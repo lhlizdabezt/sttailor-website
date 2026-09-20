@@ -138,6 +138,9 @@ for (const clothFeature of ["st-cloth-heritage", "British cloth", "Italian cloth
 for (const aboutSeoFeature of ["st-about-discovery", "PRIVATE TAILORING IN HO CHI MINH CITY", "CLOTHING ALTERATIONS", "taxID", "Founder & Tailoring Consultant", "AboutPage"]) {
   if (!about.includes(aboutSeoFeature)) failures.push(`About SEO/discovery feature is missing: ${aboutSeoFeature}`);
 }
+for (const aboutGalleryFeature of ["st-about-gallery-bridge", 'href="/gallery/"', "THE S.T TAILOR GALLERY", "st-tailor-floral-dinner-jacket-showroom.png", "VIEW THE GALLERY"]) {
+  if (!about.includes(aboutGalleryFeature)) failures.push(`About image-led Gallery discovery feature is missing: ${aboutGalleryFeature}`);
+}
 
 const gallery = readFileSync(path.join(dist, "gallery", "index.html"), "utf8");
 if (gallery.includes("st-tailor-client-red-dinner-jacket.jpg")) failures.push("Retired red dinner jacket image remains in Gallery.");

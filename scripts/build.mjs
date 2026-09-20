@@ -438,7 +438,21 @@ function transformAbout(html) {
     </nav>
   </div>
 </section>`;
-  html = `${html.slice(0, provenanceRange.end)}${clothHeritage}${consultationGuide}${html.slice(provenanceRange.end)}`;
+  const galleryBridge = `
+<section class="st-about-gallery-bridge" aria-labelledby="st-about-gallery-bridge-title">
+  <div class="st-lux-shell">
+    <a class="st-about-gallery-bridge__frame st-motion st-motion-2" href="/gallery/" aria-describedby="st-about-gallery-bridge-description">
+      <figure><img src="/media/2026/09/st-tailor-floral-dinner-jacket-showroom.png" alt="Magenta and violet floral dinner jacket in the S.T Tailor showroom | Áo khoác dự tiệc floral tông hồng tím tại showroom S.T Tailor" width="1086" height="1448" loading="lazy" decoding="async"></figure>
+      <span class="st-about-gallery-bridge__copy">
+        <span class="st-lux-eyebrow">THE S.T TAILOR GALLERY <span lang="vi">/ THƯ VIỆN HÌNH ẢNH S.T TAILOR</span></span>
+        <strong id="st-about-gallery-bridge-title">See the work in full.<span lang="vi">Khám phá tác phẩm trọn vẹn.</span></strong>
+        <small id="st-about-gallery-bridge-description">Cloth, fittings, finished garments and the showroom, gathered in one visual archive.<span lang="vi">Chất liệu, buổi thử đồ, trang phục hoàn thiện và showroom trong một thư viện hình ảnh.</span></small>
+        <b>VIEW THE GALLERY <span lang="vi">XEM THƯ VIỆN HÌNH ẢNH</span><i aria-hidden="true">→</i></b>
+      </span>
+    </a>
+  </div>
+</section>`;
+  html = `${html.slice(0, provenanceRange.end)}${clothHeritage}${consultationGuide}${galleryBridge}${html.slice(provenanceRange.end)}`;
   return replaceVisibleAtelier(html);
 }
 
