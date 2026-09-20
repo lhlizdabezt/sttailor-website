@@ -5,6 +5,11 @@ export default {
     const url = new URL(request.url);
     url.protocol = "https:";
     url.hostname = canonicalHost;
-    return Response.redirect(url, 301);
+    return new Response(null, { status: 301, headers: {
+      Location: url.toString(),
+      "Cache-Control": "public, max-age=86400",
+      "Strict-Transport-Security": "max-age=31536000",
+      "X-Content-Type-Options": "nosniff"
+    } });
   }
 };

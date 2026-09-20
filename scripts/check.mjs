@@ -8,6 +8,8 @@ const dist = path.join(root, "dist");
 const manifest = JSON.parse(readFileSync(path.join(dist, "build-manifest.json"), "utf8"));
 const failures = [];
 const expectedRoutes = ["/", "/gioi-thieu/", "/dich-vu/", "/gallery/", "/bang-gia/", "/phuong-thuc-thanh-toan/", "/lien-he/"];
+const pageTitles = new Set();
+const pageDescriptions = new Set();
 
 function visibleAndAccessibleText(html) {
   const alts = [...html.matchAll(/\balt=(['"])([\s\S]*?)\1/gi)].map((match) => match[2]);
@@ -28,10 +30,20 @@ for (const route of expectedRoutes) {
     continue;
   }
   const html = readFileSync(page, "utf8");
+  const title = html.match(/<title>([^<]+)<\/title>/)?.[1] ?? "";
+  const description = html.match(/<meta name="description" content="([^"]+)"/)?.[1] ?? "";
+  if (!title || title.length < 30 || title.length > 65) failures.push(`SEO title length is outside the useful range: ${route}`);
+  if (!description || description.length < 100 || description.length > 170) failures.push(`SEO description length is outside the useful range: ${route}`);
+  pageTitles.add(title);
+  pageDescriptions.add(description);
   if (!html.includes("st-site-header") || !html.includes("st-footer-v7 st-footer-v8")) failures.push(`Missing shared navigation or footer: ${route}`);
   if (!html.includes('<meta name="robots" content="index, follow')) failures.push(`Indexable robots metadata is missing: ${route}`);
   if (!html.includes('application/ld+json') || !html.includes('LocalBusiness')) failures.push(`LocalBusiness structured data is missing: ${route}`);
   if (!html.includes('SiteNavigationElement') || !html.includes('OfferCatalog')) failures.push(`Expanded navigation or service structured data is missing: ${route}`);
+  for (const marker of ['rel="manifest" href="/site.webmanifest"', 'name="twitter:image:alt"', 'name="google-site-verification"', 'name="p:domain_verify"']) {
+    if (!html.includes(marker)) failures.push(`SEO/discovery marker is missing on ${route}: ${marker}`);
+  }
+  if (/<meta name="keywords"/i.test(html)) failures.push(`Obsolete keyword meta tag must not be used: ${route}`);
   if (html.includes("beta.sttailor.com")) failures.push(`Beta hostname remains in production HTML: ${route}`);
   if ((html.match(/<footer class="st-footer st-footer-v7 st-footer-v8"/g) ?? []).length !== 1) failures.push(`Footer is not singular: ${route}`);
   if (html.includes("https://sttailor.com/wp-content/uploads/")) failures.push(`Remote WordPress upload remains: ${route}`);
@@ -41,6 +53,8 @@ for (const route of expectedRoutes) {
     if (html.includes(retired)) failures.push(`Retired route remains linked: ${route} -> ${retired}`);
   }
 }
+if (pageTitles.size !== expectedRoutes.length) failures.push("Every public route must have a unique SEO title.");
+if (pageDescriptions.size !== expectedRoutes.length) failures.push("Every public route must have a unique meta description.");
 
 for (const retiredDirectory of ["chinh-sach-bao-mat", "dieu-khoan-dieu-kien", "chinh-sach-van-chuyen", "bao-hanh-sua-chua", "refund_returns"]) {
   if (existsSync(path.join(dist, retiredDirectory))) failures.push(`Retired page was generated: /${retiredDirectory}/`);
@@ -73,6 +87,9 @@ if (home.includes("st-home-v6__gallery")) failures.push("The removed home galler
 if (!home.includes("ARRANGE A PRIVATE CONSULTATION") || !home.includes("ĐẶT LỊCH TƯ VẤN RIÊNG")) failures.push("Home consultation CTA is missing.");
 if (!home.includes("Five ways to begin with S.T Tailor") || !home.includes("Năm lối để bắt đầu cùng S.T Tailor")) failures.push("Home route invitation is missing.");
 if (!home.includes("logo-sttailor-1000x1024.png")) failures.push("Footer crest logo is missing.");
+if ((home.match(/<a class="st-home-editorial__frame/g) ?? []).length !== 3) failures.push("Home editorial triptych must contain exactly three image-led cards.");
+if (!home.includes('rel="preload" as="image"') || !home.includes('fetchpriority="high"')) failures.push("Home hero image preload is missing.");
+if (!home.includes('loading="lazy"') || home.includes('loading="eager"')) failures.push("Deferred images or map loading are not configured correctly.");
 const footerSocial = home.match(/<nav class="st-footer-v7__social"[\s\S]*?<\/nav>/)?.[0] ?? "";
 for (const channel of ["Facebook", "Zalo", "Instagram", "YouTube", "LinkedIn", "WhatsApp", "Pinterest", "TikTok"]) {
   if (!footerSocial.includes(channel)) failures.push(`Footer social channel missing: ${channel}`);
@@ -128,12 +145,13 @@ if (!notFound.includes("Back to Home") || !notFound.includes("Về trang chủ")
 
 const productionHeaders = readFileSync(path.join(dist, "_headers"), "utf8");
 if (/X-Robots-Tag:\s*noindex/i.test(productionHeaders)) failures.push("Production headers still prevent search indexing.");
-for (const staticFile of ["robots.txt", "sitemap.xml", "llms.txt"]) {
+for (const staticFile of ["robots.txt", "sitemap.xml", "llms.txt", "site.webmanifest"]) {
   if (!existsSync(path.join(dist, staticFile))) failures.push(`Missing production discovery file: ${staticFile}`);
 }
 const sitemap = readFileSync(path.join(dist, "sitemap.xml"), "utf8");
 if ((sitemap.match(/<url><loc>https:\/\/sttailor\.com/g) ?? []).length !== expectedRoutes.length || sitemap.includes("beta.sttailor.com")) failures.push("Sitemap does not contain the complete production route set.");
 if (!sitemap.includes('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"') || !sitemap.includes("<image:image>")) failures.push("Image sitemap discovery data is missing.");
+if (!sitemap.includes("<image:title>")) failures.push("Image sitemap titles are missing.");
 if (!generatedCss.includes("width: min(320px, 84vw) !important") || !generatedCss.includes("justify-content: flex-start !important")) failures.push("Mobile navigation is not the requested left-aligned vertical panel.");
 
 const worker = readFileSync(path.join(root, "src", "worker.js"), "utf8");
@@ -141,6 +159,19 @@ for (const legacyPath of ["/about/", "/services/", "/pricing/", "/payment-method
   if (!worker.includes(legacyPath)) failures.push(`Legacy 301 mapping is missing: ${legacyPath}`);
 }
 if (!worker.includes('new URL("/not-found", url)')) failures.push("404 worker fallback does not fetch the canonical HTML asset body.");
+for (const header of ["Strict-Transport-Security", "Content-Security-Policy", "X-Robots-Tag", "max-age=31536000, immutable"]) {
+  if (!worker.includes(header)) failures.push(`Worker production header/cache rule is missing: ${header}`);
+}
+const siteScript = readFileSync(path.join(root, "src", "scripts", "site.js"), "utf8");
+for (const key of ["Alt+M", "ArrowDown", "ArrowUp", "Escape", "Home", "End"]) {
+  if (!siteScript.includes(key === "Alt+M" ? 'event.altKey' : `event.key === "${key}"`)) failures.push(`Navigation keyboard support is missing: ${key}`);
+}
+const wwwRedirect = readFileSync(path.join(root, "src", "www-redirect.js"), "utf8");
+for (const redirectRule of ["status: 301", "Location: url.toString()", "max-age=86400", "Strict-Transport-Security"]) {
+  if (!wwwRedirect.includes(redirectRule)) failures.push(`www redirect rule is missing: ${redirectRule}`);
+}
+const wranglerConfig = readFileSync(path.join(root, "wrangler.jsonc"), "utf8");
+if (!wranglerConfig.includes('"run_worker_first": true')) failures.push("Asset requests bypass the Worker header and cache policy.");
 
 if (failures.length) throw new Error(`Migration checks failed:\n${failures.join("\n")}`);
 console.log(`PASS: ${manifest.routes.length} WordPress-source routes, ${manifest.localUploadAssets} local uploads, shared footer/map, approved removals, gallery placement, 404 action and legacy mappings verified.`);

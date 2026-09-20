@@ -25,14 +25,26 @@ const legacyRoutes = new Map([
   ["/chinh-sach-van-chuyen/", "/"]
 ]);
 const staticPrefixes = ["/media/", "/styles/", "/scripts/"];
-const staticFiles = new Set(["/robots.txt", "/sitemap.xml", "/llms.txt", "/404.html", "/not-found.html", "/_headers", "/build-manifest.json"]);
+const staticFiles = new Set(["/robots.txt", "/sitemap.xml", "/llms.txt", "/site.webmanifest", "/404.html", "/not-found.html", "/_headers", "/build-manifest.json"]);
 
-function securityHeaders(response) {
+function securityHeaders(response, pathname = "/") {
   const headers = new Headers(response.headers);
   headers.set("X-Content-Type-Options", "nosniff");
   headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
   headers.set("X-Frame-Options", "SAMEORIGIN");
+  headers.set("Strict-Transport-Security", "max-age=31536000");
+  headers.set("Content-Security-Policy", "base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests");
+  const contentType = headers.get("Content-Type") || "";
+  const isHtml = routes.has(pathname) || pathname.endsWith(".html") || pathname === "/not-found" || contentType.includes("text/html");
+  if (isHtml) {
+    headers.set("X-Robots-Tag", "index, follow, max-image-preview:large");
+    headers.set("Cache-Control", "public, max-age=0, must-revalidate");
+  } else if (staticPrefixes.some((prefix) => pathname.startsWith(prefix))) {
+    headers.set("Cache-Control", "public, max-age=31536000, immutable");
+  } else if (["/robots.txt", "/sitemap.xml", "/llms.txt", "/site.webmanifest"].includes(pathname)) {
+    headers.set("Cache-Control", "public, max-age=3600");
+  }
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
 }
 
@@ -48,7 +60,10 @@ async function notFound(request, env, url) {
   // must remain on the requested URL and render the document with a true 404.
   const headers = new Headers(source.headers);
   headers.delete("Location");
-  return securityHeaders(new Response(source.body, { status: 404, statusText: "Not Found", headers }));
+  const response = securityHeaders(new Response(source.body, { status: 404, statusText: "Not Found", headers }), url.pathname);
+  const notFoundHeaders = new Headers(response.headers);
+  notFoundHeaders.set("X-Robots-Tag", "noindex, follow");
+  return new Response(response.body, { status: 404, statusText: "Not Found", headers: notFoundHeaders });
 }
 
 export default {
@@ -79,7 +94,7 @@ export default {
       return Response.redirect(new URL(`${pathname}/${url.search}`, url), 301);
     }
     if (routes.has(pathname) || staticFiles.has(pathname) || staticPrefixes.some((prefix) => pathname.startsWith(prefix))) {
-      return securityHeaders(await env.ASSETS.fetch(request));
+      return securityHeaders(await env.ASSETS.fetch(request), pathname);
     }
     return notFound(request, env, url);
   }

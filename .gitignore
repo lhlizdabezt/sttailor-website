@@ -2,3 +2,6 @@ node_modules/
 .wrangler/
 dist/
 cutover-backups/
+.playwright-cli/
+output/
+artifacts/

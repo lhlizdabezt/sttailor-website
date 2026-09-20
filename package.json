@@ -1,7 +1,7 @@
 {
   "name": "sttailor-cloudflare-worker",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Static-first S.T Tailor website for Cloudflare Workers",
   "type": "module",
   "scripts": {
