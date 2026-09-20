@@ -135,6 +135,7 @@ for (const aboutSeoFeature of ["st-about-discovery", "PRIVATE TAILORING IN HO CH
 }
 
 const gallery = readFileSync(path.join(dist, "gallery", "index.html"), "utf8");
+if (gallery.includes("st-tailor-client-red-dinner-jacket.jpg")) failures.push("Retired red dinner jacket image remains in Gallery.");
 for (const removedBlock of ["album-archive", "album-client-feedback", "st-gallery-closing"]) {
   if (gallery.includes(removedBlock)) failures.push(`Removed Gallery block remains: ${removedBlock}`);
 }
