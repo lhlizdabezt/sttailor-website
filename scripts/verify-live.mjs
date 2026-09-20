@@ -14,9 +14,25 @@ const expect = (condition, message) => {
   if (!condition) failures.push(message);
 };
 
+// Cloudflare may need a short DNS propagation window immediately after a
+// custom-domain Worker deployment. Retry transient network failures only;
+// status assertions below still fail immediately for an incorrect response.
+async function fetchWithRetry(resource, options = {}, attempts = 5) {
+  let lastError;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      return await fetch(resource, options);
+    } catch (error) {
+      lastError = error;
+      if (attempt < attempts) await new Promise((resolve) => setTimeout(resolve, attempt * 1000));
+    }
+  }
+  throw lastError;
+}
+
 const pages = new Map();
 for (const route of routes) {
-  const response = await fetch(`${origin}${route}`);
+  const response = await fetchWithRetry(`${origin}${route}`);
   const html = await response.text();
   pages.set(route, html);
   expect(response.status === 200, `${route} returned ${response.status}`);
@@ -37,7 +53,7 @@ expect(home.includes('name="twitter:image:alt"'), "Social image alternative text
 expect(home.includes('name="google-site-verification"') && home.includes('name="p:domain_verify"'), "Search ownership metadata is missing");
 const cssPath = home.match(/<link rel="stylesheet" href="([^"]+)"/)?.[1];
 expect(Boolean(cssPath), "The production stylesheet was not found");
-const css = cssPath ? await (await fetch(new URL(cssPath, origin))).text() : "";
+const css = cssPath ? await (await fetchWithRetry(new URL(cssPath, origin))).text() : "";
 expect(css.includes("text-transform: uppercase"), "Navigation is not forced to uppercase");
 expect(css.includes("flex-direction: column"), "Mobile navigation is not a vertical list");
 expect(css.includes("background: linear-gradient(110deg, rgba(244, 226, 197, .97)"), "Old-money tan header treatment is missing");
@@ -53,11 +69,11 @@ expect(home.includes('"OfferCatalog"'), "OfferCatalog structured data is missing
 expect(home.includes('"SiteNavigationElement"'), "SiteNavigationElement structured data is missing");
 expect(pages.get("/dich-vu/").includes('"Service"'), "Services structured data is missing");
 
-const robots = await fetch(`${origin}/robots.txt`);
+const robots = await fetchWithRetry(`${origin}/robots.txt`);
 const robotsText = await robots.text();
 expect(robots.status === 200 && robotsText.includes(`Sitemap: ${origin}/sitemap.xml`), "robots.txt is invalid");
 
-const sitemap = await fetch(`${origin}/sitemap.xml`);
+const sitemap = await fetchWithRetry(`${origin}/sitemap.xml`);
 const sitemapText = await sitemap.text();
 expect(sitemap.status === 200, `sitemap.xml returned ${sitemap.status}`);
 expect((sitemapText.match(/<url>/g) || []).length === routes.length, "sitemap.xml does not contain exactly seven public routes");
@@ -65,17 +81,17 @@ expect(sitemapText.includes("xmlns:image="), "Image sitemap namespace is missing
 expect(sitemapText.includes("<image:image>"), "Image sitemap entries are missing");
 expect(sitemapText.includes("<image:title>"), "Image sitemap titles are missing");
 
-const manifest = await fetch(`${origin}/site.webmanifest`);
+const manifest = await fetchWithRetry(`${origin}/site.webmanifest`);
 expect(manifest.status === 200 && (await manifest.text()).includes('"name": "S.T Tailor"'), "site.webmanifest is invalid");
 
-const legacy = await fetch(`${origin}/about/`, { redirect: "manual" });
+const legacy = await fetchWithRetry(`${origin}/about/`, { redirect: "manual" });
 expect(legacy.status === 301 && legacy.headers.get("location") === `${origin}/gioi-thieu/`, "Legacy URL mapping is not a 301");
 
-const www = await fetch("https://www.sttailor.com/gallery/?source=www", { redirect: "manual" });
+const www = await fetchWithRetry("https://www.sttailor.com/gallery/?source=www", { redirect: "manual" });
 expect(www.status === 301 && www.headers.get("location") === `${origin}/gallery/?source=www`, "www does not preserve path/query in its apex 301");
 expect(www.headers.get("cache-control")?.includes("max-age=86400"), "www redirect is not cacheable");
 
-const missing = await fetch(`${origin}/this-page-does-not-exist`);
+const missing = await fetchWithRetry(`${origin}/this-page-does-not-exist`);
 const missingHtml = await missing.text();
 expect(missing.status === 404, `Unknown URL returned ${missing.status}`);
 expect(missingHtml.includes("Back to Home"), "404 page has no Back to Home action");
