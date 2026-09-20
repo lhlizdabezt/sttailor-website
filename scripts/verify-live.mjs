@@ -30,6 +30,7 @@ for (const route of routes) {
 
 const home = pages.get("/");
 expect((home.match(/<a class="st-home-editorial__frame/g) || []).length === 3, "Home editorial triptych is missing");
+expect(home.includes("/media/2026/09/st-tailor-client-fitted-suit.jpg") && !home.includes("/media/2026/09/st-tailor-client-shoulder-fitting.jpg"), "Home FIT card is using the wrong image");
 expect(home.includes('rel="manifest" href="/site.webmanifest"'), "Web app manifest discovery is missing");
 expect(home.includes('rel="preload" as="image"') && home.includes('fetchpriority="high"'), "Home hero preload is missing");
 expect(home.includes('name="twitter:image:alt"'), "Social image alternative text is missing");

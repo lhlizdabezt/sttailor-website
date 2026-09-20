@@ -88,6 +88,7 @@ if (!home.includes("ARRANGE A PRIVATE CONSULTATION") || !home.includes("ĐẶT L
 if (!home.includes("Five ways to begin with S.T Tailor") || !home.includes("Năm lối để bắt đầu cùng S.T Tailor")) failures.push("Home route invitation is missing.");
 if (!home.includes("logo-sttailor-1000x1024.png")) failures.push("Footer crest logo is missing.");
 if ((home.match(/<a class="st-home-editorial__frame/g) ?? []).length !== 3) failures.push("Home editorial triptych must contain exactly three image-led cards.");
+if (!home.includes('/media/2026/09/st-tailor-client-fitted-suit.jpg') || home.includes('/media/2026/09/st-tailor-client-shoulder-fitting.jpg')) failures.push("Home FIT card does not use the approved fitted-suit image.");
 if (!home.includes('rel="preload" as="image"') || !home.includes('fetchpriority="high"')) failures.push("Home hero image preload is missing.");
 if (!home.includes('loading="lazy"') || home.includes('loading="eager"')) failures.push("Deferred images or map loading are not configured correctly.");
 const footerSocial = home.match(/<nav class="st-footer-v7__social"[\s\S]*?<\/nav>/)?.[0] ?? "";

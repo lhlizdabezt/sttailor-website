@@ -112,7 +112,7 @@ function transformHome(html) {
       <span>CLOTH <small lang="vi">CHẤT LIỆU</small></span>
     </a>
     <a class="st-home-editorial__frame st-home-editorial__frame--tall st-motion st-motion-2" href="/dich-vu/">
-      <img src="/media/2026/09/st-tailor-client-shoulder-fitting.jpg" alt="Shoulder fitting during the S.T Tailor bespoke process" width="720" height="1280" loading="lazy" decoding="async">
+      <img src="/media/2026/09/st-tailor-client-fitted-suit.jpg" alt="Fitted suit at S.T Tailor" width="1536" height="1920" loading="lazy" decoding="async">
       <span>FIT <small lang="vi">PHOM DÁNG</small></span>
     </a>
     <a class="st-home-editorial__frame st-motion st-motion-3" href="/gallery/">
