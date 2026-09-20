@@ -36,13 +36,11 @@ Every push to `main` runs `.github/workflows/deploy.yml`. GitHub Actions install
 - `CLOUDFLARE_API_TOKEN`
 - `CLOUDFLARE_ACCOUNT_ID`
 
-Commits are authored with `luonghailong.work@gmail.com` as requested. Cloudflare credentials are stored only as encrypted GitHub Actions secrets.
+Commits are authored with `luonghailong.work@gmail.com` as requested. Cloudflare credentials are stored only as encrypted GitHub Actions secrets. The normal production action is `git push origin main`; do not run a local Cloudflare deploy for ordinary content or code updates.
 
-## Manual deployment
+## Emergency-only manual deployment
 
-1. Authenticate once with `npx wrangler login`.
-2. Run `npm run deploy`.
-3. Verify `https://sttailor.com/`, all seven published routes, `/healthz`, legacy redirects and the true 404 response.
+Use this only when GitHub Actions is unavailable. Ordinary deployments run entirely from GitHub Actions. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 ## Content updates after cutover
 

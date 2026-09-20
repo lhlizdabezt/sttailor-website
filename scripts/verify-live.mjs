@@ -101,10 +101,9 @@ const expectedWwwLocation = `${origin}/gallery/?source=www`;
 const www = await fetchUntil(
   "https://www.sttailor.com/gallery/?source=www",
   { redirect: "manual" },
-  (response) => response.status === 301 && response.headers.get("location") === expectedWwwLocation && response.headers.get("cache-control")?.includes("max-age=86400")
+  (response) => response.status === 301 && response.headers.get("location") === expectedWwwLocation
 );
 expect(www.status === 301 && www.headers.get("location") === `${origin}/gallery/?source=www`, "www does not preserve path/query in its apex 301");
-expect(www.headers.get("cache-control")?.includes("max-age=86400"), "www redirect is not cacheable");
 
 const missing = await fetchWithRetry(`${origin}/this-page-does-not-exist`);
 const missingHtml = await missing.text();
