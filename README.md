@@ -31,7 +31,7 @@ npm run dev
 
 ## Automated production deployment
 
-Every push to `main` runs `.github/workflows/deploy.yml`. GitHub Actions installs exact dependencies, rebuilds the site, runs the migration/SEO checks, deploys the apex Worker, and then deploys the `www` redirect Worker. The repository requires these GitHub Actions secrets:
+Every push to `main` runs `.github/workflows/deploy.yml`. GitHub Actions installs exact dependencies, rebuilds the site, runs the migration/SEO checks, deploys the apex Worker and the `www` redirect Worker, then verifies the public routes, mobile navigation, structured data, sitemap, redirects and true 404 response against production. The repository requires these GitHub Actions secrets:
 
 - `CLOUDFLARE_API_TOKEN`
 - `CLOUDFLARE_ACCOUNT_ID`
