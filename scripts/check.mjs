@@ -85,9 +85,14 @@ else {
 const home = readFileSync(path.join(dist, "index.html"), "utf8");
 if (home.includes("st-home-v6__gallery")) failures.push("The removed home gallery strip is still present.");
 if (!home.includes("ARRANGE A PRIVATE CONSULTATION") || !home.includes("ĐẶT LỊCH TƯ VẤN RIÊNG")) failures.push("Home consultation CTA is missing.");
-if (!home.includes("Five ways to begin with S.T Tailor") || !home.includes("Năm lối để bắt đầu cùng S.T Tailor")) failures.push("Home route invitation is missing.");
+for (const removedHomeRouteText of ["Five ways into the atelier", "Five ways to begin with S.T Tailor", "Năm lối để bước vào không gian atelier", "Năm lối để bắt đầu cùng S.T Tailor", "st-home-v6__routes"]) {
+  if (home.includes(removedHomeRouteText)) failures.push(`Removed home route strip remains: ${removedHomeRouteText}`);
+}
 if (!home.includes("logo-sttailor-1000x1024.png")) failures.push("Footer crest logo is missing.");
-if ((home.match(/<a class="st-home-editorial__frame/g) ?? []).length !== 3) failures.push("Home editorial triptych must contain exactly three image-led cards.");
+if ((home.match(/<a class="st-home-editorial__frame/g) ?? []).length !== 5) failures.push("Home visual destinations must contain exactly five image-led cards.");
+for (const visualDestination of ["/gioi-thieu/", "/dich-vu/", "/gallery/", "/bang-gia/", "/lien-he/", "st-tailor-client-private-consultation.jpg"]) {
+  if (!home.includes(visualDestination)) failures.push(`Home visual destination is missing: ${visualDestination}`);
+}
 if (!home.includes('/media/2026/09/st-tailor-client-fitted-suit.jpg') || home.includes('/media/2026/09/st-tailor-client-shoulder-fitting.jpg')) failures.push("Home FIT card does not use the approved fitted-suit image.");
 if (!home.includes('rel="preload" as="image"') || !home.includes('fetchpriority="high"')) failures.push("Home hero image preload is missing.");
 if (!home.includes('loading="lazy"') || home.includes('loading="eager"')) failures.push("Deferred images or map loading are not configured correctly.");

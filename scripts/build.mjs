@@ -98,15 +98,11 @@ function transformHome(html) {
     .replace(
       /<a class="st-home-v6__hero-jump"[^>]*>[\s\S]*?<\/a>/,
       '<a class="st-home-v6__hero-jump" href="/lien-he/"><span>ARRANGE A PRIVATE CONSULTATION</span><span lang="vi">ĐẶT LỊCH TƯ VẤN RIÊNG</span></a>'
-    )
-    .replace(
-      "Five ways into the atelier. <span lang=\"vi\">Năm lối để bước vào không gian atelier.</span>",
-      "Five ways to begin with S.T Tailor. <span lang=\"vi\">Năm lối để bắt đầu cùng S.T Tailor.</span>"
-    )
-    .replace("Meet the atelier and its point of view.<span lang=\"vi\">Gặp gỡ atelier và tinh thần làm nghề.</span>", "Meet S.T Tailor and its point of view.<span lang=\"vi\">Gặp gỡ S.T Tailor và tinh thần làm nghề.</span>");
+    );
+  html = removeElementByClass(html, "nav", "st-home-v6__routes");
   html = removeElementByClass(html, "section", "st-home-v6__gallery");
   const editorial = `
-  <section class="st-home-editorial" aria-label="S.T Tailor craft and showroom">
+  <section class="st-home-editorial" aria-label="S.T Tailor visual destinations | Lối vào hình ảnh S.T Tailor">
     <a class="st-home-editorial__frame st-motion st-motion-1" href="/gioi-thieu/">
       <img src="/media/2026/09/fabric-focus-cloth-books.jpg" alt="Tailoring cloth books selected at S.T Tailor" width="2048" height="2048" loading="lazy" decoding="async">
       <span>CLOTH <small lang="vi">CHẤT LIỆU</small></span>
@@ -118,6 +114,14 @@ function transformHome(html) {
     <a class="st-home-editorial__frame st-motion st-motion-3" href="/gallery/">
       <img src="/media/2026/06/store-sttailor-4.webp" alt="S.T Tailor showroom interior" width="1086" height="1448" loading="lazy" decoding="async">
       <span>HOUSE <small lang="vi">NHÀ MAY</small></span>
+    </a>
+    <a class="st-home-editorial__frame st-motion st-motion-4" href="/bang-gia/">
+      <img src="/media/2026/09/st-tailor-navy-double-breasted-front.jpeg" alt="Navy double-breasted suit by S.T Tailor" width="1536" height="2048" loading="lazy" decoding="async">
+      <span>PRICING <small lang="vi">BẢNG GIÁ</small></span>
+    </a>
+    <a class="st-home-editorial__frame st-motion st-motion-5" href="/lien-he/">
+      <img src="/media/2026/09/st-tailor-client-private-consultation.jpg" alt="Private tailoring consultation at S.T Tailor" width="1536" height="2048" loading="lazy" decoding="async">
+      <span>CONSULT <small lang="vi">ĐẶT LỊCH</small></span>
     </a>
   </section>`;
   return html.replace(/\s*<\/section>\s*$/, `${editorial}\n</section>`);
