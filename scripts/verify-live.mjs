@@ -55,7 +55,13 @@ for (const route of routes) {
 }
 
 const home = pages.get("/");
-expect((home.match(/<a class="st-home-editorial__frame/g) || []).length === 3, "Home editorial triptych is missing");
+expect((home.match(/<a class="st-home-editorial__frame/g) || []).length === 5, "Home visual destination cards are missing");
+for (const removedHomeRouteText of ["Five ways into the atelier", "Five ways to begin with S.T Tailor", "Năm lối để bước vào không gian atelier", "Năm lối để bắt đầu cùng S.T Tailor", "st-home-v6__routes"]) {
+  expect(!home.includes(removedHomeRouteText), `Removed home route strip remains: ${removedHomeRouteText}`);
+}
+for (const visualDestination of ["/gioi-thieu/", "/dich-vu/", "/gallery/", "/bang-gia/", "/lien-he/", "st-tailor-client-private-consultation.jpg"]) {
+  expect(home.includes(visualDestination), `Home visual destination is missing: ${visualDestination}`);
+}
 expect(home.includes("/media/2026/09/st-tailor-client-fitted-suit.jpg") && !home.includes("/media/2026/09/st-tailor-client-shoulder-fitting.jpg"), "Home FIT card is using the wrong image");
 expect(home.includes('rel="manifest" href="/site.webmanifest"'), "Web app manifest discovery is missing");
 expect(home.includes('rel="preload" as="image"') && home.includes('fetchpriority="high"'), "Home hero preload is missing");
