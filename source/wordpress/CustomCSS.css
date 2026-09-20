@@ -6185,6 +6185,117 @@ html body .st-service-page .st-service-notes__list p span[lang="vi"] {
   }
 }
 
+/* About: clear service paths for visitors and semantic internal linking. */
+html body .st-lux-page.st-lux-about .st-about-discovery {
+  padding: clamp(64px, 9vw, 118px) 0 !important;
+  background: #f5e7d1 !important;
+  border-top: 1px solid rgba(94, 52, 34, .28) !important;
+  border-bottom: 1px solid rgba(94, 52, 34, .28) !important;
+}
+html body .st-lux-page.st-lux-about .st-about-discovery__shell {
+  display: grid !important;
+  grid-template-columns: minmax(280px, .82fr) minmax(0, 1.18fr) !important;
+  align-items: start !important;
+  gap: clamp(36px, 8vw, 120px) !important;
+}
+html body .st-lux-page.st-lux-about .st-about-discovery__head { max-width: 510px !important; }
+html body .st-lux-page.st-lux-about .st-about-discovery__head h2 {
+  margin: 11px 0 18px !important;
+  color: #3c2115 !important;
+  font-size: clamp(40px, 4.3vw, 64px) !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+}
+html body .st-lux-page.st-lux-about .st-about-discovery__head h2 [lang="vi"] {
+  display: block !important;
+  margin-top: 10px !important;
+  color: #7c4428 !important;
+  font-family: var(--st-font-copy-local) !important;
+  font-size: .38em !important;
+  font-weight: 800 !important;
+  line-height: 1.35 !important;
+}
+html body .st-lux-page.st-lux-about .st-about-discovery__head > p:last-child {
+  margin: 0 !important;
+  color: #62412f !important;
+  font-size: 16px !important;
+  line-height: 1.75 !important;
+}
+html body .st-lux-page.st-lux-about .st-about-discovery__head > p:last-child [lang="vi"] {
+  display: block !important;
+  margin-top: 8px !important;
+  color: #75452e !important;
+  font-size: .94em !important;
+}
+html body .st-lux-page.st-lux-about .st-about-discovery__links {
+  display: grid !important;
+  gap: 12px !important;
+}
+html body .st-lux-page.st-lux-about .st-about-discovery__links > a,
+html body .st-lux-page.st-lux-about .st-about-discovery__links > a:link,
+html body .st-lux-page.st-lux-about .st-about-discovery__links > a:visited {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: 1fr auto !important;
+  gap: 7px 24px !important;
+  min-height: 112px !important;
+  padding: 23px 68px 22px 25px !important;
+  border: 1px solid #7b472c !important;
+  background: rgba(255, 250, 242, .76) !important;
+  color: #3c2115 !important;
+  box-shadow: 4px 4px 0 rgba(83, 43, 25, .18) !important;
+  text-decoration: none !important;
+  transition: transform .28s ease, background-color .28s ease, box-shadow .28s ease !important;
+}
+html body .st-lux-page.st-lux-about .st-about-discovery__links > a:hover,
+html body .st-lux-page.st-lux-about .st-about-discovery__links > a:focus-visible {
+  background: #fffaf2 !important;
+  box-shadow: 7px 7px 0 rgba(83, 43, 25, .22) !important;
+  transform: translate(-3px, -3px) !important;
+}
+html body .st-lux-page.st-lux-about .st-about-discovery__links strong {
+  display: block !important;
+  color: #422416 !important;
+  font-family: var(--st-font-copy-local) !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  letter-spacing: .09em !important;
+  line-height: 1.35 !important;
+}
+html body .st-lux-page.st-lux-about .st-about-discovery__links strong [lang="vi"] {
+  display: block !important;
+  margin-top: 4px !important;
+  color: #834829 !important;
+  font-size: .88em !important;
+}
+html body .st-lux-page.st-lux-about .st-about-discovery__links small {
+  grid-column: 1 / 2 !important;
+  color: #664330 !important;
+  font-family: var(--st-font-copy-local) !important;
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+}
+html body .st-lux-page.st-lux-about .st-about-discovery__links small [lang="vi"] {
+  display: block !important;
+  margin-top: 3px !important;
+  color: #7b4b34 !important;
+}
+html body .st-lux-page.st-lux-about .st-about-discovery__links i {
+  position: absolute !important;
+  top: 50% !important;
+  right: 24px !important;
+  color: #6f391f !important;
+  font-size: 28px !important;
+  font-style: normal !important;
+  line-height: 1 !important;
+  transform: translateY(-50%) !important;
+}
+@media (max-width: 760px) {
+  html body .st-lux-page.st-lux-about .st-about-discovery__shell { grid-template-columns: 1fr !important; gap: 31px !important; }
+  html body .st-lux-page.st-lux-about .st-about-discovery__links > a { min-height: 0 !important; padding: 21px 58px 21px 20px !important; }
+  html body .st-lux-page.st-lux-about .st-about-discovery__head > p:last-child { font-size: 15px !important; }
+}
+
 /* S.T TAILOR V6.4.20 | A text-only hero route leads into the five atelier pages. */
 html body #st-home-v6.st-home-v6--mission #st-home-v6-pages {
   scroll-margin-top: 88px !important;

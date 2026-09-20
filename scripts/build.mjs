@@ -14,7 +14,7 @@ let scriptHref = "/scripts/site.js";
 
 const routes = [
   ["/", "Home.html", "S.T Tailor | Bespoke Tailoring in Ho Chi Minh City", "Bespoke suits, shirts, formalwear and alterations at 258 Lê Thánh Tôn, Ho Chi Minh City. Private consultations available.", "/media/2026/06/background-hero-trang-lien-he-sttailor.webp", "Private fitting at S.T Tailor in Ho Chi Minh City"],
-  ["/gioi-thieu/", "About.html", "About S.T Tailor | Heritage Tailoring in HCMC", "Discover S.T Tailor's approach to personal fit, British and Italian cloth, Vietnamese silk and considered tailoring in Ho Chi Minh City.", "/media/2026/09/fabric-focus-cloth-books.jpg", "Tailoring cloth books selected at S.T Tailor"],
+  ["/gioi-thieu/", "About.html", "About S.T Tailor | Bespoke Tailoring & Alterations in HCMC", "Meet S.T Tailor in Ho Chi Minh City for bespoke suits, formalwear, clothing alterations, British and Italian cloth, Vietnamese silk and private fittings.", "/media/2026/09/fabric-focus-cloth-books.jpg", "Tailoring cloth books selected at S.T Tailor"],
   ["/dich-vu/", "Services.html", "Bespoke Tailoring & Alterations in HCMC | S.T Tailor", "Explore bespoke suits, shirts, formalwear, womenswear, fittings and clothing alterations by S.T Tailor in central Ho Chi Minh City.", "/media/2026/09/st-tailor-client-shoulder-fitting.jpg", "Shoulder fitting during the S.T Tailor bespoke process"],
   ["/gallery/", "Gallery.html", "Bespoke Tailoring Gallery in HCMC | S.T Tailor", "View S.T Tailor's cloth, fittings, suits, formalwear, womenswear, garment details and showroom in Ho Chi Minh City.", "/media/2026/09/st-tailor-gallery-showroom-tailoring-display.jpg", "S.T Tailor showroom and tailoring display"],
   ["/bang-gia/", "Pricing.html", "Bespoke Tailoring Prices in HCMC | S.T Tailor", "Review starting prices for bespoke suits, shirts, formalwear and clothing alterations before consulting S.T Tailor in Ho Chi Minh City.", "/media/2026/09/st-tailor-navy-double-breasted-front.jpeg", "Navy double-breasted suit by S.T Tailor"],
@@ -295,7 +295,22 @@ function transformAbout(html) {
     </div>
   </div>
 </section>`;
-  html = `${html.slice(0, provenanceRange.end)}${clothHeritage}${html.slice(provenanceRange.end)}`;
+  const consultationGuide = `
+<section class="st-about-discovery" aria-labelledby="st-about-discovery-title">
+  <div class="st-lux-shell st-about-discovery__shell">
+    <header class="st-about-discovery__head st-motion st-motion-1">
+      <p class="st-lux-eyebrow">PRIVATE TAILORING IN HO CHI MINH CITY <span lang="vi">/ MAY ĐO RIÊNG TẠI TP. HỒ CHÍ MINH</span></p>
+      <h2 id="st-about-discovery-title">A clear place to begin.<span lang="vi">Một khởi đầu rõ ràng.</span></h2>
+      <p>At our 258 Lê Thánh Tôn showroom, a consultation connects the occasion, cloth, fit and finishing before an order is confirmed.<span lang="vi">Tại showroom 258 Lê Thánh Tôn, buổi tư vấn kết nối dịp sử dụng, chất liệu, phom dáng và hoàn thiện trước khi xác nhận đơn may.</span></p>
+    </header>
+    <nav class="st-about-discovery__links" aria-label="S.T Tailor consultation paths | Lối vào tư vấn S.T Tailor">
+      <a class="st-motion st-motion-1" href="/dich-vu/"><strong>BESPOKE TAILORING <span lang="vi">MAY ĐO RIÊNG</span></strong><small>Suits, shirts, formalwear and womenswear.<span lang="vi">Suit, sơ mi, lễ phục và trang phục nữ.</span></small><i aria-hidden="true">→</i></a>
+      <a class="st-motion st-motion-2" href="/dich-vu/"><strong>CLOTHING ALTERATIONS <span lang="vi">CHỈNH SỬA TRANG PHỤC</span></strong><small>Practical refinements for garments you already own.<span lang="vi">Tinh chỉnh thực tế cho trang phục sẵn có.</span></small><i aria-hidden="true">→</i></a>
+      <a class="st-motion st-motion-3" href="/lien-he/"><strong>PRIVATE CONSULTATION <span lang="vi">ĐẶT LỊCH TƯ VẤN</span></strong><small>Telephone, Messenger, Zalo, Instagram or WhatsApp.<span lang="vi">Điện thoại, Messenger, Zalo, Instagram hoặc WhatsApp.</span></small><i aria-hidden="true">→</i></a>
+    </nav>
+  </div>
+</section>`;
+  html = `${html.slice(0, provenanceRange.end)}${clothHeritage}${consultationGuide}${html.slice(provenanceRange.end)}`;
   return replaceVisibleAtelier(html);
 }
 
@@ -360,6 +375,8 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     name: "S.T Tailor",
     alternateName: ["S.T Tailor HCMC", "S.T Tailor Ho Chi Minh City"],
     legalName: "SON THINH TMDV COMPANY LIMITED",
+    taxID: "0319232823",
+    founder: { "@type": "Person", name: "Trịnh Hoành Sơn", jobTitle: "Founder & Tailoring Consultant" },
     url: "https://sttailor.com/",
     logo: { "@type": "ImageObject", url: "https://sttailor.com/media/2026/09/logo-sttailor-1000x1024.png" },
     image: ["https://sttailor.com/media/2026/06/store-sttailor-1.webp", "https://sttailor.com/media/2026/06/store-sttailor-4.webp", "https://sttailor.com/media/2026/09/fabric-focus-cloth-books.jpg"],
@@ -387,7 +404,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
   const graph = [
     business,
     { "@type": "WebSite", "@id": "https://sttailor.com/#website", url: "https://sttailor.com/", name: "S.T Tailor", alternateName: ["S.T Tailor HCMC", "S.T Tailor Ho Chi Minh City"], inLanguage: ["en", "vi"], publisher: { "@id": "https://sttailor.com/#business" } },
-    { "@type": pageType, "@id": `${canonical}#webpage`, url: canonical, name: title, description, isPartOf: { "@id": "https://sttailor.com/#website" }, about: { "@id": "https://sttailor.com/#business" }, primaryImageOfPage: { "@type": "ImageObject", url: `https://sttailor.com${shareImage}`, caption: shareImageAlt }, inLanguage: ["en", "vi"] },
+    { "@type": pageType, "@id": `${canonical}#webpage`, url: canonical, name: title, description, isPartOf: { "@id": "https://sttailor.com/#website" }, about: { "@id": "https://sttailor.com/#business" }, mainEntity: { "@id": "https://sttailor.com/#business" }, primaryImageOfPage: { "@type": "ImageObject", url: `https://sttailor.com${shareImage}`, caption: shareImageAlt }, inLanguage: ["en", "vi"] },
     { "@type": "SiteNavigationElement", "@id": "https://sttailor.com/#navigation", name: routes.map(([, , routeTitle]) => routeTitle.split(" | ")[0]), url: routes.map(([routePath]) => `https://sttailor.com${routePath}`) }
   ];
   if (route === "/dich-vu/") graph.push({ "@type": "Service", "@id": `${canonical}#service`, name: "Bespoke tailoring and clothing alterations", alternateName: "May đo và sửa chữa trang phục", provider: { "@id": "https://sttailor.com/#business" }, areaServed: { "@type": "City", name: "Ho Chi Minh City" }, serviceType: ["Bespoke tailoring", "Formalwear", "Womenswear", "Clothing alterations"] });

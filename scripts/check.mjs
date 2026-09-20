@@ -130,6 +130,9 @@ for (const removedBlock of ["st-lux-gallery-redirect", "st-lux-appointment", "st
 for (const clothFeature of ["st-cloth-heritage", "British cloth", "Italian cloth", "Vitale Barberis Canonico", "Vietnamese silk"]) {
   if (!about.includes(clothFeature)) failures.push(`About cloth heritage feature is missing: ${clothFeature}`);
 }
+for (const aboutSeoFeature of ["st-about-discovery", "PRIVATE TAILORING IN HO CHI MINH CITY", "CLOTHING ALTERATIONS", "taxID", "Founder & Tailoring Consultant", "AboutPage"]) {
+  if (!about.includes(aboutSeoFeature)) failures.push(`About SEO/discovery feature is missing: ${aboutSeoFeature}`);
+}
 
 const gallery = readFileSync(path.join(dist, "gallery", "index.html"), "utf8");
 for (const removedBlock of ["album-archive", "album-client-feedback", "st-gallery-closing"]) {
