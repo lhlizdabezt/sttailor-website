@@ -1,0 +1,16 @@
+{
+  "name": "sttailor-cloudflare-worker",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Static-first S.T Tailor website for Cloudflare Workers",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/check.mjs",
+    "dev": "npm run build && wrangler dev",
+    "deploy": "npm run build && npm run check && wrangler deploy && wrangler deploy --config wrangler.www.jsonc"
+  },
+  "devDependencies": {
+    "wrangler": "^4.135.0"
+  }
+}

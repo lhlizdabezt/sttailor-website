@@ -1,0 +1,371 @@
+:root {
+  --st-vietnamese: "Segoe UI Variable Text", "Segoe UI Variable", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Noto Sans", Arial, sans-serif;
+  --st-wordmark: "Palatino Linotype", "Book Antiqua", "Iowan Old Style", Georgia, serif;
+  --st-heritage: "Cormorant Garamond", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  --st-editorial-serif: "Cormorant Garamond", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+}
+
+* { box-sizing: border-box; }
+html { background: #fffaf4; }
+body { min-width: 320px; margin: 0; background: #fffaf4; color: #302019; font-family: var(--st-vietnamese); }
+img { max-width: 100%; }
+main { display: block; width: 100%; overflow: hidden; }
+.st-site-frame { width: 100%; overflow: clip; }
+.st-skip-link { position: fixed; z-index: 100; top: 10px; left: 10px; transform: translateY(-150%); padding: 10px 14px; background: #6c371e; color: #fffaf4; font: 700 12px/1 var(--st-vietnamese); text-decoration: none; }
+.st-skip-link:focus { transform: translateY(0); }
+
+/* This header reproduces the quiet, light WordPress chrome while keeping only the original logo. */
+.st-site-header { position: sticky; top: 0; z-index: 30; width: 100%; background: linear-gradient(110deg, rgba(244, 226, 197, .97), rgba(232, 207, 171, .96) 52%, rgba(246, 231, 207, .97)); border-bottom: 1px solid rgba(125, 75, 43, .38); box-shadow: 0 8px 24px rgba(74, 39, 22, .08), inset 0 1px rgba(255, 251, 242, .72); backdrop-filter: blur(14px) saturate(112%); -webkit-backdrop-filter: blur(14px) saturate(112%); }
+.st-site-header__bar { display: flex; width: min(1280px, calc(100% - 56px)); min-height: 78px; margin: 0 auto; align-items: center; justify-content: space-between; gap: 28px; }
+.st-site-brand { display: inline-flex; flex: 0 0 auto; align-items: center; max-width: min(118px, 22vw); }
+.st-site-brand img { display: block; width: min(102px, 20vw); height: auto; margin: 0; background: transparent; border: 0; filter: none; }
+.st-site-nav { display: flex; align-items: center; justify-content: flex-end; gap: clamp(15px, 2vw, 30px); }
+.st-site-nav a { display: inline-flex; min-height: 42px; align-items: center; border-bottom: 1px solid transparent; color: #4b2b1d; font-family: var(--st-wordmark); font-size: 13px; font-weight: 600; letter-spacing: .075em; line-height: 1; text-decoration: none; text-transform: uppercase; transition: color .2s ease, border-color .2s ease, background-color .2s ease, padding .2s ease; }
+.st-site-nav a:hover, .st-site-nav a:focus-visible, .st-site-nav a[aria-current="page"] { border-color: #8e4b26; color: #8e4b26; outline: 0; }
+.st-nav-toggle { display: none; width: 44px; height: 44px; padding: 11px 10px; border: 1px solid #6c371e; border-radius: 0; background: transparent; color: #6c371e; cursor: pointer; }
+.st-nav-toggle i { display: block; width: 22px; height: 1px; margin: 5px auto; background: currentColor; transition: transform .2s ease, opacity .2s ease; }
+.st-nav-toggle[aria-expanded="true"] { background: #6c371e; color: #fffaf4; }
+.st-nav-toggle[aria-expanded="true"] i:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.st-nav-toggle[aria-expanded="true"] i:nth-child(2) { opacity: 0; }
+.st-nav-toggle[aria-expanded="true"] i:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* The WordPress hero action stays a clear outlined destination after removal of the old beta override. */
+#st-home-v6.st-home-v6--mission .st-home-v6__hero-copy h1,
+#st-home-v6.st-home-v6--mission .st-home-v6__routes-label { font-family: var(--st-wordmark) !important; font-weight: 500 !important; letter-spacing: .01em; }
+#st-home-v6.st-home-v6--mission .st-home-v6__hero-jump { display: inline-flex !important; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 58px; padding: 13px 22px; border: 1px solid #efc177 !important; background: rgba(57, 30, 19, .42) !important; box-shadow: inset 0 0 0 1px rgba(255, 248, 239, .20), 0 10px 24px rgba(37, 17, 10, .18); color: #fff9ef !important; -webkit-text-fill-color: #fff9ef !important; text-align: center; text-decoration: none; transition: background-color .22s ease, color .22s ease, transform .22s ease, box-shadow .22s ease; }
+#st-home-v6.st-home-v6--mission .st-home-v6__hero-jump span { display: block !important; color: inherit !important; -webkit-text-fill-color: inherit !important; font-family: var(--st-vietnamese) !important; font-size: 11px !important; font-weight: 700 !important; letter-spacing: .12em !important; line-height: 1.15 !important; opacity: 1 !important; }
+#st-home-v6.st-home-v6--mission .st-home-v6__hero-jump span[lang="vi"] { font-size: 10px !important; letter-spacing: .09em !important; }
+#st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:hover,
+#st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible { background: #f7dfb8 !important; box-shadow: inset 0 0 0 1px #f7dfb8, 0 12px 26px rgba(37, 17, 10, .25); color: #3b2116 !important; -webkit-text-fill-color: #3b2116 !important; outline: 0; transform: translateY(-2px); }
+html body .st-site-frame #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump { border-top: 1px solid #efc177 !important; border-right: 1px solid #efc177 !important; border-bottom: 1px solid #efc177 !important; border-left: 1px solid #efc177 !important; background-color: rgba(57, 30, 19, .42) !important; }
+#st-home-v6.st-home-v6--mission .st-home-v6__routes { background-color: #f4e5d0 !important; background-image: linear-gradient(90deg, rgba(116, 71, 42, .055) 1px, transparent 1px) !important; background-size: 22px 100% !important; }
+#st-home-v6.st-home-v6--mission .st-home-v6__routes-label { font-size: clamp(26px, 3vw, 42px) !important; line-height: 1.05 !important; }
+
+/* The remaining Services material retains the WordPress layout but uses fonts with dependable Vietnamese glyph coverage. */
+.st-service-page,
+.st-service-page * { min-width: 0; }
+.st-service-page :is(h1, h2, h3, .st-page-kicker, .st-service-commission-map__catalogue > article > span) { font-family: var(--st-wordmark) !important; font-weight: 600 !important; letter-spacing: .012em !important; }
+.st-service-page :is(p, li, small, em, a, span) { font-family: var(--st-vietnamese) !important; font-variant-ligatures: common-ligatures; }
+.st-service-page :is(h1, h2, h3) [lang="vi"],
+.st-service-page .st-page-kicker [lang="vi"],
+.st-service-page .st-service-commission-map__catalogue [lang="vi"] { font-family: var(--st-wordmark) !important; font-weight: 500 !important; }
+.st-service-page .st-service-house-standard h2,
+.st-service-page .st-service-commission-map__head h2 { font-size: clamp(34px, 5vw, 68px) !important; line-height: .98 !important; }
+.st-service-page .st-service-commission-map__head .st-page-kicker { font-size: clamp(13px, 1.4vw, 17px) !important; letter-spacing: .11em !important; }
+.st-service-page .st-service-commission-map__catalogue h3 { font-size: clamp(24px, 2.25vw, 38px) !important; line-height: 1.05 !important; }
+.st-service-page .st-service-commission-map__catalogue p { font-size: clamp(15px, 1.2vw, 18px) !important; line-height: 1.55 !important; }
+.st-service-page .st-service-booking h2 { font-family: var(--st-wordmark) !important; font-weight: 600 !important; }
+/* The removed house-standard band must not leave the old commission-map top gutter behind. */
+html body .st-service-page .st-service-commission-map { margin-top: 0 !important; }
+
+/* About keeps the WordPress content hierarchy while making the retained editorial headings calmer and more legible. */
+.st-lux-about :is(h1, h2, h3, .st-lux-eyebrow) { font-family: var(--st-wordmark) !important; font-weight: 600 !important; }
+.st-lux-about .st-lux-provenance__materials :is(h3, p),
+.st-lux-about .st-lux-values :is(h3, p) { font-family: var(--st-vietnamese) !important; }
+.st-lux-about .st-lux-provenance__materials h3,
+.st-lux-about .st-lux-values h3 { font-family: var(--st-wordmark) !important; font-size: clamp(20px, 2vw, 30px) !important; line-height: 1.08 !important; }
+.st-lux-about .st-lux-values-wrap h2,
+.st-lux-about .st-lux-business h2 { font-size: clamp(36px, 5vw, 70px) !important; line-height: .98 !important; }
+.st-lux-about .st-lux-people .st-lux-section-heading { margin-inline: auto !important; text-align: center !important; }
+
+/* The owner requested no more than three photographs on an album row. */
+.st-gallery-page .st-album-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+.st-gallery-page .st-gallery-album__heading h2 { font-family: var(--st-wordmark) !important; font-weight: 600 !important; }
+.st-gallery-page .st-gallery-album__heading h2 [lang="vi"] { font-family: var(--st-wordmark) !important; font-weight: 500 !important; }
+
+/* Gallery chapter navigator: a tactile 3x3 heritage index that jumps to each photographic album. */
+html body .st-gallery-numpad { position: relative !important; padding: clamp(68px, 9vw, 120px) 0 !important; overflow: hidden !important; background: #ead2b7 !important; color: #3a2116 !important; }
+html body .st-gallery-numpad::before { content: "" !important; position: absolute !important; inset: 18px !important; border: 1px solid rgba(107, 59, 35, .25) !important; pointer-events: none !important; }
+html body .st-gallery-numpad__heading { max-width: 800px !important; margin: 0 auto 42px !important; text-align: center !important; }
+html body .st-gallery-numpad__heading .st-gallery-kicker { margin: 0 0 13px !important; color: #83502f !important; -webkit-text-fill-color: #83502f !important; font: 700 13px/1.4 var(--st-vietnamese) !important; letter-spacing: .14em !important; }
+html body .st-gallery-numpad__heading .st-gallery-kicker span[lang="vi"] { color: #936141 !important; -webkit-text-fill-color: #936141 !important; }
+html body .st-gallery-numpad__heading h2 { margin: 0 !important; color: #321b12 !important; -webkit-text-fill-color: #321b12 !important; font: 500 clamp(40px, 5.5vw, 74px)/.96 var(--st-wordmark) !important; letter-spacing: -.02em !important; }
+html body .st-gallery-numpad__heading h2 span[lang="vi"] { display: block !important; margin-top: 12px !important; color: #754629 !important; -webkit-text-fill-color: #754629 !important; font-size: .43em !important; line-height: 1.15 !important; letter-spacing: .01em !important; }
+html body .st-gallery-numpad__heading > p:last-child { max-width: 640px !important; margin: 18px auto 0 !important; color: #62402f !important; -webkit-text-fill-color: #62402f !important; font: 400 16px/1.65 var(--st-vietnamese) !important; }
+html body .st-gallery-numpad__heading > p:last-child span[lang="vi"] { display: block !important; margin-top: 7px !important; color: #7b533d !important; -webkit-text-fill-color: #7b533d !important; }
+html body .st-gallery-numpad__grid { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 14px !important; max-width: 1120px !important; margin: 0 auto !important; }
+html body .st-gallery-numpad__card { position: relative !important; display: grid !important; min-height: 166px !important; grid-template-columns: 38px minmax(0, 1fr) 22px !important; grid-template-rows: auto auto !important; column-gap: 12px !important; align-content: center !important; padding: 24px 22px !important; border: 1px solid rgba(102, 57, 34, .46) !important; background: rgba(255, 250, 242, .91) !important; box-shadow: 5px 5px 0 rgba(117, 71, 43, .18) !important; color: #382017 !important; -webkit-text-fill-color: #382017 !important; text-decoration: none !important; transition: transform .28s cubic-bezier(.2,.7,.2,1), background-color .28s ease, box-shadow .28s ease, border-color .28s ease !important; }
+html body .st-gallery-numpad__card > span { grid-row: 1 / span 2 !important; align-self: center !important; color: #915632 !important; -webkit-text-fill-color: #915632 !important; font: 700 13px/1 var(--st-vietnamese) !important; letter-spacing: .1em !important; }
+html body .st-gallery-numpad__card > strong { color: #382017 !important; -webkit-text-fill-color: #382017 !important; font: 500 clamp(18px, 1.6vw, 24px)/1.04 var(--st-wordmark) !important; }
+html body .st-gallery-numpad__card > em { margin-top: 8px !important; color: #76503a !important; -webkit-text-fill-color: #76503a !important; font: 500 13px/1.3 var(--st-vietnamese) !important; font-style: normal !important; }
+html body .st-gallery-numpad__card > i { grid-column: 3 !important; grid-row: 1 / span 2 !important; align-self: center !important; color: #8c502f !important; -webkit-text-fill-color: #8c502f !important; font: 400 21px/1 var(--st-wordmark) !important; font-style: normal !important; transition: transform .28s ease !important; }
+html body .st-gallery-numpad__card:hover, html body .st-gallery-numpad__card:focus-visible { border-color: #4a2719 !important; background: #f4dfc3 !important; box-shadow: 9px 9px 0 #9a603a !important; color: #321b12 !important; -webkit-text-fill-color: #321b12 !important; transform: translate(-3px, -3px) !important; outline: 0 !important; }
+html body .st-gallery-numpad__card:hover > i, html body .st-gallery-numpad__card:focus-visible > i { transform: translate(4px, -4px) !important; }
+
+/* Pricing ends with two equally weighted, legible choices: quotation and payment. */
+.stpr-ledger .stpr-hero .stpr-kicker,
+.stpr-ledger .stpr-priceboard__head .stpr-eyebrow { font-family: var(--st-wordmark) !important; font-size: clamp(17px, 1.75vw, 24px) !important; font-weight: 600 !important; letter-spacing: .075em !important; }
+.stpr-ledger .stpr-next-steps { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+
+/* The approved six direct contact channels complete two balanced rows instead of leaving empty tracks. */
+.st-contact-page--v2 .st-contact-buttons { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+
+/* Give the bilingual contact heading its own rhythm before the detail list. */
+html body .st-contact-page .st-contact-info > h2 {
+  display: grid !important;
+  gap: 7px !important;
+  margin: 0 0 30px !important;
+  line-height: 1.08 !important;
+}
+html body .st-contact-page .st-contact-info > h2 > br { display: none !important; }
+html body .st-contact-page .st-contact-info > h2 > span[lang="vi"] {
+  display: block !important;
+  margin: 0 !important;
+  font-size: .58em !important;
+  line-height: 1.35 !important;
+}
+/* Contact hero is intentionally concise: the bilingual invitation carries the band without a paragraph wall. */
+html body .st-contact-page--v2 .st-contact-hero-content > p { display: none !important; }
+html body .st-contact-page--v2 .st-contact-hero-content > h1 {
+  max-width: 900px !important;
+  font-size: clamp(42px, 5.4vw, 78px) !important;
+  line-height: .98 !important;
+}
+html body .st-contact-page--v2 .st-contact-hero-content > h1 span[lang="vi"] { font-size: .43em !important; line-height: 1.18 !important; }
+
+/* Homepage: the showroom becomes the quiet backdrop, while every route remains readable on a translucent paper card. */
+html body #st-home-v6.st-home-v6--mission .st-home-v6__routes--mission {
+  position: relative !important;
+  isolation: isolate !important;
+  background-color: #2d1a12 !important;
+  background-image:
+    linear-gradient(90deg, rgba(31, 17, 11, .78), rgba(45, 25, 15, .52) 46%, rgba(31, 17, 11, .74)),
+    url("/media/2026/06/store-sttailor-1.webp") !important;
+  background-position: center 46% !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  box-shadow: inset 0 1px rgba(255, 244, 224, .22), inset 0 -1px rgba(255, 244, 224, .16) !important;
+}
+html body #st-home-v6.st-home-v6--mission .st-home-v6__routes--mission::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: -1 !important;
+  background: linear-gradient(180deg, rgba(20, 11, 7, .15), rgba(20, 11, 7, .52)) !important;
+  pointer-events: none !important;
+}
+html body #st-home-v6.st-home-v6--mission .st-home-v6__routes--mission .st-home-v6__routes-label {
+  width: fit-content !important;
+  max-width: 760px !important;
+  margin: 0 0 30px !important;
+  padding: 17px 21px 16px !important;
+  border: 1px solid rgba(246, 215, 171, .66) !important;
+  background: rgba(40, 22, 14, .58) !important;
+  box-shadow: 0 18px 50px rgba(15, 8, 5, .22) !important;
+  color: #fff8ee !important;
+  -webkit-text-fill-color: #fff8ee !important;
+  backdrop-filter: blur(7px) !important;
+}
+html body #st-home-v6.st-home-v6--mission .st-home-v6__routes--mission .st-home-v6__routes-label::before { display: none !important; }
+html body #st-home-v6.st-home-v6--mission .st-home-v6__routes--mission .st-home-v6__routes-label span[lang="vi"] {
+  color: #f3cea0 !important;
+  -webkit-text-fill-color: #f3cea0 !important;
+}
+html body #st-home-v6.st-home-v6--mission .st-home-v6__routes--mission .st-home-v6__routes-grid {
+  gap: 12px !important;
+  padding: 12px !important;
+  border: 1px solid rgba(250, 225, 191, .5) !important;
+  background: rgba(37, 20, 13, .34) !important;
+  box-shadow: 0 24px 72px rgba(15, 8, 5, .28) !important;
+  backdrop-filter: blur(9px) !important;
+}
+html body #st-home-v6.st-home-v6--mission .st-home-v6__routes--mission a.st-home-v6__route,
+html body #st-home-v6.st-home-v6--mission .st-home-v6__routes--mission a.st-home-v6__route:nth-child(n) {
+  border: 1px solid rgba(103, 54, 31, .28) !important;
+  background: rgba(255, 249, 239, .88) !important;
+  box-shadow: 0 11px 30px rgba(20, 10, 6, .14) !important;
+  backdrop-filter: blur(7px) !important;
+}
+html body #st-home-v6.st-home-v6--mission .st-home-v6__routes--mission a.st-home-v6__route:hover,
+html body #st-home-v6.st-home-v6--mission .st-home-v6__routes--mission a.st-home-v6__route:focus-visible {
+  border-color: #f0c17f !important;
+  background: #4f2a19 !important;
+  box-shadow: 0 18px 38px rgba(15, 8, 5, .28) !important;
+  transform: translateY(-4px) !important;
+}
+
+/* Homepage consultation action: a clear double-rule invitation, matching the site's formal CTA language. */
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump {
+  position: relative !important;
+  display: inline-grid !important;
+  min-width: min(100%, 326px) !important;
+  min-height: 68px !important;
+  padding: 16px 58px 15px 24px !important;
+  border: 1px solid #f1cf9a !important;
+  background: #f6e2c1 !important;
+  box-shadow: 0 16px 42px rgba(24, 12, 7, .28) !important;
+  color: #3d2014 !important;
+  -webkit-text-fill-color: #3d2014 !important;
+  text-align: left !important;
+}
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 5px !important;
+  border: 1px solid rgba(94, 48, 27, .42) !important;
+  pointer-events: none !important;
+}
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump::after {
+  content: "→" !important;
+  position: absolute !important;
+  top: 50% !important;
+  right: 22px !important;
+  color: #7a3f22 !important;
+  font: 400 25px/1 var(--st-wordmark) !important;
+  transform: translateY(-50%) !important;
+  transition: transform .24s ease !important;
+}
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump span {
+  font-family: var(--st-vietnamese) !important;
+  font-size: 11px !important;
+  letter-spacing: .105em !important;
+}
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump span[lang="vi"] { color: #78452e !important; -webkit-text-fill-color: #78452e !important; }
+/* Keep the bilingual separator with the Vietnamese label; the inherited WordPress cream made it look detached. */
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump span[lang="vi"]::before { color: #78452e !important; -webkit-text-fill-color: #78452e !important; }
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:hover,
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible {
+  border-color: #f1cf9a !important;
+  background: #4a2819 !important;
+  color: #fff7ec !important;
+  -webkit-text-fill-color: #fff7ec !important;
+  transform: translateY(-3px) !important;
+}
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:hover span[lang="vi"],
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible span[lang="vi"],
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:hover span[lang="vi"]::before,
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible span[lang="vi"]::before,
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:hover::after,
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible::after { color: #f3cf9e !important; -webkit-text-fill-color: #f3cf9e !important; }
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:hover::after,
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible::after { transform: translate(4px, -50%) !important; }
+html body .st-site-frame #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump {
+  background: #f6e2c1 !important;
+  color: #3d2014 !important;
+  -webkit-text-fill-color: #3d2014 !important;
+}
+html body .st-site-frame #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:hover,
+html body .st-site-frame #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible {
+  background: #4a2819 !important;
+  color: #fff7ec !important;
+  -webkit-text-fill-color: #fff7ec !important;
+}
+
+/* Services: five precise stages presented as one connected tailoring journey. */
+html body .st-service-page .st-bespoke-process {
+  position: relative !important;
+  overflow: hidden !important;
+  padding: clamp(72px, 9vw, 126px) 0 !important;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(212, 157, 94, .16), transparent 34%),
+    linear-gradient(135deg, #24150f 0%, #3b2116 56%, #28170f 100%) !important;
+  color: #fff7ec !important;
+}
+html body .st-service-page .st-bespoke-process::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 14px !important;
+  border: 1px solid rgba(237, 194, 139, .28) !important;
+  pointer-events: none !important;
+}
+html body .st-service-page .st-bespoke-process__head { max-width: 880px !important; margin: 0 auto clamp(40px, 6vw, 70px) !important; text-align: center !important; }
+html body .st-service-page .st-bespoke-process__head .st-page-kicker { color: #e8b978 !important; -webkit-text-fill-color: #e8b978 !important; font-size: clamp(14px, 1.35vw, 18px) !important; letter-spacing: .12em !important; }
+html body .st-service-page .st-bespoke-process__head h2 { margin: 14px 0 22px !important; color: #fff9f0 !important; -webkit-text-fill-color: #fff9f0 !important; font-size: clamp(39px, 5.4vw, 74px) !important; font-weight: 500 !important; line-height: .98 !important; }
+html body .st-service-page .st-bespoke-process__head h2 span[lang="vi"] { display: block !important; margin-top: 12px !important; color: #efc995 !important; -webkit-text-fill-color: #efc995 !important; font-size: .47em !important; line-height: 1.14 !important; }
+html body .st-service-page .st-bespoke-process__head > p:last-child { max-width: 720px !important; margin: 0 auto !important; color: #ead8c7 !important; -webkit-text-fill-color: #ead8c7 !important; font-size: clamp(15px, 1.35vw, 18px) !important; line-height: 1.75 !important; }
+html body .st-service-page .st-bespoke-process__head > p:last-child span[lang="vi"] { display: block !important; margin-top: 7px !important; color: #d9b995 !important; -webkit-text-fill-color: #d9b995 !important; }
+html body .st-service-page .st-bespoke-process__steps { position: relative !important; display: grid !important; grid-template-columns: repeat(5, minmax(0, 1fr)) !important; margin: 0 !important; padding: 0 !important; list-style: none !important; }
+html body .st-service-page .st-bespoke-process__steps::before { content: "" !important; position: absolute !important; top: 35px !important; right: 4% !important; left: 4% !important; height: 1px !important; background: linear-gradient(90deg, transparent, #d9a665 9%, #d9a665 91%, transparent) !important; }
+html body .st-service-page .st-bespoke-process__steps > li { position: relative !important; display: grid !important; align-content: start !important; min-height: 360px !important; padding: 0 clamp(15px, 2vw, 26px) 30px !important; border-right: 1px solid rgba(237, 194, 139, .18) !important; color: #fff7ec !important; }
+html body .st-service-page .st-bespoke-process__steps > li:last-child { border-right: 0 !important; }
+html body .st-service-page .st-bespoke-process__number { position: relative !important; z-index: 1 !important; display: grid !important; width: 70px !important; height: 70px !important; margin: 0 0 32px !important; place-items: center !important; border: 1px solid #d9a665 !important; border-radius: 50% !important; background: #2e1a12 !important; color: #f1ca94 !important; -webkit-text-fill-color: #f1ca94 !important; font: 500 16px/1 var(--st-wordmark) !important; letter-spacing: .08em !important; }
+html body .st-service-page .st-bespoke-process__steps h3 { margin: 0 0 17px !important; color: #fff9f0 !important; -webkit-text-fill-color: #fff9f0 !important; font-size: clamp(25px, 2vw, 34px) !important; font-weight: 500 !important; line-height: 1 !important; }
+html body .st-service-page .st-bespoke-process__steps h3 span[lang="vi"] { display: block !important; margin-top: 8px !important; color: #e7bd86 !important; -webkit-text-fill-color: #e7bd86 !important; font-size: .55em !important; line-height: 1.15 !important; }
+html body .st-service-page .st-bespoke-process__steps p { margin: 0 !important; color: #d9c5b4 !important; -webkit-text-fill-color: #d9c5b4 !important; font-size: 14px !important; line-height: 1.67 !important; }
+html body .st-service-page .st-bespoke-process__steps p span[lang="vi"] { display: block !important; margin-top: 8px !important; color: #c8a989 !important; -webkit-text-fill-color: #c8a989 !important; }
+html body .st-service-page .st-bespoke-process__actions { display: flex !important; margin-top: 42px !important; justify-content: center !important; gap: 12px !important; }
+html body .st-service-page .st-bespoke-process__actions a { display: inline-flex !important; min-height: 52px !important; padding: 13px 18px !important; align-items: center !important; justify-content: center !important; gap: 7px !important; border: 1px solid #e7bd86 !important; background: #f3d7ae !important; color: #3a2116 !important; -webkit-text-fill-color: #3a2116 !important; font-size: 11px !important; font-weight: 800 !important; letter-spacing: .08em !important; text-decoration: none !important; transition: transform .2s ease, background-color .2s ease !important; }
+html body .st-service-page .st-bespoke-process__actions a:last-child { background: transparent !important; color: #fff6e8 !important; -webkit-text-fill-color: #fff6e8 !important; }
+html body .st-service-page .st-bespoke-process__actions a:hover,
+html body .st-service-page .st-bespoke-process__actions a:focus-visible { background: #fff8ee !important; color: #3a2116 !important; -webkit-text-fill-color: #3a2116 !important; transform: translateY(-2px) !important; }
+
+/* About: a visual cloth triptych grounded in the actual S.T Tailor archive. */
+html body .st-cloth-heritage { padding: clamp(72px, 9vw, 126px) 0 !important; background: #f4e5d0 !important; color: #342017 !important; }
+html body .st-cloth-heritage__head { display: grid !important; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr) !important; gap: 18px clamp(34px, 7vw, 108px) !important; margin: 0 0 clamp(38px, 5vw, 64px) !important; align-items: end !important; }
+html body .st-cloth-heritage__head .st-lux-eyebrow { grid-column: 1 / -1 !important; margin: 0 !important; color: #874921 !important; -webkit-text-fill-color: #874921 !important; font-size: 14px !important; letter-spacing: .13em !important; }
+html body .st-cloth-heritage__head h2 { margin: 0 !important; color: #2e1a12 !important; -webkit-text-fill-color: #2e1a12 !important; font-family: var(--st-wordmark) !important; font-size: clamp(42px, 5.6vw, 76px) !important; font-weight: 500 !important; line-height: .93 !important; }
+html body .st-cloth-heritage__head h2 span[lang="vi"] { display: block !important; margin-top: 12px !important; color: #7c4328 !important; -webkit-text-fill-color: #7c4328 !important; font-size: .46em !important; line-height: 1.12 !important; }
+html body .st-cloth-heritage__head > p { max-width: 580px !important; margin: 0 !important; color: #5e3b29 !important; -webkit-text-fill-color: #5e3b29 !important; font: 400 clamp(16px, 1.45vw, 20px)/1.7 var(--st-vietnamese) !important; }
+html body .st-cloth-heritage__head > p span[lang="vi"] { display: block !important; margin-top: 8px !important; color: #754d37 !important; -webkit-text-fill-color: #754d37 !important; }
+html body .st-cloth-heritage__gallery { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 14px !important; }
+html body .st-cloth-heritage__gallery figure { position: relative !important; min-height: 560px !important; margin: 0 !important; overflow: hidden !important; background: #2d1a12 !important; box-shadow: 0 24px 56px rgba(61, 32, 20, .17) !important; }
+html body .st-cloth-heritage__gallery img { width: 100% !important; height: 100% !important; min-height: 560px !important; object-fit: cover !important; transition: transform .7s cubic-bezier(.2,.7,.2,1) !important; }
+html body .st-cloth-heritage__gallery figure:hover img { transform: scale(1.035) !important; }
+html body .st-cloth-heritage__gallery figcaption { position: absolute !important; right: 0 !important; bottom: 0 !important; left: 0 !important; display: grid !important; padding: 72px 24px 24px !important; background: linear-gradient(180deg, transparent, rgba(28, 15, 10, .94)) !important; color: #fff8ef !important; }
+html body .st-cloth-heritage__gallery figcaption b { color: #fff8ef !important; -webkit-text-fill-color: #fff8ef !important; font: 500 clamp(25px, 2.4vw, 38px)/1 var(--st-wordmark) !important; }
+html body .st-cloth-heritage__gallery figcaption > span[lang="vi"] { margin-top: 6px !important; color: #edc58e !important; -webkit-text-fill-color: #edc58e !important; font: 500 16px/1.2 var(--st-wordmark) !important; }
+html body .st-cloth-heritage__gallery figcaption small { margin-top: 15px !important; color: #e8d7c8 !important; -webkit-text-fill-color: #e8d7c8 !important; font: 400 14px/1.55 var(--st-vietnamese) !important; }
+html body .st-cloth-heritage__gallery figcaption small span[lang="vi"] { display: block !important; margin-top: 6px !important; color: #d1b293 !important; -webkit-text-fill-color: #d1b293 !important; }
+
+/* Footer crest uses the supplied original-colour transparent logo. */
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__crest { display: inline-flex !important; width: 104px !important; margin: 0 0 22px !important; background: transparent !important; border: 0 !important; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__crest img { display: block !important; width: 100% !important; height: auto !important; background: transparent !important; border: 0 !important; filter: none !important; mix-blend-mode: normal !important; }
+
+@media (max-width: 980px) {
+  .st-site-header__bar { width: min(100% - 32px, 720px); min-height: 72px; }
+  .st-site-brand { max-width: 96px; }
+  .st-site-brand img { width: min(82px, 30vw); }
+  .st-nav-toggle { display: block; }
+  .st-site-nav { position: absolute !important; top: 100% !important; right: auto !important; left: 0 !important; display: flex !important; width: min(320px, 84vw) !important; max-height: 0; flex-direction: column !important; align-items: stretch !important; overflow: hidden; gap: 0 !important; padding: 0 !important; background: #512a1a; border-right: 1px solid rgba(255, 250, 244, .32); border-bottom: 0; box-shadow: 16px 20px 38px rgba(31, 15, 9, .24); opacity: 0; pointer-events: none; transform: translateX(-14px); transform-origin: left top; transition: max-height .3s ease, opacity .2s ease, transform .25s ease, border-color .2s ease, padding .2s ease; }
+  .st-site-nav.is-open { max-height: 430px; padding: 10px 0 !important; border-bottom: 1px solid rgba(255, 250, 244, .32); opacity: 1; pointer-events: auto; transform: translateX(0); }
+  .st-site-nav a, .st-site-nav a:visited { display: flex !important; grid-column: auto !important; width: 100% !important; min-height: 54px; margin: 0 !important; padding: 13px 24px !important; justify-content: flex-start !important; border: 0 !important; border-bottom: 1px solid rgba(255, 244, 229, .18) !important; background: transparent !important; color: #fffaf4; font-size: 13px; text-align: left !important; }
+  .st-site-nav a:last-child { border-bottom: 0 !important; }
+  .st-site-nav a:hover, .st-site-nav a:focus-visible, .st-site-nav a[aria-current="page"] { border-color: rgba(255, 250, 244, .18) !important; background: #f0dbc0 !important; color: #452516; padding-left: 31px !important; }
+  html body .st-service-page .st-bespoke-process__steps { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 20px 0 !important; }
+  html body .st-service-page .st-bespoke-process__steps::before { display: none !important; }
+  html body .st-service-page .st-bespoke-process__steps > li { min-height: 0 !important; padding: 0 24px 34px !important; }
+  html body .st-service-page .st-bespoke-process__steps > li:nth-child(even) { border-right: 0 !important; }
+  html body .st-service-page .st-bespoke-process__steps > li:nth-child(5) { grid-column: 1 / -1 !important; max-width: 50% !important; margin-inline: auto !important; border-right: 0 !important; }
+  html body .st-cloth-heritage__head { grid-template-columns: 1fr !important; }
+  html body .st-cloth-heritage__gallery { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  html body .st-cloth-heritage__gallery figure:last-child { grid-column: 1 / -1 !important; min-height: 460px !important; }
+  .st-contact-page--v2 .st-contact-buttons { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .st-gallery-page .st-album-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  html body .st-gallery-numpad__grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .stpr-ledger .stpr-next-steps { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 560px) {
+  .st-site-header__bar { min-height: 68px; }
+  .st-site-brand { max-width: 78px; }
+  .st-site-brand img { width: 70px; }
+  .st-site-nav a { min-height: 52px !important; padding: 12px 22px !important; font-size: 12px !important; }
+  html body #st-home-v6.st-home-v6--mission .st-home-v6__routes--mission { background-position: 38% center !important; }
+  html body #st-home-v6.st-home-v6--mission .st-home-v6__routes--mission .st-home-v6__routes-label { padding: 14px 16px !important; }
+  html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump { min-width: 0 !important; width: 100% !important; padding-right: 52px !important; }
+  html body .st-service-page .st-bespoke-process { padding: 68px 0 !important; }
+  html body .st-service-page .st-bespoke-process::before { inset: 8px !important; }
+  html body .st-service-page .st-bespoke-process__steps { grid-template-columns: 1fr !important; }
+  html body .st-service-page .st-bespoke-process__steps > li,
+  html body .st-service-page .st-bespoke-process__steps > li:nth-child(5) { grid-column: auto !important; max-width: none !important; margin: 0 !important; padding: 0 8px 32px !important; border-right: 0 !important; border-bottom: 1px solid rgba(237, 194, 139, .18) !important; }
+  html body .st-service-page .st-bespoke-process__steps > li + li { padding-top: 28px !important; }
+  html body .st-service-page .st-bespoke-process__number { margin-bottom: 22px !important; }
+  html body .st-service-page .st-bespoke-process__actions { flex-direction: column !important; }
+  html body .st-service-page .st-bespoke-process__actions a { width: 100% !important; }
+  html body .st-cloth-heritage__gallery { grid-template-columns: 1fr !important; }
+  html body .st-cloth-heritage__gallery figure,
+  html body .st-cloth-heritage__gallery figure:last-child,
+  html body .st-cloth-heritage__gallery img { grid-column: auto !important; min-height: 470px !important; }
+  html body .st-footer-v7.st-footer-v8 .st-footer-v7__crest { width: 86px !important; }
+  .st-contact-page--v2 .st-contact-buttons { grid-template-columns: 1fr !important; }
+  .st-gallery-page .st-album-grid { grid-template-columns: 1fr !important; }
+  html body .st-gallery-numpad { padding: 60px 0 !important; }
+  html body .st-gallery-numpad::before { inset: 8px !important; }
+  html body .st-gallery-numpad__heading { margin-bottom: 30px !important; text-align: left !important; }
+  html body .st-gallery-numpad__grid { grid-template-columns: 1fr !important; gap: 11px !important; }
+  html body .st-gallery-numpad__card { min-height: 126px !important; padding: 19px 16px !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}
