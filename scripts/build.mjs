@@ -204,6 +204,130 @@ function transformContact(html) {
   return replaceVisibleAtelier(html);
 }
 
+const galleryAltText = {
+  "st-tailor-gallery-brocade-dinner-jacket.jpg": "Black textured dinner jacket on a mannequin | Áo khoác dự tiệc đen dệt vân trên mannequin",
+  "st-tailor-gallery-ceremonial-jacket-frame.jpg": "Burgundy ceremonial jacket with gold embroidery | Áo lễ phục đỏ burgundy thêu chỉ vàng",
+  "st-tailor-gallery-duk-0010.jpg": "Black tuxedo with white shirt on a mannequin | Tuxedo đen cùng sơ mi trắng trên mannequin",
+  "st-tailor-gallery-duk-0012.jpg": "Black tuxedo with tailored satin lapel | Tuxedo đen với ve satin may đo",
+  "st-tailor-gallery-duk-9733.jpg": "Black formal trousers and white pleated shirt | Quần lễ phục đen và sơ mi trắng xếp ly",
+  "sttailorhcm_3971189422263494295.jpg": "Black pinstripe suit with red lining detail | Suit sọc đen với chi tiết lớp lót đỏ",
+  "sttailorhcm_3971191631789221081.jpg": "Navy suit displayed on a mannequin | Suit xanh navy trưng bày trên mannequin",
+  "st-tailor-gallery-client-charcoal-suit.jpg": "Client wearing a charcoal tailored suit in the showroom | Khách hàng mặc suit xám than may đo tại showroom",
+  "st-tailor-gallery-navy-formal-front.jpg": "Client in a navy formal suit, front view | Khách hàng mặc suit lễ phục xanh navy, góc chính diện",
+  "st-tailor-archive-navy-formal-back.jpg": "Client in a navy formal suit, back view | Khách hàng mặc suit lễ phục xanh navy, góc phía sau",
+  "st-tailor-archive-navy-formal-profile.jpg": "Client in a navy formal suit, side profile | Khách hàng mặc suit lễ phục xanh navy, góc nghiêng",
+  "st-tailor-navy-double-breasted-front.jpeg": "Navy double-breasted suit on a mannequin | Suit xanh navy hai hàng nút trên mannequin",
+  "st-tailor-archive-atelier-one.jpg": "Navy tailored suit on a mannequin by the coast | Suit xanh navy may đo trên mannequin bên bờ biển",
+  "st-tailor-archive-atelier-two.jpg": "Grey double-breasted suit in a tailoring room | Suit xám hai hàng nút trong không gian nhà may",
+  "st-tailor-gallery-grey-suit.jpg": "Grey tailored suit on a mannequin by a window | Suit xám may đo trên mannequin cạnh cửa sổ",
+  "st-tailor-gallery-beige-double-breasted-suit.png": "Cream double-breasted suit on a mannequin | Suit kem hai hàng nút trên mannequin",
+  "st-tailor-gallery-gray-double-breasted-suit.png": "Light grey double-breasted suit on a mannequin | Suit xám nhạt hai hàng nút trên mannequin",
+  "st-tailor-gallery-navy-suit-mannequin.png": "Navy double-breasted suit on a mannequin | Suit xanh navy hai hàng nút trên mannequin",
+  "st-tailor-gallery-navy-suit-mannequin-editorial.jpg": "Navy blazer with patterned tie and pocket square | Blazer xanh navy với cà vạt hoa văn và khăn túi áo",
+  "st-tailor-black-suit-full-length.jpeg": "Black tailored suit, full length | Suit đen may đo, toàn thân",
+  "st-tailor-navy-lapel-detail.jpeg": "Navy double-breasted suit lapel detail | Chi tiết ve áo suit xanh navy hai hàng nút",
+  "st-tailor-gallery-duk-9988.jpg": "Light blue tailored suit on a mannequin | Suit xanh nhạt may đo trên mannequin",
+  "st-tailor-gallery-duk-9991.jpg": "Lilac tailored suit on a mannequin | Suit tông lilac may đo trên mannequin",
+  "st-tailor-gallery-duk-9858.jpg": "Cream tailored suit with light blue shirt | Suit màu kem may đo cùng sơ mi xanh nhạt",
+  "st-tailor-womens-white-suit.jpg": "White women's tailored suit on a mannequin | Suit nữ trắng may đo trên mannequin",
+  "st-tailor-client-womens-white-suit.jpg": "Client wearing a white women's tailored suit outdoors | Khách hàng mặc suit nữ trắng may đo ngoài trời",
+  "st-tailor-client-womens-fitting.jpg": "Women's trouser fitting in the showroom | Buổi thử quần nữ tại showroom",
+  "st-tailor-archive-womens-suit-window.jpg": "White women's suit on a mannequin by the window | Suit nữ trắng trên mannequin cạnh cửa sổ",
+  "st-tailor-gallery-womenswear-window-frame.jpg": "Floral womenswear displayed in the showroom window | Trang phục nữ họa tiết hoa trưng bày tại cửa sổ showroom",
+  "st-tailor-gallery-blush-silk-floral-dress.jpg": "Blush silk dress with floral embroidery | Đầm lụa hồng phấn thêu hoa",
+  "st-tailor-floral-dinner-jacket-showroom.png": "Magenta and violet floral dinner jacket in the S.T Tailor showroom | Áo khoác dự tiệc floral tông hồng tím tại showroom S.T Tailor",
+  "st-tailor-floral-dinner-jacket-lapel.png": "Floral dinner jacket lapel and cloth detail | Chi tiết ve áo và chất liệu của áo khoác dự tiệc floral",
+  "st-tailor-floral-dinner-jacket-front.png": "Floral dinner jacket front and pocket detail | Chi tiết thân trước và túi của áo khoác dự tiệc floral",
+  "st-tailor-floral-dinner-jacket-texture.jpg": "Magenta and violet floral dinner jacket jacquard texture and pocket seam | Chất liệu jacquard và đường may túi của áo khoác dự tiệc floral tông hồng tím",
+  "st-tailor-gallery-shirt-label-detail.jpg": "S.T Tailor shirt label sewn inside a white shirt | Nhãn S.T Tailor may bên trong sơ mi trắng",
+  "st-tailor-gallery-patterned-shirt.jpg": "Blue patterned tailored shirt on a mannequin | Sơ mi xanh hoa văn may đo trên mannequin",
+  "tailored-trouser-check.jpg": "Grey checked tailored trousers folded on wood | Quần may đo caro xám gấp trên nền gỗ",
+  "st-tailor-archive-occasion-editorial.jpg": "Tailoring consultation editorial with white shirt and navy suit | Hình ảnh tư vấn may đo với sơ mi trắng và suit navy",
+  "st-tailor-gallery-duk-9905.jpg": "White tailored shirt folded on navy cloth | Sơ mi trắng may đo gấp trên nền vải navy",
+  "st-tailor-gallery-duk-9907.jpg": "White tailored shirt with checked inner collar detail | Sơ mi trắng may đo với chi tiết cổ trong caro",
+  "st-tailor-gallery-duk-9908.jpg": "White tailored shirt cuff with checked trim | Cổ tay sơ mi trắng may đo với viền caro",
+  "st-tailor-gallery-duk-9910.jpg": "White tailored shirt collar with checked trim | Cổ sơ mi trắng may đo với viền caro",
+  "st-tailor-gallery-duk-9913.jpg": "White tailored shirt front with checked placket detail | Thân trước sơ mi trắng may đo với nẹp caro",
+  "st-tailor-gallery-duk-9920.jpg": "Light blue tailored trousers folded on white cloth | Quần xanh nhạt may đo gấp trên nền trắng",
+  "st-tailor-gallery-duk-9926.jpg": "Black tailored trouser interior and waistband detail | Chi tiết cạp và mặt trong quần đen may đo",
+  "st-tailor-gallery-shoulder-lapel-detail.jpg": "Grey suit shoulder and notch lapel detail | Chi tiết vai và ve chữ K của suit xám",
+  "navy-notch-lapel.jpg": "Navy blazer with notch lapel and yellow pocket square | Blazer xanh navy với ve chữ K và khăn túi vàng",
+  "navy-suit-construction.jpeg": "Navy suit showing front, side, back and lapel views | Suit xanh navy với các góc chính diện, nghiêng, sau và ve áo",
+  "st-tailor-archive-gold-jacket-detail.jpg": "Client opening a jacket to show gold lining | Khách hàng mở áo khoác để thể hiện lớp lót vàng",
+  "st-tailor-archive-atelier-three.jpg": "Grey patterned jacket on a mannequin in the tailoring room | Áo khoác xám họa tiết trên mannequin trong không gian nhà may",
+  "st-tailor-gallery-jacket-lining-mannequin.jpg": "Open tailored jacket showing patterned lining and inner labels | Áo khoác may đo mở thân, thể hiện lớp lót hoa văn và nhãn bên trong",
+  "fabric-focus-swatch-books.jpg": "Tailoring swatch books with blue and red cloth samples | Sách mẫu vải may đo với các mẫu xanh navy và đỏ",
+  "fabric-focus-catalogue.jpg": "Tailoring cloth catalogue and blue fabric book | Catalogue chất liệu may đo và sổ vải xanh",
+  "fabric-focus-colour-reference.jpg": "Cloth colour reference book with fabric swatches | Sổ tham khảo màu vải cùng các mẫu vải",
+  "fabric-focus-standing-book.jpg": "Standing tailoring cloth book with navy swatches | Sổ vải may đo dựng đứng cùng mẫu vải navy",
+  "fabric-focus-cloth-books.jpg": "Tailoring cloth books and grey swatches | Sách vải may đo và các mẫu vải xám",
+  "st-tailor-suiting-fabric-swatches.jpeg": "Suiting fabric swatches in neutral tones | Mẫu vải suit tông trung tính",
+  "st-tailor-client-fabric-consultation.jpg": "Client reviewing cloth samples during a consultation | Khách hàng xem mẫu vải trong buổi tư vấn",
+  "st-tailor-gallery-trouser-interior-detail.jpg": "Tailored trouser interior with seam finishing | Mặt trong quần may đo với đường hoàn thiện",
+  "st-tailor-archive-jacket-lining-one.jpg": "Grey jacket lining with yellow seam tape | Lớp lót áo khoác xám với viền chỉ vàng",
+  "st-tailor-archive-jacket-lining-two.jpg": "Grey jacket lining and inner label detail | Chi tiết lớp lót và nhãn bên trong áo khoác xám",
+  "st-tailor-gallery-canonico-cloth-books.jpg": "Vitale Barberis Canonico cloth books at S.T Tailor | Sách vải Vitale Barberis Canonico tại S.T Tailor",
+  "st-tailor-fabric-books.jpeg": "Stacked suiting fabric books from Italian mills | Chồng sổ vải suit từ các nhà dệt Ý",
+  "st-tailor-client-fitted-suit.jpg": "Client wearing a fitted black suit with yellow shirt | Khách hàng mặc suit đen vừa vặn cùng sơ mi vàng",
+  "st-tailor-client-fitting-suit-back.jpg": "Back view during a black suit fitting | Góc phía sau trong buổi thử suit đen",
+  "st-tailor-client-measurement-session.jpg": "Tailor measuring a client during a fitting session | Thợ may lấy số đo khách hàng trong buổi thử đồ",
+  "st-tailor-client-navy-suit-fitting.jpg": "Client receiving a navy suit fitting adjustment | Khách hàng được chỉnh phom suit xanh navy",
+  "st-tailor-client-shirt-trouser-fitting.jpg": "Client trying a white shirt and black trousers | Khách hàng thử sơ mi trắng và quần đen",
+  "st-tailor-client-shoulder-fitting.jpg": "Tailor adjusting a client's shirt shoulder | Thợ may chỉnh vai áo sơ mi cho khách hàng",
+  "st-tailor-owner-client-white-suit.jpg": "S.T Tailor with a client in a white suit | S.T Tailor cùng khách hàng mặc suit trắng",
+  "st-tailor-client-portrait-appointment.jpg": "Client portrait in white shirt and black trousers | Chân dung khách hàng với sơ mi trắng và quần đen",
+  "st-tailor-client-private-consultation.jpg": "Private consultation with two S.T Tailor clients | Buổi tư vấn riêng cùng hai khách hàng S.T Tailor",
+  "st-tailor-archive-gold-jacket-fitting.jpg": "Client wearing a black suit with gold shirt during fitting | Khách hàng mặc suit đen cùng sơ mi vàng trong buổi thử đồ",
+  "st-tailor-gallery-client-white-jacket.jpg": "Client wearing a white dinner jacket at the showroom entrance | Khách hàng mặc áo khoác dự tiệc trắng tại lối vào showroom",
+  "st-tailor-client-handshake.jpg": "S.T Tailor client appointment handshake | Bắt tay trong buổi hẹn cùng khách hàng S.T Tailor",
+  "st-tailor-gallery-duk-9807.jpg": "Client in a blue suit seated in the showroom | Khách hàng mặc suit xanh ngồi tại showroom",
+  "store-sttailor-1.webp": "S.T Tailor reception and logo wall | Quầy tiếp đón và tường logo S.T Tailor",
+  "store-sttailor-2.webp": "S.T Tailor showroom with garments and fitting area | Showroom S.T Tailor với trang phục và khu thử đồ",
+  "store-sttailor-3.webp": "Tailored suit and mannequins in the S.T Tailor showroom | Suit may đo và mannequin trong showroom S.T Tailor",
+  "store-sttailor-4.webp": "S.T Tailor lounge with display shelving | Góc tiếp khách S.T Tailor với kệ trưng bày",
+  "st-tailor-showroom-interior-wide.jpeg": "Wide view of the S.T Tailor showroom | Góc nhìn rộng không gian showroom S.T Tailor",
+  "st-tailor-gallery-wardrobe-rail.jpg": "Tailored garments on a showroom wardrobe rail | Trang phục may đo trên giá treo tại showroom",
+  "st-tailor-gallery-storefront-details-night.jpg": "S.T Tailor storefront detail at night | Chi tiết mặt tiền S.T Tailor về đêm",
+  "st-tailor-gallery-bespoke-sign-evening.jpg": "Bespoke tailoring sign outside S.T Tailor at night | Biển hiệu may đo riêng của S.T Tailor về đêm",
+  "st-tailor-gallery-window-display-evening.jpg": "S.T Tailor window display in the evening | Tủ trưng bày S.T Tailor vào buổi tối",
+  "st-tailor-gallery-cloth-wall-evening.jpg": "Showroom aisle with fabric and garments in the evening | Lối đi showroom với vải và trang phục vào buổi tối",
+  "st-tailor-gallery-showroom-tailoring-display.jpg": "Tailoring display with suit and dress forms at S.T Tailor | Khu trưng bày may đo với suit và mannequin tại S.T Tailor",
+  "st-tailor-garment-rack.jpeg": "Garments on a showroom rail | Trang phục trên giá treo tại showroom",
+  "st-tailor-gallery-duk-0058.jpg": "S.T Tailor showroom interior with garments on display | Không gian S.T Tailor với trang phục trưng bày",
+  "st-tailor-gallery-duk-0038.jpg": "Tailoring accessories displayed on a shelf | Phụ kiện may đo trưng bày trên kệ",
+  "st-tailor-gallery-duk-0064.jpg": "S.T Tailor showroom interior with garment rail | Không gian S.T Tailor với giá treo trang phục",
+  "st-tailor-archive-founder-one.jpeg": "Brown tailored trouser cuff with leather shoes | Gấu quần nâu may đo cùng giày da",
+  "st-tailor-archive-founder-two.jpeg": "Tailored jacket, tie and lapel pin detail | Chi tiết áo khoác may đo, cà vạt và ghim ve áo",
+  "st-tailor-archive-founder-three.jpeg": "Brown tailored suit shoulder and lapel detail | Chi tiết vai và ve áo suit nâu may đo",
+  "st-tailor-archive-founder-four.jpeg": "Man wearing a brown tailored suit in the showroom | Người mặc suit nâu may đo tại showroom",
+  "st-tailor-archive-founder-five.jpeg": "Watch and measuring tape during a tailoring appointment | Đồng hồ và thước dây trong buổi hẹn may đo",
+  "st-tailor-archive-founder-six.jpeg": "Portrait of a client in a brown tailored suit | Chân dung khách hàng trong suit nâu may đo",
+  "st-tailor-archive-founder-seven.jpeg": "Client selecting a jacket in the showroom | Khách hàng chọn áo khoác tại showroom",
+  "st-tailor-archive-atelier-four.jpg": "Red patterned jacket lining and S.T Tailor label | Lớp lót áo khoác đỏ hoa văn và nhãn S.T Tailor",
+  "st-tailor-gallery-partner-certificate.jpg": "Official partner certificate displayed at S.T Tailor | Chứng nhận đối tác chính thức trưng bày tại S.T Tailor",
+  "st-tailor-gallery-singer-feedback-one.jpg": "Client feedback portrait at S.T Tailor | Chân dung khách hàng phản hồi tại S.T Tailor",
+  "st-tailor-gallery-singer-feedback-two.jpg": "Client feedback moment at S.T Tailor | Khoảnh khắc phản hồi của khách hàng tại S.T Tailor",
+  "st-tailor-gallery-international-client-one.jpg": "International client appointment at S.T Tailor | Buổi hẹn cùng khách hàng quốc tế tại S.T Tailor",
+  "st-tailor-gallery-international-client-two.jpg": "International client receiving a garment at S.T Tailor | Khách hàng quốc tế nhận trang phục tại S.T Tailor",
+  "mr-Thinh.webp": "Client portrait in a black tailored suit | Chân dung khách hàng trong suit đen may đo",
+  "mr-Son.webp": "Client portrait in a navy tailored suit | Chân dung khách hàng trong suit xanh navy may đo"
+};
+
+function applyGalleryAltText(html) {
+  const unmatched = new Set();
+  const rendered = html.replace(/<img\b[^>]*\bsrc="([^"]+)"[^>]*>/gi, (tag, src) => {
+    const filename = src.split("/").pop();
+    const alt = galleryAltText[filename];
+    if (!alt) {
+      unmatched.add(filename);
+      return tag;
+    }
+    return tag.replace(/\s+alt=("|')[\s\S]*?\1/i, "").replace(/\/?>(?=$)/, ` alt="${alt}">`);
+  });
+  if (unmatched.size) throw new Error(`Gallery images are missing verified alt text: ${[...unmatched].join(", ")}`);
+  return rendered;
+}
+
 function figureForAsset(html, filename) {
   const matcher = new RegExp(`<figure\\b[^>]*>(?:(?!<\\/figure>)[\\s\\S])*?${escapeRegex(filename)}(?:(?!<\\/figure>)[\\s\\S])*?<\\/figure>`, "i");
   const match = matcher.exec(html);
@@ -264,7 +388,7 @@ function transformGallery(html) {
   html = removeElementByClass(html, "section", "st-gallery-closing")
     .replace("<span>08</span> PEOPLE &amp; APPOINTMENTS", "<span>08</span> PEOPLE, APPOINTMENTS &amp; CLIENT FEEDBACK")
     .replace("A personal process, from welcome to final adjustment.<span lang=\"vi\">Một hành trình riêng, từ lời chào đón đến lần tinh chỉnh cuối cùng.</span>", "A personal process, from welcome to final adjustment.<span lang=\"vi\">Hành trình riêng từ lời chào đón đến lần tinh chỉnh cuối cùng.</span>");
-  return replaceVisibleAtelier(html);
+  return replaceVisibleAtelier(applyGalleryAltText(html));
 }
 
 function transformPayment(html) {
@@ -348,6 +472,13 @@ function transformPage(sourceFile, html) {
   return (transforms[sourceFile] ?? replaceVisibleAtelier)(html);
 }
 
+function imageMetadata(html) {
+  return [...html.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^\"]+)"[^>]*>/gi)].map((match) => ({
+    src: match[1],
+    alt: /\balt="([^\"]*)"/i.exec(match[0])?.[1] ?? ""
+  }));
+}
+
 function header(activePath) {
   const navItems = [
     ["/gioi-thieu/", "About"],
@@ -372,6 +503,7 @@ function footer() {
 
 function documentFor(route, sourceFile, title, description, shareImage, shareImageAlt) {
   const body = transformPage(sourceFile, readSource(sourceFile));
+  const galleryImages = route === "/gallery/" ? imageMetadata(body) : [];
   const canonical = `https://sttailor.com${route}`;
   const business = {
     "@type": ["LocalBusiness", "ClothingStore"],
@@ -412,6 +544,18 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     { "@type": "SiteNavigationElement", "@id": "https://sttailor.com/#navigation", name: routes.map(([, , routeTitle]) => routeTitle.split(" | ")[0]), url: routes.map(([routePath]) => `https://sttailor.com${routePath}`) }
   ];
   if (route === "/dich-vu/") graph.push({ "@type": "Service", "@id": `${canonical}#service`, name: "Bespoke tailoring and clothing alterations", alternateName: "May đo và sửa chữa trang phục", provider: { "@id": "https://sttailor.com/#business" }, areaServed: { "@type": "City", name: "Ho Chi Minh City" }, serviceType: ["Bespoke tailoring", "Formalwear", "Womenswear", "Clothing alterations"] });
+  if (route === "/gallery/") graph.push({
+    "@type": "ItemList",
+    "@id": `${canonical}#images`,
+    name: "S.T Tailor Gallery | Thư viện hình ảnh S.T Tailor",
+    description: "Bespoke tailoring, cloth, fittings, clients and showroom photographs. | Hình ảnh may đo, chất liệu, buổi thử đồ, khách hàng và showroom.",
+    numberOfItems: galleryImages.length,
+    itemListElement: galleryImages.map(({ src, alt }, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: { "@type": "ImageObject", contentUrl: `https://sttailor.com${src}`, caption: alt, inLanguage: ["en", "vi"] }
+    }))
+  });
   if (route !== "/") graph.push({ "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: "https://sttailor.com/" }, { "@type": "ListItem", position: 2, name: title.split(" | ")[0], item: canonical }] });
   const jsonLd = `<script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@graph": graph })}</script>`;
   const safeTitle = title.replaceAll('"', "&quot;");
@@ -481,10 +625,11 @@ const sitemapEntries = routes.map(([route, , , , shareImage, shareImageAlt]) => 
   const pageHtml = readFileSync(pagePath, "utf8");
   const imageMap = new Map([[shareImage, shareImageAlt]]);
   for (const match of pageHtml.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^"]+)"[^>]*>/gi)) {
+    if (route === "/gallery/" && /(?:logo-sttailor|LinkedInLogo)/i.test(match[1])) continue;
     const alt = /\balt="([^"]*)"/i.exec(match[0])?.[1] || "S.T Tailor";
     if (!imageMap.has(match[1])) imageMap.set(match[1], alt);
   }
-  const imageEntries = [...imageMap].slice(0, 20).map(([src, alt]) => `<image:image><image:loc>https://sttailor.com${xmlEscape(src)}</image:loc><image:title>${xmlEscape(alt)}</image:title></image:image>`).join("");
+  const imageEntries = [...imageMap].slice(0, 1000).map(([src, alt]) => `<image:image><image:loc>https://sttailor.com${xmlEscape(src)}</image:loc><image:title>${xmlEscape(alt)}</image:title></image:image>`).join("");
   return `\n  <url><loc>https://sttailor.com${route}</loc><lastmod>${buildDate}</lastmod>${imageEntries}</url>`;
 }).join("");
 writeFileSync(path.join(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">${sitemapEntries}\n</urlset>\n`, "utf8");

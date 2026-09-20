@@ -146,8 +146,16 @@ for (const removedBlock of ["album-archive", "album-client-feedback", "st-galler
 }
 if ((gallery.match(/st-gallery-numpad__card/g) ?? []).length !== 9) failures.push("Gallery 3x3 chapter navigator must contain exactly nine cards.");
 if (!gallery.includes("st-gallery-numpad") || !gallery.includes("#album-tuxedo") || !gallery.includes("#album-showroom")) failures.push("Gallery chapter navigator is missing jump targets.");
+const galleryImageTags = [...gallery.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^\"]+)"[^>]*>/gi)];
+const galleryContentImages = galleryImageTags.filter((match) => !match[1].includes("logo-sttailor") && !match[1].endsWith("/LinkedInLogo.png"));
+if (galleryContentImages.length !== 99) failures.push("Gallery must retain exactly 99 approved editorial images.");
+for (const image of galleryContentImages) {
+  const alt = /\balt="([^\"]*)"/i.exec(image[0])?.[1] ?? "";
+  if (!alt || !alt.includes(" | ")) failures.push(`Gallery image is missing a bilingual alt text: ${image[1]}`);
+}
+if (!gallery.includes('"@type":"ItemList"') || !gallery.includes(`"numberOfItems":${galleryContentImages.length}`)) failures.push("Gallery image structured data is missing or incomplete.");
 for (const requiredAsset of ["st-tailor-archive-atelier-four.jpg", "st-tailor-gallery-partner-certificate.jpg"]) {
-  if ((gallery.match(new RegExp(requiredAsset.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g")) ?? []).length !== 1) failures.push(`Gallery retained image must appear exactly once: ${requiredAsset}`);
+  if (galleryContentImages.filter((image) => image[1].endsWith(`/${requiredAsset}`)).length !== 1) failures.push(`Gallery retained image must appear exactly once: ${requiredAsset}`);
 }
 
 const notFound = readFileSync(path.join(dist, "404.html"), "utf8");
@@ -162,6 +170,8 @@ const sitemap = readFileSync(path.join(dist, "sitemap.xml"), "utf8");
 if ((sitemap.match(/<url><loc>https:\/\/sttailor\.com/g) ?? []).length !== expectedRoutes.length || sitemap.includes("beta.sttailor.com")) failures.push("Sitemap does not contain the complete production route set.");
 if (!sitemap.includes('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"') || !sitemap.includes("<image:image>")) failures.push("Image sitemap discovery data is missing.");
 if (!sitemap.includes("<image:title>")) failures.push("Image sitemap titles are missing.");
+const gallerySitemap = sitemap.match(/<url><loc>https:\/\/sttailor\.com\/gallery\/[\s\S]*?<\/url>/)?.[0] ?? "";
+if ((gallerySitemap.match(/<image:image>/g) ?? []).length !== 99) failures.push("Gallery image sitemap does not expose every editorial image exactly once.");
 if (!generatedCss.includes("width: min(320px, 84vw) !important") || !generatedCss.includes("justify-content: flex-start !important")) failures.push("Mobile navigation is not the requested left-aligned vertical panel.");
 
 const worker = readFileSync(path.join(root, "src", "worker.js"), "utf8");
