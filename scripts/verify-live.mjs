@@ -30,6 +30,16 @@ async function fetchWithRetry(resource, options = {}, attempts = 5) {
   throw lastError;
 }
 
+async function fetchUntil(resource, options, predicate, attempts = 20) {
+  let lastResponse;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    lastResponse = await fetchWithRetry(resource, options);
+    if (predicate(lastResponse)) return lastResponse;
+    if (attempt < attempts) await new Promise((resolve) => setTimeout(resolve, 3000));
+  }
+  return lastResponse;
+}
+
 const pages = new Map();
 for (const route of routes) {
   const response = await fetchWithRetry(`${origin}${route}`);
@@ -87,7 +97,12 @@ expect(manifest.status === 200 && (await manifest.text()).includes('"name": "S.T
 const legacy = await fetchWithRetry(`${origin}/about/`, { redirect: "manual" });
 expect(legacy.status === 301 && legacy.headers.get("location") === `${origin}/gioi-thieu/`, "Legacy URL mapping is not a 301");
 
-const www = await fetchWithRetry("https://www.sttailor.com/gallery/?source=www", { redirect: "manual" });
+const expectedWwwLocation = `${origin}/gallery/?source=www`;
+const www = await fetchUntil(
+  "https://www.sttailor.com/gallery/?source=www",
+  { redirect: "manual" },
+  (response) => response.status === 301 && response.headers.get("location") === expectedWwwLocation && response.headers.get("cache-control")?.includes("max-age=86400")
+);
 expect(www.status === 301 && www.headers.get("location") === `${origin}/gallery/?source=www`, "www does not preserve path/query in its apex 301");
 expect(www.headers.get("cache-control")?.includes("max-age=86400"), "www redirect is not cacheable");
 

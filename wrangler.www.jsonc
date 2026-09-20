@@ -5,8 +5,8 @@
   "compatibility_date": "2026-09-19",
   "routes": [
     {
-      "pattern": "www.sttailor.com",
-      "custom_domain": true
+      "pattern": "www.sttailor.com/*",
+      "zone_name": "sttailor.com"
     }
   ],
   "workers_dev": false,

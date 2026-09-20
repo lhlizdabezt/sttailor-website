@@ -171,6 +171,12 @@ const wwwRedirect = readFileSync(path.join(root, "src", "www-redirect.js"), "utf
 for (const redirectRule of ["status: 301", "Location: url.toString()", "max-age=86400", "Strict-Transport-Security"]) {
   if (!wwwRedirect.includes(redirectRule)) failures.push(`www redirect rule is missing: ${redirectRule}`);
 }
+const wwwWorkerConfig = readFileSync(path.join(root, "wrangler.www.jsonc"), "utf8");
+if (!wwwWorkerConfig.includes('"pattern": "www.sttailor.com/*"') || !wwwWorkerConfig.includes('"zone_name": "sttailor.com"')) failures.push("www must use a zone Worker Route rather than a disposable custom domain.");
+const wwwDnsScript = readFileSync(path.join(root, "scripts", "ensure-www-dns.mjs"), "utf8");
+for (const marker of ["CLOUDFLARE_API_TOKEN", "www.sttailor.com", 'type: "AAAA"', "proxied: true"]) {
+  if (!wwwDnsScript.includes(marker)) failures.push(`www DNS automation is missing: ${marker}`);
+}
 const wranglerConfig = readFileSync(path.join(root, "wrangler.jsonc"), "utf8");
 if (!wranglerConfig.includes('"run_worker_first": true')) failures.push("Asset requests bypass the Worker header and cache policy.");
 
