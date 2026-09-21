@@ -26,6 +26,14 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Set up image build runtime
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install image build dependency
+        run: python -m pip install --disable-pip-version-check "Pillow==12.2.0"
+
       - name: Install exact dependencies
         run: npm ci
 
