@@ -201,7 +201,7 @@ if (!sitemap.includes("<image:title>")) failures.push("Image sitemap titles are 
 const gallerySitemap = sitemap.match(/<url><loc>https:\/\/sttailor\.com\/gallery\/[\s\S]*?<\/url>/)?.[0] ?? "";
 if ((gallerySitemap.match(/<image:image>/g) ?? []).length !== 99) failures.push("Gallery image sitemap does not expose every editorial image exactly once.");
 if ((sitemap.match(/<image:loc>/g) ?? []).length !== new Set([...sitemap.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)].map((match) => match[1])).size) failures.push("Image sitemap contains duplicate image locations.");
-if (!generatedCss.includes("width: min(320px, 84vw) !important") || !generatedCss.includes("justify-content: flex-start !important")) failures.push("Mobile navigation is not the requested left-aligned vertical panel.");
+if (!generatedCss.includes("width: 100vw !important") || !generatedCss.includes("left: 50% !important") || !generatedCss.includes("justify-content: flex-start !important")) failures.push("Mobile navigation is not the requested full-width, left-aligned panel.");
 
 const worker = readFileSync(path.join(root, "src", "worker.js"), "utf8");
 for (const legacyPath of ["/about/", "/services/", "/pricing/", "/payment-methods/", "/contact/", "/refund_returns/"]) {
