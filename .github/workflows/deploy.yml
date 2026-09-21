@@ -10,55 +10,72 @@ permissions:
 
 concurrency:
   group: sttailor-production
-  cancel-in-progress: true
+  # Finish one complete cutover before the next push starts. Cancelling a run
+  # part-way through can otherwise leave an avoidable apex/www timing gap.
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     environment: production
     steps:
       - name: Check out source
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.0
 
       - name: Set up Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 22
+          node-version: "22.23.2"
           cache: npm
 
       - name: Set up image build runtime
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.0.0
         with:
           python-version: "3.12"
 
       - name: Install image build dependency
-        run: python -m pip install --disable-pip-version-check "Pillow==12.2.0"
+        run: |
+          python -m pip install --disable-pip-version-check --only-binary=:all: --requirement requirements-build.txt
+          python -m pip check
 
       - name: Install exact dependencies
         run: npm ci
 
       - name: Build production assets
         run: npm run build
+        env:
+          STTAILOR_BUILD_REVISION: ${{ github.sha }}
 
       - name: Run migration and SEO checks
         run: npm run check
 
+      - name: Confirm deployment credentials are present
+        run: |
+          test -n "$CLOUDFLARE_API_TOKEN"
+          test -n "$CLOUDFLARE_ACCOUNT_ID"
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Ensure production DNS records
+        run: node scripts/run-with-retry.mjs --attempts 3 --delay-ms 10000 -- node scripts/ensure-www-dns.mjs
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
       - name: Deploy apex website
-        run: npx wrangler deploy
+        run: node scripts/run-with-retry.mjs --attempts 3 --delay-ms 10000 -- npx wrangler deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       - name: Deploy www redirect
-        run: npx wrangler deploy --config wrangler.www.jsonc
+        run: node scripts/run-with-retry.mjs --attempts 3 --delay-ms 10000 -- npx wrangler deploy --config wrangler.www.jsonc
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-      - name: Ensure deployment DNS records
-        run: node scripts/ensure-www-dns.mjs
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-
       - name: Verify production website
-        run: npm run verify:live
+        run: node scripts/run-with-retry.mjs --attempts 3 --delay-ms 15000 -- npm run verify:live
+        env:
+          EXPECTED_BUILD_REVISION: ${{ github.sha }}

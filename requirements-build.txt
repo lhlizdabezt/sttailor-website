@@ -1,0 +1,2 @@
+# Deterministic image metadata and responsive-derivative build dependency.
+Pillow==12.2.0

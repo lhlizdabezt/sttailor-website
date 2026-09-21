@@ -31,12 +31,12 @@ npm run dev
 
 ## Automated production deployment
 
-Every push to `main` runs `.github/workflows/deploy.yml`. GitHub Actions installs exact dependencies, rebuilds the site, runs the migration/SEO checks, deploys the apex Worker and the `www` redirect Worker, then verifies the public routes, mobile navigation, structured data, sitemap, redirects and true 404 response against production. The repository requires these GitHub Actions secrets:
+Every push to `main` runs `.github/workflows/deploy.yml`. GitHub Actions is the only normal deployment route: it validates the checked-in revision, maintains only the required proxied `www` DNS endpoint, deploys the apex Worker and `www` redirect Worker, and verifies that production serves that exact Git revision. Deployments are serialized and transient Cloudflare/DNS calls retry safely; a failed build or check exits before any Worker replacement, leaving the previously deployed production version online. The repository requires these GitHub Actions secrets:
 
 - `CLOUDFLARE_API_TOKEN`
 - `CLOUDFLARE_ACCOUNT_ID`
 
-Commits are authored with `luonghailong.work@gmail.com` as requested. Cloudflare credentials are stored only as encrypted GitHub Actions secrets. The normal production action is `git push origin main`; do not run a local Cloudflare deploy for ordinary content or code updates.
+Commits are authored with `luonghailong.work@gmail.com` as requested. Cloudflare credentials are stored only as encrypted GitHub Actions secrets. The normal production action is `git push origin main`; do not run a local Cloudflare deploy for ordinary content or code updates. Local preview/builds require `python -m pip install -r requirements-build.txt` once for responsive-image generation, but never require a local Cloudflare token.
 
 ## Emergency-only manual deployment
 

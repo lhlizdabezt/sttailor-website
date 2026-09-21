@@ -21,6 +21,7 @@ function visibleAndAccessibleText(html) {
 }
 
 if (manifest.source !== "source/wordpress" || manifest.sourceMedia !== "source/media") failures.push("Build did not use the versioned WordPress and media source.");
+if (!manifest.revision || !/^(local|[0-9a-f]{40})$/i.test(manifest.revision)) failures.push("Build manifest does not contain a valid deployment revision.");
 if (JSON.stringify(manifest.routes) !== JSON.stringify(expectedRoutes)) failures.push("Published route set does not match the approved site map.");
 
 for (const route of expectedRoutes) {
@@ -37,6 +38,7 @@ for (const route of expectedRoutes) {
   pageTitles.add(title);
   pageDescriptions.add(description);
   if (!html.includes("st-site-header") || !html.includes("st-footer-v7 st-footer-v8")) failures.push(`Missing shared navigation or footer: ${route}`);
+  if (!html.includes('name="sttailor-build-revision"')) failures.push(`Build revision marker is missing: ${route}`);
   if (!html.includes('<meta name="robots" content="index, follow')) failures.push(`Indexable robots metadata is missing: ${route}`);
   if (!html.includes('application/ld+json') || !html.includes('LocalBusiness')) failures.push(`LocalBusiness structured data is missing: ${route}`);
   if (!html.includes('SiteNavigationElement') || !html.includes('OfferCatalog')) failures.push(`Expanded navigation or service structured data is missing: ${route}`);

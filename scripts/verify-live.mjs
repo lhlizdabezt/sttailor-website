@@ -1,4 +1,6 @@
 const origin = "https://sttailor.com";
+const expectedBuildRevision = process.env.EXPECTED_BUILD_REVISION;
+if (expectedBuildRevision && !/^[0-9a-f]{40}$/i.test(expectedBuildRevision)) throw new Error("EXPECTED_BUILD_REVISION must be a full Git commit SHA.");
 const routes = [
   "/",
   "/gioi-thieu/",
@@ -40,19 +42,36 @@ async function fetchUntil(resource, options, predicate, attempts = 20) {
   return lastResponse;
 }
 
+async function fetchTextUntil(resource, options, predicate, attempts = 20) {
+  let last;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    const response = await fetchWithRetry(resource, options);
+    const text = await response.text();
+    last = { response, text };
+    if (predicate(response, text)) return last;
+    if (attempt < attempts) await new Promise((resolve) => setTimeout(resolve, 3000));
+  }
+  return last;
+}
+
 const pages = new Map();
 for (const route of routes) {
-  const response = await fetchWithRetry(`${origin}${route}`);
-  const html = await response.text();
-  pages.set(route, html);
+  const verifyingRevision = route === "/" && expectedBuildRevision;
+  const { response, text: html } = verifyingRevision
+    ? await fetchTextUntil(`${origin}${route}`, {}, (candidate, text) => candidate.status === 200 && text.includes(`name="sttailor-build-revision" content="${expectedBuildRevision}"`))
+    : { response: await fetchWithRetry(`${origin}${route}`), text: "" };
+  const pageHtml = verifyingRevision ? html : await response.text();
+  pages.set(route, pageHtml);
   expect(response.status === 200, `${route} returned ${response.status}`);
   expect(response.headers.get("strict-transport-security")?.includes("max-age=15552000"), `${route} has no HSTS policy`);
   expect(response.headers.get("content-security-policy")?.includes("object-src 'none'"), `${route} has no baseline CSP`);
   expect(response.headers.get("x-robots-tag")?.includes("index, follow"), `${route} has no indexable X-Robots-Tag`);
-  expect(html.includes(`<link rel="canonical" href="${origin}${route}">`), `${route} has no production canonical`);
-  expect(!html.toLowerCase().includes("beta.sttailor.com"), `${route} still contains the beta host`);
-  expect(html.includes('name="robots" content="index, follow'), `${route} is not indexable`);
+  expect(pageHtml.includes(`<link rel="canonical" href="${origin}${route}">`), `${route} has no production canonical`);
+  expect(!pageHtml.toLowerCase().includes("beta.sttailor.com"), `${route} still contains the beta host`);
+  expect(pageHtml.includes('name="robots" content="index, follow'), `${route} is not indexable`);
 }
+
+if (expectedBuildRevision) expect(pages.get("/").includes(`name="sttailor-build-revision" content="${expectedBuildRevision}"`), "Production did not serve the revision deployed by this workflow.");
 
 const home = pages.get("/");
 expect((home.match(/<a class="st-home-editorial__frame/g) || []).length === 5, "Home visual destination cards are missing");
