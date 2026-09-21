@@ -78,7 +78,9 @@ export default {
       return Response.json({ ok: true, site: "S.T Tailor", runtime: "Cloudflare Workers" });
     }
     if (pathname === "/wp-login.php" || pathname.startsWith("/wp-admin")) {
-      return Response.redirect(new URL("/lien-he/", url), 302);
+      // WordPress was retired. Treat legacy administration endpoints as real,
+      // non-indexable missing resources instead of creating a soft 404 redirect.
+      return notFound(request, env, url);
     }
     if (requestHost === `www.${canonicalHost}`) {
       url.hostname = canonicalHost;

@@ -137,6 +137,10 @@ expect(missing.status === 404, `Unknown URL returned ${missing.status}`);
 expect(missingHtml.includes("Back to Home"), "404 page has no Back to Home action");
 expect(missing.headers.get("x-robots-tag")?.includes("noindex"), "404 response is not marked noindex");
 
+const retiredWordPress = await fetchWithRetry(`${origin}/wp-login.php`, { redirect: "manual" });
+expect(retiredWordPress.status === 404, `Retired WordPress login returned ${retiredWordPress.status} instead of 404`);
+expect(retiredWordPress.headers.get("x-robots-tag")?.includes("noindex"), "Retired WordPress login is not marked noindex");
+
 if (failures.length) {
   console.error(failures.map((failure) => `FAIL: ${failure}`).join("\n"));
   process.exit(1);
