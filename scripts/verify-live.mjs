@@ -46,7 +46,7 @@ for (const route of routes) {
   const html = await response.text();
   pages.set(route, html);
   expect(response.status === 200, `${route} returned ${response.status}`);
-  expect(response.headers.get("strict-transport-security")?.includes("max-age=31536000"), `${route} has no HSTS policy`);
+  expect(response.headers.get("strict-transport-security")?.includes("max-age=15552000"), `${route} has no HSTS policy`);
   expect(response.headers.get("content-security-policy")?.includes("object-src 'none'"), `${route} has no baseline CSP`);
   expect(response.headers.get("x-robots-tag")?.includes("index, follow"), `${route} has no indexable X-Robots-Tag`);
   expect(html.includes(`<link rel="canonical" href="${origin}${route}">`), `${route} has no production canonical`);
@@ -110,6 +110,7 @@ const www = await fetchUntil(
   (response) => response.status === 301 && response.headers.get("location") === expectedWwwLocation
 );
 expect(www.status === 301 && www.headers.get("location") === `${origin}/gallery/?source=www`, "www does not preserve path/query in its apex 301");
+expect(www.headers.get("strict-transport-security")?.includes("max-age=15552000"), "www redirect has no conservative HSTS policy");
 
 const missing = await fetchWithRetry(`${origin}/this-page-does-not-exist`);
 const missingHtml = await missing.text();

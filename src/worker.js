@@ -33,15 +33,17 @@ function securityHeaders(response, pathname = "/") {
   headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
   headers.set("X-Frame-Options", "SAMEORIGIN");
-  headers.set("Strict-Transport-Security", "max-age=31536000");
+  headers.set("Strict-Transport-Security", "max-age=15552000");
   headers.set("Content-Security-Policy", "base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests");
   const contentType = headers.get("Content-Type") || "";
   const isHtml = routes.has(pathname) || pathname.endsWith(".html") || pathname === "/not-found" || contentType.includes("text/html");
   if (isHtml) {
     headers.set("X-Robots-Tag", "index, follow, max-image-preview:large");
     headers.set("Cache-Control", "public, max-age=0, must-revalidate");
-  } else if (staticPrefixes.some((prefix) => pathname.startsWith(prefix))) {
+  } else if (pathname.startsWith("/styles/") || pathname.startsWith("/scripts/")) {
     headers.set("Cache-Control", "public, max-age=31536000, immutable");
+  } else if (pathname.startsWith("/media/")) {
+    headers.set("Cache-Control", "public, max-age=604800");
   } else if (["/robots.txt", "/sitemap.xml", "/llms.txt", "/site.webmanifest"].includes(pathname)) {
     headers.set("Cache-Control", "public, max-age=3600");
   }

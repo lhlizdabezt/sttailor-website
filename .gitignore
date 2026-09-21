@@ -5,3 +5,4 @@ cutover-backups/
 .playwright-cli/
 output/
 artifacts/
+scripts/__pycache__/

@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
-import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -11,6 +12,7 @@ const sourceMedia = path.join(root, "source", "media");
 const dist = path.join(root, "dist");
 let stylesheetHref = "/styles/site.css";
 let scriptHref = "/scripts/site.js";
+let imageManifest = {};
 
 const routes = [
   ["/", "Home.html", "S.T Tailor | Bespoke Tailoring in Ho Chi Minh City", "Bespoke suits, shirts, formalwear and alterations at 258 Lê Thánh Tôn, Ho Chi Minh City. Private consultations available.", "/media/2026/06/background-hero-trang-lien-he-sttailor.webp", "Private fitting at S.T Tailor in Ho Chi Minh City"],
@@ -211,7 +213,11 @@ function transformContact(html) {
     .replace(/\s*<p>Tell us what you are dressing for\.[\s\S]*?<\/p>/, "")
     .replace(/\s*<section class="st-contact-gallery-redirect"[\s\S]*?<\/section>/, "")
     .replace(/\s*<p class="st-contact-summary">[\s\S]*?<\/p>/, "")
-    .replace(/\s*<div class="st-contact-line small"><\/div>/, "");
+    .replace(/\s*<div class="st-contact-line small"><\/div>/, "")
+    .replace(
+      '<h2>CONTACT DETAILS<br><span lang="vi">THÔNG TIN LIÊN HỆ</span></h2>',
+      '<h1>CONTACT DETAILS<br><span lang="vi">THÔNG TIN LIÊN HỆ</span></h1>'
+    );
   for (const className of ["st-contact-card--linkedin", "st-contact-card--pinterest", "st-contact-card--youtube", "st-contact-card--tiktok"]) {
     html = removeElementByClass(html, "article", className);
   }
@@ -555,6 +561,23 @@ function imageMetadata(html) {
   }));
 }
 
+function enrichImageAttributes(html, { responsiveGallery = false } = {}) {
+  return html.replace(/<img\b[^>]*\bsrc="(\/media\/[^\"]+)"[^>]*>/gi, (tag, src) => {
+    const asset = decodeURIComponent(src.replace(/^\/media\//, ""));
+    const metadata = imageManifest[asset];
+    if (!metadata) return tag;
+    let output = tag;
+    if (!/\bwidth="\d+"/i.test(output)) output = output.replace(/<img\b/i, `<img width="${metadata.width}"`);
+    if (!/\bheight="\d+"/i.test(output)) output = output.replace(/<img\b/i, `<img height="${metadata.height}"`);
+    if (!/\bdecoding=/i.test(output)) output = output.replace(/<img\b/i, '<img decoding="async"');
+    if (responsiveGallery && metadata.responsive?.length && !/\bsrcset=/i.test(output)) {
+      const srcset = metadata.responsive.map(({ src: candidate, width }) => `${candidate} ${width}w`).join(", ");
+      output = output.replace(/<img\b/i, `<img srcset="${srcset}" sizes="(max-width: 760px) 100vw, (max-width: 1080px) 50vw, 33vw"`);
+    }
+    return output;
+  });
+}
+
 function header(activePath) {
   const navItems = [
     ["/gioi-thieu/", "About"],
@@ -578,7 +601,7 @@ function footer() {
 }
 
 function documentFor(route, sourceFile, title, description, shareImage, shareImageAlt) {
-  const body = transformPage(sourceFile, readSource(sourceFile));
+  const body = enrichImageAttributes(transformPage(sourceFile, readSource(sourceFile)), { responsiveGallery: route === "/gallery/" });
   const galleryImages = route === "/gallery/" ? imageMetadata(body) : [];
   const canonical = `https://sttailor.com${route}`;
   const business = {
@@ -647,8 +670,7 @@ function collectAssetPaths() {
   const sourceFiles = [...routes.map(([, file]) => file), "Error.html", "Footer.html"];
   const content = [...sourceFiles.map((file) => readFileSync(path.join(sourceRoot, file), "utf8")), readFileSync(path.join(sourceRoot, "CustomCSS.css"), "utf8")].join("\n");
   const matcher = /https?:\/\/sttailor\.com\/wp-content\/uploads\/([^\"' )]+)/g;
-  const localFonts = ["fonts/cormorant-garamond-regular.woff2", "fonts/cormorant-garamond-semibold.woff2", "fonts/manrope-regular.woff2", "fonts/manrope-semibold.woff2"].filter((asset) => existsSync(path.join(sourceMedia, asset)));
-  const found = new Set(["2026/09/logo-sttailor.png", "2026/09/logo-sttailor-1000x1024.png", ...localFonts]);
+  const found = new Set(["2026/09/logo-sttailor.png", "2026/09/logo-sttailor-1000x1024.png"]);
   for (const match of content.matchAll(matcher)) found.add(match[1]);
   return [...found].filter((asset) => !asset.includes(".."));
 }
@@ -658,8 +680,19 @@ function copyAssets() {
   const assets = collectAssetPaths();
   const missing = assets.filter((asset) => !existsSync(path.join(sourceMedia, asset)));
   if (missing.length) throw new Error(`Versioned media source is incomplete:\n${missing.join("\n")}`);
-  cpSync(sourceMedia, path.join(dist, "media"), { recursive: true });
+  for (const asset of assets) {
+    const target = path.join(dist, "media", asset);
+    mkdirSync(path.dirname(target), { recursive: true });
+    copyFileSync(path.join(sourceMedia, asset), target);
+  }
   return assets;
+}
+
+function buildImageManifest() {
+  const result = spawnSync("python", [path.join(root, "scripts", "build-image-manifest.py"), sourceMedia, path.join(dist, "image-manifest.json")], { encoding: "utf8" });
+  if (result.status !== 0) throw new Error(`Image manifest generation failed:\n${result.stderr || result.stdout}`);
+  imageManifest = JSON.parse(readFileSync(path.join(dist, "image-manifest.json"), "utf8"));
+  return Object.keys(imageManifest).length;
 }
 
 function assertGalleryHasNoDuplicates() {
@@ -672,6 +705,7 @@ rmSync(dist, { recursive: true, force: true });
 mkdirSync(dist, { recursive: true });
 assertGalleryHasNoDuplicates();
 const assets = copyAssets();
+const imageCount = buildImageManifest();
 mkdirSync(path.join(dist, "styles"), { recursive: true });
 mkdirSync(path.join(dist, "scripts"), { recursive: true });
 
@@ -696,7 +730,9 @@ writeFileSync(path.join(dist, "not-found.html"), notFoundDocument, "utf8");
 writeFileSync(path.join(dist, "robots.txt"), "User-agent: *\nAllow: /\nDisallow: /build-manifest.json\nSitemap: https://sttailor.com/sitemap.xml\n", "utf8");
 const xmlEscape = (value) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&apos;");
 const buildDate = new Date().toISOString().slice(0, 10);
-const sitemapEntries = routes.map(([route, , , , shareImage, shareImageAlt]) => {
+const publishedImageLocations = new Set();
+const sitemapRouteOrder = [routes.find(([route]) => route === "/gallery/"), ...routes.filter(([route]) => route !== "/gallery/")];
+const sitemapEntries = sitemapRouteOrder.map(([route, , , , shareImage, shareImageAlt]) => {
   const pagePath = route === "/" ? path.join(dist, "index.html") : path.join(dist, route.slice(1), "index.html");
   const pageHtml = readFileSync(pagePath, "utf8");
   const imageMap = new Map([[shareImage, shareImageAlt]]);
@@ -705,12 +741,17 @@ const sitemapEntries = routes.map(([route, , , , shareImage, shareImageAlt]) => 
     const alt = /\balt="([^"]*)"/i.exec(match[0])?.[1] || "S.T Tailor";
     if (!imageMap.has(match[1])) imageMap.set(match[1], alt);
   }
-  const imageEntries = [...imageMap].slice(0, 1000).map(([src, alt]) => `<image:image><image:loc>https://sttailor.com${xmlEscape(src)}</image:loc><image:title>${xmlEscape(alt)}</image:title></image:image>`).join("");
+  const pageImages = [...imageMap].filter(([src]) => {
+    if (publishedImageLocations.has(src)) return false;
+    publishedImageLocations.add(src);
+    return true;
+  });
+  const imageEntries = pageImages.slice(0, 1000).map(([src, alt]) => `<image:image><image:loc>https://sttailor.com${xmlEscape(src)}</image:loc><image:title>${xmlEscape(alt)}</image:title></image:image>`).join("");
   return `\n  <url><loc>https://sttailor.com${route}</loc><lastmod>${buildDate}</lastmod>${imageEntries}</url>`;
 }).join("");
 writeFileSync(path.join(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">${sitemapEntries}\n</urlset>\n`, "utf8");
 writeFileSync(path.join(dist, "site.webmanifest"), JSON.stringify({ name: "S.T Tailor", short_name: "S.T Tailor", description: "Bespoke tailoring and clothing alterations in Ho Chi Minh City.", start_url: "/", scope: "/", display: "standalone", background_color: "#f3e1c5", theme_color: "#ead1ad", icons: [{ src: "/media/2026/09/logo-sttailor.png", sizes: "any", type: "image/png", purpose: "any maskable" }] }, null, 2), "utf8");
 writeFileSync(path.join(dist, "llms.txt"), "# S.T Tailor\n\nS.T Tailor is a bespoke tailoring and clothing alterations house at 258 Le Thanh Ton, Phuong Tan Dinh, Ho Chi Minh City, Vietnam.\n\n- Website: https://sttailor.com/\n- Services: https://sttailor.com/dich-vu/\n- Gallery: https://sttailor.com/gallery/\n- Pricing: https://sttailor.com/bang-gia/\n- Payment methods: https://sttailor.com/phuong-thuc-thanh-toan/\n- Contact: https://sttailor.com/lien-he/\n- Telephone: +84 909 556 258\n- Email: contact.sttailor@gmail.com\n", "utf8");
-writeFileSync(path.join(dist, "_headers"), "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n  X-Frame-Options: SAMEORIGIN\n  Strict-Transport-Security: max-age=31536000\n  Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests\n", "utf8");
-writeFileSync(path.join(dist, "build-manifest.json"), JSON.stringify({ source: "source/wordpress", sourceMedia: "source/media", routes: routes.map(([route]) => route), localUploadAssets: assets.length, galleryDuplicateCheck: "passed" }, null, 2), "utf8");
-console.log(`Built ${routes.length} routes from the versioned WordPress reference with ${assets.length} local upload assets.`);
+writeFileSync(path.join(dist, "_headers"), "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n  X-Frame-Options: SAMEORIGIN\n  Strict-Transport-Security: max-age=15552000\n  Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests\n", "utf8");
+writeFileSync(path.join(dist, "build-manifest.json"), JSON.stringify({ source: "source/wordpress", sourceMedia: "source/media", routes: routes.map(([route]) => route), localUploadAssets: assets.length, imageMetadata: imageCount, galleryDuplicateCheck: "passed" }, null, 2), "utf8");
+console.log(`Built ${routes.length} routes from the versioned WordPress reference with ${assets.length} local upload assets and dimensions for ${imageCount} images.`);

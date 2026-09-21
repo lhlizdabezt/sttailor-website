@@ -18,14 +18,19 @@ const zoneId = zones[0].id;
 const recordName = "www.sttailor.com";
 const records = await apiRequest(`/zones/${zoneId}/dns_records?name=${recordName}&per_page=100`);
 const appleVerification = "apple-domain-verification=yQzSEAR1bU9DtwAF";
+const redirectAddress = "100::";
+const existingRedirectRecord = records.find((item) => item.type === "AAAA" && item.content === redirectAddress && item.proxied === true);
 
-for (const record of records.filter((item) => ["A", "AAAA", "CNAME"].includes(item.type))) {
+// Only records on the dedicated www host can route visitor traffic. Leave
+// TXT and other verification records untouched, and retain an already-correct
+// proxy AAAA record so normal GitHub deployments are idempotent.
+for (const record of records.filter((item) => ["A", "AAAA", "CNAME"].includes(item.type) && item.id !== existingRedirectRecord?.id)) {
   await apiRequest(`/zones/${zoneId}/dns_records/${record.id}`, { method: "DELETE" });
 }
 
-const record = await apiRequest(`/zones/${zoneId}/dns_records`, {
+const record = existingRedirectRecord ?? await apiRequest(`/zones/${zoneId}/dns_records`, {
   method: "POST",
-  body: JSON.stringify({ type: "AAAA", name: "www", content: "100::", ttl: 1, proxied: true, comment: "Proxy record for sttailor-www-redirect Worker" })
+  body: JSON.stringify({ type: "AAAA", name: "www", content: redirectAddress, ttl: 1, proxied: true, comment: "Proxy record for sttailor-www-redirect Worker" })
 });
 
 const apexTxtRecords = await apiRequest(`/zones/${zoneId}/dns_records?type=TXT&name=sttailor.com&per_page=100`);

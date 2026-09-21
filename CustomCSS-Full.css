@@ -12834,3 +12834,48 @@ html body .st-home-editorial__frame:focus-visible { outline: 3px solid #f0c17f !
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }
 
+/* Editorial heading alignment: the legacy WordPress cascade left slight
+   horizontal offsets on these three content heads. Keep one optical centre
+   line on desktop and mobile, independent of inherited layout rules. */
+html body :is(.st-gallery-numpad__heading, .st-service-page .st-bespoke-process__head, .st-payment-compliance__head) {
+  display: grid !important;
+  justify-items: center !important;
+  align-content: start !important;
+  justify-self: center !important;
+  inset-inline: auto !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  text-align: center !important;
+}
+
+html body :is(.st-gallery-numpad__heading, .st-service-page .st-bespoke-process__head, .st-payment-compliance__head) > :is(.st-gallery-kicker, .st-page-kicker, h1, h2, p) {
+  justify-self: center !important;
+  inline-size: 100% !important;
+  margin-inline: auto !important;
+  padding-inline: 0 !important;
+  text-align: center !important;
+  text-indent: 0 !important;
+  transform: none !important;
+}
+
+html body :is(.st-gallery-numpad__heading, .st-service-page .st-bespoke-process__head, .st-payment-compliance__head) :is(h1, h2, p) span[lang="vi"] {
+  inline-size: 100% !important;
+  margin-inline: auto !important;
+  text-align: center !important;
+}
+
+html body .st-contact-page .st-contact-info > h1 {
+  margin: 0 0 22px !important;
+  color: var(--st-ink) !important;
+  font: 500 clamp(34px, 4.2vw, 56px)/1 var(--st-wordmark) !important;
+}
+
+html body .st-contact-page .st-contact-info > h1 span[lang="vi"] {
+  display: block !important;
+  margin-top: 9px !important;
+  color: var(--st-cognac) !important;
+  font-size: .48em !important;
+  line-height: 1.14 !important;
+}
+

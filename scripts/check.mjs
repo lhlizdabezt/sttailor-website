@@ -116,6 +116,7 @@ for (const excluded of ["linkedin", "facebook", "pinterest", "youtube", "tiktok"
   if (contactCards.includes(`st-contact-card--${excluded}`)) failures.push(`Retired contact channel remains: ${excluded}`);
 }
 if (contact.includes("st-contact-hero") || contact.includes("Tell us what you are dressing for") || contact.includes("Hãy chia sẻ dịp sử dụng")) failures.push("Contact hero band still remains after the requested removal.");
+if ((contact.match(/<h1\b/g) ?? []).length !== 1 || !contact.includes("CONTACT DETAILS")) failures.push("Contact page must retain one semantic H1 after its introduction band is removed.");
 
 const services = readFileSync(path.join(dist, "dich-vu", "index.html"), "utf8");
 for (const removedBlock of ["st-service-hero", "st-service-offerings", "st-service-brief", "st-service-process", "st-service-house-standard", "st-service-notes", "st-service-gallery-redirect", "st-service-commission-map__journey"]) {
@@ -176,6 +177,8 @@ if (galleryContentImages.length !== 99) failures.push("Gallery must retain exact
 for (const image of galleryContentImages) {
   const alt = /\balt="([^\"]*)"/i.exec(image[0])?.[1] ?? "";
   if (!alt || !alt.includes(" | ")) failures.push(`Gallery image is missing a bilingual alt text: ${image[1]}`);
+  if (!/\bwidth="\d+"/i.test(image[0]) || !/\bheight="\d+"/i.test(image[0])) failures.push(`Gallery image is missing intrinsic dimensions: ${image[1]}`);
+  if (!/\bsrcset="[^\"]+\.webp \d+w/i.test(image[0])) failures.push(`Gallery image is missing responsive WebP candidates: ${image[1]}`);
 }
 if (!gallery.includes('"@type":"ItemList"') || !gallery.includes(`"numberOfItems":${galleryContentImages.length}`)) failures.push("Gallery image structured data is missing or incomplete.");
 for (const requiredAsset of ["st-tailor-archive-atelier-four.jpg", "st-tailor-gallery-partner-certificate.jpg"]) {
@@ -187,6 +190,7 @@ if (!notFound.includes("Back to Home") || !notFound.includes("Về trang chủ")
 
 const productionHeaders = readFileSync(path.join(dist, "_headers"), "utf8");
 if (/X-Robots-Tag:\s*noindex/i.test(productionHeaders)) failures.push("Production headers still prevent search indexing.");
+if (!productionHeaders.includes("Strict-Transport-Security: max-age=15552000")) failures.push("Production HSTS must remain the conservative six-month policy.");
 for (const staticFile of ["robots.txt", "sitemap.xml", "llms.txt", "site.webmanifest"]) {
   if (!existsSync(path.join(dist, staticFile))) failures.push(`Missing production discovery file: ${staticFile}`);
 }
@@ -196,6 +200,7 @@ if (!sitemap.includes('xmlns:image="http://www.google.com/schemas/sitemap-image/
 if (!sitemap.includes("<image:title>")) failures.push("Image sitemap titles are missing.");
 const gallerySitemap = sitemap.match(/<url><loc>https:\/\/sttailor\.com\/gallery\/[\s\S]*?<\/url>/)?.[0] ?? "";
 if ((gallerySitemap.match(/<image:image>/g) ?? []).length !== 99) failures.push("Gallery image sitemap does not expose every editorial image exactly once.");
+if ((sitemap.match(/<image:loc>/g) ?? []).length !== new Set([...sitemap.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)].map((match) => match[1])).size) failures.push("Image sitemap contains duplicate image locations.");
 if (!generatedCss.includes("width: min(320px, 84vw) !important") || !generatedCss.includes("justify-content: flex-start !important")) failures.push("Mobile navigation is not the requested left-aligned vertical panel.");
 
 const worker = readFileSync(path.join(root, "src", "worker.js"), "utf8");
@@ -203,9 +208,10 @@ for (const legacyPath of ["/about/", "/services/", "/pricing/", "/payment-method
   if (!worker.includes(legacyPath)) failures.push(`Legacy 301 mapping is missing: ${legacyPath}`);
 }
 if (!worker.includes('new URL("/not-found", url)')) failures.push("404 worker fallback does not fetch the canonical HTML asset body.");
-for (const header of ["Strict-Transport-Security", "Content-Security-Policy", "X-Robots-Tag", "max-age=31536000, immutable"]) {
+for (const header of ["Strict-Transport-Security", "Content-Security-Policy", "X-Robots-Tag", "max-age=31536000, immutable", "max-age=604800"]) {
   if (!worker.includes(header)) failures.push(`Worker production header/cache rule is missing: ${header}`);
 }
+if (!worker.includes('"max-age=15552000"')) failures.push("Worker HSTS policy is not the conservative six-month duration.");
 const siteScript = readFileSync(path.join(root, "src", "scripts", "site.js"), "utf8");
 for (const key of ["Alt+M", "ArrowDown", "ArrowUp", "Escape", "Home", "End"]) {
   if (!siteScript.includes(key === "Alt+M" ? 'event.altKey' : `event.key === "${key}"`)) failures.push(`Navigation keyboard support is missing: ${key}`);
@@ -214,6 +220,7 @@ const wwwRedirect = readFileSync(path.join(root, "src", "www-redirect.js"), "utf
 for (const redirectRule of ["status: 301", "Location: url.toString()", "max-age=86400", "Strict-Transport-Security"]) {
   if (!wwwRedirect.includes(redirectRule)) failures.push(`www redirect rule is missing: ${redirectRule}`);
 }
+if (!wwwRedirect.includes('"max-age=15552000"')) failures.push("www redirect HSTS policy is not the conservative six-month duration.");
 const wwwWorkerConfig = readFileSync(path.join(root, "wrangler.www.jsonc"), "utf8");
 if (!wwwWorkerConfig.includes('"pattern": "www.sttailor.com/*"') || !wwwWorkerConfig.includes('"zone_name": "sttailor.com"')) failures.push("www must use a zone Worker Route rather than a disposable custom domain.");
 const wwwDnsScript = readFileSync(path.join(root, "scripts", "ensure-www-dns.mjs"), "utf8");
