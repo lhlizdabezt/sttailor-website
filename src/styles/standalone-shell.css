@@ -76,7 +76,7 @@ html body .st-service-page .st-service-commission-map { margin-top: 0 !important
 /* Gallery chapter navigator: a tactile 3x3 heritage index that jumps to each photographic album. */
 html body .st-gallery-numpad { position: relative !important; padding: clamp(68px, 9vw, 120px) 0 !important; overflow: hidden !important; background: #ead2b7 !important; color: #3a2116 !important; }
 html body .st-gallery-numpad::before { content: "" !important; position: absolute !important; inset: 18px !important; border: 1px solid rgba(107, 59, 35, .25) !important; pointer-events: none !important; }
-html body .st-gallery-numpad__heading { max-width: 800px !important; margin: 0 auto 42px !important; text-align: center !important; }
+html body .st-gallery-numpad__heading { display: block !important; width: min(800px, calc(100% - 40px)) !important; max-width: none !important; margin: 0 auto 42px !important; text-align: center !important; }
 html body .st-gallery-numpad__heading .st-gallery-kicker { margin: 0 0 13px !important; color: #83502f !important; -webkit-text-fill-color: #83502f !important; font: 700 13px/1.4 var(--st-vietnamese) !important; letter-spacing: .14em !important; }
 html body .st-gallery-numpad__heading .st-gallery-kicker span[lang="vi"] { color: #936141 !important; -webkit-text-fill-color: #936141 !important; }
 html body .st-gallery-numpad__heading h2 { margin: 0 !important; color: #321b12 !important; -webkit-text-fill-color: #321b12 !important; font: 500 clamp(40px, 5.5vw, 74px)/.96 var(--st-wordmark) !important; letter-spacing: -.02em !important; }
@@ -268,9 +268,9 @@ html body .st-service-page .st-bespoke-process::before {
   border: 1px solid rgba(237, 194, 139, .28) !important;
   pointer-events: none !important;
 }
-html body .st-service-page .st-bespoke-process__head { max-width: 880px !important; margin: 0 auto clamp(40px, 6vw, 70px) !important; text-align: center !important; }
+html body .st-service-page .st-bespoke-process__head { display: block !important; width: min(880px, calc(100% - 40px)) !important; max-width: none !important; margin: 0 auto clamp(40px, 6vw, 70px) !important; text-align: center !important; }
 html body .st-service-page .st-bespoke-process__head .st-page-kicker { color: #e8b978 !important; -webkit-text-fill-color: #e8b978 !important; font-size: clamp(14px, 1.35vw, 18px) !important; letter-spacing: .12em !important; }
-html body .st-service-page .st-bespoke-process__head h1 { margin: 14px 0 22px !important; color: #fff9f0 !important; -webkit-text-fill-color: #fff9f0 !important; font-size: clamp(39px, 5.4vw, 74px) !important; font-weight: 500 !important; line-height: .98 !important; }
+html body .st-service-page .st-bespoke-process__head h1 { display: block !important; width: 100% !important; margin: 14px auto 22px !important; color: #fff9f0 !important; -webkit-text-fill-color: #fff9f0 !important; font-size: clamp(39px, 5.4vw, 74px) !important; font-weight: 500 !important; line-height: .98 !important; text-align: center !important; text-wrap: balance !important; }
 html body .st-service-page .st-bespoke-process__head h1 span[lang="vi"] { display: block !important; margin-top: 12px !important; color: #efc995 !important; -webkit-text-fill-color: #efc995 !important; font-size: .47em !important; line-height: 1.14 !important; }
 html body .stpr-ledger .stpr-priceboard__head h1 { margin: 12px 0 0 !important; color: #311d14 !important; -webkit-text-fill-color: #311d14 !important; font-family: var(--st-wordmark) !important; font-size: clamp(38px, 5vw, 68px) !important; font-weight: 500 !important; line-height: .98 !important; text-wrap: balance !important; }
 html body .stpr-ledger .stpr-priceboard__head h1 span[lang="vi"] { display: block !important; margin-top: 10px !important; color: #7b452a !important; -webkit-text-fill-color: #7b452a !important; font-size: .5em !important; line-height: 1.14 !important; }
@@ -374,9 +374,9 @@ html body .st-pricing-gallery-suite__frame:focus-visible { outline: 3px solid #7
 
 /* Payment: readable legal terms with clear light/dark hierarchy. */
 html body .st-payment-compliance { padding: clamp(72px, 9vw, 126px) 0 !important; background: #efe0ca !important; color: #311d14 !important; }
-html body .st-payment-compliance__head { max-width: 900px !important; margin: 0 auto clamp(42px, 6vw, 70px) !important; text-align: center !important; }
+html body .st-payment-compliance__head { display: block !important; width: min(900px, calc(100% - 40px)) !important; max-width: none !important; margin: 0 auto clamp(42px, 6vw, 70px) !important; text-align: center !important; }
 html body .st-payment-compliance__head .st-page-kicker { color: #82451f !important; -webkit-text-fill-color: #82451f !important; font-size: clamp(14px, 1.25vw, 17px) !important; }
-html body .st-payment-compliance__head h2 { margin: 15px 0 22px !important; color: #2c1911 !important; -webkit-text-fill-color: #2c1911 !important; font: 500 clamp(44px, 5.6vw, 76px)/.95 var(--st-wordmark) !important; text-wrap: balance !important; }
+html body .st-payment-compliance__head h2 { display: block !important; width: 100% !important; margin: 15px auto 22px !important; color: #2c1911 !important; -webkit-text-fill-color: #2c1911 !important; font: 500 clamp(44px, 5.6vw, 76px)/.95 var(--st-wordmark) !important; text-align: center !important; text-wrap: balance !important; }
 html body .st-payment-compliance__head h2 span[lang="vi"] { display: block !important; margin-top: 12px !important; color: #784328 !important; -webkit-text-fill-color: #784328 !important; font-size: .48em !important; line-height: 1.12 !important; }
 html body .st-payment-compliance__head > p:last-child { max-width: 780px !important; margin: 0 auto !important; color: #62412f !important; -webkit-text-fill-color: #62412f !important; font: 400 clamp(15px, 1.25vw, 18px)/1.7 var(--st-vietnamese) !important; }
 html body .st-payment-compliance__head > p:last-child span[lang="vi"] { display: block !important; margin-top: 8px !important; color: #75503b !important; -webkit-text-fill-color: #75503b !important; }
@@ -590,6 +590,7 @@ html body .st-home-editorial__frame:focus-visible { outline: 3px solid #f0c17f !
   html body .st-pricing-gallery-suite__media figure:last-child { min-height: 390px !important; margin: 0 !important; }
   html body .st-pricing-gallery-suite__media img { min-height: 390px !important; }
   html body .st-payment-compliance__grid { grid-template-columns: 1fr !important; }
+  html body .st-payment-compliance__head { width: min(900px, calc(100% - 28px)) !important; }
   html body .st-payment-compliance__law { padding: 28px 20px !important; }
   html body .st-payment-compliance__law a { align-items: flex-start !important; flex-direction: column !important; }
   html body .st-payment-compliance__law a span[lang="vi"] { text-align: left !important; }
@@ -600,7 +601,7 @@ html body .st-home-editorial__frame:focus-visible { outline: 3px solid #f0c17f !
   .st-gallery-page .st-album-grid { grid-template-columns: 1fr !important; }
   html body .st-gallery-numpad { padding: 60px 0 !important; }
   html body .st-gallery-numpad::before { inset: 8px !important; }
-  html body .st-gallery-numpad__heading { margin-bottom: 30px !important; text-align: left !important; }
+  html body .st-gallery-numpad__heading { width: min(800px, calc(100% - 28px)) !important; margin-bottom: 30px !important; text-align: center !important; }
   html body .st-gallery-numpad__grid { grid-template-columns: 1fr !important; gap: 11px !important; }
   html body .st-gallery-numpad__card { min-height: 126px !important; padding: 19px 16px !important; }
 }

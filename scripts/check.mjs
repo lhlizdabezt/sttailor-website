@@ -124,9 +124,10 @@ for (const removedBlock of ["st-service-hero", "st-service-offerings", "st-servi
 if (!services.includes("THE BESPOKE PROCESS") || !services.includes("QUY TRÌNH MAY ĐO") || !services.includes("st-bespoke-process__steps")) failures.push("Redesigned bespoke process is missing from Services.");
 if ((services.match(/<h1\b/g) ?? []).length !== 1) failures.push("Services must contain exactly one primary H1 heading.");
 if (!generatedCss.includes(".st-service-page .st-service-commission-map { margin-top: 0 !important; }")) failures.push("Services commission map still retains the removed top whitespace.");
-for (const serviceGalleryFeature of ["st-service-gallery-suite", 'href="/gallery/"', "st-tailor-client-fabric-consultation.jpg", "st-tailor-client-measurement-session.jpg", "st-tailor-gallery-jacket-lining-mannequin.jpg", "OPEN THE GALLERY"]) {
-  if (!services.includes(serviceGalleryFeature)) failures.push(`Services visual Gallery route is missing: ${serviceGalleryFeature}`);
+for (const retiredServiceGalleryFeature of ["st-service-gallery-suite", "st-tailor-client-measurement-session.jpg", "st-tailor-gallery-jacket-lining-mannequin.jpg", "OPEN THE GALLERY"]) {
+  if (services.includes(retiredServiceGalleryFeature)) failures.push(`Retired Services Gallery route remains: ${retiredServiceGalleryFeature}`);
 }
+if (!services.includes("st-tailor-client-fabric-consultation.jpg")) failures.push("Services social thumbnail must use the approved fabric-consultation image.");
 if (services.includes("st-tailor-client-shoulder-fitting.jpg")) failures.push("Services still exposes the retired shoulder-fitting thumbnail.");
 if (!services.includes('og:image" content="https://sttailor.com/media/2026/09/st-tailor-client-fabric-consultation.jpg"')) failures.push("Services social thumbnail does not use the approved fabric-consultation image.");
 

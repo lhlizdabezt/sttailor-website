@@ -172,22 +172,7 @@ function transformServices(html) {
       <div class="st-bespoke-process__actions"><a href="/lien-he/">ARRANGE A CONSULTATION <span lang="vi">ĐẶT LỊCH TƯ VẤN</span></a><a href="/bang-gia/">VIEW STARTING PRICES <span lang="vi">XEM BẢNG GIÁ</span></a></div>
     </div>
   </section>`;
-  const gallerySuite = `
-  <section class="st-service-gallery-suite" aria-labelledby="st-service-gallery-suite-title">
-    <a class="st-service-gallery-suite__frame" href="/gallery/" aria-describedby="st-service-gallery-suite-description">
-      <span class="st-service-gallery-suite__media">
-        <figure class="st-motion st-motion-1"><img src="/media/2026/09/st-tailor-client-fabric-consultation.jpg" alt="Client reviewing tailoring fabrics with S.T Tailor | Khách hàng chọn vải may đo cùng S.T Tailor" width="1080" height="1920" loading="lazy" decoding="async"></figure>
-        <figure class="st-motion st-motion-2"><img src="/media/2026/09/st-tailor-client-measurement-session.jpg" alt="Client measurement session inside S.T Tailor | Buổi lấy số đo khách hàng tại S.T Tailor" width="1080" height="1920" loading="lazy" decoding="async"></figure>
-        <figure class="st-motion st-motion-3"><img src="/media/2026/09/st-tailor-gallery-jacket-lining-mannequin.jpg" alt="Tailored jacket lining and finishing on a mannequin | Lớp lót và chi tiết hoàn thiện áo may đo trên mannequin" width="4284" height="5712" loading="lazy" decoding="async"></figure>
-      </span>
-      <span class="st-service-gallery-suite__copy st-motion st-motion-4">
-        <small>TAILORING, OBSERVED <span lang="vi">MAY ĐO QUA TỪNG KHOẢNH KHẮC</span></small>
-        <strong id="st-service-gallery-suite-title">See cloth, fittings and finishing up close.<span lang="vi">Khám phá chất liệu, buổi thử đồ và từng chi tiết hoàn thiện.</span></strong>
-        <span id="st-service-gallery-suite-description">OPEN THE GALLERY <b lang="vi">XEM THƯ VIỆN HÌNH ẢNH</b><i aria-hidden="true">→</i></span>
-      </span>
-    </a>
-  </section>`;
-  html = html.replace('  <aside class="st-service-booking"', `${bespokeProcess}\n${gallerySuite}\n\n  <aside class="st-service-booking"`);
+  html = html.replace('  <aside class="st-service-booking"', `${bespokeProcess}\n\n  <aside class="st-service-booking"`);
   return replaceVisibleAtelier(html);
 }
 
