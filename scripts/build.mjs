@@ -15,10 +15,10 @@ let scriptHref = "/scripts/site.js";
 const routes = [
   ["/", "Home.html", "S.T Tailor | Bespoke Tailoring in Ho Chi Minh City", "Bespoke suits, shirts, formalwear and alterations at 258 Lê Thánh Tôn, Ho Chi Minh City. Private consultations available.", "/media/2026/06/background-hero-trang-lien-he-sttailor.webp", "Private fitting at S.T Tailor in Ho Chi Minh City"],
   ["/gioi-thieu/", "About.html", "About S.T Tailor | Bespoke Tailoring & Alterations in HCMC", "Meet S.T Tailor in Ho Chi Minh City for bespoke suits, formalwear, clothing alterations, British and Italian cloth, Vietnamese silk and private fittings.", "/media/2026/09/fabric-focus-cloth-books.jpg", "Tailoring cloth books selected at S.T Tailor"],
-  ["/dich-vu/", "Services.html", "Bespoke Tailoring & Alterations in HCMC | S.T Tailor", "Explore bespoke suits, shirts, formalwear, womenswear, fittings and clothing alterations by S.T Tailor in central Ho Chi Minh City.", "/media/2026/09/st-tailor-client-shoulder-fitting.jpg", "Shoulder fitting during the S.T Tailor bespoke process"],
+  ["/dich-vu/", "Services.html", "Bespoke Tailoring & Alterations in HCMC | S.T Tailor", "Explore bespoke suits, shirts, formalwear, womenswear, fittings and clothing alterations by S.T Tailor in central Ho Chi Minh City.", "/media/2026/09/st-tailor-client-fabric-consultation.jpg", "Client reviewing tailoring fabrics with S.T Tailor | Khách hàng chọn vải may đo cùng S.T Tailor"],
   ["/gallery/", "Gallery.html", "Bespoke Tailoring Gallery in HCMC | S.T Tailor", "View S.T Tailor's cloth, fittings, suits, formalwear, womenswear, garment details and showroom in Ho Chi Minh City.", "/media/2026/09/st-tailor-gallery-showroom-tailoring-display.jpg", "S.T Tailor showroom and tailoring display"],
   ["/bang-gia/", "Pricing.html", "Bespoke Tailoring Prices in HCMC | S.T Tailor", "Review starting prices for bespoke suits, shirts, formalwear and clothing alterations before consulting S.T Tailor in Ho Chi Minh City.", "/media/2026/09/st-tailor-navy-double-breasted-front.jpeg", "Navy double-breasted suit by S.T Tailor"],
-  ["/phuong-thuc-thanh-toan/", "Payment.html", "Payment Methods for Tailoring | S.T Tailor HCMC", "View accepted cards, bank transfer, digital wallets and international payment options for S.T Tailor commissions in Ho Chi Minh City.", "/media/2026/06/store-sttailor-2.webp", "S.T Tailor showroom in Ho Chi Minh City"],
+  ["/phuong-thuc-thanh-toan/", "Payment.html", "Payment Methods & Terms | S.T Tailor HCMC", "Review payment terms for S.T Tailor bespoke and alteration orders, including cards, bank transfer, digital wallets, deposits, invoices and refunds.", "/media/2026/06/store-sttailor-2.webp", "S.T Tailor showroom in Ho Chi Minh City"],
   ["/lien-he/", "Contact.html", "Contact S.T Tailor HCMC | Private Consultation", "Contact S.T Tailor by telephone, email, Messenger, Zalo, Instagram or WhatsApp and arrange a private tailoring consultation.", "/media/2026/06/store-sttailor-1.webp", "S.T Tailor showroom at 258 Lê Thánh Tôn" ]
 ];
 
@@ -130,6 +130,7 @@ function transformHome(html) {
 function transformFooter(html) {
   html = removeElementByClass(html, "div", "st-footer-v7__top")
     .replace('loading="eager"', 'loading="lazy"')
+    .replaceAll('alt="" aria-hidden="true">', 'alt="" aria-hidden="true" width="20" height="20">')
     .replace(/\s*<a href="tel:[^"]+">[\s\S]*?<\/a>/, "")
     .replace(/\s*<a href="mailto:[^"]+">[\s\S]*?<\/a>/, "")
     .replace(/\s*<a href="(?:https:\/\/sttailor\.com)?\/refund_returns\/">[\s\S]*?<\/a>/, "")
@@ -158,7 +159,7 @@ function transformServices(html) {
     <div class="st-service-shell">
       <header class="st-bespoke-process__head st-motion st-motion-1">
         <p class="st-page-kicker">THE BESPOKE PROCESS <span lang="vi">/ QUY TRÌNH MAY ĐO</span></p>
-        <h2 id="st-bespoke-process-title">From conversation to a garment that belongs to you.<span lang="vi">Từ cuộc trò chuyện đến trang phục thực sự thuộc về bạn.</span></h2>
+        <h1 id="st-bespoke-process-title">From conversation to a garment that belongs to you.<span lang="vi">Từ cuộc trò chuyện đến trang phục thực sự thuộc về bạn.</span></h1>
         <p>Five considered stages keep proportion, cloth and purpose aligned from the first appointment to the final handover.<span lang="vi">Năm giai đoạn được chăm chút để phom dáng, chất liệu và mục đích sử dụng luôn nhất quán từ buổi hẹn đầu tiên đến khi bàn giao.</span></p>
       </header>
       <ol class="st-bespoke-process__steps">
@@ -171,12 +172,29 @@ function transformServices(html) {
       <div class="st-bespoke-process__actions"><a href="/lien-he/">ARRANGE A CONSULTATION <span lang="vi">ĐẶT LỊCH TƯ VẤN</span></a><a href="/bang-gia/">VIEW STARTING PRICES <span lang="vi">XEM BẢNG GIÁ</span></a></div>
     </div>
   </section>`;
-  html = html.replace('  <aside class="st-service-booking"', `${bespokeProcess}\n\n  <aside class="st-service-booking"`);
+  const gallerySuite = `
+  <section class="st-service-gallery-suite" aria-labelledby="st-service-gallery-suite-title">
+    <a class="st-service-gallery-suite__frame" href="/gallery/" aria-describedby="st-service-gallery-suite-description">
+      <span class="st-service-gallery-suite__media">
+        <figure class="st-motion st-motion-1"><img src="/media/2026/09/st-tailor-client-fabric-consultation.jpg" alt="Client reviewing tailoring fabrics with S.T Tailor | Khách hàng chọn vải may đo cùng S.T Tailor" width="1080" height="1920" loading="lazy" decoding="async"></figure>
+        <figure class="st-motion st-motion-2"><img src="/media/2026/09/st-tailor-client-measurement-session.jpg" alt="Client measurement session inside S.T Tailor | Buổi lấy số đo khách hàng tại S.T Tailor" width="1080" height="1920" loading="lazy" decoding="async"></figure>
+        <figure class="st-motion st-motion-3"><img src="/media/2026/09/st-tailor-gallery-jacket-lining-mannequin.jpg" alt="Tailored jacket lining and finishing on a mannequin | Lớp lót và chi tiết hoàn thiện áo may đo trên mannequin" width="4284" height="5712" loading="lazy" decoding="async"></figure>
+      </span>
+      <span class="st-service-gallery-suite__copy st-motion st-motion-4">
+        <small>TAILORING, OBSERVED <span lang="vi">MAY ĐO QUA TỪNG KHOẢNH KHẮC</span></small>
+        <strong id="st-service-gallery-suite-title">See cloth, fittings and finishing up close.<span lang="vi">Khám phá chất liệu, buổi thử đồ và từng chi tiết hoàn thiện.</span></strong>
+        <span id="st-service-gallery-suite-description">OPEN THE GALLERY <b lang="vi">XEM THƯ VIỆN HÌNH ẢNH</b><i aria-hidden="true">→</i></span>
+      </span>
+    </a>
+  </section>`;
+  html = html.replace('  <aside class="st-service-booking"', `${bespokeProcess}\n${gallerySuite}\n\n  <aside class="st-service-booking"`);
   return replaceVisibleAtelier(html);
 }
 
 function transformPricing(html) {
   html = removeElementByClass(html, "header", "stpr-hero")
+    .replace('<h2 id="stpr-priceboard-title">', '<h1 id="stpr-priceboard-title">')
+    .replace('</span></h2>\n          </div>\n          <p>Each starting price is a guide', '</span></h1>\n          </div>\n          <p>Each starting price is a guide')
     .replace(/\s*<p>Each starting price is a guide[\s\S]*?<\/p>/, "")
     .replace("THE ATELIER GALLERY <span lang=\"vi\">THƯ VIỆN ATELIER</span>", "PRIVATE CONSULTATION <span lang=\"vi\">TƯ VẤN VÀ BÁO GIÁ</span>")
     .replace("See the references behind each commission.<span lang=\"vi\">Khám phá cảm hứng phía sau mỗi đơn may.</span>", "Let us prepare your quotation.<span lang=\"vi\">Nhận tư vấn và báo giá.</span>")
@@ -185,6 +203,21 @@ function transformPricing(html) {
     .replace(/EXPLORE THE GALLERY[\s\S]*?<\/a>/, 'BOOK A CONSULTATION <span lang="vi">ĐẶT LỊCH TƯ VẤN</span></a>');
   html = removeElementByClass(html, "section", "stpr-notes");
   html = removeElementByClass(html, "section", "stpr-cta");
+  const gallerySuite = `
+  <section class="st-pricing-gallery-suite" aria-labelledby="st-pricing-gallery-suite-title">
+    <a class="st-pricing-gallery-suite__frame" href="/gallery/" aria-describedby="st-pricing-gallery-suite-description">
+      <span class="st-pricing-gallery-suite__copy st-motion st-motion-1">
+        <small>FROM CLOTH TO FINISH <span lang="vi">TỪ CHẤT LIỆU ĐẾN HOÀN THIỆN</span></small>
+        <strong id="st-pricing-gallery-suite-title">Read the price. See the craft.<span lang="vi">Xem mức giá. Khám phá tay nghề.</span></strong>
+        <span id="st-pricing-gallery-suite-description">VIEW THE GALLERY <b lang="vi">XEM THƯ VIỆN HÌNH ẢNH</b><i aria-hidden="true">→</i></span>
+      </span>
+      <span class="st-pricing-gallery-suite__media">
+        <figure class="st-motion st-motion-2"><img src="/media/2026/09/st-tailor-gallery-canonico-cloth-books.jpg" alt="Vitale Barberis Canonico cloth books at S.T Tailor | Bộ mẫu vải Vitale Barberis Canonico tại S.T Tailor" width="3024" height="4032" loading="lazy" decoding="async"></figure>
+        <figure class="st-motion st-motion-3"><img src="/media/2026/09/st-tailor-gallery-shoulder-lapel-detail.jpg" alt="Tailored grey jacket shoulder and lapel detail | Chi tiết vai và ve áo khoác xám may đo" width="1152" height="1440" loading="lazy" decoding="async"></figure>
+      </span>
+    </a>
+  </section>`;
+  html = html.replace(/\s*<\/section>\s*$/, `${gallerySuite}\n</section>`);
   return replaceVisibleAtelier(html);
 }
 
@@ -392,7 +425,51 @@ function transformGallery(html) {
 }
 
 function transformPayment(html) {
-  return replaceVisibleAtelier(removeElementByClass(html, "section", "st-policy-refund-link"));
+  html = removeElementByClass(html, "section", "st-policy-refund-link");
+  html = removeElementByClass(html, "section", "st-payment-terms");
+  const compliance = `
+  <section class="st-payment-compliance" aria-labelledby="st-payment-compliance-title">
+    <div class="st-payment-shell">
+      <header class="st-payment-compliance__head st-motion st-motion-1">
+        <p class="st-page-kicker">PAYMENT &amp; ORDER TERMS / ĐIỀU KHOẢN THANH TOÁN &amp; ĐƠN HÀNG</p>
+        <h2 id="st-payment-compliance-title">Clear before confirmation.<span lang="vi">Rõ ràng trước khi xác nhận.</span></h2>
+        <p>These terms explain how S.T Tailor records payment for bespoke tailoring, alterations and showroom services. The written quotation and confirmed order remain the specific record for each commission.<span lang="vi">Các điều khoản này giải thích cách S.T Tailor ghi nhận thanh toán cho dịch vụ may đo, chỉnh sửa trang phục và dịch vụ tại showroom. Báo giá bằng văn bản và đơn hàng đã xác nhận là căn cứ cụ thể cho từng đơn may.</span></p>
+      </header>
+      <div class="st-payment-compliance__grid">
+        <article class="st-motion st-motion-1"><span>01</span><h3>PRICE, CURRENCY &amp; FEES <b lang="vi">GIÁ, TIỀN TỆ &amp; CHI PHÍ</b></h3><p>The quotation identifies the payable amount, currency, deposit and agreed milestones before confirmation. A bank, card issuer, wallet or transfer provider may apply its own exchange rate or fee; any known S.T Tailor charge is disclosed before payment.<span lang="vi">Báo giá ghi rõ số tiền, loại tiền tệ, mức đặt cọc và các mốc thanh toán trước khi xác nhận. Ngân hàng, tổ chức phát hành thẻ, ví điện tử hoặc đơn vị chuyển tiền có thể áp dụng tỷ giá hay phí riêng; mọi khoản phí do S.T Tailor biết sẽ được thông báo trước khi thanh toán.</span></p></article>
+        <article class="st-motion st-motion-2"><span>02</span><h3>DEPOSIT &amp; ORDER RECORD <b lang="vi">ĐẶT CỌC &amp; XÁC NHẬN ĐƠN</b></h3><p>Production or cloth reservation begins after the order terms are confirmed and the required deposit has cleared. The deposit amount and payment schedule follow the written quotation; no universal deposit rate applies unless it is stated for that order.<span lang="vi">Việc giữ vải hoặc sắp xếp sản xuất bắt đầu sau khi điều khoản đơn hàng được xác nhận và khoản đặt cọc cần thiết đã được ghi có. Mức cọc và lịch thanh toán theo báo giá bằng văn bản; không áp dụng một tỷ lệ cọc chung nếu đơn hàng không ghi rõ.</span></p></article>
+        <article class="st-motion st-motion-3"><span>03</span><h3>PAYMENT CONFIRMATION <b lang="vi">XÁC NHẬN THANH TOÁN</b></h3><p>Payment is recorded after confirmation from the relevant bank or provider. A transfer screenshot helps reconciliation but does not by itself confirm cleared funds. S.T Tailor may request proportionate transaction details to resolve errors or suspected fraud.<span lang="vi">Thanh toán được ghi nhận sau khi có xác nhận từ ngân hàng hoặc đơn vị cung cấp liên quan. Ảnh chụp giao dịch hỗ trợ đối soát nhưng không tự thay thế xác nhận tiền đã ghi có. S.T Tailor có thể yêu cầu thông tin giao dịch ở mức cần thiết để xử lý sai sót hoặc dấu hiệu gian lận.</span></p></article>
+        <article class="st-motion st-motion-4"><span>04</span><h3>CANCELLATION, ERROR &amp; REFUND <b lang="vi">HỦY, SAI SÓT &amp; HOÀN TIỀN</b></h3><p>Cancellation and refund requests are reviewed against the confirmed order, work completed and materials committed, without limiting mandatory consumer rights. Duplicate or incorrect payments are reconciled using the transaction record; an approved refund returns through the original channel where supported, or another lawful method agreed in writing. Bank or provider processing time may apply.<span lang="vi">Yêu cầu hủy hoặc hoàn tiền được xem xét theo đơn hàng đã xác nhận, phần việc đã thực hiện và vật liệu đã cam kết, đồng thời không hạn chế các quyền bắt buộc của người tiêu dùng. Khoản thanh toán trùng hoặc sai được đối soát theo chứng từ giao dịch; khoản hoàn tiền đã được chấp thuận sẽ đi qua kênh ban đầu khi được hỗ trợ hoặc qua phương thức hợp pháp khác được thống nhất bằng văn bản. Thời gian xử lý của ngân hàng hoặc đơn vị cung cấp có thể được áp dụng.</span></p></article>
+        <article class="st-motion st-motion-5"><span>05</span><h3>RECEIPT &amp; ELECTRONIC INVOICE <b lang="vi">CHỨNG TỪ &amp; HÓA ĐƠN ĐIỆN TỬ</b></h3><p>Provide the correct purchaser name, address, tax code and invoice email before invoice issuance when an invoice is required. S.T Tailor issues payment records and electronic invoices in line with the confirmed transaction and applicable Vietnamese tax and invoice rules.<span lang="vi">Khi cần hóa đơn, vui lòng cung cấp đúng tên người mua, địa chỉ, mã số thuế và email nhận hóa đơn trước thời điểm lập hóa đơn. S.T Tailor lập chứng từ thanh toán và hóa đơn điện tử theo giao dịch đã xác nhận cùng quy định thuế, hóa đơn hiện hành của Việt Nam.</span></p></article>
+        <article class="st-motion st-motion-6"><span>06</span><h3>DATA &amp; PAYMENT SECURITY <b lang="vi">DỮ LIỆU &amp; AN TOÀN THANH TOÁN</b></h3><p>Only transaction information reasonably needed to verify and service the order should be shared. Card credentials and wallet authorisation are handled through the relevant bank or payment provider where that channel is used. Never send a password, PIN, OTP or banking login through chat or email.<span lang="vi">Chỉ nên chia sẻ thông tin giao dịch cần thiết để xác minh và phục vụ đơn hàng. Khi sử dụng thẻ hoặc ví, thông tin xác thực được xử lý qua ngân hàng hoặc đơn vị thanh toán liên quan. Không gửi mật khẩu, mã PIN, OTP hoặc thông tin đăng nhập ngân hàng qua tin nhắn hay email.</span></p></article>
+      </div>
+      <div class="st-payment-compliance__law st-motion st-motion-2">
+        <div><p class="st-page-kicker">VIETNAM LEGAL FRAMEWORK / CĂN CỨ PHÁP LUẬT VIỆT NAM</p><p>This page follows the current framework for consumer protection, electronic transactions, non-cash payments, electronic invoices and personal-data protection. It provides general operating information and does not reduce rights granted by mandatory law.<span lang="vi">Trang này tuân theo khung pháp lý hiện hành về bảo vệ người tiêu dùng, giao dịch điện tử, thanh toán không dùng tiền mặt, hóa đơn điện tử và bảo vệ dữ liệu cá nhân. Nội dung cung cấp thông tin vận hành chung và không làm giảm các quyền được pháp luật bắt buộc bảo vệ.</span></p></div>
+        <ul>
+          <li><a href="https://vanban.chinhphu.vn/?classid=1&amp;docid=208363&amp;orggroupid=1&amp;pageid=27160&amp;previousPage=other+articles" target="_blank" rel="noopener external">Law 19/2023/QH15 <span lang="vi">Luật Bảo vệ quyền lợi người tiêu dùng</span></a></li>
+          <li><a href="https://vanban.chinhphu.vn/?classid=1&amp;docid=208421&amp;pageid=27160&amp;typegroupid=3" target="_blank" rel="noopener external">Law 20/2023/QH15 <span lang="vi">Luật Giao dịch điện tử</span></a></li>
+          <li><a href="https://vanban.chinhphu.vn/?classid=1&amp;docid=210262&amp;orggroupid=2&amp;pageid=27160" target="_blank" rel="noopener external">Decree 52/2024/NĐ-CP <span lang="vi">Thanh toán không dùng tiền mặt</span></a></li>
+          <li><a href="https://vanban.chinhphu.vn/?docid=213179&amp;lang=vi&amp;pageid=27160" target="_blank" rel="noopener external">Decree 70/2025/NĐ-CP <span lang="vi">Hóa đơn, chứng từ</span></a></li>
+          <li><a href="https://vanban.chinhphu.vn/?classid=1&amp;docid=214590&amp;pageid=27160" target="_blank" rel="noopener external">Law 91/2025/QH15 <span lang="vi">Luật Bảo vệ dữ liệu cá nhân</span></a></li>
+        </ul>
+      </div>
+    </div>
+  </section>`;
+  const gallerySuite = `
+  <section class="st-payment-gallery-suite" aria-labelledby="st-payment-gallery-suite-title">
+    <div class="st-payment-shell">
+      <a class="st-payment-gallery-suite__frame" href="/gallery/" aria-describedby="st-payment-gallery-suite-description">
+        <figure class="st-motion st-motion-1"><img src="/media/2026/09/st-tailor-gallery-showroom-tailoring-display.jpg" alt="Navy suit and womenswear displayed inside S.T Tailor | Suit xanh navy và trang phục nữ trưng bày tại S.T Tailor" width="1080" height="1920" loading="lazy" decoding="async"></figure>
+        <span class="st-payment-gallery-suite__copy st-motion st-motion-2">
+          <small>BEYOND THE TRANSACTION <span lang="vi">SAU MỖI GIAO DỊCH</span></small>
+          <strong id="st-payment-gallery-suite-title">See what each commission becomes.<span lang="vi">Khám phá thành phẩm sau mỗi đơn may.</span></strong>
+          <span id="st-payment-gallery-suite-description">ENTER THE GALLERY <b lang="vi">ĐẾN THƯ VIỆN HÌNH ẢNH</b><i aria-hidden="true">→</i></span>
+        </span>
+      </a>
+    </div>
+  </section>`;
+  html = html.replace('  <section class="st-payment-security"', `${compliance}\n${gallerySuite}\n\n  <section class="st-payment-security"`);
+  return replaceVisibleAtelier(html);
 }
 
 function transformAbout(html) {

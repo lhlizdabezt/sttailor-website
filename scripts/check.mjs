@@ -89,6 +89,7 @@ for (const removedHomeRouteText of ["Five ways into the atelier", "Five ways to 
   if (home.includes(removedHomeRouteText)) failures.push(`Removed home route strip remains: ${removedHomeRouteText}`);
 }
 if (!home.includes("logo-sttailor-1000x1024.png")) failures.push("Footer crest logo is missing.");
+if (/<footer[\s\S]*?<img\b(?![^>]*\bwidth="\d+")(?![^>]*\bheight="\d+")[^>]*>/i.test(home)) failures.push("Footer contains an image without explicit dimensions.");
 if ((home.match(/<a class="st-home-editorial__frame/g) ?? []).length !== 5) failures.push("Home visual destinations must contain exactly five image-led cards.");
 for (const visualDestination of ["/gioi-thieu/", "/dich-vu/", "/gallery/", "/bang-gia/", "/lien-he/", "st-tailor-client-private-consultation.jpg"]) {
   if (!home.includes(visualDestination)) failures.push(`Home visual destination is missing: ${visualDestination}`);
@@ -121,12 +122,31 @@ for (const removedBlock of ["st-service-hero", "st-service-offerings", "st-servi
   if (services.includes(removedBlock)) failures.push(`Removed Services block remains: ${removedBlock}`);
 }
 if (!services.includes("THE BESPOKE PROCESS") || !services.includes("QUY TRÌNH MAY ĐO") || !services.includes("st-bespoke-process__steps")) failures.push("Redesigned bespoke process is missing from Services.");
+if ((services.match(/<h1\b/g) ?? []).length !== 1) failures.push("Services must contain exactly one primary H1 heading.");
 if (!generatedCss.includes(".st-service-page .st-service-commission-map { margin-top: 0 !important; }")) failures.push("Services commission map still retains the removed top whitespace.");
+for (const serviceGalleryFeature of ["st-service-gallery-suite", 'href="/gallery/"', "st-tailor-client-fabric-consultation.jpg", "st-tailor-client-measurement-session.jpg", "st-tailor-gallery-jacket-lining-mannequin.jpg", "OPEN THE GALLERY"]) {
+  if (!services.includes(serviceGalleryFeature)) failures.push(`Services visual Gallery route is missing: ${serviceGalleryFeature}`);
+}
+if (services.includes("st-tailor-client-shoulder-fitting.jpg")) failures.push("Services still exposes the retired shoulder-fitting thumbnail.");
+if (!services.includes('og:image" content="https://sttailor.com/media/2026/09/st-tailor-client-fabric-consultation.jpg"')) failures.push("Services social thumbnail does not use the approved fabric-consultation image.");
 
 const pricing = readFileSync(path.join(dist, "bang-gia", "index.html"), "utf8");
 for (const removedPricingHero of ["stpr-hero", "BESPOKE PRICING", "BẢNG GIÁ MAY ĐO", "Clear starting prices", "Giá khởi điểm rõ ràng"]) {
   if (pricing.includes(removedPricingHero)) failures.push(`Removed Pricing hero content remains: ${removedPricingHero}`);
 }
+if ((pricing.match(/<h1\b/g) ?? []).length !== 1) failures.push("Pricing must contain exactly one primary H1 heading.");
+for (const pricingGalleryFeature of ["st-pricing-gallery-suite", 'href="/gallery/"', "st-tailor-gallery-canonico-cloth-books.jpg", "st-tailor-gallery-shoulder-lapel-detail.jpg", "VIEW THE GALLERY"]) {
+  if (!pricing.includes(pricingGalleryFeature)) failures.push(`Pricing visual Gallery route is missing: ${pricingGalleryFeature}`);
+}
+
+const payment = readFileSync(path.join(dist, "phuong-thuc-thanh-toan", "index.html"), "utf8");
+for (const paymentFeature of ["st-payment-compliance", "PAYMENT &amp; ORDER TERMS", "ĐIỀU KHOẢN THANH TOÁN", "Visa", "Mastercard", "American Express", "JCB", "Apple Pay", "Google Wallet", "Samsung Wallet", "PayPal", "Wise", "19/2023/QH15", "20/2023/QH15", "52/2024/NĐ-CP", "70/2025/NĐ-CP", "91/2025/QH15"]) {
+  if (!payment.includes(paymentFeature)) failures.push(`Payment terms or legal framework is missing: ${paymentFeature}`);
+}
+for (const paymentGalleryFeature of ["st-payment-gallery-suite", 'href="/gallery/"', "st-tailor-gallery-showroom-tailoring-display.jpg", "ENTER THE GALLERY"]) {
+  if (!payment.includes(paymentGalleryFeature)) failures.push(`Payment visual Gallery route is missing: ${paymentGalleryFeature}`);
+}
+if (payment.includes("st-policy-refund-link") || payment.includes("contacting the atelier")) failures.push("Removed Payment refund band or retired atelier wording remains.");
 
 const about = readFileSync(path.join(dist, "gioi-thieu", "index.html"), "utf8");
 for (const removedBlock of ["st-lux-gallery-redirect", "st-lux-appointment", "st-lux-provenance__archive-note", "WHAT GUIDES THE WORK"]) {
