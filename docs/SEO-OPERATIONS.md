@@ -40,6 +40,12 @@ Add the domain property and submit the same production sitemap. A focused weekly
 - **Performance:** filter by page, query, country, device, and search type. Improve pages with meaningful impressions and weak click-through rates using truthful titles, descriptions, imagery, and internal links.
 - **Core Web Vitals:** prioritise real mobile data for LCP, CLS, and INP rather than synthetic scores alone.
 
+## Traffic and behaviour measurement
+
+The shared HTML template loads Google Analytics 4 measurement ID `G-BQDKE20XR0` and Microsoft Clarity project ID `ymcn0kdqo0` exactly once per public page. Google Analytics measures acquisition, engagement and conversion events; Clarity supplies session recordings, heatmaps and usability signals such as dead clicks and excessive scrolling.
+
+Use the two tools together: find a high-exit or low-conversion page in GA4, then inspect representative Clarity recordings or heatmaps before changing the page. Do not add duplicate analytics snippets through Cloudflare, a tag manager, or a page fragment. Review privacy disclosures and consent obligations applicable to the business before enabling additional advertising, remarketing, or cross-site tracking features.
+
 ## Local discovery standards
 
 Keep the same business name, address, phone, opening hours, website, directions URL, service list, and original photographs across Google Business Profile, Apple Business Connect, Bing Places, social profiles, and eligible directories. Request only genuine customer reviews and never use automated reviews, traffic, backlinks, or keyword-stuffed business names.

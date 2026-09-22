@@ -71,6 +71,8 @@ for (const route of routes) {
   expect(pageHtml.includes(`<link rel="canonical" href="${origin}${route}">`), `${route} has no production canonical`);
   expect(!pageHtml.toLowerCase().includes("beta.sttailor.com"), `${route} still contains the beta host`);
   expect(pageHtml.includes('name="robots" content="index, follow'), `${route} is not indexable`);
+  expect((pageHtml.match(/googletagmanager\.com\/gtag\/js\?id=G-BQDKE20XR0/g) || []).length === 1 && pageHtml.includes('gtag("config","G-BQDKE20XR0")'), `${route} has no single Google Analytics 4 tag`);
+  expect((pageHtml.match(/clarity\.ms\/tag\//g) || []).length === 1 && pageHtml.includes('"ymcn0kdqo0"'), `${route} has no single Microsoft Clarity tag`);
 }
 
 if (expectedBuildRevision) expect(pages.get("/").includes(`name="sttailor-build-revision" content="${expectedBuildRevision}"`), "Production did not serve the revision deployed by this workflow.");
