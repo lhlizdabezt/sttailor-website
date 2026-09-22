@@ -286,9 +286,10 @@ for (const legacyPath of ["/about/", "/services/", "/pricing/", "/payment-method
   if (!worker.includes(legacyPath)) failures.push(`Legacy 301 mapping is missing: ${legacyPath}`);
 }
 if (!worker.includes('new URL("/not-found", url)')) failures.push("404 worker fallback does not fetch the canonical HTML asset body.");
-for (const header of ["Strict-Transport-Security", "Content-Security-Policy", "X-Robots-Tag", "max-age=31536000, immutable", "max-age=604800"]) {
+for (const header of ["Strict-Transport-Security", "Content-Security-Policy", "X-Robots-Tag", "max-age=3600, must-revalidate", "max-age=604800"]) {
   if (!worker.includes(header)) failures.push(`Worker production header/cache rule is missing: ${header}`);
 }
+if (worker.includes("max-age=31536000, immutable")) failures.push("Non-fingerprinted CSS/JS must not be browser-cached as immutable for one year.");
 if (!worker.includes('"max-age=15552000"')) failures.push("Worker HSTS policy is not the conservative six-month duration.");
 const siteScript = readFileSync(path.join(root, "src", "scripts", "site.js"), "utf8");
 for (const key of ["Alt+M", "ArrowDown", "ArrowUp", "Escape", "Home", "End"]) {

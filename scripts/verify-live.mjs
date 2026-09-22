@@ -96,6 +96,10 @@ const home = pages.get("/");
 const siteScriptPath = home.match(/<script type="module" src="([^"]+)"/i)?.[1];
 const siteScript = siteScriptPath ? await (await fetchWithRetry(new URL(siteScriptPath, origin))).text() : "";
 expect(Boolean(siteScriptPath) && siteScript.includes('"contact_click"') && siteScript.includes('"consultation_intent"') && siteScript.includes('"page_type"'), "Production interaction analytics or Clarity page tags are missing");
+if (siteScriptPath) {
+  const scriptHeaders = await fetchWithRetry(new URL(siteScriptPath, origin), { method: "HEAD" });
+  expect(scriptHeaders.headers.get("cache-control")?.includes("max-age=3600, must-revalidate"), "Unversioned production JavaScript has an unsafe browser cache policy");
+}
 expect((home.match(/<a class="st-home-editorial__frame/g) || []).length === 5, "Home visual destination cards are missing");
 for (const removedHomeRouteText of ["Five ways into the atelier", "Five ways to begin with S.T Tailor", "Năm lối để bước vào không gian atelier", "Năm lối để bắt đầu cùng S.T Tailor", "st-home-v6__routes"]) {
   expect(!home.includes(removedHomeRouteText), `Removed home route strip remains: ${removedHomeRouteText}`);
@@ -111,6 +115,10 @@ expect(home.includes('name="google-site-verification"') && home.includes('name="
 const cssPath = home.match(/<link rel="stylesheet" href="([^"]+)"/)?.[1];
 expect(Boolean(cssPath), "The production stylesheet was not found");
 const css = cssPath ? await (await fetchWithRetry(new URL(cssPath, origin))).text() : "";
+if (cssPath) {
+  const cssHeaders = await fetchWithRetry(new URL(cssPath, origin), { method: "HEAD" });
+  expect(cssHeaders.headers.get("cache-control")?.includes("max-age=3600, must-revalidate"), "Unversioned production CSS has an unsafe browser cache policy");
+}
 const navigationLinkRule = [...css.matchAll(/\.st-site-nav a[^\{]*\{[^}]*\}/g)]
   .map((match) => match[0])
   .find((rule) => rule.includes("text-transform:uppercase"));
