@@ -8,7 +8,7 @@ const sourceRoot = path.join(root, "source", "wordpress");
 const dist = path.join(root, "dist");
 const manifest = JSON.parse(readFileSync(path.join(dist, "build-manifest.json"), "utf8"));
 const failures = [];
-const expectedRoutes = ["/", "/gioi-thieu/", "/dich-vu/", "/gallery/", "/bang-gia/", "/phuong-thuc-thanh-toan/", "/lien-he/", "/cam-nang-may-do/", "/chon-vai-may-do/", "/quy-trinh-thu-do/", "/chinh-sua-trang-phuc/", "/bao-quan-giat-la/"];
+const expectedRoutes = ["/", "/gioi-thieu/", "/dich-vu/", "/gallery/", "/bang-gia/", "/phuong-thuc-thanh-toan/", "/lien-he/", "/cam-nang-may-do/", "/chon-vai-may-do/", "/quy-trinh-thu-do/", "/chinh-sua-trang-phuc/", "/bao-quan-giat-la/", "/doi-tra-hoan-tien/", "/chinh-sach-van-chuyen/", "/dieu-khoan-dieu-kien/", "/chinh-sach-bao-mat/"];
 const pageTitles = new Set();
 const pageDescriptions = new Set();
 
@@ -47,6 +47,7 @@ for (const route of expectedRoutes) {
   if (!html.includes('SiteNavigationElement') || !html.includes('OfferCatalog')) failures.push(`Expanded navigation or service structured data is missing: ${route}`);
   if ((html.match(/googletagmanager\.com\/gtag\/js\?id=G-BQDKE20XR0/g) ?? []).length !== 1 || !html.includes('gtag("config","G-BQDKE20XR0")')) failures.push(`Google Analytics 4 tag is missing or duplicated: ${route}`);
   if ((html.match(/clarity\.ms\/tag\//g) ?? []).length !== 1 || !html.includes('"ymcn0kdqo0"')) failures.push(`Microsoft Clarity tag is missing or duplicated: ${route}`);
+  if (html.includes("data-consent-panel") || html.includes("data-consent-open")) failures.push(`Unrequested privacy controls remain: ${route}`);
   const schemaText = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i)?.[1];
   const schemaGraph = schemaText ? JSON.parse(schemaText)["@graph"] : [];
   const businessSchema = schemaGraph.find((item) => Array.isArray(item["@type"]) && item["@type"].includes("LocalBusiness"));
@@ -73,14 +74,14 @@ for (const route of expectedRoutes) {
   }
   if (/\batelier\b/i.test(visibleAndAccessibleText(html))) failures.push(`Visible or accessible Atelier wording remains: ${route}`);
   if (/\uFFFD|Ã.|Ä.|Æ.|áº.|á»./u.test(visibleAndAccessibleText(html))) failures.push(`Possible Unicode mojibake remains: ${route}`);
-  for (const retired of ["/chinh-sach-bao-mat/", "/dieu-khoan-dieu-kien/", "/chinh-sach-van-chuyen/", "/bao-hanh-sua-chua/", "/refund_returns/"]) {
+  for (const retired of ["/bao-hanh-sua-chua/", "/refund_returns/"]) {
     if (html.includes(retired)) failures.push(`Retired route remains linked: ${route} -> ${retired}`);
   }
 }
 if (pageTitles.size !== expectedRoutes.length) failures.push("Every public route must have a unique SEO title.");
 if (pageDescriptions.size !== expectedRoutes.length) failures.push("Every public route must have a unique meta description.");
 
-for (const retiredDirectory of ["chinh-sach-bao-mat", "dieu-khoan-dieu-kien", "chinh-sach-van-chuyen", "bao-hanh-sua-chua", "refund_returns"]) {
+for (const retiredDirectory of ["bao-hanh-sua-chua", "refund_returns"]) {
   if (existsSync(path.join(dist, retiredDirectory))) failures.push(`Retired page was generated: /${retiredDirectory}/`);
 }
 
@@ -132,7 +133,8 @@ for (const excluded of ["Telephone", "Email"]) {
   if (footerSocial.includes(excluded)) failures.push(`Footer social channel must not include: ${excluded}`);
 }
 if (!home.includes("S.T Tailor showroom map")) failures.push("Shared footer is missing the Google Maps embed.");
-if (home.includes("st-footer-v7__top") || home.includes("st-footer-v7__bottom")) failures.push("Removed footer bands are still present.");
+if (home.includes("st-footer-v7__top")) failures.push("Removed footer promotion band is still present.");
+if (!home.includes('class="st-footer-v7__bottom st-footer-v8__legal"') || !home.includes('aria-label="Client policies"')) failures.push("Right-aligned client policy section is missing.");
 
 const contact = readFileSync(path.join(dist, "lien-he", "index.html"), "utf8");
 const contactCards = contact.match(/st-contact-card--[a-z]+/g) ?? [];
@@ -178,7 +180,7 @@ for (const paymentFeature of ["st-payment-compliance", "PAYMENT &amp; ORDER TERM
 for (const paymentGalleryFeature of ["st-payment-gallery-suite", 'href="/gallery/"', "st-tailor-gallery-showroom-tailoring-display.jpg", "ENTER THE GALLERY"]) {
   if (!payment.includes(paymentGalleryFeature)) failures.push(`Payment visual Gallery route is missing: ${paymentGalleryFeature}`);
 }
-if (payment.includes("st-policy-refund-link") || payment.includes("contacting the atelier")) failures.push("Removed Payment refund band or retired atelier wording remains.");
+if (!payment.includes("st-policy-refund-link") || !payment.includes('href="/doi-tra-hoan-tien/"') || payment.includes("contacting the atelier")) failures.push("Payment must link to the current returns policy without retired wording.");
 
 const about = readFileSync(path.join(dist, "gioi-thieu", "index.html"), "utf8");
 for (const removedBlock of ["st-lux-gallery-redirect", "st-lux-appointment", "st-lux-provenance__archive-note", "WHAT GUIDES THE WORK"]) {

@@ -15,7 +15,11 @@ const routes = [
   "/chon-vai-may-do/",
   "/quy-trinh-thu-do/",
   "/chinh-sua-trang-phuc/",
-  "/bao-quan-giat-la/"
+  "/bao-quan-giat-la/",
+  "/doi-tra-hoan-tien/",
+  "/chinh-sach-van-chuyen/",
+  "/dieu-khoan-dieu-kien/",
+  "/chinh-sach-bao-mat/"
 ];
 
 const failures = [];
@@ -79,8 +83,10 @@ for (const route of routes) {
   const footer = pageHtml.match(/<footer\b[\s\S]*?<\/footer>/i)?.[0] ?? "";
   const footerLinks = new Set([...footer.matchAll(/\bhref="(\/[^"]*)"/g)].map((match) => match[1]));
   for (const publishedRoute of routes) expect(footerLinks.has(publishedRoute), `${route} footer omits ${publishedRoute}`);
+  expect(footer.includes('class="st-footer-v7__bottom st-footer-v8__legal"') && footer.includes('aria-label="Client policies"'), `${route} has no client-policy bar at the footer edge`);
   expect((pageHtml.match(/googletagmanager\.com\/gtag\/js\?id=G-BQDKE20XR0/g) || []).length === 1 && pageHtml.includes('gtag("config","G-BQDKE20XR0")'), `${route} has no single Google Analytics 4 tag`);
   expect((pageHtml.match(/clarity\.ms\/tag\//g) || []).length === 1 && pageHtml.includes('"ymcn0kdqo0"'), `${route} has no single Microsoft Clarity tag`);
+  expect(!pageHtml.includes("data-consent-panel") && !pageHtml.includes("data-consent-open"), `${route} still has a consent control`);
   expect((pageHtml.match(/href="https:\/\/x\.com\/sttalior"/g) || []).length === 1 && pageHtml.includes('"https://x.com/sttalior"'), `${route} has no single official X profile in social links/schema`);
 }
 
@@ -149,6 +155,8 @@ expect(manifest.status === 200 && (await manifest.text()).includes('"name": "S.T
 
 const legacy = await fetchWithRetry(`${origin}/about/`, { redirect: "manual" });
 expect(legacy.status === 301 && legacy.headers.get("location") === `${origin}/gioi-thieu/`, "Legacy URL mapping is not a 301");
+const oldRefund = await fetchWithRetry(`${origin}/refund_returns/`, { redirect: "manual" });
+expect(oldRefund.status === 301 && oldRefund.headers.get("location") === `${origin}/doi-tra-hoan-tien/`, "Old returns URL does not redirect to the new policy");
 
 const expectedWwwLocation = `${origin}/gallery/?source=www`;
 const www = await fetchUntil(

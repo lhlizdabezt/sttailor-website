@@ -34,7 +34,11 @@ const routes = [
   ["/chon-vai-may-do/", "GuideCloth.html", "How to Choose Suit Fabric in HCMC | S.T Tailor", "Choose suit and formalwear cloth by occasion, climate, drape and care with practical bilingual guidance from S.T Tailor in Ho Chi Minh City.", "/media/2026/09/st-tailor-gallery-canonico-cloth-books.jpg", "Vitale Barberis Canonico cloth books at S.T Tailor"],
   ["/quy-trinh-thu-do/", "GuideFitting.html", "Bespoke Fitting Process in HCMC | S.T Tailor", "Understand consultation, measurement, fittings, refinement and handover for a bespoke garment at S.T Tailor in central Ho Chi Minh City.", "/media/2026/09/st-tailor-client-measurement-session.jpg", "Tailor measuring a client during a fitting at S.T Tailor"],
   ["/chinh-sua-trang-phuc/", "GuideAlterations.html", "Clothing Alterations in HCMC | S.T Tailor Guide", "Learn what S.T Tailor assesses before altering trouser hems, waists, jacket sleeves and garment repairs in central Ho Chi Minh City.", "/media/2026/09/st-tailor-gallery-trouser-interior-detail.jpg", "Tailored trouser interior and seam finishing at S.T Tailor"],
-  ["/bao-quan-giat-la/", "GuideCare.html", "Suit Care & Garment Cleaning Guide | S.T Tailor", "Follow a practical bilingual guide to airing, brushing, storing, spot care, washing, ironing and professional cleaning for tailored garments.", "/media/2026/09/st-tailor-gallery-jacket-lining-mannequin.jpg", "Tailored jacket lining and construction at S.T Tailor"]
+  ["/bao-quan-giat-la/", "GuideCare.html", "Suit Care & Garment Cleaning Guide | S.T Tailor", "Follow a practical bilingual guide to airing, brushing, storing, spot care, washing, ironing and professional cleaning for tailored garments.", "/media/2026/09/st-tailor-gallery-jacket-lining-mannequin.jpg", "Tailored jacket lining and construction at S.T Tailor"],
+  ["/doi-tra-hoan-tien/", "Returns.html", "Returns & Refunds for Tailored Garments | S.T Tailor", "Read S.T Tailor's bilingual returns and refunds policy for made-to-measure garments, alterations, order concerns, cancellations and documented refunds.", "/media/2026/09/fabric-focus-cloth-books.jpg", "Tailoring cloth books used when confirming a S.T Tailor order"],
+  ["/chinh-sach-van-chuyen/", "Shipping.html", "Shipping & Delivery for Tailored Garments | S.T Tailor", "Explore S.T Tailor's bilingual delivery options for showroom collection, Ho Chi Minh City couriers, Vietnam shipping and international dispatch.", "/media/2026/06/store-sttailor-2.webp", "S.T Tailor showroom for garment collection and handover"],
+  ["/dieu-khoan-dieu-kien/", "Terms.html", "Terms & Conditions for Tailoring Orders | S.T Tailor", "Review S.T Tailor's bilingual order terms covering quotations, bespoke fittings, payments, delivery, changes and consumer rights in Vietnam.", "/media/2026/09/fabric-focus-cloth-books.jpg", "S.T Tailor fabric library for bespoke orders"],
+  ["/chinh-sach-bao-mat/", "Privacy.html", "Privacy Policy & Client Data | S.T Tailor", "Learn how S.T Tailor handles enquiries, measurements, order details and website analytics, with bilingual privacy information and contact options.", "/media/2026/06/store-sttailor-1.webp", "S.T Tailor showroom in Ho Chi Minh City"]
 ];
 
 const primaryNavigation = [
@@ -43,6 +47,7 @@ const primaryNavigation = [
   ["/gallery/", "Gallery"],
   ["/bang-gia/", "Pricing"],
   ["/phuong-thuc-thanh-toan/", "Payment methods"],
+  ["/doi-tra-hoan-tien/", "Client care"],
   ["/lien-he/", "Contact"]
 ];
 
@@ -169,8 +174,6 @@ function transformFooter(html) {
     .replaceAll('alt="" aria-hidden="true">', 'alt="" aria-hidden="true" width="20" height="20">')
     .replace(/\s*<a href="tel:[^"]+">[\s\S]*?<\/a>/, "")
     .replace(/\s*<a href="mailto:[^"]+">[\s\S]*?<\/a>/, "")
-    .replace(/\s*<a href="(?:https:\/\/sttailor\.com)?\/refund_returns\/">[\s\S]*?<\/a>/, "")
-    .replace(/\s*<div class="st-footer-v7__bottom">[\s\S]*?<\/div>\s*<\/footer>/, "\n</footer>")
     .replace("Atelier gallery", "S.T Tailor gallery")
     .replace(
       '<section class="st-footer-v7__about" aria-labelledby="st-footer-title">',
@@ -450,7 +453,6 @@ function transformGallery(html) {
 }
 
 function transformPayment(html) {
-  html = removeElementByClass(html, "section", "st-policy-refund-link");
   html = removeElementByClass(html, "section", "st-payment-terms");
   const compliance = `
   <section class="st-payment-compliance" aria-labelledby="st-payment-compliance-title">
@@ -843,7 +845,7 @@ const sitemapEntries = sitemapRouteOrder.map(([route, , , , shareImage, shareIma
 }).join("");
 writeFileSync(path.join(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">${sitemapEntries}\n</urlset>\n`, "utf8");
 writeFileSync(path.join(dist, "site.webmanifest"), JSON.stringify({ name: "S.T Tailor", short_name: "S.T Tailor", description: "Bespoke tailoring and clothing alterations in Ho Chi Minh City.", start_url: "/", scope: "/", display: "standalone", background_color: "#f3e1c5", theme_color: "#ead1ad", icons: [{ src: "/media/2026/09/logo-sttailor.png", sizes: "any", type: "image/png", purpose: "any maskable" }] }, null, 2), "utf8");
-writeFileSync(path.join(dist, "llms.txt"), "# S.T Tailor\n\nS.T Tailor is a bespoke tailoring and clothing alterations house at 258 Le Thanh Ton, Phuong Tan Dinh, Ho Chi Minh City, Vietnam.\n\n- Website: https://sttailor.com/\n- Services: https://sttailor.com/dich-vu/\n- Gallery: https://sttailor.com/gallery/\n- Pricing: https://sttailor.com/bang-gia/\n- Payment methods: https://sttailor.com/phuong-thuc-thanh-toan/\n- Tailoring guide: https://sttailor.com/cam-nang-may-do/\n- Choosing cloth: https://sttailor.com/chon-vai-may-do/\n- Fitting process: https://sttailor.com/quy-trinh-thu-do/\n- Clothing alterations: https://sttailor.com/chinh-sua-trang-phuc/\n- Garment care and cleaning: https://sttailor.com/bao-quan-giat-la/\n- Contact: https://sttailor.com/lien-he/\n- Telephone: +84 909 556 258\n- Email: contact.sttailor@gmail.com\n", "utf8");
+writeFileSync(path.join(dist, "llms.txt"), "# S.T Tailor\n\nS.T Tailor is a bespoke tailoring and clothing alterations house at 258 Le Thanh Ton, Phuong Tan Dinh, Ho Chi Minh City, Vietnam.\n\n- Website: https://sttailor.com/\n- Services: https://sttailor.com/dich-vu/\n- Gallery: https://sttailor.com/gallery/\n- Pricing: https://sttailor.com/bang-gia/\n- Payment methods: https://sttailor.com/phuong-thuc-thanh-toan/\n- Returns and refunds: https://sttailor.com/doi-tra-hoan-tien/\n- Shipping and delivery: https://sttailor.com/chinh-sach-van-chuyen/\n- Terms and conditions: https://sttailor.com/dieu-khoan-dieu-kien/\n- Privacy policy: https://sttailor.com/chinh-sach-bao-mat/\n- Tailoring guide: https://sttailor.com/cam-nang-may-do/\n- Choosing cloth: https://sttailor.com/chon-vai-may-do/\n- Fitting process: https://sttailor.com/quy-trinh-thu-do/\n- Clothing alterations: https://sttailor.com/chinh-sua-trang-phuc/\n- Garment care and cleaning: https://sttailor.com/bao-quan-giat-la/\n- Contact: https://sttailor.com/lien-he/\n- Telephone: +84 909 556 258\n- Email: contact.sttailor@gmail.com\n", "utf8");
 writeFileSync(path.join(dist, "_headers"), "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n  X-Frame-Options: SAMEORIGIN\n  Strict-Transport-Security: max-age=15552000\n  Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests\n", "utf8");
 writeFileSync(path.join(dist, "build-manifest.json"), JSON.stringify({ source: "source/wordpress", sourceMedia: "source/media", revision: buildRevision, routes: routes.map(([route]) => route), localUploadAssets: assets.length, imageMetadata: imageCount, galleryDuplicateCheck: "passed" }, null, 2), "utf8");
 console.log(`Built ${routes.length} routes from the versioned WordPress reference with ${assets.length} local upload assets and dimensions for ${imageCount} images.`);

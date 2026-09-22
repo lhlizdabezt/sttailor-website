@@ -13,7 +13,11 @@ const routes = new Set([
   "/chon-vai-may-do/",
   "/quy-trinh-thu-do/",
   "/chinh-sua-trang-phuc/",
-  "/bao-quan-giat-la/"
+  "/bao-quan-giat-la/",
+  "/doi-tra-hoan-tien/",
+  "/chinh-sach-van-chuyen/",
+  "/dieu-khoan-dieu-kien/",
+  "/chinh-sach-bao-mat/"
 ]);
 // Retired WordPress paths have an intentional, permanent destination. Any
 // path outside this table and the published routes remains a true 404.
@@ -30,11 +34,8 @@ const legacyRoutes = new Map([
   ["/fitting-process/", "/quy-trinh-thu-do/"],
   ["/alterations/", "/chinh-sua-trang-phuc/"],
   ["/garment-care/", "/bao-quan-giat-la/"],
-  ["/refund_returns/", "/dich-vu/"],
-  ["/bao-hanh-sua-chua/", "/dich-vu/"],
-  ["/chinh-sach-bao-mat/", "/"],
-  ["/dieu-khoan-dieu-kien/", "/"],
-  ["/chinh-sach-van-chuyen/", "/"]
+  ["/refund_returns/", "/doi-tra-hoan-tien/"],
+  ["/bao-hanh-sua-chua/", "/dich-vu/"]
 ]);
 const staticPrefixes = ["/media/", "/styles/", "/scripts/"];
 const staticFiles = new Set(["/robots.txt", "/sitemap.xml", "/llms.txt", "/site.webmanifest", `/${indexNowKeyFile}`, "/404.html", "/not-found.html", "/_headers", "/build-manifest.json"]);

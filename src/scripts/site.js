@@ -81,7 +81,11 @@ const pageTypes = {
   "/chon-vai-may-do/": "guide_cloth",
   "/quy-trinh-thu-do/": "guide_fitting",
   "/chinh-sua-trang-phuc/": "guide_alterations",
-  "/bao-quan-giat-la/": "guide_care"
+  "/bao-quan-giat-la/": "guide_care",
+  "/doi-tra-hoan-tien/": "returns",
+  "/chinh-sach-van-chuyen/": "shipping",
+  "/dieu-khoan-dieu-kien/": "terms",
+  "/chinh-sach-bao-mat/": "privacy"
 };
 const pageType = pageTypes[window.location.pathname] ?? "other";
 
