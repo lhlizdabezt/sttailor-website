@@ -8,7 +8,7 @@ const sourceRoot = path.join(root, "source", "wordpress");
 const dist = path.join(root, "dist");
 const manifest = JSON.parse(readFileSync(path.join(dist, "build-manifest.json"), "utf8"));
 const failures = [];
-const expectedRoutes = ["/", "/gioi-thieu/", "/dich-vu/", "/gallery/", "/bang-gia/", "/phuong-thuc-thanh-toan/", "/lien-he/", "/cam-nang-may-do/", "/chon-vai-may-do/", "/quy-trinh-thu-do/", "/chinh-sua-trang-phuc/"];
+const expectedRoutes = ["/", "/gioi-thieu/", "/dich-vu/", "/gallery/", "/bang-gia/", "/phuong-thuc-thanh-toan/", "/lien-he/", "/cam-nang-may-do/", "/chon-vai-may-do/", "/quy-trinh-thu-do/", "/chinh-sua-trang-phuc/", "/bao-quan-giat-la/"];
 const pageTitles = new Set();
 const pageDescriptions = new Set();
 
@@ -57,6 +57,12 @@ for (const route of expectedRoutes) {
   if (/<meta name="keywords"/i.test(html)) failures.push(`Obsolete keyword meta tag must not be used: ${route}`);
   if (html.includes("beta.sttailor.com")) failures.push(`Beta hostname remains in production HTML: ${route}`);
   if ((html.match(/<footer class="st-footer st-footer-v7 st-footer-v8"/g) ?? []).length !== 1) failures.push(`Footer is not singular: ${route}`);
+  const footer = html.match(/<footer\b[\s\S]*?<\/footer>/i)?.[0] ?? "";
+  const footerLinks = new Set([...footer.matchAll(/\bhref="(\/[^"]*)"/g)].map((match) => match[1]));
+  for (const publishedRoute of expectedRoutes) {
+    if (!footerLinks.has(publishedRoute)) failures.push(`Footer on ${route} omits published page ${publishedRoute}`);
+  }
+  if (!/<nav class="st-footer-v7__nav"[\s\S]*?<a href="\/">Home <span lang="vi">Trang chủ<\/span><\/a>/i.test(footer)) failures.push(`Footer on ${route} lacks a visible Home navigation link.`);
   if (html.includes("https://sttailor.com/wp-content/uploads/")) failures.push(`Remote WordPress upload remains: ${route}`);
   for (const image of html.matchAll(/<img\b[^>]*\bsrc="\/media\/[^"]+"[^>]*>/gi)) {
     if (!/\bwidth="\d+"/i.test(image[0]) || !/\bheight="\d+"/i.test(image[0])) failures.push(`Local image is missing intrinsic dimensions: ${route}`);
@@ -187,12 +193,16 @@ for (const aboutSeoFeature of ["st-about-discovery", "PRIVATE TAILORING IN HO CH
 if (!about.includes('href="/chinh-sua-trang-phuc/"')) failures.push("About alterations discovery does not lead to the dedicated guide.");
 
 const guideHub = readFileSync(path.join(dist, "cam-nang-may-do", "index.html"), "utf8");
-for (const marker of ["st-guide-page", "st-guide-index", "/chon-vai-may-do/", "/quy-trinh-thu-do/", "/chinh-sua-trang-phuc/"]) {
+for (const marker of ["st-guide-page", "st-guide-index", "/chon-vai-may-do/", "/quy-trinh-thu-do/", "/chinh-sua-trang-phuc/", "/bao-quan-giat-la/"]) {
   if (!guideHub.includes(marker)) failures.push(`Tailoring guide hub is missing: ${marker}`);
 }
-for (const route of ["chon-vai-may-do", "quy-trinh-thu-do", "chinh-sua-trang-phuc"]) {
+for (const route of ["chon-vai-may-do", "quy-trinh-thu-do", "chinh-sua-trang-phuc", "bao-quan-giat-la"]) {
   const guide = readFileSync(path.join(dist, route, "index.html"), "utf8");
   if (!guide.includes("st-guide-article") || !guide.includes('href="/cam-nang-may-do/"')) failures.push(`Guide article structure is incomplete: /${route}/`);
+}
+const careGuide = readFileSync(path.join(dist, "bao-quan-giat-la", "index.html"), "utf8");
+for (const marker of ["CARE LABEL FIRST", "Đọc ký hiệu trước khi giặt", "Woolmark", "GINETEX", "Dry Clean Only"]) {
+  if (!careGuide.includes(marker)) failures.push(`Garment-care guide is missing: ${marker}`);
 }
 for (const aboutGalleryFeature of ["st-about-gallery-bridge", 'href="/gallery/"', "THE S.T TAILOR GALLERY", "st-tailor-floral-dinner-jacket-showroom.png", "VIEW THE GALLERY"]) {
   if (!about.includes(aboutGalleryFeature)) failures.push(`About image-led Gallery discovery feature is missing: ${aboutGalleryFeature}`);

@@ -12511,7 +12511,6 @@ html body .st-service-page .st-bespoke-process__steps p { margin: 0 !important; 
 html body .st-service-page .st-bespoke-process__steps p span[lang="vi"] { display: block !important; margin-top: 8px !important; color: #c8a989 !important; -webkit-text-fill-color: #c8a989 !important; }
 html body .st-service-page .st-bespoke-process__actions { display: flex !important; margin-top: 42px !important; justify-content: center !important; gap: 12px !important; }
 html body .st-service-page .st-bespoke-process__actions a { display: inline-flex !important; min-height: 52px !important; padding: 13px 18px !important; align-items: center !important; justify-content: center !important; gap: 7px !important; border: 1px solid #e7bd86 !important; background: #f3d7ae !important; color: #3a2116 !important; -webkit-text-fill-color: #3a2116 !important; font-size: 11px !important; font-weight: 800 !important; letter-spacing: .08em !important; text-decoration: none !important; transition: transform .2s ease, background-color .2s ease !important; }
-html body .st-service-page .st-bespoke-process__actions a:last-child { background: transparent !important; color: #fff6e8 !important; -webkit-text-fill-color: #fff6e8 !important; }
 html body .st-service-page .st-bespoke-process__actions a:hover,
 html body .st-service-page .st-bespoke-process__actions a:focus-visible { background: #fff8ee !important; color: #3a2116 !important; -webkit-text-fill-color: #3a2116 !important; transform: translateY(-2px) !important; }
 
@@ -12908,9 +12907,9 @@ html body .st-home-guide-strip {
   transition: background-color .22s ease, color .22s ease, transform .22s ease, box-shadow .22s ease !important;
 }
 html body .st-home-guide-strip strong { font: 500 clamp(27px, 3.2vw, 44px)/1 var(--st-wordmark) !important; }
-html body .st-home-guide-strip strong small { display: block !important; margin-top: 9px !important; color: #76462c !important; font: 650 12px/1.35 var(--st-vietnamese) !important; letter-spacing: .12em !important; text-transform: uppercase !important; }
+html body .st-home-guide-strip strong small { display: block !important; margin-top: 9px !important; color: #76462c !important; font: 650 clamp(16px, 1.55vw, 20px)/1.35 var(--st-vietnamese) !important; letter-spacing: .06em !important; }
 html body .st-home-guide-strip > span { display: inline-grid !important; min-height: 50px !important; padding: 10px 42px 10px 15px !important; align-items: center !important; border: 1px solid currentColor !important; font: 700 11px/1.2 var(--st-vietnamese) !important; letter-spacing: .12em !important; text-transform: uppercase !important; position: relative !important; }
-html body .st-home-guide-strip > span small { display: block !important; margin-top: 4px !important; color: inherit !important; font: 650 9px/1.2 var(--st-vietnamese) !important; letter-spacing: .09em !important; }
+html body .st-home-guide-strip > span small { display: block !important; margin-top: 4px !important; color: inherit !important; font: 650 11px/1.2 var(--st-vietnamese) !important; letter-spacing: .07em !important; }
 html body .st-home-guide-strip > span i { position: absolute !important; right: 15px !important; top: 50% !important; font-style: normal !important; transform: translateY(-50%) !important; }
 html body .st-home-guide-strip:hover,
 html body .st-home-guide-strip:focus-visible { background: #542b1b !important; box-shadow: 10px 10px 0 rgba(101, 54, 30, .22) !important; color: #fff7ec !important; outline: 2px solid #a86e43 !important; outline-offset: 4px !important; transform: translateY(-2px) !important; }
@@ -12935,12 +12934,12 @@ html body .st-guide-index { padding: clamp(70px, 9vw, 126px) 0 !important; }
 html body .st-guide-section-head { max-width: 800px !important; margin: 0 auto 44px !important; text-align: center !important; }
 html body .st-guide-section-head h2 { margin: 0 !important; color: var(--guide-ink) !important; font: 500 clamp(38px, 5vw, 66px)/.98 var(--st-wordmark) !important; }
 html body .st-guide-section-head h2 span[lang="vi"] { display: block !important; margin-top: 12px !important; color: #75452c !important; font-size: .46em !important; line-height: 1.15 !important; }
-html body .st-guide-index__grid { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 14px !important; }
+html body .st-guide-index__grid { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 14px !important; }
 html body .st-guide-index__grid > a { position: relative !important; display: grid !important; min-height: 270px !important; padding: 32px !important; grid-template-rows: auto auto 1fr auto !important; border: 1px solid #9b6d50 !important; background: #fffdf8 !important; color: var(--guide-ink) !important; text-decoration: none !important; transition: background-color .22s ease, color .22s ease, transform .22s ease !important; }
 html body .st-guide-index__grid > a > span { color: #8a4d2e !important; font: 750 11px/1 var(--st-vietnamese) !important; letter-spacing: .13em !important; }
 html body .st-guide-index__grid strong { margin-top: 36px !important; font: 500 clamp(28px, 2.8vw, 39px)/1 var(--st-wordmark) !important; }
-html body .st-guide-index__grid small { display: block !important; margin-top: 8px !important; color: #7f4b30 !important; font: 650 13px/1.3 var(--st-vietnamese) !important; }
-html body .st-guide-index__grid p { margin: 20px 0 !important; font: 400 15px/1.55 var(--st-vietnamese) !important; }
+html body .st-guide-index__grid small { display: block !important; margin-top: 8px !important; color: #7f4b30 !important; font: 650 16px/1.3 var(--st-vietnamese) !important; }
+html body .st-guide-index__grid p { margin: 20px 0 !important; font: 400 16px/1.55 var(--st-vietnamese) !important; }
 html body .st-guide-index__grid p span[lang="vi"] { display: block !important; margin-top: 7px !important; }
 html body .st-guide-index__grid i { justify-self: end !important; font-style: normal !important; font-size: 22px !important; }
 html body .st-guide-index__grid > a:hover,
@@ -12955,13 +12954,23 @@ html body .st-guide-article__body > section > p:last-child { margin: 0 !importan
 html body .st-guide-article__body > section > p:last-child span[lang="vi"] { display: block !important; margin-top: 10px !important; color: #76513e !important; }
 html body .st-guide-next { display: flex !important; margin-top: 22px !important; gap: 12px !important; justify-content: space-between !important; }
 html body .st-guide-next a,
-html body .st-guide-cta a { display: inline-flex !important; min-height: 50px !important; padding: 13px 18px !important; align-items: center !important; justify-content: center !important; border: 1px solid currentColor !important; color: inherit !important; font: 750 11px/1.25 var(--st-vietnamese) !important; letter-spacing: .11em !important; text-align: center !important; text-decoration: none !important; }
+html body .st-guide-cta a { display: inline-flex !important; min-height: 50px !important; padding: 13px 18px !important; align-items: center !important; justify-content: center !important; gap: 7px !important; flex-wrap: wrap !important; border: 1px solid currentColor !important; color: inherit !important; font: 750 12px/1.35 var(--st-vietnamese) !important; letter-spacing: .07em !important; text-align: center !important; text-decoration: none !important; }
+html body .st-label-separator { display: inline-block !important; margin-inline: 2px !important; }
 html body .st-guide-next a:hover,
 html body .st-guide-next a:focus-visible { background: var(--guide-brown) !important; color: #fff8ed !important; outline: 2px solid #a87855 !important; outline-offset: 3px !important; }
 html body .st-guide-cta { padding: clamp(42px, 6vw, 76px) 0 !important; background: var(--guide-brown) !important; color: #fff8ed !important; }
 html body .st-guide-cta .st-guide-shell { display: flex !important; align-items: center !important; justify-content: space-between !important; gap: 30px !important; }
 html body .st-guide-cta p { margin: 0 !important; font: 500 clamp(30px, 4vw, 52px)/1 var(--st-wordmark) !important; }
 html body .st-guide-cta p span[lang="vi"] { display: block !important; margin-top: 9px !important; color: #efcda3 !important; font-size: .48em !important; line-height: 1.15 !important; }
+html body .st-guide-sources { display: flex !important; flex-wrap: wrap !important; align-items: center !important; gap: 10px 20px !important; padding: 20px 0 28px !important; border-top: 1px solid rgba(96, 51, 31, .32) !important; font: 500 14px/1.5 var(--st-vietnamese) !important; }
+html body .st-guide-sources p { flex-basis: 100% !important; margin: 0 !important; color: #60331f !important; font-weight: 700 !important; }
+html body .st-guide-sources a { color: #60331f !important; text-underline-offset: 4px !important; }
+html body .st-guide-sources a:focus-visible { outline: 2px solid #a87855 !important; outline-offset: 3px !important; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__guide-links { display: flex !important; flex-direction: column !important; gap: 11px !important; margin: -5px 0 19px 10px !important; padding-left: 16px !important; border-left: 1px solid rgba(96, 51, 31, .35) !important; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__guide-links a { display: block !important; color: #4a2618 !important; -webkit-text-fill-color: #4a2618 !important; font: 600 14px/1.35 var(--st-vietnamese) !important; text-decoration: underline !important; text-decoration-color: rgba(74, 38, 24, .7) !important; text-underline-offset: 3px !important; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__guide-links a span[lang="vi"] { display: block !important; margin-top: 3px !important; color: #70432a !important; -webkit-text-fill-color: #70432a !important; font-weight: 500 !important; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__guide-links a:hover,
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__guide-links a:focus-visible { color: #8a4e25 !important; -webkit-text-fill-color: #8a4e25 !important; text-decoration-thickness: 2px !important; outline-offset: 3px !important; }
 
 @media (max-width: 860px) {
   html body .st-guide-hero__grid { grid-template-columns: 1fr !important; }

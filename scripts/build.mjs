@@ -30,10 +30,11 @@ const routes = [
   ["/bang-gia/", "Pricing.html", "Bespoke Tailoring Prices in HCMC | S.T Tailor", "Review starting prices for bespoke suits, shirts, formalwear and clothing alterations before consulting S.T Tailor in Ho Chi Minh City.", "/media/2026/09/st-tailor-navy-double-breasted-front.jpeg", "Navy double-breasted suit by S.T Tailor"],
   ["/phuong-thuc-thanh-toan/", "Payment.html", "Payment Methods & Terms | S.T Tailor HCMC", "Review payment terms for S.T Tailor bespoke and alteration orders, including cards, bank transfer, digital wallets, deposits, invoices and refunds.", "/media/2026/06/store-sttailor-2.webp", "S.T Tailor showroom in Ho Chi Minh City"],
   ["/lien-he/", "Contact.html", "Contact S.T Tailor HCMC | Private Consultation", "Contact S.T Tailor by telephone, email, Messenger, Zalo, Instagram or WhatsApp and arrange a private tailoring consultation.", "/media/2026/06/store-sttailor-1.webp", "S.T Tailor showroom at 258 Lê Thánh Tôn"],
-  ["/cam-nang-may-do/", "GuideHub.html", "Tailoring Guide in HCMC | S.T Tailor", "Read practical bilingual guidance from S.T Tailor on choosing cloth, preparing for fittings and assessing clothing alterations in Ho Chi Minh City.", "/media/2026/09/fabric-focus-swatch-books.jpg", "Tailoring cloth swatches at S.T Tailor"],
+  ["/cam-nang-may-do/", "GuideHub.html", "Tailoring Guide in HCMC | S.T Tailor", "Read practical bilingual guidance from S.T Tailor on choosing cloth, fittings, alterations and caring for tailored garments in Ho Chi Minh City.", "/media/2026/09/fabric-focus-swatch-books.jpg", "Tailoring cloth swatches at S.T Tailor"],
   ["/chon-vai-may-do/", "GuideCloth.html", "How to Choose Suit Fabric in HCMC | S.T Tailor", "Choose suit and formalwear cloth by occasion, climate, drape and care with practical bilingual guidance from S.T Tailor in Ho Chi Minh City.", "/media/2026/09/st-tailor-gallery-canonico-cloth-books.jpg", "Vitale Barberis Canonico cloth books at S.T Tailor"],
   ["/quy-trinh-thu-do/", "GuideFitting.html", "Bespoke Fitting Process in HCMC | S.T Tailor", "Understand consultation, measurement, fittings, refinement and handover for a bespoke garment at S.T Tailor in central Ho Chi Minh City.", "/media/2026/09/st-tailor-client-measurement-session.jpg", "Tailor measuring a client during a fitting at S.T Tailor"],
-  ["/chinh-sua-trang-phuc/", "GuideAlterations.html", "Clothing Alterations in HCMC | S.T Tailor Guide", "Learn what S.T Tailor assesses before altering trouser hems, waists, jacket sleeves and garment repairs in central Ho Chi Minh City.", "/media/2026/09/st-tailor-gallery-trouser-interior-detail.jpg", "Tailored trouser interior and seam finishing at S.T Tailor"]
+  ["/chinh-sua-trang-phuc/", "GuideAlterations.html", "Clothing Alterations in HCMC | S.T Tailor Guide", "Learn what S.T Tailor assesses before altering trouser hems, waists, jacket sleeves and garment repairs in central Ho Chi Minh City.", "/media/2026/09/st-tailor-gallery-trouser-interior-detail.jpg", "Tailored trouser interior and seam finishing at S.T Tailor"],
+  ["/bao-quan-giat-la/", "GuideCare.html", "Suit Care & Garment Cleaning Guide | S.T Tailor", "Follow a practical bilingual guide to airing, brushing, storing, spot care, washing, ironing and professional cleaning for tailored garments.", "/media/2026/09/st-tailor-gallery-jacket-lining-mannequin.jpg", "Tailored jacket lining and construction at S.T Tailor"]
 ];
 
 const primaryNavigation = [
@@ -48,7 +49,8 @@ const primaryNavigation = [
 const guideRoutes = [
   ["/chon-vai-may-do/", "Choosing cloth", "Chọn vải may đo"],
   ["/quy-trinh-thu-do/", "The fitting process", "Quy trình thử đồ"],
-  ["/chinh-sua-trang-phuc/", "Clothing alterations", "Chỉnh sửa trang phục"]
+  ["/chinh-sua-trang-phuc/", "Clothing alterations", "Chỉnh sửa trang phục"],
+  ["/bao-quan-giat-la/", "Garment care and cleaning", "Bảo quản và giặt là"]
 ];
 
 function readSource(file) {
@@ -203,7 +205,7 @@ function transformServices(html) {
         <li class="st-motion st-motion-4"><span class="st-bespoke-process__number">04</span><div><h3>Fittings &amp; refinement<span lang="vi">Thử đồ &amp; tinh chỉnh</span></h3><p>Balance, comfort and movement are reviewed through fitting, then resolved in the finishing details.<span lang="vi">Độ cân đối, thoải mái và chuyển động được kiểm tra qua thử đồ rồi hoàn thiện ở từng chi tiết.</span></p></div></li>
         <li class="st-motion st-motion-5"><span class="st-bespoke-process__number">05</span><div><h3>Handover &amp; care<span lang="vi">Bàn giao &amp; chăm sóc</span></h3><p>The finished garment is inspected and pressed, with practical guidance for wearing and care.<span lang="vi">Trang phục được kiểm tra, là hoàn thiện và hướng dẫn sử dụng, bảo quản phù hợp.</span></p></div></li>
       </ol>
-      <div class="st-bespoke-process__actions"><a href="/lien-he/">ARRANGE A CONSULTATION <span lang="vi">ĐẶT LỊCH TƯ VẤN</span></a><a href="/bang-gia/">VIEW STARTING PRICES <span lang="vi">XEM BẢNG GIÁ</span></a><a href="/cam-nang-may-do/">READ THE TAILORING GUIDE <span lang="vi">XEM CẨM NANG MAY ĐO</span></a></div>
+      <div class="st-bespoke-process__actions"><a href="/lien-he/">ARRANGE A CONSULTATION <span aria-hidden="true">/</span> <span lang="vi">ĐẶT LỊCH TƯ VẤN</span></a><a href="/bang-gia/">VIEW STARTING PRICES <span aria-hidden="true">/</span> <span lang="vi">XEM BẢNG GIÁ</span></a><a href="/cam-nang-may-do/">READ THE TAILORING GUIDE <span aria-hidden="true">/</span> <span lang="vi">XEM CẨM NANG MAY ĐO</span></a></div>
     </div>
   </section>`;
   html = html.replace('  <aside class="st-service-booking"', `${bespokeProcess}\n\n  <aside class="st-service-booking"`);
@@ -726,7 +728,13 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     graph.push({ "@type": "Article", "@id": `${canonical}#article`, headline: title.split(" | ")[0], description, image: `https://sttailor.com${shareImage}`, author: { "@id": "https://sttailor.com/#business" }, publisher: { "@id": "https://sttailor.com/#business" }, mainEntityOfPage: { "@id": `${canonical}#webpage` }, dateModified: lastModified, inLanguage: ["en", "vi"] });
     webPage.mainEntity = { "@id": `${canonical}#article` };
   }
-  if (route !== "/") graph.push({ "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: "https://sttailor.com/" }, { "@type": "ListItem", position: 2, name: title.split(" | ")[0], item: canonical }] });
+  if (route !== "/") {
+    const isGuideArticle = guideRoutes.some(([guideRoute]) => guideRoute === route);
+    const itemListElement = isGuideArticle
+      ? [{ "@type": "ListItem", position: 1, name: "Home", item: "https://sttailor.com/" }, { "@type": "ListItem", position: 2, name: "Tailoring guide", item: "https://sttailor.com/cam-nang-may-do/" }, { "@type": "ListItem", position: 3, name: title.split(" | ")[0], item: canonical }]
+      : [{ "@type": "ListItem", position: 1, name: "Home", item: "https://sttailor.com/" }, { "@type": "ListItem", position: 2, name: title.split(" | ")[0], item: canonical }];
+    graph.push({ "@type": "BreadcrumbList", itemListElement });
+  }
   const jsonLd = `<script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@graph": graph })}</script>`;
   const safeTitle = title.replaceAll('"', "&quot;");
   const safeDescription = description.replaceAll('"', "&quot;");
@@ -835,7 +843,7 @@ const sitemapEntries = sitemapRouteOrder.map(([route, , , , shareImage, shareIma
 }).join("");
 writeFileSync(path.join(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">${sitemapEntries}\n</urlset>\n`, "utf8");
 writeFileSync(path.join(dist, "site.webmanifest"), JSON.stringify({ name: "S.T Tailor", short_name: "S.T Tailor", description: "Bespoke tailoring and clothing alterations in Ho Chi Minh City.", start_url: "/", scope: "/", display: "standalone", background_color: "#f3e1c5", theme_color: "#ead1ad", icons: [{ src: "/media/2026/09/logo-sttailor.png", sizes: "any", type: "image/png", purpose: "any maskable" }] }, null, 2), "utf8");
-writeFileSync(path.join(dist, "llms.txt"), "# S.T Tailor\n\nS.T Tailor is a bespoke tailoring and clothing alterations house at 258 Le Thanh Ton, Phuong Tan Dinh, Ho Chi Minh City, Vietnam.\n\n- Website: https://sttailor.com/\n- Services: https://sttailor.com/dich-vu/\n- Gallery: https://sttailor.com/gallery/\n- Pricing: https://sttailor.com/bang-gia/\n- Payment methods: https://sttailor.com/phuong-thuc-thanh-toan/\n- Tailoring guide: https://sttailor.com/cam-nang-may-do/\n- Choosing cloth: https://sttailor.com/chon-vai-may-do/\n- Fitting process: https://sttailor.com/quy-trinh-thu-do/\n- Clothing alterations: https://sttailor.com/chinh-sua-trang-phuc/\n- Contact: https://sttailor.com/lien-he/\n- Telephone: +84 909 556 258\n- Email: contact.sttailor@gmail.com\n", "utf8");
+writeFileSync(path.join(dist, "llms.txt"), "# S.T Tailor\n\nS.T Tailor is a bespoke tailoring and clothing alterations house at 258 Le Thanh Ton, Phuong Tan Dinh, Ho Chi Minh City, Vietnam.\n\n- Website: https://sttailor.com/\n- Services: https://sttailor.com/dich-vu/\n- Gallery: https://sttailor.com/gallery/\n- Pricing: https://sttailor.com/bang-gia/\n- Payment methods: https://sttailor.com/phuong-thuc-thanh-toan/\n- Tailoring guide: https://sttailor.com/cam-nang-may-do/\n- Choosing cloth: https://sttailor.com/chon-vai-may-do/\n- Fitting process: https://sttailor.com/quy-trinh-thu-do/\n- Clothing alterations: https://sttailor.com/chinh-sua-trang-phuc/\n- Garment care and cleaning: https://sttailor.com/bao-quan-giat-la/\n- Contact: https://sttailor.com/lien-he/\n- Telephone: +84 909 556 258\n- Email: contact.sttailor@gmail.com\n", "utf8");
 writeFileSync(path.join(dist, "_headers"), "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n  X-Frame-Options: SAMEORIGIN\n  Strict-Transport-Security: max-age=15552000\n  Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests\n", "utf8");
 writeFileSync(path.join(dist, "build-manifest.json"), JSON.stringify({ source: "source/wordpress", sourceMedia: "source/media", revision: buildRevision, routes: routes.map(([route]) => route), localUploadAssets: assets.length, imageMetadata: imageCount, galleryDuplicateCheck: "passed" }, null, 2), "utf8");
 console.log(`Built ${routes.length} routes from the versioned WordPress reference with ${assets.length} local upload assets and dimensions for ${imageCount} images.`);

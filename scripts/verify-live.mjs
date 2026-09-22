@@ -14,7 +14,8 @@ const routes = [
   "/cam-nang-may-do/",
   "/chon-vai-may-do/",
   "/quy-trinh-thu-do/",
-  "/chinh-sua-trang-phuc/"
+  "/chinh-sua-trang-phuc/",
+  "/bao-quan-giat-la/"
 ];
 
 const failures = [];
@@ -75,6 +76,9 @@ for (const route of routes) {
   expect(pageHtml.includes(`<link rel="canonical" href="${origin}${route}">`), `${route} has no production canonical`);
   expect(!pageHtml.toLowerCase().includes("beta.sttailor.com"), `${route} still contains the beta host`);
   expect(pageHtml.includes('name="robots" content="index, follow'), `${route} is not indexable`);
+  const footer = pageHtml.match(/<footer\b[\s\S]*?<\/footer>/i)?.[0] ?? "";
+  const footerLinks = new Set([...footer.matchAll(/\bhref="(\/[^"]*)"/g)].map((match) => match[1]));
+  for (const publishedRoute of routes) expect(footerLinks.has(publishedRoute), `${route} footer omits ${publishedRoute}`);
   expect((pageHtml.match(/googletagmanager\.com\/gtag\/js\?id=G-BQDKE20XR0/g) || []).length === 1 && pageHtml.includes('gtag("config","G-BQDKE20XR0")'), `${route} has no single Google Analytics 4 tag`);
   expect((pageHtml.match(/clarity\.ms\/tag\//g) || []).length === 1 && pageHtml.includes('"ymcn0kdqo0"'), `${route} has no single Microsoft Clarity tag`);
   expect((pageHtml.match(/href="https:\/\/x\.com\/sttalior"/g) || []).length === 1 && pageHtml.includes('"https://x.com/sttalior"'), `${route} has no single official X profile in social links/schema`);

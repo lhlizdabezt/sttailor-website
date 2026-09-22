@@ -80,7 +80,8 @@ const pageTypes = {
   "/cam-nang-may-do/": "guide_hub",
   "/chon-vai-may-do/": "guide_cloth",
   "/quy-trinh-thu-do/": "guide_fitting",
-  "/chinh-sua-trang-phuc/": "guide_alterations"
+  "/chinh-sua-trang-phuc/": "guide_alterations",
+  "/bao-quan-giat-la/": "guide_care"
 };
 const pageType = pageTypes[window.location.pathname] ?? "other";
 
