@@ -73,6 +73,7 @@ for (const route of routes) {
   expect(pageHtml.includes('name="robots" content="index, follow'), `${route} is not indexable`);
   expect((pageHtml.match(/googletagmanager\.com\/gtag\/js\?id=G-BQDKE20XR0/g) || []).length === 1 && pageHtml.includes('gtag("config","G-BQDKE20XR0")'), `${route} has no single Google Analytics 4 tag`);
   expect((pageHtml.match(/clarity\.ms\/tag\//g) || []).length === 1 && pageHtml.includes('"ymcn0kdqo0"'), `${route} has no single Microsoft Clarity tag`);
+  expect((pageHtml.match(/href="https:\/\/x\.com\/sttalior"/g) || []).length === 1 && pageHtml.includes('"https://x.com/sttalior"'), `${route} has no single official X profile in social links/schema`);
 }
 
 if (expectedBuildRevision) expect(pages.get("/").includes(`name="sttailor-build-revision" content="${expectedBuildRevision}"`), "Production did not serve the revision deployed by this workflow.");

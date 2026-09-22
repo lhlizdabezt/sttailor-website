@@ -48,7 +48,7 @@ Use the two tools together: find a high-exit or low-conversion page in GA4, then
 
 ## Local discovery standards
 
-Keep the same business name, address, phone, opening hours, website, directions URL, service list, and original photographs across Google Business Profile, Apple Business Connect, Bing Places, social profiles, and eligible directories. Request only genuine customer reviews and never use automated reviews, traffic, backlinks, or keyword-stuffed business names.
+Keep the same business name, address, phone, opening hours, website, directions URL, service list, and original photographs across Google Business Profile, Apple Business Connect, Bing Places, social profiles, and eligible directories. The official X profile is `https://x.com/sttalior` and is published both in the footer and `LocalBusiness.sameAs`. Request only genuine customer reviews and never use automated reviews, traffic, backlinks, or keyword-stuffed business names.
 
 ## Source change gate
 

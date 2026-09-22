@@ -45,6 +45,10 @@ for (const route of expectedRoutes) {
   if (!html.includes('SiteNavigationElement') || !html.includes('OfferCatalog')) failures.push(`Expanded navigation or service structured data is missing: ${route}`);
   if ((html.match(/googletagmanager\.com\/gtag\/js\?id=G-BQDKE20XR0/g) ?? []).length !== 1 || !html.includes('gtag("config","G-BQDKE20XR0")')) failures.push(`Google Analytics 4 tag is missing or duplicated: ${route}`);
   if ((html.match(/clarity\.ms\/tag\//g) ?? []).length !== 1 || !html.includes('"ymcn0kdqo0"')) failures.push(`Microsoft Clarity tag is missing or duplicated: ${route}`);
+  const schemaText = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i)?.[1];
+  const schemaGraph = schemaText ? JSON.parse(schemaText)["@graph"] : [];
+  const businessSchema = schemaGraph.find((item) => Array.isArray(item["@type"]) && item["@type"].includes("LocalBusiness"));
+  if ((html.match(/href="https:\/\/x\.com\/sttalior"/g) ?? []).length !== 1 || (businessSchema?.sameAs ?? []).filter((url) => url === "https://x.com/sttalior").length !== 1) failures.push(`Official X profile is missing or duplicated in social links/schema: ${route}`);
   for (const marker of ['rel="manifest" href="/site.webmanifest"', 'name="twitter:image:alt"', 'name="google-site-verification"', 'name="p:domain_verify"']) {
     if (!html.includes(marker)) failures.push(`SEO/discovery marker is missing on ${route}: ${marker}`);
   }
