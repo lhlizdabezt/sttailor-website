@@ -60,6 +60,11 @@ for (const route of expectedRoutes) {
   if ((html.match(/<footer class="st-footer st-footer-v7 st-footer-v8"/g) ?? []).length !== 1) failures.push(`Footer is not singular: ${route}`);
   const footer = html.match(/<footer\b[\s\S]*?<\/footer>/i)?.[0] ?? "";
   const footerLinks = new Set([...footer.matchAll(/\bhref="(\/[^"]*)"/g)].map((match) => match[1]));
+  for (const [, href] of html.matchAll(/\bhref="(\/[^"]*)"/g)) {
+    const pathname = decodeURIComponent(new URL(href, "https://sttailor.com").pathname);
+    const asset = path.join(dist, pathname.replace(/^\/+/, ""), pathname.endsWith("/") ? "index.html" : "");
+    if (!existsSync(asset)) failures.push("Broken internal link on " + route + ": " + href);
+  }
   for (const publishedRoute of expectedRoutes) {
     if (!footerLinks.has(publishedRoute)) failures.push(`Footer on ${route} omits published page ${publishedRoute}`);
   }
@@ -80,6 +85,24 @@ for (const route of expectedRoutes) {
 }
 if (pageTitles.size !== expectedRoutes.length) failures.push("Every public route must have a unique SEO title.");
 if (pageDescriptions.size !== expectedRoutes.length) failures.push("Every public route must have a unique meta description.");
+
+for (const [route, groups] of Object.entries({
+  "/doi-tra-hoan-tien/": [
+    ["We compare the delivered garment", "No sentence on this page", "Chúng tôi đối chiếu trang phục", "Không nội dung nào trên trang này"],
+    ["If a garment does not match", "Fit preferences can change", "Nếu trang phục không đúng", "Cảm nhận về độ vừa"],
+    ["Tell us in writing if you wish to cancel", "If the written order expressly", "Nếu muốn hủy đơn", "Nếu đơn hàng bằng văn bản"]
+  ]
+})) {
+  const page = path.join(dist, route.slice(1), "index.html");
+  if (!existsSync(page)) continue;
+  const html = readFileSync(page, "utf8");
+  for (const [enFirst, enSecond, viFirst, viSecond] of groups) {
+    const positions = [enFirst, enSecond, viFirst, viSecond].map((text) => html.indexOf(text));
+    if (positions.some((position) => position < 0) || positions.some((position, index) => index > 0 && position <= positions[index - 1])) {
+      failures.push(`Bilingual paragraphs must read English-English then Vietnamese-Vietnamese on ${route}: ${enFirst}`);
+    }
+  }
+}
 
 for (const retiredDirectory of ["bao-hanh-sua-chua", "refund_returns"]) {
   if (existsSync(path.join(dist, retiredDirectory))) failures.push(`Retired page was generated: /${retiredDirectory}/`);

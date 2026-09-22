@@ -795,6 +795,8 @@ html body .st-info-section h2 span[lang="vi"] { display: block !important; margi
 html body .st-info-section__copy p { margin: 0 0 22px !important; color: #473127 !important; font: 400 16px/1.74 var(--st-vietnamese) !important; }
 html body .st-info-section__copy p:last-child { margin-bottom: 0 !important; }
 html body .st-info-section__copy p span[lang="vi"] { display: block !important; margin-top: 10px !important; color: #674c3d !important; }
+html body .st-info-section__copy p[lang="vi"] { color: #674c3d !important; }
+html body .st-info-section__copy p.st-language-start { margin-top: 27px !important; padding-top: 19px !important; border-top: 1px solid #d7b99a !important; }
 html body .st-info-section__copy a, html body .st-info-law a { color: #61331e !important; text-decoration: underline !important; text-decoration-color: #9e6c48 !important; text-underline-offset: 3px !important; }
 html body .st-info-section__copy a:hover, html body .st-info-section__copy a:focus-visible, html body .st-info-law a:hover, html body .st-info-law a:focus-visible { color: #9a4d27 !important; outline: 2px solid #9e6c48 !important; outline-offset: 3px !important; }
 html body .st-info-law { display: flex !important; flex-wrap: wrap !important; align-items: center !important; gap: 12px 28px !important; padding: 28px 0 0 !important; border-top: 1px solid var(--info-rule) !important; font: 500 14px/1.55 var(--st-vietnamese) !important; }
