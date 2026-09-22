@@ -13031,10 +13031,10 @@ html body .st-info-next p span[lang="vi"] { display: block !important; margin-to
 html body .st-info-next a { flex-shrink: 0 !important; border-color: #f0d0a8 !important; background: #f0d0a8 !important; color: #3b2116 !important; }
 html body .st-info-next a:hover, html body .st-info-next a:focus-visible { background: #fffaf3 !important; color: #3b2116 !important; transform: translateY(-2px) !important; outline: 2px solid #f0d0a8 !important; outline-offset: 3px !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal { background: #2d1d15 !important; }
-html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal .st-footer-v7__shell { display: grid !important; min-height: 0 !important; grid-template-columns: 190px minmax(0, 1fr) !important; gap: 24px !important; align-items: end !important; padding: 28px 0 30px !important; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal .st-footer-v7__shell { display: grid !important; min-height: 0 !important; grid-template-columns: 230px minmax(0, 1fr) !important; gap: 24px !important; align-items: end !important; padding: 28px 0 30px !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal .st-footer-v8__copyright { max-width: none !important; margin: 0 !important; padding-bottom: 0 !important; color: #e5c7a7 !important; font: 500 11px/1.5 var(--st-vietnamese) !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__copyright > span { display: block !important; white-space: nowrap !important; }
-html body .st-footer-v7.st-footer-v8 .st-footer-v8__copyright > span[lang="vi"] { margin: 0 !important; color: #d4ac84 !important; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v8__copyright > span [lang="vi"] { display: inline !important; margin: 0 0 0 5px !important; color: #d4ac84 !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal-links { min-width: 0 !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal-label { margin: 0 0 11px !important; color: #e9bc87 !important; font: 750 11px/1.4 var(--st-vietnamese) !important; letter-spacing: .15em !important; text-align: right !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal-label span[lang="vi"] { margin-left: 6px !important; color: #d4ac84 !important; font-weight: 550 !important; letter-spacing: .03em !important; }
