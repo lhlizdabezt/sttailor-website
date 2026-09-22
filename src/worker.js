@@ -54,8 +54,7 @@ function securityHeaders(response, pathname = "/") {
     headers.set("X-Robots-Tag", "index, follow, max-image-preview:large");
     headers.set("Cache-Control", "public, max-age=0, must-revalidate");
   } else if (pathname.startsWith("/styles/") || pathname.startsWith("/scripts/")) {
-    // These paths are stable across deploys; let browsers revalidate promptly.
-    headers.set("Cache-Control", "public, max-age=3600, must-revalidate");
+    headers.set("Cache-Control", "public, max-age=31536000, immutable");
   } else if (pathname.startsWith("/media/")) {
     headers.set("Cache-Control", "public, max-age=604800");
   } else if (["/robots.txt", "/sitemap.xml", "/llms.txt", "/site.webmanifest", `/${indexNowKeyFile}`].includes(pathname)) {
