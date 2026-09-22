@@ -12893,7 +12893,7 @@ html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission {
 }
 html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-media {
   position: absolute !important;
-  z-index: -2 !important;
+  z-index: 0 !important;
   inset: 0 !important;
   display: block !important;
   width: 100% !important;
@@ -12906,11 +12906,13 @@ html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-media {
 html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission::before {
   content: "" !important;
   position: absolute !important;
-  z-index: -1 !important;
+  z-index: 1 !important;
   inset: 0 !important;
   background: linear-gradient(90deg, rgba(33, 14, 9, .88) 0%, rgba(54, 25, 14, .69) 54%, rgba(54, 25, 14, .32) 100%), repeating-linear-gradient(90deg, rgba(255,238,211,.035) 0 1px, transparent 1px 16px) !important;
   pointer-events: none !important;
 }
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission::after { z-index: 1 !important; }
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-grid { position: relative !important; z-index: 2 !important; }
 
 /* The mobile viewport never needs the full 1717px desktop hero. The build
    creates this 768px WebP derivative from the original, preserving the source
