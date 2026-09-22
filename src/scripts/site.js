@@ -76,7 +76,11 @@ const pageTypes = {
   "/gallery/": "gallery",
   "/bang-gia/": "pricing",
   "/phuong-thuc-thanh-toan/": "payment",
-  "/lien-he/": "contact"
+  "/lien-he/": "contact",
+  "/cam-nang-may-do/": "guide_hub",
+  "/chon-vai-may-do/": "guide_cloth",
+  "/quy-trinh-thu-do/": "guide_fitting",
+  "/chinh-sua-trang-phuc/": "guide_alterations"
 };
 const pageType = pageTypes[window.location.pathname] ?? "other";
 

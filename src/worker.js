@@ -8,7 +8,11 @@ const routes = new Set([
   "/gallery/",
   "/bang-gia/",
   "/phuong-thuc-thanh-toan/",
-  "/lien-he/"
+  "/lien-he/",
+  "/cam-nang-may-do/",
+  "/chon-vai-may-do/",
+  "/quy-trinh-thu-do/",
+  "/chinh-sua-trang-phuc/"
 ]);
 // Retired WordPress paths have an intentional, permanent destination. Any
 // path outside this table and the published routes remains a true 404.
@@ -20,6 +24,10 @@ const legacyRoutes = new Map([
   ["/payment/", "/phuong-thuc-thanh-toan/"],
   ["/payment-methods/", "/phuong-thuc-thanh-toan/"],
   ["/contact/", "/lien-he/"],
+  ["/tailoring-guide/", "/cam-nang-may-do/"],
+  ["/fabric-guide/", "/chon-vai-may-do/"],
+  ["/fitting-process/", "/quy-trinh-thu-do/"],
+  ["/alterations/", "/chinh-sua-trang-phuc/"],
   ["/refund_returns/", "/dich-vu/"],
   ["/bao-hanh-sua-chua/", "/dich-vu/"],
   ["/chinh-sach-bao-mat/", "/"],

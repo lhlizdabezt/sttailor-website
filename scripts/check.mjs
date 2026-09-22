@@ -8,7 +8,7 @@ const sourceRoot = path.join(root, "source", "wordpress");
 const dist = path.join(root, "dist");
 const manifest = JSON.parse(readFileSync(path.join(dist, "build-manifest.json"), "utf8"));
 const failures = [];
-const expectedRoutes = ["/", "/gioi-thieu/", "/dich-vu/", "/gallery/", "/bang-gia/", "/phuong-thuc-thanh-toan/", "/lien-he/"];
+const expectedRoutes = ["/", "/gioi-thieu/", "/dich-vu/", "/gallery/", "/bang-gia/", "/phuong-thuc-thanh-toan/", "/lien-he/", "/cam-nang-may-do/", "/chon-vai-may-do/", "/quy-trinh-thu-do/", "/chinh-sua-trang-phuc/"];
 const pageTitles = new Set();
 const pageDescriptions = new Set();
 
@@ -39,6 +39,8 @@ for (const route of expectedRoutes) {
   pageTitles.add(title);
   pageDescriptions.add(description);
   if (!html.includes("st-site-header") || !html.includes("st-footer-v7 st-footer-v8")) failures.push(`Missing shared navigation or footer: ${route}`);
+  if (!html.startsWith('<!doctype html><html lang="en">')) failures.push(`Primary document language is incorrect: ${route}`);
+  if ((html.match(/<h1\b/g) ?? []).length !== 1) failures.push(`Page must contain exactly one H1: ${route}`);
   if (!html.includes('name="sttailor-build-revision"')) failures.push(`Build revision marker is missing: ${route}`);
   if (!html.includes('<meta name="robots" content="index, follow')) failures.push(`Indexable robots metadata is missing: ${route}`);
   if (!html.includes('application/ld+json') || !html.includes('LocalBusiness')) failures.push(`LocalBusiness structured data is missing: ${route}`);
@@ -56,6 +58,13 @@ for (const route of expectedRoutes) {
   if (html.includes("beta.sttailor.com")) failures.push(`Beta hostname remains in production HTML: ${route}`);
   if ((html.match(/<footer class="st-footer st-footer-v7 st-footer-v8"/g) ?? []).length !== 1) failures.push(`Footer is not singular: ${route}`);
   if (html.includes("https://sttailor.com/wp-content/uploads/")) failures.push(`Remote WordPress upload remains: ${route}`);
+  for (const image of html.matchAll(/<img\b[^>]*\bsrc="\/media\/[^"]+"[^>]*>/gi)) {
+    if (!/\bwidth="\d+"/i.test(image[0]) || !/\bheight="\d+"/i.test(image[0])) failures.push(`Local image is missing intrinsic dimensions: ${route}`);
+    if (!/\bsrcset="[^"]+\.webp \d+w/i.test(image[0])) failures.push(`Local image is missing responsive WebP candidates: ${route}`);
+  }
+  for (const image of html.matchAll(/<img\b[^>]*\bsrc="https:\/\/(?:api\.iconify\.design|cdn\.simpleicons\.org)\/[^"]+"[^>]*>/gi)) {
+    if (!/\bwidth="\d+"/i.test(image[0]) || !/\bheight="\d+"/i.test(image[0])) failures.push(`External icon is missing intrinsic dimensions: ${route}`);
+  }
   if (/\batelier\b/i.test(visibleAndAccessibleText(html))) failures.push(`Visible or accessible Atelier wording remains: ${route}`);
   if (/\uFFFD|Ã.|Ä.|Æ.|áº.|á»./u.test(visibleAndAccessibleText(html))) failures.push(`Possible Unicode mojibake remains: ${route}`);
   for (const retired of ["/chinh-sach-bao-mat/", "/dieu-khoan-dieu-kien/", "/chinh-sach-van-chuyen/", "/bao-hanh-sua-chua/", "/refund_returns/"]) {
@@ -108,6 +117,7 @@ for (const visualDestination of ["/gioi-thieu/", "/dich-vu/", "/gallery/", "/ban
 if (!home.includes('/media/2026/09/st-tailor-client-fitted-suit.jpg') || home.includes('/media/2026/09/st-tailor-client-shoulder-fitting.jpg')) failures.push("Home FIT card does not use the approved fitted-suit image.");
 if (!home.includes('rel="preload" as="image"') || !home.includes('fetchpriority="high"')) failures.push("Home hero image preload is missing.");
 if (!home.includes('loading="lazy"') || home.includes('loading="eager"')) failures.push("Deferred images or map loading are not configured correctly.");
+if (!home.includes('class="st-home-guide-strip"') || !home.includes('href="/cam-nang-may-do/"')) failures.push("Home tailoring-guide discovery strip is missing.");
 const footerSocial = home.match(/<nav class="st-footer-v7__social"[\s\S]*?<\/nav>/)?.[0] ?? "";
 for (const channel of ["Facebook", "Zalo", "Instagram", "YouTube", "LinkedIn", "WhatsApp", "Pinterest", "TikTok"]) {
   if (!footerSocial.includes(channel)) failures.push(`Footer social channel missing: ${channel}`);
@@ -173,6 +183,16 @@ for (const clothFeature of ["st-cloth-heritage", "British cloth", "Italian cloth
 }
 for (const aboutSeoFeature of ["st-about-discovery", "PRIVATE TAILORING IN HO CHI MINH CITY", "CLOTHING ALTERATIONS", "taxID", "Founder & Tailoring Consultant", "AboutPage"]) {
   if (!about.includes(aboutSeoFeature)) failures.push(`About SEO/discovery feature is missing: ${aboutSeoFeature}`);
+}
+if (!about.includes('href="/chinh-sua-trang-phuc/"')) failures.push("About alterations discovery does not lead to the dedicated guide.");
+
+const guideHub = readFileSync(path.join(dist, "cam-nang-may-do", "index.html"), "utf8");
+for (const marker of ["st-guide-page", "st-guide-index", "/chon-vai-may-do/", "/quy-trinh-thu-do/", "/chinh-sua-trang-phuc/"]) {
+  if (!guideHub.includes(marker)) failures.push(`Tailoring guide hub is missing: ${marker}`);
+}
+for (const route of ["chon-vai-may-do", "quy-trinh-thu-do", "chinh-sua-trang-phuc"]) {
+  const guide = readFileSync(path.join(dist, route, "index.html"), "utf8");
+  if (!guide.includes("st-guide-article") || !guide.includes('href="/cam-nang-may-do/"')) failures.push(`Guide article structure is incomplete: /${route}/`);
 }
 for (const aboutGalleryFeature of ["st-about-gallery-bridge", 'href="/gallery/"', "THE S.T TAILOR GALLERY", "st-tailor-floral-dinner-jacket-showroom.png", "VIEW THE GALLERY"]) {
   if (!about.includes(aboutGalleryFeature)) failures.push(`About image-led Gallery discovery feature is missing: ${aboutGalleryFeature}`);

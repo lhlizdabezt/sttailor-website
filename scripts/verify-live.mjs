@@ -10,7 +10,11 @@ const routes = [
   "/gallery/",
   "/bang-gia/",
   "/phuong-thuc-thanh-toan/",
-  "/lien-he/"
+  "/lien-he/",
+  "/cam-nang-may-do/",
+  "/chon-vai-may-do/",
+  "/quy-trinh-thu-do/",
+  "/chinh-sua-trang-phuc/"
 ];
 
 const failures = [];
@@ -131,7 +135,7 @@ expect(indexNowKeyResponse.status === 200 && (await indexNowKeyResponse.text()).
 const sitemap = await fetchWithRetry(`${origin}/sitemap.xml`);
 const sitemapText = await sitemap.text();
 expect(sitemap.status === 200, `sitemap.xml returned ${sitemap.status}`);
-expect((sitemapText.match(/<url>/g) || []).length === routes.length, "sitemap.xml does not contain exactly seven public routes");
+expect((sitemapText.match(/<url>/g) || []).length === routes.length, `sitemap.xml does not contain exactly ${routes.length} public routes`);
 expect(sitemapText.includes("xmlns:image="), "Image sitemap namespace is missing");
 expect(sitemapText.includes("<image:image>"), "Image sitemap entries are missing");
 expect(sitemapText.includes("<image:title>"), "Image sitemap titles are missing");

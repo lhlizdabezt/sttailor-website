@@ -654,3 +654,108 @@ html body .st-contact-page .st-contact-info > h1 span[lang="vi"] {
   font-size: .48em !important;
   line-height: 1.14 !important;
 }
+
+/* Keep the LCP headline immediately paintable. Motion remains on supporting content. */
+html body #st-home-v6 .st-home-v6__hero-copy.st-home-v6__rise {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+:is(a, button, [role="button"]) { touch-action: manipulation; }
+:is(h1, h2, h3) { text-wrap: balance; }
+:is(h1, h2, h3)[id] { scroll-margin-top: 106px; }
+
+/* A compact route into the new editorial guide cluster keeps the homepage visual. */
+html body .st-home-guide-strip {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  width: min(1180px, calc(100% - 40px)) !important;
+  min-height: 118px !important;
+  margin: clamp(28px, 5vw, 58px) auto !important;
+  padding: clamp(24px, 4vw, 42px) !important;
+  align-items: center !important;
+  gap: 24px !important;
+  border: 1px solid #724126 !important;
+  background: #f2dfc3 !important;
+  box-shadow: 8px 8px 0 rgba(101, 54, 30, .16) !important;
+  color: #3b2116 !important;
+  text-decoration: none !important;
+  transition: background-color .22s ease, color .22s ease, transform .22s ease, box-shadow .22s ease !important;
+}
+html body .st-home-guide-strip strong { font: 500 clamp(27px, 3.2vw, 44px)/1 var(--st-wordmark) !important; }
+html body .st-home-guide-strip strong small { display: block !important; margin-top: 9px !important; color: #76462c !important; font: 650 12px/1.35 var(--st-vietnamese) !important; letter-spacing: .12em !important; text-transform: uppercase !important; }
+html body .st-home-guide-strip > span { display: inline-grid !important; min-height: 50px !important; padding: 10px 42px 10px 15px !important; align-items: center !important; border: 1px solid currentColor !important; font: 700 11px/1.2 var(--st-vietnamese) !important; letter-spacing: .12em !important; text-transform: uppercase !important; position: relative !important; }
+html body .st-home-guide-strip > span small { display: block !important; margin-top: 4px !important; color: inherit !important; font: 650 9px/1.2 var(--st-vietnamese) !important; letter-spacing: .09em !important; }
+html body .st-home-guide-strip > span i { position: absolute !important; right: 15px !important; top: 50% !important; font-style: normal !important; transform: translateY(-50%) !important; }
+html body .st-home-guide-strip:hover,
+html body .st-home-guide-strip:focus-visible { background: #542b1b !important; box-shadow: 10px 10px 0 rgba(101, 54, 30, .22) !important; color: #fff7ec !important; outline: 2px solid #a86e43 !important; outline-offset: 4px !important; transform: translateY(-2px) !important; }
+html body .st-home-guide-strip:hover strong small,
+html body .st-home-guide-strip:focus-visible strong small { color: #efcda3 !important; }
+
+/* Tailoring guides: concise, bilingual editorial pages with deliberate contrast. */
+html body .st-guide-page { --guide-ink: #321c13; --guide-brown: #60331f; --guide-tan: #ead2b4; --guide-cream: #fffaf3; background: var(--guide-cream) !important; color: var(--guide-ink) !important; }
+html body .st-guide-shell { width: min(1160px, calc(100% - 48px)) !important; margin-inline: auto !important; }
+html body .st-guide-hero { position: relative !important; padding: clamp(58px, 8vw, 108px) 0 !important; overflow: hidden !important; background: var(--guide-tan) !important; }
+html body .st-guide-hero::before { content: "" !important; position: absolute !important; inset: 18px !important; border: 1px solid rgba(96, 51, 31, .24) !important; pointer-events: none !important; }
+html body .st-guide-hero__grid { position: relative !important; display: grid !important; grid-template-columns: minmax(0, .88fr) minmax(360px, .72fr) !important; align-items: center !important; gap: clamp(42px, 7vw, 92px) !important; }
+html body .st-guide-hero__copy { max-width: 680px !important; }
+html body .st-guide-kicker { margin: 0 0 18px !important; color: #78462b !important; font: 750 12px/1.35 var(--st-vietnamese) !important; letter-spacing: .14em !important; text-transform: uppercase !important; }
+html body .st-guide-hero h1 { margin: 0 !important; color: var(--guide-ink) !important; font: 500 clamp(46px, 6vw, 82px)/.94 var(--st-wordmark) !important; letter-spacing: -.025em !important; }
+html body .st-guide-hero h1 span[lang="vi"] { display: block !important; margin-top: 14px !important; color: #73442a !important; font-size: .43em !important; line-height: 1.12 !important; letter-spacing: 0 !important; }
+html body .st-guide-hero__copy > p:last-child { max-width: 630px !important; margin: 24px 0 0 !important; color: #563829 !important; font: 400 16px/1.7 var(--st-vietnamese) !important; }
+html body .st-guide-hero__copy > p:last-child span[lang="vi"] { display: block !important; margin-top: 8px !important; color: #704b38 !important; }
+html body .st-guide-hero__media { position: relative !important; min-height: 560px !important; margin: 0 !important; border: 1px solid #6e3c24 !important; box-shadow: 15px 15px 0 rgba(96, 51, 31, .16) !important; overflow: hidden !important; }
+html body .st-guide-hero__media img { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; }
+html body .st-guide-index { padding: clamp(70px, 9vw, 126px) 0 !important; }
+html body .st-guide-section-head { max-width: 800px !important; margin: 0 auto 44px !important; text-align: center !important; }
+html body .st-guide-section-head h2 { margin: 0 !important; color: var(--guide-ink) !important; font: 500 clamp(38px, 5vw, 66px)/.98 var(--st-wordmark) !important; }
+html body .st-guide-section-head h2 span[lang="vi"] { display: block !important; margin-top: 12px !important; color: #75452c !important; font-size: .46em !important; line-height: 1.15 !important; }
+html body .st-guide-index__grid { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 14px !important; }
+html body .st-guide-index__grid > a { position: relative !important; display: grid !important; min-height: 270px !important; padding: 32px !important; grid-template-rows: auto auto 1fr auto !important; border: 1px solid #9b6d50 !important; background: #fffdf8 !important; color: var(--guide-ink) !important; text-decoration: none !important; transition: background-color .22s ease, color .22s ease, transform .22s ease !important; }
+html body .st-guide-index__grid > a > span { color: #8a4d2e !important; font: 750 11px/1 var(--st-vietnamese) !important; letter-spacing: .13em !important; }
+html body .st-guide-index__grid strong { margin-top: 36px !important; font: 500 clamp(28px, 2.8vw, 39px)/1 var(--st-wordmark) !important; }
+html body .st-guide-index__grid small { display: block !important; margin-top: 8px !important; color: #7f4b30 !important; font: 650 13px/1.3 var(--st-vietnamese) !important; }
+html body .st-guide-index__grid p { margin: 20px 0 !important; font: 400 15px/1.55 var(--st-vietnamese) !important; }
+html body .st-guide-index__grid p span[lang="vi"] { display: block !important; margin-top: 7px !important; }
+html body .st-guide-index__grid i { justify-self: end !important; font-style: normal !important; font-size: 22px !important; }
+html body .st-guide-index__grid > a:hover,
+html body .st-guide-index__grid > a:focus-visible { background: var(--guide-brown) !important; color: #fff8ed !important; outline: 2px solid #9b6d50 !important; outline-offset: 3px !important; transform: translateY(-4px) !important; }
+html body .st-guide-index__grid > a:hover :is(span, small),
+html body .st-guide-index__grid > a:focus-visible :is(span, small) { color: #efcda3 !important; }
+html body .st-guide-article__body { padding: clamp(72px, 10vw, 138px) 0 !important; }
+html body .st-guide-article__body > section { display: grid !important; grid-template-columns: minmax(140px, .32fr) minmax(250px, .75fr) minmax(300px, 1fr) !important; gap: clamp(24px, 4vw, 64px) !important; padding: clamp(42px, 6vw, 72px) 0 !important; align-items: start !important; border-top: 1px solid rgba(96, 51, 31, .32) !important; }
+html body .st-guide-article__body > section h2 { margin: 0 !important; color: var(--guide-ink) !important; font: 500 clamp(32px, 4vw, 52px)/1 var(--st-wordmark) !important; }
+html body .st-guide-article__body > section h2 span[lang="vi"] { display: block !important; margin-top: 11px !important; color: #75452c !important; font-size: .48em !important; line-height: 1.16 !important; }
+html body .st-guide-article__body > section > p:last-child { margin: 0 !important; color: #53372a !important; font: 400 16px/1.75 var(--st-vietnamese) !important; }
+html body .st-guide-article__body > section > p:last-child span[lang="vi"] { display: block !important; margin-top: 10px !important; color: #76513e !important; }
+html body .st-guide-next { display: flex !important; margin-top: 22px !important; gap: 12px !important; justify-content: space-between !important; }
+html body .st-guide-next a,
+html body .st-guide-cta a { display: inline-flex !important; min-height: 50px !important; padding: 13px 18px !important; align-items: center !important; justify-content: center !important; border: 1px solid currentColor !important; color: inherit !important; font: 750 11px/1.25 var(--st-vietnamese) !important; letter-spacing: .11em !important; text-align: center !important; text-decoration: none !important; }
+html body .st-guide-next a:hover,
+html body .st-guide-next a:focus-visible { background: var(--guide-brown) !important; color: #fff8ed !important; outline: 2px solid #a87855 !important; outline-offset: 3px !important; }
+html body .st-guide-cta { padding: clamp(42px, 6vw, 76px) 0 !important; background: var(--guide-brown) !important; color: #fff8ed !important; }
+html body .st-guide-cta .st-guide-shell { display: flex !important; align-items: center !important; justify-content: space-between !important; gap: 30px !important; }
+html body .st-guide-cta p { margin: 0 !important; font: 500 clamp(30px, 4vw, 52px)/1 var(--st-wordmark) !important; }
+html body .st-guide-cta p span[lang="vi"] { display: block !important; margin-top: 9px !important; color: #efcda3 !important; font-size: .48em !important; line-height: 1.15 !important; }
+
+@media (max-width: 860px) {
+  html body .st-guide-hero__grid { grid-template-columns: 1fr !important; }
+  html body .st-guide-hero__media { min-height: min(118vw, 620px) !important; }
+  html body .st-guide-index__grid { grid-template-columns: 1fr !important; }
+  html body .st-guide-index__grid > a { min-height: 230px !important; }
+  html body .st-guide-article__body > section { grid-template-columns: 1fr !important; gap: 18px !important; }
+  html body .st-guide-next,
+  html body .st-guide-cta .st-guide-shell { align-items: stretch !important; flex-direction: column !important; }
+}
+
+@media (max-width: 560px) {
+  html body .st-home-guide-strip { grid-template-columns: 1fr !important; width: calc(100% - 28px) !important; padding: 26px 22px !important; }
+  html body .st-home-guide-strip > span { justify-content: space-between !important; }
+  html body .st-guide-shell { width: calc(100% - 28px) !important; }
+  html body .st-guide-hero { padding: 56px 0 !important; }
+  html body .st-guide-hero::before { inset: 8px !important; }
+  html body .st-guide-hero__media { min-height: 112vw !important; box-shadow: 8px 8px 0 rgba(96, 51, 31, .16) !important; }
+  html body .st-guide-index__grid > a { padding: 26px 22px !important; }
+  html body .st-guide-next a { width: 100% !important; }
+}

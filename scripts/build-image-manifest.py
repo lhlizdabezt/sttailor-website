@@ -15,7 +15,8 @@ from PIL import Image, ImageOps
 
 
 SOURCE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
-RESPONSIVE_WIDTHS = (480, 768)
+CONTENT_WIDTHS = (480, 768, 1200, 1600)
+ICON_WIDTHS = (96, 160, 320)
 
 
 def public_path(path: Path) -> str:
@@ -54,7 +55,8 @@ def main() -> int:
                 image = ImageOps.exif_transpose(opened)
                 width, height = image.size
                 variants = []
-                for candidate in RESPONSIVE_WIDTHS:
+                responsive_widths = ICON_WIDTHS if "logo" in source.stem.lower() else CONTENT_WIDTHS
+                for candidate in responsive_widths:
                     if candidate < width:
                         variants.append({"src": build_variant(image, relative, candidate, responsive_root), "width": candidate})
                 metadata[relative.as_posix()] = {"width": width, "height": height, "responsive": variants}

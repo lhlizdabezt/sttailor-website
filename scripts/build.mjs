@@ -29,7 +29,26 @@ const routes = [
   ["/gallery/", "Gallery.html", "Bespoke Tailoring Gallery in HCMC | S.T Tailor", "View S.T Tailor's cloth, fittings, suits, formalwear, womenswear, garment details and showroom in Ho Chi Minh City.", "/media/2026/09/st-tailor-gallery-showroom-tailoring-display.jpg", "S.T Tailor showroom and tailoring display"],
   ["/bang-gia/", "Pricing.html", "Bespoke Tailoring Prices in HCMC | S.T Tailor", "Review starting prices for bespoke suits, shirts, formalwear and clothing alterations before consulting S.T Tailor in Ho Chi Minh City.", "/media/2026/09/st-tailor-navy-double-breasted-front.jpeg", "Navy double-breasted suit by S.T Tailor"],
   ["/phuong-thuc-thanh-toan/", "Payment.html", "Payment Methods & Terms | S.T Tailor HCMC", "Review payment terms for S.T Tailor bespoke and alteration orders, including cards, bank transfer, digital wallets, deposits, invoices and refunds.", "/media/2026/06/store-sttailor-2.webp", "S.T Tailor showroom in Ho Chi Minh City"],
-  ["/lien-he/", "Contact.html", "Contact S.T Tailor HCMC | Private Consultation", "Contact S.T Tailor by telephone, email, Messenger, Zalo, Instagram or WhatsApp and arrange a private tailoring consultation.", "/media/2026/06/store-sttailor-1.webp", "S.T Tailor showroom at 258 Lê Thánh Tôn" ]
+  ["/lien-he/", "Contact.html", "Contact S.T Tailor HCMC | Private Consultation", "Contact S.T Tailor by telephone, email, Messenger, Zalo, Instagram or WhatsApp and arrange a private tailoring consultation.", "/media/2026/06/store-sttailor-1.webp", "S.T Tailor showroom at 258 Lê Thánh Tôn"],
+  ["/cam-nang-may-do/", "GuideHub.html", "Tailoring Guide in HCMC | S.T Tailor", "Read practical bilingual guidance from S.T Tailor on choosing cloth, preparing for fittings and assessing clothing alterations in Ho Chi Minh City.", "/media/2026/09/fabric-focus-swatch-books.jpg", "Tailoring cloth swatches at S.T Tailor"],
+  ["/chon-vai-may-do/", "GuideCloth.html", "How to Choose Suit Fabric in HCMC | S.T Tailor", "Choose suit and formalwear cloth by occasion, climate, drape and care with practical bilingual guidance from S.T Tailor in Ho Chi Minh City.", "/media/2026/09/st-tailor-gallery-canonico-cloth-books.jpg", "Vitale Barberis Canonico cloth books at S.T Tailor"],
+  ["/quy-trinh-thu-do/", "GuideFitting.html", "Bespoke Fitting Process in HCMC | S.T Tailor", "Understand consultation, measurement, fittings, refinement and handover for a bespoke garment at S.T Tailor in central Ho Chi Minh City.", "/media/2026/09/st-tailor-client-measurement-session.jpg", "Tailor measuring a client during a fitting at S.T Tailor"],
+  ["/chinh-sua-trang-phuc/", "GuideAlterations.html", "Clothing Alterations in HCMC | S.T Tailor Guide", "Learn what S.T Tailor assesses before altering trouser hems, waists, jacket sleeves and garment repairs in central Ho Chi Minh City.", "/media/2026/09/st-tailor-gallery-trouser-interior-detail.jpg", "Tailored trouser interior and seam finishing at S.T Tailor"]
+];
+
+const primaryNavigation = [
+  ["/gioi-thieu/", "About"],
+  ["/dich-vu/", "Services"],
+  ["/gallery/", "Gallery"],
+  ["/bang-gia/", "Pricing"],
+  ["/phuong-thuc-thanh-toan/", "Payment methods"],
+  ["/lien-he/", "Contact"]
+];
+
+const guideRoutes = [
+  ["/chon-vai-may-do/", "Choosing cloth", "Chọn vải may đo"],
+  ["/quy-trinh-thu-do/", "The fitting process", "Quy trình thử đồ"],
+  ["/chinh-sua-trang-phuc/", "Clothing alterations", "Chỉnh sửa trang phục"]
 ];
 
 function readSource(file) {
@@ -134,7 +153,12 @@ function transformHome(html) {
       <span>CONSULT <small lang="vi">ĐẶT LỊCH</small></span>
     </a>
   </section>`;
-  return html.replace(/\s*<\/section>\s*$/, `${editorial}\n</section>`);
+  const guideStrip = `
+  <a class="st-home-guide-strip" href="/cam-nang-may-do/">
+    <strong>Cloth · fitting · alterations <small lang="vi">Chất liệu · thử đồ · chỉnh sửa</small></strong>
+    <span>OPEN THE GUIDE <small lang="vi">XEM CẨM NANG</small><i aria-hidden="true">→</i></span>
+  </a>`;
+  return html.replace(/\s*<\/section>\s*$/, `${editorial}${guideStrip}\n</section>`);
 }
 
 function transformFooter(html) {
@@ -179,7 +203,7 @@ function transformServices(html) {
         <li class="st-motion st-motion-4"><span class="st-bespoke-process__number">04</span><div><h3>Fittings &amp; refinement<span lang="vi">Thử đồ &amp; tinh chỉnh</span></h3><p>Balance, comfort and movement are reviewed through fitting, then resolved in the finishing details.<span lang="vi">Độ cân đối, thoải mái và chuyển động được kiểm tra qua thử đồ rồi hoàn thiện ở từng chi tiết.</span></p></div></li>
         <li class="st-motion st-motion-5"><span class="st-bespoke-process__number">05</span><div><h3>Handover &amp; care<span lang="vi">Bàn giao &amp; chăm sóc</span></h3><p>The finished garment is inspected and pressed, with practical guidance for wearing and care.<span lang="vi">Trang phục được kiểm tra, là hoàn thiện và hướng dẫn sử dụng, bảo quản phù hợp.</span></p></div></li>
       </ol>
-      <div class="st-bespoke-process__actions"><a href="/lien-he/">ARRANGE A CONSULTATION <span lang="vi">ĐẶT LỊCH TƯ VẤN</span></a><a href="/bang-gia/">VIEW STARTING PRICES <span lang="vi">XEM BẢNG GIÁ</span></a></div>
+      <div class="st-bespoke-process__actions"><a href="/lien-he/">ARRANGE A CONSULTATION <span lang="vi">ĐẶT LỊCH TƯ VẤN</span></a><a href="/bang-gia/">VIEW STARTING PRICES <span lang="vi">XEM BẢNG GIÁ</span></a><a href="/cam-nang-may-do/">READ THE TAILORING GUIDE <span lang="vi">XEM CẨM NANG MAY ĐO</span></a></div>
     </div>
   </section>`;
   html = html.replace('  <aside class="st-service-booking"', `${bespokeProcess}\n\n  <aside class="st-service-booking"`);
@@ -509,7 +533,7 @@ function transformAbout(html) {
     </header>
     <nav class="st-about-discovery__links" aria-label="S.T Tailor consultation paths | Lối vào tư vấn S.T Tailor">
       <a class="st-motion st-motion-1" href="/dich-vu/"><strong>BESPOKE TAILORING <span lang="vi">MAY ĐO RIÊNG</span></strong><small>Suits, shirts, formalwear and womenswear.<span lang="vi">Suit, sơ mi, lễ phục và trang phục nữ.</span></small><i aria-hidden="true">→</i></a>
-      <a class="st-motion st-motion-2" href="/dich-vu/"><strong>CLOTHING ALTERATIONS <span lang="vi">CHỈNH SỬA TRANG PHỤC</span></strong><small>Practical refinements for garments you already own.<span lang="vi">Tinh chỉnh thực tế cho trang phục sẵn có.</span></small><i aria-hidden="true">→</i></a>
+      <a class="st-motion st-motion-2" href="/chinh-sua-trang-phuc/"><strong>CLOTHING ALTERATIONS <span lang="vi">CHỈNH SỬA TRANG PHỤC</span></strong><small>Practical refinements for garments you already own.<span lang="vi">Tinh chỉnh thực tế cho trang phục sẵn có.</span></small><i aria-hidden="true">→</i></a>
       <a class="st-motion st-motion-3" href="/lien-he/"><strong>PRIVATE CONSULTATION <span lang="vi">ĐẶT LỊCH TƯ VẤN</span></strong><small>Telephone, Messenger, Zalo, Instagram or WhatsApp.<span lang="vi">Điện thoại, Messenger, Zalo, Instagram hoặc WhatsApp.</span></small><i aria-hidden="true">→</i></a>
     </nav>
   </div>
@@ -569,8 +593,8 @@ function imageMetadata(html) {
   }));
 }
 
-function enrichImageAttributes(html, { responsiveGallery = false } = {}) {
-  return html.replace(/<img\b[^>]*\bsrc="(\/media\/[^\"]+)"[^>]*>/gi, (tag, src) => {
+function enrichImageAttributes(html, { responsiveSizes } = {}) {
+  const localImages = html.replace(/<img\b[^>]*\bsrc="(\/media\/[^\"]+)"[^>]*>/gi, (tag, src) => {
     const asset = decodeURIComponent(src.replace(/^\/media\//, ""));
     const metadata = imageManifest[asset];
     if (!metadata) return tag;
@@ -578,24 +602,42 @@ function enrichImageAttributes(html, { responsiveGallery = false } = {}) {
     if (!/\bwidth="\d+"/i.test(output)) output = output.replace(/<img\b/i, `<img width="${metadata.width}"`);
     if (!/\bheight="\d+"/i.test(output)) output = output.replace(/<img\b/i, `<img height="${metadata.height}"`);
     if (!/\bdecoding=/i.test(output)) output = output.replace(/<img\b/i, '<img decoding="async"');
-    if (responsiveGallery && metadata.responsive?.length && !/\bsrcset=/i.test(output)) {
+    if (responsiveSizes && metadata.responsive?.length && !/\bsrcset=/i.test(output)) {
       const srcset = metadata.responsive.map(({ src: candidate, width }) => `${candidate} ${width}w`).join(", ");
-      output = output.replace(/<img\b/i, `<img srcset="${srcset}" sizes="(max-width: 760px) 100vw, (max-width: 1080px) 50vw, 33vw"`);
+      output = output.replace(/<img\b/i, `<img srcset="${srcset}" sizes="${responsiveSizes}"`);
     }
+    return output;
+  });
+  return localImages.replace(/<img\b[^>]*\bsrc="https:\/\/(?:api\.iconify\.design|cdn\.simpleicons\.org)\/[^\"]+"[^>]*>/gi, (tag) => {
+    let output = tag;
+    if (!/\bwidth="\d+"/i.test(output)) output = output.replace(/<img\b/i, '<img width="24"');
+    if (!/\bheight="\d+"/i.test(output)) output = output.replace(/<img\b/i, '<img height="24"');
+    if (!/\bloading=/i.test(output)) output = output.replace(/<img\b/i, '<img loading="lazy"');
+    if (!/\bdecoding=/i.test(output)) output = output.replace(/<img\b/i, '<img decoding="async"');
     return output;
   });
 }
 
-function header(activePath) {
-  const navItems = [
-    ["/gioi-thieu/", "About"],
-    ["/dich-vu/", "Services"],
-    ["/gallery/", "Gallery"],
-    ["/bang-gia/", "Pricing"],
-    ["/phuong-thuc-thanh-toan/", "Payment methods"],
-    ["/lien-he/", "Contact"]
+const buildDate = new Date().toISOString().slice(0, 10);
+
+function lastModifiedFor(sourceFile) {
+  const trackedInputs = [
+    path.join("source", "wordpress", sourceFile),
+    path.join("source", "wordpress", "Footer.html"),
+    path.join("source", "wordpress", "CustomCSS.css"),
+    path.join("src", "styles", "standalone-shell.css"),
+    path.join("src", "scripts", "site.js"),
+    path.join("scripts", "build.mjs")
   ];
-  const nav = navItems.map(([href, label]) => `<a href="${href}"${activePath === href ? " aria-current=\"page\"" : ""}>${label}</a>`).join("");
+  const dirty = spawnSync("git", ["status", "--porcelain", "--", ...trackedInputs], { cwd: root, encoding: "utf8" });
+  if (dirty.status !== 0 || dirty.stdout.trim()) return buildDate;
+  const history = spawnSync("git", ["log", "-1", "--format=%cs", "--", ...trackedInputs], { cwd: root, encoding: "utf8" });
+  const date = history.status === 0 ? history.stdout.trim() : "";
+  return /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : buildDate;
+}
+
+function header(activePath) {
+  const nav = primaryNavigation.map(([href, label]) => `<a href="${href}"${activePath === href ? " aria-current=\"page\"" : ""}>${label}</a>`).join("");
   return `<a class="st-skip-link" href="#main-content">Skip to content</a>
 <header class="st-site-header"><div class="st-site-header__bar">
   <a class="st-site-brand" href="/" aria-label="S.T Tailor home"><img src="/media/2026/09/logo-sttailor.png" alt="S.T Tailor" width="1239" height="1269" decoding="async" fetchpriority="high"></a>
@@ -608,8 +650,13 @@ function footer() {
   return transformFooter(readSource("Footer.html"));
 }
 
-function documentFor(route, sourceFile, title, description, shareImage, shareImageAlt) {
-  const body = enrichImageAttributes(transformPage(sourceFile, readSource(sourceFile)), { responsiveGallery: route === "/gallery/" });
+function documentFor(route, sourceFile, title, description, shareImage, shareImageAlt, lastModified) {
+  const responsiveSizes = route === "/gallery/"
+    ? "(max-width: 760px) 100vw, (max-width: 1080px) 50vw, 33vw"
+    : route === "/"
+      ? "(max-width: 760px) 100vw, (max-width: 1120px) 50vw, 20vw"
+      : "(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 800px";
+  const body = enrichImageAttributes(transformPage(sourceFile, readSource(sourceFile)), { responsiveSizes });
   const galleryImages = route === "/gallery/" ? imageMetadata(body) : [];
   const canonical = `https://sttailor.com${route}`;
   const business = {
@@ -626,7 +673,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     description: "Bespoke tailoring, formalwear and clothing alterations in Ho Chi Minh City.",
     telephone: "+84 909 556 258",
     email: "contact.sttailor@gmail.com",
-    address: { "@type": "PostalAddress", streetAddress: "258 Lê Thánh Tôn, Phường Tân Định", addressLocality: "Ho Chi Minh City", addressCountry: "VN" },
+    address: { "@type": "PostalAddress", streetAddress: "258 Lê Thánh Tôn, Phường Tân Định", addressLocality: "Ho Chi Minh City", addressRegion: "Ho Chi Minh City", addressCountry: "VN" },
     geo: { "@type": "GeoCoordinates", latitude: 10.7720874, longitude: 106.6957664 },
     openingHoursSpecification: [{ "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], opens: "09:00", closes: "20:00" }],
     areaServed: [{ "@type": "City", name: "Ho Chi Minh City" }, { "@type": "Country", name: "Vietnam" }],
@@ -643,15 +690,21 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     name: "S.T Tailor services",
     itemListElement: ["Bespoke suits and vests", "Blazers and separates", "Shirts and trousers", "Formalwear", "Womenswear", "Wedding and traditional clothing", "Clothing alterations", "Cloth consultation"].map((name) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name, provider: { "@id": "https://sttailor.com/#business" } } }))
   };
-  const pageType = route === "/gioi-thieu/" ? "AboutPage" : route === "/lien-he/" ? "ContactPage" : route === "/gallery/" ? "CollectionPage" : "WebPage";
+  const pageType = route === "/gioi-thieu/" ? "AboutPage" : route === "/lien-he/" ? "ContactPage" : ["/gallery/", "/cam-nang-may-do/"].includes(route) ? "CollectionPage" : "WebPage";
+  const webPage = { "@type": pageType, "@id": `${canonical}#webpage`, url: canonical, name: title, description, isPartOf: { "@id": "https://sttailor.com/#website" }, about: { "@id": "https://sttailor.com/#business" }, primaryImageOfPage: { "@type": "ImageObject", url: `https://sttailor.com${shareImage}`, caption: shareImageAlt }, inLanguage: ["en", "vi"], dateModified: lastModified };
   const graph = [
     business,
     { "@type": "WebSite", "@id": "https://sttailor.com/#website", url: "https://sttailor.com/", name: "S.T Tailor", alternateName: ["S.T Tailor HCMC", "S.T Tailor Ho Chi Minh City"], inLanguage: ["en", "vi"], publisher: { "@id": "https://sttailor.com/#business" } },
-    { "@type": pageType, "@id": `${canonical}#webpage`, url: canonical, name: title, description, isPartOf: { "@id": "https://sttailor.com/#website" }, about: { "@id": "https://sttailor.com/#business" }, mainEntity: { "@id": "https://sttailor.com/#business" }, primaryImageOfPage: { "@type": "ImageObject", url: `https://sttailor.com${shareImage}`, caption: shareImageAlt }, inLanguage: ["en", "vi"] },
-    { "@type": "SiteNavigationElement", "@id": "https://sttailor.com/#navigation", name: routes.map(([, , routeTitle]) => routeTitle.split(" | ")[0]), url: routes.map(([routePath]) => `https://sttailor.com${routePath}`) }
+    webPage,
+    { "@type": "SiteNavigationElement", "@id": "https://sttailor.com/#navigation", name: primaryNavigation.map(([, label]) => label), url: primaryNavigation.map(([routePath]) => `https://sttailor.com${routePath}`) }
   ];
-  if (route === "/dich-vu/") graph.push({ "@type": "Service", "@id": `${canonical}#service`, name: "Bespoke tailoring and clothing alterations", alternateName: "May đo và sửa chữa trang phục", provider: { "@id": "https://sttailor.com/#business" }, areaServed: { "@type": "City", name: "Ho Chi Minh City" }, serviceType: ["Bespoke tailoring", "Formalwear", "Womenswear", "Clothing alterations"] });
-  if (route === "/gallery/") graph.push({
+  if (["/", "/gioi-thieu/", "/lien-he/"].includes(route)) webPage.mainEntity = { "@id": "https://sttailor.com/#business" };
+  if (route === "/dich-vu/") {
+    graph.push({ "@type": "Service", "@id": `${canonical}#service`, name: "Bespoke tailoring and clothing alterations", alternateName: "May đo và sửa chữa trang phục", provider: { "@id": "https://sttailor.com/#business" }, areaServed: { "@type": "City", name: "Ho Chi Minh City" }, serviceType: ["Bespoke tailoring", "Formalwear", "Womenswear", "Clothing alterations"] });
+    webPage.mainEntity = { "@id": `${canonical}#service` };
+  }
+  if (route === "/gallery/") {
+    graph.push({
     "@type": "ItemList",
     "@id": `${canonical}#images`,
     name: "S.T Tailor Gallery | Thư viện hình ảnh S.T Tailor",
@@ -662,7 +715,17 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
       position: index + 1,
       item: { "@type": "ImageObject", contentUrl: `https://sttailor.com${src}`, caption: alt, inLanguage: ["en", "vi"] }
     }))
-  });
+    });
+    webPage.mainEntity = { "@id": `${canonical}#images` };
+  }
+  if (route === "/cam-nang-may-do/") {
+    graph.push({ "@type": "ItemList", "@id": `${canonical}#guides`, name: "S.T Tailor tailoring guide | Cẩm nang may đo S.T Tailor", numberOfItems: guideRoutes.length, itemListElement: guideRoutes.map(([url, english, vietnamese], index) => ({ "@type": "ListItem", position: index + 1, name: `${english} | ${vietnamese}`, url: `https://sttailor.com${url}` })) });
+    webPage.mainEntity = { "@id": `${canonical}#guides` };
+  }
+  if (guideRoutes.some(([guideRoute]) => guideRoute === route)) {
+    graph.push({ "@type": "Article", "@id": `${canonical}#article`, headline: title.split(" | ")[0], description, image: `https://sttailor.com${shareImage}`, author: { "@id": "https://sttailor.com/#business" }, publisher: { "@id": "https://sttailor.com/#business" }, mainEntityOfPage: { "@id": `${canonical}#webpage` }, dateModified: lastModified, inLanguage: ["en", "vi"] });
+    webPage.mainEntity = { "@id": `${canonical}#article` };
+  }
   if (route !== "/") graph.push({ "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: "https://sttailor.com/" }, { "@type": "ListItem", position: 2, name: title.split(" | ")[0], item: canonical }] });
   const jsonLd = `<script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@graph": graph })}</script>`;
   const safeTitle = title.replaceAll('"', "&quot;");
@@ -671,7 +734,9 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
   const shareImageUrl = `https://sttailor.com${shareImage}`;
   const imageType = /\.webp$/i.test(shareImage) ? "image/webp" : "image/jpeg";
   const heroPreload = route === "/" ? `<link rel="preload" as="image" href="${shareImage}" fetchpriority="high">` : "";
-  return `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${safeDescription}"><meta name="author" content="S.T Tailor"><meta name="application-name" content="S.T Tailor"><meta name="sttailor-build-revision" content="${buildRevision}"><meta name="color-scheme" content="light"><meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="google-site-verification" content="e1RyHPdDirO6wJIxuZKKSIY6EXYb37XMfktIVl3aJz8"><meta name="p:domain_verify" content="78c108c3384a3aa9201fb90b99f0b225"><link rel="canonical" href="${canonical}"><link rel="icon" href="/media/2026/09/logo-sttailor.png" type="image/png"><link rel="apple-touch-icon" href="/media/2026/09/logo-sttailor.png"><link rel="manifest" href="/site.webmanifest">${heroPreload}<meta property="og:title" content="${safeTitle}"><meta property="og:description" content="${safeDescription}"><meta property="og:type" content="website"><meta property="og:url" content="${canonical}"><meta property="og:site_name" content="S.T Tailor"><meta property="og:locale" content="vi_VN"><meta property="og:locale:alternate" content="en_US"><meta property="og:image" content="${shareImageUrl}"><meta property="og:image:type" content="${imageType}"><meta property="og:image:alt" content="${safeImageAlt}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${safeTitle}"><meta name="twitter:description" content="${safeDescription}"><meta name="twitter:image" content="${shareImageUrl}"><meta name="twitter:image:alt" content="${safeImageAlt}"><meta name="theme-color" content="#ead1ad"><title>${safeTitle}</title>${jsonLd}${analyticsTags}<link rel="stylesheet" href="${stylesheetHref}"></head><body><div class="st-site-frame">${header(route)}<main id="main-content">${body}</main>${footer()}</div><script type="module" src="${scriptHref}"></script></body></html>`;
+  const siteHeader = enrichImageAttributes(header(route), { responsiveSizes: "102px" });
+  const siteFooter = enrichImageAttributes(footer(), { responsiveSizes: "160px" });
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${safeDescription}"><meta name="author" content="S.T Tailor"><meta name="application-name" content="S.T Tailor"><meta name="sttailor-build-revision" content="${buildRevision}"><meta name="color-scheme" content="light"><meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="google-site-verification" content="e1RyHPdDirO6wJIxuZKKSIY6EXYb37XMfktIVl3aJz8"><meta name="p:domain_verify" content="78c108c3384a3aa9201fb90b99f0b225"><link rel="canonical" href="${canonical}"><link rel="icon" href="/media/2026/09/logo-sttailor.png" type="image/png"><link rel="apple-touch-icon" href="/media/2026/09/logo-sttailor.png"><link rel="manifest" href="/site.webmanifest">${heroPreload}<meta property="og:title" content="${safeTitle}"><meta property="og:description" content="${safeDescription}"><meta property="og:type" content="website"><meta property="og:url" content="${canonical}"><meta property="og:site_name" content="S.T Tailor"><meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:image" content="${shareImageUrl}"><meta property="og:image:type" content="${imageType}"><meta property="og:image:alt" content="${safeImageAlt}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${safeTitle}"><meta name="twitter:description" content="${safeDescription}"><meta name="twitter:image" content="${shareImageUrl}"><meta name="twitter:image:alt" content="${safeImageAlt}"><meta name="theme-color" content="#ead1ad"><title>${safeTitle}</title>${jsonLd}${analyticsTags}<link rel="stylesheet" href="${stylesheetHref}"></head><body><div class="st-site-frame">${siteHeader}<main id="main-content">${body}</main>${siteFooter}</div><script type="module" src="${scriptHref}"></script></body></html>`;
 }
 
 function collectAssetPaths() {
@@ -705,7 +770,9 @@ function buildImageManifest() {
 
 function assertGalleryHasNoDuplicates() {
   const gallery = transformGallery(readSource("Gallery.html"));
-  const refs = [...gallery.matchAll(/https?:\/\/sttailor\.com\/wp-content\/uploads\/([^\"' )]+)/g)].map((match) => match[1]);
+  const refs = [...gallery.matchAll(/<img\b[^>]*\bsrc="\/media\/([^\"]+)"[^>]*>/gi)]
+    .map((match) => match[1])
+    .filter((asset) => !/(?:logo-sttailor|LinkedInLogo)/i.test(asset));
   if (new Set(refs).size !== refs.length) throw new Error("Gallery source contains duplicate image references. Build stopped to preserve the no-duplicate gallery rule.");
 }
 
@@ -733,18 +800,20 @@ const siteScript = readFileSync(path.join(root, "src", "scripts", "site.js"), "u
 scriptHref = `/scripts/site.js?v=${createHash("sha256").update(siteScript).digest("hex").slice(0, 12)}`;
 writeFileSync(path.join(dist, "scripts", "site.js"), siteScript, "utf8");
 
+const routeLastModified = new Map();
 for (const [route, sourceFile, title, description, shareImage, shareImageAlt] of routes) {
   const output = route === "/" ? path.join(dist, "index.html") : path.join(dist, route.slice(1), "index.html");
+  const lastModified = lastModifiedFor(sourceFile);
+  routeLastModified.set(route, lastModified);
   mkdirSync(path.dirname(output), { recursive: true });
-  writeFileSync(output, documentFor(route, sourceFile, title, description, shareImage, shareImageAlt), "utf8");
+  writeFileSync(output, documentFor(route, sourceFile, title, description, shareImage, shareImageAlt, lastModified), "utf8");
 }
-const notFoundDocument = documentFor("/", "Error.html", "Page not found | S.T Tailor", "The requested S.T Tailor page was not found.", "/media/2026/06/store-sttailor-1.webp", "S.T Tailor showroom in Ho Chi Minh City");
+const notFoundDocument = documentFor("/", "Error.html", "Page not found | S.T Tailor", "The requested S.T Tailor page was not found.", "/media/2026/06/store-sttailor-1.webp", "S.T Tailor showroom in Ho Chi Minh City", lastModifiedFor("Error.html"));
 writeFileSync(path.join(dist, "404.html"), notFoundDocument, "utf8");
 writeFileSync(path.join(dist, "not-found.html"), notFoundDocument, "utf8");
 writeFileSync(path.join(dist, "robots.txt"), "User-agent: *\nAllow: /\nDisallow: /build-manifest.json\nSitemap: https://sttailor.com/sitemap.xml\n", "utf8");
 writeFileSync(path.join(dist, indexNowKeyFile), `${indexNowKey}\n`, "utf8");
 const xmlEscape = (value) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&apos;");
-const buildDate = new Date().toISOString().slice(0, 10);
 const publishedImageLocations = new Set();
 const sitemapRouteOrder = [routes.find(([route]) => route === "/gallery/"), ...routes.filter(([route]) => route !== "/gallery/")];
 const sitemapEntries = sitemapRouteOrder.map(([route, , , , shareImage, shareImageAlt]) => {
@@ -762,11 +831,11 @@ const sitemapEntries = sitemapRouteOrder.map(([route, , , , shareImage, shareIma
     return true;
   });
   const imageEntries = pageImages.slice(0, 1000).map(([src, alt]) => `<image:image><image:loc>https://sttailor.com${xmlEscape(src)}</image:loc><image:title>${xmlEscape(alt)}</image:title></image:image>`).join("");
-  return `\n  <url><loc>https://sttailor.com${route}</loc><lastmod>${buildDate}</lastmod>${imageEntries}</url>`;
+  return `\n  <url><loc>https://sttailor.com${route}</loc><lastmod>${routeLastModified.get(route) ?? buildDate}</lastmod>${imageEntries}</url>`;
 }).join("");
 writeFileSync(path.join(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">${sitemapEntries}\n</urlset>\n`, "utf8");
 writeFileSync(path.join(dist, "site.webmanifest"), JSON.stringify({ name: "S.T Tailor", short_name: "S.T Tailor", description: "Bespoke tailoring and clothing alterations in Ho Chi Minh City.", start_url: "/", scope: "/", display: "standalone", background_color: "#f3e1c5", theme_color: "#ead1ad", icons: [{ src: "/media/2026/09/logo-sttailor.png", sizes: "any", type: "image/png", purpose: "any maskable" }] }, null, 2), "utf8");
-writeFileSync(path.join(dist, "llms.txt"), "# S.T Tailor\n\nS.T Tailor is a bespoke tailoring and clothing alterations house at 258 Le Thanh Ton, Phuong Tan Dinh, Ho Chi Minh City, Vietnam.\n\n- Website: https://sttailor.com/\n- Services: https://sttailor.com/dich-vu/\n- Gallery: https://sttailor.com/gallery/\n- Pricing: https://sttailor.com/bang-gia/\n- Payment methods: https://sttailor.com/phuong-thuc-thanh-toan/\n- Contact: https://sttailor.com/lien-he/\n- Telephone: +84 909 556 258\n- Email: contact.sttailor@gmail.com\n", "utf8");
+writeFileSync(path.join(dist, "llms.txt"), "# S.T Tailor\n\nS.T Tailor is a bespoke tailoring and clothing alterations house at 258 Le Thanh Ton, Phuong Tan Dinh, Ho Chi Minh City, Vietnam.\n\n- Website: https://sttailor.com/\n- Services: https://sttailor.com/dich-vu/\n- Gallery: https://sttailor.com/gallery/\n- Pricing: https://sttailor.com/bang-gia/\n- Payment methods: https://sttailor.com/phuong-thuc-thanh-toan/\n- Tailoring guide: https://sttailor.com/cam-nang-may-do/\n- Choosing cloth: https://sttailor.com/chon-vai-may-do/\n- Fitting process: https://sttailor.com/quy-trinh-thu-do/\n- Clothing alterations: https://sttailor.com/chinh-sua-trang-phuc/\n- Contact: https://sttailor.com/lien-he/\n- Telephone: +84 909 556 258\n- Email: contact.sttailor@gmail.com\n", "utf8");
 writeFileSync(path.join(dist, "_headers"), "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n  X-Frame-Options: SAMEORIGIN\n  Strict-Transport-Security: max-age=15552000\n  Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests\n", "utf8");
 writeFileSync(path.join(dist, "build-manifest.json"), JSON.stringify({ source: "source/wordpress", sourceMedia: "source/media", revision: buildRevision, routes: routes.map(([route]) => route), localUploadAssets: assets.length, imageMetadata: imageCount, galleryDuplicateCheck: "passed" }, null, 2), "utf8");
 console.log(`Built ${routes.length} routes from the versioned WordPress reference with ${assets.length} local upload assets and dimensions for ${imageCount} images.`);
