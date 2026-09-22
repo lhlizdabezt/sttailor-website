@@ -16,7 +16,9 @@ concurrency:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    # Keep a known, supported runner image. `ubuntu-latest` will change to
+    # Ubuntu 26 and can alter the deployment environment without a code review.
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     environment: production
     steps:
