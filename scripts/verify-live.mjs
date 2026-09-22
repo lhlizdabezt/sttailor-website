@@ -89,10 +89,19 @@ expect(home.includes('name="google-site-verification"') && home.includes('name="
 const cssPath = home.match(/<link rel="stylesheet" href="([^"]+)"/)?.[1];
 expect(Boolean(cssPath), "The production stylesheet was not found");
 const css = cssPath ? await (await fetchWithRetry(new URL(cssPath, origin))).text() : "";
-expect(css.includes("text-transform: uppercase"), "Navigation is not forced to uppercase");
-expect(css.includes("flex-direction: column"), "Mobile navigation is not a vertical list");
-expect(css.includes("background: linear-gradient(110deg, rgba(244, 226, 197, .97)"), "Old-money tan header treatment is missing");
-expect(css.includes(".st-service-page .st-service-commission-map { margin-top: 0 !important; }"), "Services spacing fix is missing");
+const navigationLinkRule = [...css.matchAll(/\.st-site-nav a[^\{]*\{[^}]*\}/g)]
+  .map((match) => match[0])
+  .find((rule) => rule.includes("text-transform:uppercase"));
+const mobileNavigationRule = [...css.matchAll(/\.st-site-nav\{[^}]*\}/g)]
+  .map((match) => match[0])
+  .find((rule) => rule.includes("width:100vw!important"));
+const commissionMapRule = [...css.matchAll(/\.st-service-page\s+\.st-service-commission-map\{[^}]*\}/g)]
+  .map((match) => match[0])
+  .find((rule) => rule.includes("margin-top:0!important"));
+expect(Boolean(navigationLinkRule), "Navigation is not forced to uppercase");
+expect(mobileNavigationRule?.includes("flex-direction:column!important"), "Mobile navigation is not a vertical list");
+expect(css.includes(".st-site-header{") && css.includes("background:linear-gradient(110deg,#f4e2c5f7"), "Old-money tan header treatment is missing");
+expect(Boolean(commissionMapRule), "Services spacing fix is missing");
 
 const contact = pages.get("/lien-he/");
 expect(!contact.includes("Tell us what you are dressing for"), "Removed contact introduction is still present");
