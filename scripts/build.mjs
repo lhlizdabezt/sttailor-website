@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
+import { transform as minifyCss } from "lightningcss";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -715,8 +716,11 @@ mkdirSync(path.join(dist, "scripts"), { recursive: true });
 const wordpressCss = readFileSync(path.join(sourceRoot, "CustomCSS.css"), "utf8").replaceAll("https://sttailor.com/wp-content/uploads/", "/media/");
 const standaloneCss = readFileSync(path.join(root, "src", "styles", "standalone-shell.css"), "utf8");
 const fullCustomCss = `${wordpressCss}\n\n/* Cloudflare Worker standalone shell. WordPress page CSS above remains the visual source of truth. */\n${standaloneCss}\n`;
-stylesheetHref = `/styles/site.css?v=${createHash("sha256").update(fullCustomCss).digest("hex").slice(0, 12)}`;
-writeFileSync(path.join(dist, "styles", "site.css"), fullCustomCss, "utf8");
+// The editable export remains complete for owner maintenance. Only the served
+// asset is minified, and its content hash keeps its immutable cache safe.
+const productionCss = minifyCss({ filename: "site.css", code: Buffer.from(fullCustomCss), minify: true }).code.toString();
+stylesheetHref = `/styles/site.css?v=${createHash("sha256").update(productionCss).digest("hex").slice(0, 12)}`;
+writeFileSync(path.join(dist, "styles", "site.css"), productionCss, "utf8");
 writeFileSync(path.join(root, "CustomCSS-Full.css"), fullCustomCss, "utf8");
 const siteScript = readFileSync(path.join(root, "src", "scripts", "site.js"), "utf8");
 scriptHref = `/scripts/site.js?v=${createHash("sha256").update(siteScript).digest("hex").slice(0, 12)}`;

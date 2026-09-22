@@ -64,10 +64,12 @@ for (const retiredDirectory of ["chinh-sach-bao-mat", "dieu-khoan-dieu-kien", "c
 
 const css = path.join(dist, "styles", "site.css");
 const generatedCss = existsSync(css) ? readFileSync(css, "utf8") : "";
+const editableCss = existsSync(path.join(root, "CustomCSS-Full.css")) ? readFileSync(path.join(root, "CustomCSS-Full.css"), "utf8") : "";
 if (!existsSync(css) || statSync(css).size < 100000) failures.push("Full generated Custom CSS is missing or unexpectedly short.");
 else {
   const approvedCss = readFileSync(path.join(sourceRoot, "CustomCSS.css"), "utf8").replaceAll("https://sttailor.com/wp-content/uploads/", "/media/");
-  if (!generatedCss.startsWith(approvedCss)) failures.push("Generated CSS does not preserve the complete approved WordPress CSS source.");
+  if (!editableCss.startsWith(approvedCss)) failures.push("Editable CSS export does not preserve the complete approved WordPress CSS source.");
+  if (generatedCss.length >= editableCss.length) failures.push("Production CSS was not minified.");
   if (generatedCss.includes("migration.css")) failures.push("Retired migration stylesheet remains in the generated CSS.");
   const sourceMotion = {
     keyframes: (approvedCss.match(/@keyframes\s+[\w-]+/g) ?? []).length,
@@ -126,7 +128,10 @@ for (const removedBlock of ["st-service-hero", "st-service-offerings", "st-servi
 }
 if (!services.includes("THE BESPOKE PROCESS") || !services.includes("QUY TRÌNH MAY ĐO") || !services.includes("st-bespoke-process__steps")) failures.push("Redesigned bespoke process is missing from Services.");
 if ((services.match(/<h1\b/g) ?? []).length !== 1) failures.push("Services must contain exactly one primary H1 heading.");
-if (!generatedCss.includes(".st-service-page .st-service-commission-map { margin-top: 0 !important; }")) failures.push("Services commission map still retains the removed top whitespace.");
+const commissionMapRule = [...generatedCss.matchAll(/\.st-service-page\s+\.st-service-commission-map\{[^}]*\}/g)]
+  .map((match) => match[0])
+  .find((rule) => rule.includes("margin-top:0!important"));
+if (!commissionMapRule) failures.push("Services commission map still retains the removed top whitespace.");
 for (const retiredServiceGalleryFeature of ["st-service-gallery-suite", "st-tailor-client-measurement-session.jpg", "st-tailor-gallery-jacket-lining-mannequin.jpg", "OPEN THE GALLERY"]) {
   if (services.includes(retiredServiceGalleryFeature)) failures.push(`Retired Services Gallery route remains: ${retiredServiceGalleryFeature}`);
 }
@@ -203,7 +208,13 @@ if (!sitemap.includes("<image:title>")) failures.push("Image sitemap titles are 
 const gallerySitemap = sitemap.match(/<url><loc>https:\/\/sttailor\.com\/gallery\/[\s\S]*?<\/url>/)?.[0] ?? "";
 if ((gallerySitemap.match(/<image:image>/g) ?? []).length !== 99) failures.push("Gallery image sitemap does not expose every editorial image exactly once.");
 if ((sitemap.match(/<image:loc>/g) ?? []).length !== new Set([...sitemap.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)].map((match) => match[1])).size) failures.push("Image sitemap contains duplicate image locations.");
-if (!generatedCss.includes("width: 100vw !important") || !generatedCss.includes("left: 50% !important") || !generatedCss.includes("justify-content: flex-start !important")) failures.push("Mobile navigation is not the requested full-width, left-aligned panel.");
+const mobileNavRule = [...generatedCss.matchAll(/\.st-site-nav\{[^}]*\}/g)]
+  .map((match) => match[0])
+  .find((rule) => rule.includes("width:100vw!important"));
+const mobileNavLinkRule = [...generatedCss.matchAll(/\.st-site-nav a[^\{]*\{[^}]*\}/g)]
+  .map((match) => match[0])
+  .find((rule) => rule.includes("justify-content:flex-start!important"));
+if (!mobileNavRule?.includes("left:50%!important") || !mobileNavLinkRule) failures.push("Mobile navigation is not the requested full-width, left-aligned panel.");
 
 const worker = readFileSync(path.join(root, "src", "worker.js"), "utf8");
 for (const legacyPath of ["/about/", "/services/", "/pricing/", "/payment-methods/", "/contact/", "/refund_returns/"]) {
