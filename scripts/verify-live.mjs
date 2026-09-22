@@ -1,3 +1,5 @@
+import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
+
 const origin = "https://sttailor.com";
 const expectedBuildRevision = process.env.EXPECTED_BUILD_REVISION;
 if (expectedBuildRevision && !/^[0-9a-f]{40}$/i.test(expectedBuildRevision)) throw new Error("EXPECTED_BUILD_REVISION must be a full Git commit SHA.");
@@ -116,6 +118,9 @@ expect(pages.get("/dich-vu/").includes('"Service"'), "Services structured data i
 const robots = await fetchWithRetry(`${origin}/robots.txt`);
 const robotsText = await robots.text();
 expect(robots.status === 200 && robotsText.includes(`Sitemap: ${origin}/sitemap.xml`), "robots.txt is invalid");
+
+const indexNowKeyResponse = await fetchWithRetry(`${origin}/${indexNowKeyFile}`);
+expect(indexNowKeyResponse.status === 200 && (await indexNowKeyResponse.text()).trim() === indexNowKey, "IndexNow ownership key file is missing or invalid");
 
 const sitemap = await fetchWithRetry(`${origin}/sitemap.xml`);
 const sitemapText = await sitemap.text();

@@ -81,3 +81,15 @@ jobs:
         run: node scripts/run-with-retry.mjs --attempts 3 --delay-ms 15000 -- npm run verify:live
         env:
           EXPECTED_BUILD_REVISION: ${{ github.sha }}
+
+      - name: Notify Bing IndexNow after verified production deployment
+        id: indexnow
+        # IndexNow is a crawl notification, never a condition for publishing a
+        # verified website. A temporary search-engine outage must not turn a
+        # healthy deploy red or roll back the live Worker.
+        continue-on-error: true
+        run: node scripts/run-with-retry.mjs --attempts 3 --delay-ms 10000 -- npm run notify:indexnow
+
+      - name: Record deferred IndexNow notification
+        if: steps.indexnow.outcome == 'failure'
+        run: echo "::warning title=IndexNow notification deferred::Production was verified, but Bing did not accept the crawl notification after three attempts. Re-run this workflow later; do not redeploy locally."

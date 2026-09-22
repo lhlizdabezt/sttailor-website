@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const sourceRoot = path.join(root, "source", "wordpress");
@@ -198,8 +199,11 @@ if (!notFound.includes("Back to Home") || !notFound.includes("Về trang chủ")
 const productionHeaders = readFileSync(path.join(dist, "_headers"), "utf8");
 if (/X-Robots-Tag:\s*noindex/i.test(productionHeaders)) failures.push("Production headers still prevent search indexing.");
 if (!productionHeaders.includes("Strict-Transport-Security: max-age=15552000")) failures.push("Production HSTS must remain the conservative six-month policy.");
-for (const staticFile of ["robots.txt", "sitemap.xml", "llms.txt", "site.webmanifest"]) {
+for (const staticFile of ["robots.txt", "sitemap.xml", "llms.txt", "site.webmanifest", indexNowKeyFile]) {
   if (!existsSync(path.join(dist, staticFile))) failures.push(`Missing production discovery file: ${staticFile}`);
+}
+if (existsSync(path.join(dist, indexNowKeyFile)) && readFileSync(path.join(dist, indexNowKeyFile), "utf8") !== `${indexNowKey}\n`) {
+  failures.push("IndexNow ownership key file does not contain the expected key.");
 }
 const sitemap = readFileSync(path.join(dist, "sitemap.xml"), "utf8");
 if ((sitemap.match(/<url><loc>https:\/\/sttailor\.com/g) ?? []).length !== expectedRoutes.length || sitemap.includes("beta.sttailor.com")) failures.push("Sitemap does not contain the complete production route set.");

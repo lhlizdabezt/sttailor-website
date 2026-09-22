@@ -4,6 +4,7 @@ import { spawnSync } from "node:child_process";
 import { transform as minifyCss } from "lightningcss";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 // This directory is intentionally read-only. It is the approved WordPress
@@ -735,6 +736,7 @@ const notFoundDocument = documentFor("/", "Error.html", "Page not found | S.T Ta
 writeFileSync(path.join(dist, "404.html"), notFoundDocument, "utf8");
 writeFileSync(path.join(dist, "not-found.html"), notFoundDocument, "utf8");
 writeFileSync(path.join(dist, "robots.txt"), "User-agent: *\nAllow: /\nDisallow: /build-manifest.json\nSitemap: https://sttailor.com/sitemap.xml\n", "utf8");
+writeFileSync(path.join(dist, indexNowKeyFile), `${indexNowKey}\n`, "utf8");
 const xmlEscape = (value) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&apos;");
 const buildDate = new Date().toISOString().slice(0, 10);
 const publishedImageLocations = new Set();

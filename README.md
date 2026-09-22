@@ -47,7 +47,7 @@ Use this only when GitHub Actions is unavailable. Ordinary deployments run entir
 - [Architecture](docs/ARCHITECTURE.md)
 - [Cloudflare settings](docs/CLOUDFLARE-SETTINGS.md)
 - [DNS cutover](docs/DNS-CUTOVER.md) and [DNSSEC](docs/DNSSEC.md)
-- [SEO](docs/SEO.md), [local SEO](docs/LOCAL-SEO.md), and [redirects](docs/REDIRECTS.md)
+- [SEO](docs/SEO.md), [IndexNow and webmaster operations](docs/SEO-OPERATIONS.md), [local SEO](docs/LOCAL-SEO.md), and [redirects](docs/REDIRECTS.md)
 - [Beta retirement](docs/BETA-RETIREMENT.md), [WordPress retirement](docs/WORDPRESS-RETIREMENT.md), and [rollback](docs/ROLLBACK.md)
 
 ## Content updates after cutover

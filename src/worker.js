@@ -1,3 +1,5 @@
+import { indexNowKeyFile } from "./indexnow.js";
+
 const canonicalHost = "sttailor.com";
 const routes = new Set([
   "/",
@@ -25,7 +27,7 @@ const legacyRoutes = new Map([
   ["/chinh-sach-van-chuyen/", "/"]
 ]);
 const staticPrefixes = ["/media/", "/styles/", "/scripts/"];
-const staticFiles = new Set(["/robots.txt", "/sitemap.xml", "/llms.txt", "/site.webmanifest", "/404.html", "/not-found.html", "/_headers", "/build-manifest.json"]);
+const staticFiles = new Set(["/robots.txt", "/sitemap.xml", "/llms.txt", "/site.webmanifest", `/${indexNowKeyFile}`, "/404.html", "/not-found.html", "/_headers", "/build-manifest.json"]);
 
 function securityHeaders(response, pathname = "/") {
   const headers = new Headers(response.headers);
@@ -44,7 +46,7 @@ function securityHeaders(response, pathname = "/") {
     headers.set("Cache-Control", "public, max-age=31536000, immutable");
   } else if (pathname.startsWith("/media/")) {
     headers.set("Cache-Control", "public, max-age=604800");
-  } else if (["/robots.txt", "/sitemap.xml", "/llms.txt", "/site.webmanifest"].includes(pathname)) {
+  } else if (["/robots.txt", "/sitemap.xml", "/llms.txt", "/site.webmanifest", `/${indexNowKeyFile}`].includes(pathname)) {
     headers.set("Cache-Control", "public, max-age=3600");
   }
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers });

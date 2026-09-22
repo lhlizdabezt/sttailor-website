@@ -8,6 +8,7 @@
     "build": "node scripts/build.mjs",
     "check": "node scripts/check.mjs",
     "verify:live": "node scripts/verify-live.mjs",
+    "notify:indexnow": "node scripts/submit-indexnow.mjs",
     "dev": "npm run build && wrangler dev",
     "deploy": "npm run build && npm run check && wrangler deploy && wrangler deploy --config wrangler.www.jsonc"
   },

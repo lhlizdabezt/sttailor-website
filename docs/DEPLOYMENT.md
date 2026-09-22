@@ -14,7 +14,9 @@ git commit -m "Describe the change"
 git push origin main
 ```
 
-Each push to `main` runs [the deployment workflow](../.github/workflows/deploy.yml). It installs locked dependencies, builds the production site, checks redirects and SEO output, deploys the apex site, maintains the proxied `www` DNS record, deploys the `www` redirect Worker, then tests production.
+Each push to `main` runs [the deployment workflow](../.github/workflows/deploy.yml). It installs locked dependencies, builds the production site, checks redirects and SEO output, deploys the apex site, maintains the proxied `www` DNS record, deploys the `www` redirect Worker, then tests production. Only after that exact revision is live does it notify Bing IndexNow with the canonical URLs from `sitemap.xml`.
+
+An IndexNow outage cannot make a verified deployment fail: the workflow retries the notification three times and emits a visible warning if Bing remains unavailable. Re-run the workflow later; do not use a local deploy as a workaround.
 
 ## Required GitHub secrets
 
