@@ -12885,12 +12885,39 @@ html body #st-home-v6 .st-home-v6__hero-copy.st-home-v6__rise {
   transform: none !important;
 }
 
+/* Make the hero photograph an explicit responsive LCP image. The former CSS
+   background made the browser report the entire header as the LCP candidate
+   and delayed its final paint on mobile. */
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission {
+  background-image: none !important;
+}
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-media {
+  position: absolute !important;
+  z-index: -2 !important;
+  inset: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  pointer-events: none !important;
+}
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission::before {
+  content: "" !important;
+  position: absolute !important;
+  z-index: -1 !important;
+  inset: 0 !important;
+  background: linear-gradient(90deg, rgba(33, 14, 9, .88) 0%, rgba(54, 25, 14, .69) 54%, rgba(54, 25, 14, .32) 100%), repeating-linear-gradient(90deg, rgba(255,238,211,.035) 0 1px, transparent 1px 16px) !important;
+  pointer-events: none !important;
+}
+
 /* The mobile viewport never needs the full 1717px desktop hero. The build
    creates this 768px WebP derivative from the original, preserving the source
    photograph while reducing the LCP request on narrow screens. */
 @media (max-width: 760px) {
   html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission {
-    background-image: linear-gradient(90deg, rgba(33, 14, 9, .88) 0%, rgba(54, 25, 14, .69) 54%, rgba(54, 25, 14, .32) 100%), url("/media/_responsive/2026/06/background-hero-trang-lien-he-sttailor-768.webp") !important;
+    background-image: none !important;
   }
 }
 
