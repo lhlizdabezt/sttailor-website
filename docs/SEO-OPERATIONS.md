@@ -46,6 +46,19 @@ The shared HTML template loads Google Analytics 4 measurement ID `G-BQDKE20XR0` 
 
 Use the two tools together: find a high-exit or low-conversion page in GA4, then inspect representative Clarity recordings or heatmaps before changing the page. Do not add duplicate analytics snippets through Cloudflare, a tag manager, or a page fragment. Review privacy disclosures and consent obligations applicable to the business before enabling additional advertising, remarketing, or cross-site tracking features.
 
+### Event and Clarity configuration
+
+The site records two deliberate interaction events without visitor-entered data:
+
+- `contact_click` carries `contact_method`, `link_placement`, and `page_type` for telephone, email, WhatsApp, Zalo, Messenger, Instagram, and Maps actions.
+- `consultation_intent` carries `link_placement` and `page_type` when a visitor follows an internal contact or booking link.
+
+Register `contact_method`, `link_placement`, and `page_type` as event-scoped custom dimensions in GA4 before using them in detailed reports. Do not mark a raw contact click as a key event until it has been reviewed against real enquiry quality. `consultation_intent` is the appropriate initial key-event candidate; a successful form submission or confirmed appointment should use a separate `generate_lead` event only when that action exists.
+
+Clarity receives non-personal custom tags `page_type` and `site_locale=vi_en`, plus the same interaction event names. Once traffic arrives, create a funnel from a landing page to a service or pricing page, then `consultation_intent` and `contact_click`. Use recordings only to diagnose user experience; do not collect or tag form values.
+
+In GA4 administration, keep Enhanced Measurement on, set event-data retention to 14 months, and link the exact production Search Console property. Create any internal-traffic filter in **Testing** first and activate it only after the shop or office IP ranges have been verified. These account-level controls are intentionally not faked in source code.
+
 ## Local discovery standards
 
 Keep the same business name, address, phone, opening hours, website, directions URL, service list, and original photographs across Google Business Profile, Apple Business Connect, Bing Places, social profiles, and eligible directories. The official X profile is `https://x.com/sttalior` and is published both in the footer and `LocalBusiness.sameAs`. Request only genuine customer reviews and never use automated reviews, traffic, backlinks, or keyword-stuffed business names.

@@ -66,3 +66,62 @@ if ("IntersectionObserver" in window) {
 } else {
   revealables.forEach((element) => element.classList.add("is-visible"));
 }
+
+// Measurement is deliberately limited to public interaction context. Never send
+// visitor-entered content, email addresses, telephone numbers, or form fields.
+const pageTypes = {
+  "/": "home",
+  "/gioi-thieu/": "about",
+  "/dich-vu/": "services",
+  "/gallery/": "gallery",
+  "/bang-gia/": "pricing",
+  "/phuong-thuc-thanh-toan/": "payment",
+  "/lien-he/": "contact"
+};
+const pageType = pageTypes[window.location.pathname] ?? "other";
+
+const claritySet = (key, value) => {
+  if (typeof window.clarity === "function") window.clarity("set", key, value);
+};
+const sendEvent = (name, parameters) => {
+  if (typeof window.gtag === "function") window.gtag("event", name, parameters);
+  if (typeof window.clarity === "function") window.clarity("event", name);
+};
+const linkPlacement = (link) => {
+  if (link.closest("header")) return "header";
+  if (link.closest("footer")) return "footer";
+  if (link.closest("main")) return "main";
+  return "other";
+};
+const directContactMethod = (href) => {
+  const normalized = href.toLowerCase();
+  if (normalized.startsWith("tel:")) return "telephone";
+  if (normalized.startsWith("mailto:")) return "email";
+  if (normalized.includes("wa.me/")) return "whatsapp";
+  if (normalized.includes("zalo.me/")) return "zalo";
+  if (normalized.includes("m.me/")) return "messenger";
+  if (normalized.includes("instagram.com/")) return "instagram";
+  if (normalized.includes("maps.app.goo.gl/") || normalized.includes("google.com/maps")) return "maps";
+  return null;
+};
+
+claritySet("page_type", pageType);
+claritySet("site_locale", "vi_en");
+
+document.addEventListener("click", (event) => {
+  const link = event.target instanceof Element ? event.target.closest("a[href]") : null;
+  if (!link) return;
+
+  const href = link.getAttribute("href") ?? "";
+  const placement = linkPlacement(link);
+  const contactMethod = directContactMethod(href);
+  if (contactMethod) {
+    sendEvent("contact_click", { contact_method: contactMethod, link_placement: placement, page_type: pageType });
+    return;
+  }
+
+  const destination = new URL(href, window.location.href);
+  if (destination.origin === window.location.origin && destination.pathname === "/lien-he/") {
+    sendEvent("consultation_intent", { link_placement: placement, page_type: pageType });
+  }
+});

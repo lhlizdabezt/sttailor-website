@@ -239,6 +239,9 @@ const siteScript = readFileSync(path.join(root, "src", "scripts", "site.js"), "u
 for (const key of ["Alt+M", "ArrowDown", "ArrowUp", "Escape", "Home", "End"]) {
   if (!siteScript.includes(key === "Alt+M" ? 'event.altKey' : `event.key === "${key}"`)) failures.push(`Navigation keyboard support is missing: ${key}`);
 }
+for (const marker of ['"contact_click"', '"consultation_intent"', '"page_type"', '"site_locale"', 'contact_method:', 'link_placement:']) {
+  if (!siteScript.includes(marker)) failures.push(`Analytics or Clarity interaction instrumentation is missing: ${marker}`);
+}
 const wwwRedirect = readFileSync(path.join(root, "src", "www-redirect.js"), "utf8");
 for (const redirectRule of ["status: 301", "Location: url.toString()", "max-age=86400", "Strict-Transport-Security"]) {
   if (!wwwRedirect.includes(redirectRule)) failures.push(`www redirect rule is missing: ${redirectRule}`);
