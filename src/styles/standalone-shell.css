@@ -50,9 +50,9 @@ html body .st-site-frame #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump 
 .st-service-page .st-page-kicker [lang="vi"],
 .st-service-page .st-service-commission-map__catalogue [lang="vi"] { font-family: var(--st-wordmark) !important; font-weight: 500 !important; }
 .st-service-page .st-service-house-standard h2,
-.st-service-page .st-service-commission-map__head h2 { font-size: clamp(34px, 5vw, 68px) !important; line-height: .98 !important; }
+.st-service-page .st-service-commission-map__head h1 { font-size: clamp(34px, 5vw, 68px) !important; line-height: .98 !important; }
 .st-service-page .st-service-commission-map__head .st-page-kicker { font-size: clamp(13px, 1.4vw, 17px) !important; letter-spacing: .11em !important; }
-.st-service-page .st-service-commission-map__catalogue h3 { font-size: clamp(24px, 2.25vw, 38px) !important; line-height: 1.05 !important; }
+.st-service-page .st-service-commission-map__catalogue h2 { font-size: clamp(24px, 2.25vw, 38px) !important; line-height: 1.05 !important; }
 .st-service-page .st-service-commission-map__catalogue p { font-size: clamp(15px, 1.2vw, 18px) !important; line-height: 1.55 !important; }
 .st-service-page .st-service-booking h2 { font-family: var(--st-wordmark) !important; font-weight: 600 !important; }
 /* The removed house-standard band must not leave the old commission-map top gutter behind. */
@@ -270,8 +270,8 @@ html body .st-service-page .st-bespoke-process::before {
 }
 html body .st-service-page .st-bespoke-process__head { display: block !important; width: min(880px, calc(100% - 40px)) !important; max-width: none !important; margin: 0 auto clamp(40px, 6vw, 70px) !important; text-align: center !important; }
 html body .st-service-page .st-bespoke-process__head .st-page-kicker { color: #e8b978 !important; -webkit-text-fill-color: #e8b978 !important; font-size: clamp(14px, 1.35vw, 18px) !important; letter-spacing: .12em !important; }
-html body .st-service-page .st-bespoke-process__head h1 { display: block !important; width: 100% !important; margin: 14px auto 22px !important; color: #fff9f0 !important; -webkit-text-fill-color: #fff9f0 !important; font-size: clamp(39px, 5.4vw, 74px) !important; font-weight: 500 !important; line-height: .98 !important; text-align: center !important; text-wrap: balance !important; }
-html body .st-service-page .st-bespoke-process__head h1 span[lang="vi"] { display: block !important; margin-top: 12px !important; color: #efc995 !important; -webkit-text-fill-color: #efc995 !important; font-size: .47em !important; line-height: 1.14 !important; }
+html body .st-service-page .st-bespoke-process__head h2 { display: block !important; width: 100% !important; margin: 14px auto 22px !important; color: #fff9f0 !important; -webkit-text-fill-color: #fff9f0 !important; font-size: clamp(39px, 5.4vw, 74px) !important; font-weight: 500 !important; line-height: .98 !important; text-align: center !important; text-wrap: balance !important; }
+html body .st-service-page .st-bespoke-process__head h2 span[lang="vi"] { display: block !important; margin-top: 12px !important; color: #efc995 !important; -webkit-text-fill-color: #efc995 !important; font-size: .47em !important; line-height: 1.14 !important; }
 html body .stpr-ledger .stpr-priceboard__head h1 { margin: 12px 0 0 !important; color: #311d14 !important; -webkit-text-fill-color: #311d14 !important; font-family: var(--st-wordmark) !important; font-size: clamp(38px, 5vw, 68px) !important; font-weight: 500 !important; line-height: .98 !important; text-wrap: balance !important; }
 html body .stpr-ledger .stpr-priceboard__head h1 span[lang="vi"] { display: block !important; margin-top: 10px !important; color: #7b452a !important; -webkit-text-fill-color: #7b452a !important; font-size: .5em !important; line-height: 1.14 !important; }
 html body .st-service-page .st-bespoke-process__head > p:last-child { max-width: 720px !important; margin: 0 auto !important; color: #ead8c7 !important; -webkit-text-fill-color: #ead8c7 !important; font-size: clamp(15px, 1.35vw, 18px) !important; line-height: 1.75 !important; }
@@ -877,3 +877,13 @@ html body #st-home-v5 .st5-step img[src^="/icons/lucide-"],
 html body .st-contact-page .st-contact-item img[src^="/icons/lucide-"] { filter: none !important; mix-blend-mode: normal !important; }
 html body .st-contact-page .st-contact-item img[src^="/icons/lucide-"] { width: 38px !important; height: 38px !important; flex-basis: 38px !important; }
 @media (prefers-reduced-motion: reduce) { html body .st-lux-value img[src^="/icons/lucide-"], html body #st-home-v5 .st5-step img[src^="/icons/lucide-"], html body .st-contact-page .st-contact-item img[src^="/icons/lucide-"] { transition: none !important; } }
+
+/* Lighthouse's mobile contrast findings: deepen only the affected Vietnamese
+   supporting text while preserving the site's warm cognac palette. */
+html body .st-service-page .st-service-commission-map__catalogue article h2 span[lang="vi"] { color: #78371b !important; -webkit-text-fill-color: #78371b !important; }
+html body .st-service-page .st-service-commission-map__catalogue article p span[lang="vi"] { color: #653a25 !important; -webkit-text-fill-color: #653a25 !important; }
+html body .st-gallery-page .st-gallery-numpad__heading .st-gallery-kicker span[lang="vi"] { color: #6c371e !important; -webkit-text-fill-color: #6c371e !important; }
+html body .st-gallery-page .st-gallery-album__heading h2 span[lang="vi"] { color: #68351e !important; -webkit-text-fill-color: #68351e !important; }
+html body .st-gallery-page .st-gallery-album--dark .st-gallery-album__heading h2 span[lang="vi"] { color: #f0c892 !important; -webkit-text-fill-color: #f0c892 !important; }
+html body .st-lux-page .st-lux-section-heading h2 span[lang="vi"],
+html body .st-lux-page .st-lux-values .st-lux-value h3 span[lang="vi"] { color: #843f20 !important; -webkit-text-fill-color: #843f20 !important; }

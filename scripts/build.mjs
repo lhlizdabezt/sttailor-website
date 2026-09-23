@@ -207,7 +207,7 @@ function transformServices(html) {
     <div class="st-service-shell">
       <header class="st-bespoke-process__head st-motion st-motion-1">
         <p class="st-page-kicker">THE BESPOKE PROCESS <span lang="vi">/ QUY TRÌNH MAY ĐO</span></p>
-        <h1 id="st-bespoke-process-title">From conversation to a garment that belongs to you.<span lang="vi">Từ cuộc trò chuyện đến trang phục thực sự thuộc về bạn.</span></h1>
+        <h2 id="st-bespoke-process-title">From conversation to a garment that belongs to you.<span lang="vi">Từ cuộc trò chuyện đến trang phục thực sự thuộc về bạn.</span></h2>
         <p>Five considered stages keep proportion, cloth and purpose aligned from the first appointment to the final handover.<span lang="vi">Năm giai đoạn được chăm chút để phom dáng, chất liệu và mục đích sử dụng luôn nhất quán từ buổi hẹn đầu tiên đến khi bàn giao.</span></p>
       </header>
       <ol class="st-bespoke-process__steps">
@@ -820,7 +820,15 @@ const standaloneCss = readFileSync(path.join(root, "src", "styles", "standalone-
 const fullCustomCss = `${wordpressCss}\n\n/* Cloudflare Worker standalone shell. WordPress page CSS above remains the visual source of truth. */\n${standaloneCss}\n`;
 // The editable export remains complete for owner maintenance. Only the served
 // asset is minified, and its content hash keeps its immutable cache safe.
-const productionCss = minifyCss({ filename: "site.css", code: Buffer.from(fullCustomCss), minify: true }).code.toString();
+// These legacy page IDs are absent from every published route. Keep their
+// reference CSS in CustomCSS-Full.css; prune selectors dedicated to them
+// from the deployed bundle while retaining mixed selectors used elsewhere.
+const productionCss = minifyCss({
+  filename: "site.css",
+  code: Buffer.from(fullCustomCss),
+  minify: true,
+  unusedSymbols: ["st-home-v4", "st-home-v5", "st-refund-v1", "st-privacy-v5"]
+}).code.toString();
 stylesheetHref = `/styles/site.css?v=${createHash("sha256").update(productionCss).digest("hex").slice(0, 12)}`;
 writeFileSync(path.join(dist, "styles", "site.css"), productionCss, "utf8");
 writeFileSync(path.join(root, "CustomCSS-Full.css"), fullCustomCss, "utf8");

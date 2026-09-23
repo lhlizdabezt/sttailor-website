@@ -93,6 +93,19 @@ if (!missingPage.includes('<meta name="robots" content="noindex, follow">') || !
   failures.push("The 404 document must be noindex without a homepage canonical or page schema.");
 }
 
+for (const [route, markers] of Object.entries({
+  "/bang-gia/": ['<h2>Bespoke suit', '<h2>Wedding and formal suit', '<h2>Alterations and fitting'],
+  "/lien-he/": ['<h2>ADDRESS / ĐỊA CHỈ', '<h2>HOTLINE / ĐIỆN THOẠI', '<h2>WEBSITE / TRANG WEB'],
+  "/dich-vu/": ['<h1 id="st-service-commission-map-title">', '<h2>Suits and vests', '<h2 id="st-bespoke-process-title">', '<h3>Private consultation']
+})) {
+  const html = readFileSync(path.join(dist, route.slice(1), "index.html"), "utf8");
+  for (const marker of markers) if (!html.includes(marker)) failures.push(`Heading hierarchy regressed on ${route}: ${marker}`);
+}
+const deployedCss = readFileSync(path.join(dist, "styles", "site.css"), "utf8");
+for (const obsoleteId of ["st-home-v4", "st-home-v5", "st-refund-v1", "st-privacy-v5"]) {
+  if (deployedCss.includes(`#${obsoleteId}{`)) failures.push(`Obsolete page root CSS was deployed: ${obsoleteId}`);
+}
+
 for (const [route, groups] of Object.entries({
   "/doi-tra-hoan-tien/": [
     ["We compare the delivered garment", "No sentence on this page", "Chúng tôi đối chiếu trang phục", "Không nội dung nào trên trang này"],
