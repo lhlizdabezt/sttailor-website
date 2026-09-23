@@ -13112,3 +13112,56 @@ html body .st-gallery-page .st-gallery-album--dark .st-gallery-album__heading h2
 html body .st-lux-page .st-lux-section-heading h2 span[lang="vi"],
 html body .st-lux-page .st-lux-values .st-lux-value h3 span[lang="vi"] { color: #843f20 !important; -webkit-text-fill-color: #843f20 !important; }
 
+/* The consultation photograph remains the LCP image, but its busy showroom
+   details sit beside the opening words rather than behind them. */
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission {
+  background: #301d15 !important;
+}
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-media {
+  right: 0 !important;
+  left: auto !important;
+  width: 54% !important;
+  object-position: 72% center !important;
+}
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission::before {
+  background: linear-gradient(90deg, #301d15 0%, #301d15 43%, rgba(48, 29, 21, .72) 51%, rgba(48, 29, 21, 0) 64%) !important;
+}
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission::after { display: none !important; }
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-grid {
+  width: min(1100px, calc(100% - 64px)) !important;
+  max-width: none !important;
+  padding-top: clamp(100px, 10vw, 142px) !important;
+  padding-bottom: clamp(90px, 9vw, 126px) !important;
+}
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-copy { max-width: min(49%, 570px) !important; }
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-copy h1 {
+  max-width: none !important;
+  font-size: clamp(48px, 4.8vw, 70px) !important;
+  line-height: .99 !important;
+  text-shadow: none !important;
+}
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-copy h1 span[lang="vi"] { max-width: 24ch !important; }
+@media (max-width: 760px) {
+  html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0 !important;
+  }
+  html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-media {
+    position: relative !important;
+    width: 100% !important;
+    height: clamp(275px, 86vw, 430px) !important;
+    object-position: 56% center !important;
+  }
+  html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission::before { display: none !important; }
+  html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-grid {
+    width: min(100% - 34px, 620px) !important;
+    padding: clamp(40px, 8vw, 56px) 0 clamp(52px, 9vw, 68px) !important;
+  }
+  html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-copy { max-width: 100% !important; }
+  html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-copy h1 {
+    max-width: 13ch !important;
+    font-size: clamp(43px, 10.5vw, 65px) !important;
+  }
+}
+
