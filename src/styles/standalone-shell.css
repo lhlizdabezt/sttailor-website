@@ -684,7 +684,7 @@ html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission::before {
   position: absolute !important;
   z-index: 1 !important;
   inset: 0 !important;
-  background: linear-gradient(90deg, rgba(33, 14, 9, .88) 0%, rgba(54, 25, 14, .69) 54%, rgba(54, 25, 14, .32) 100%), repeating-linear-gradient(90deg, rgba(255,238,211,.035) 0 1px, transparent 1px 16px) !important;
+  background: linear-gradient(90deg, rgba(33, 14, 9, .68) 0%, rgba(54, 25, 14, .46) 54%, rgba(54, 25, 14, .15) 100%), repeating-linear-gradient(90deg, rgba(255,238,211,.025) 0 1px, transparent 1px 16px) !important;
   pointer-events: none !important;
 }
 html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission::after { z-index: 1 !important; }
@@ -696,6 +696,9 @@ html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-grid { position: rel
 @media (max-width: 760px) {
   html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission {
     background-image: none !important;
+  }
+  html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission::before {
+    background: linear-gradient(90deg, rgba(33, 14, 9, .70), rgba(54, 25, 14, .48) 72%, rgba(54, 25, 14, .30)) !important;
   }
 }
 
