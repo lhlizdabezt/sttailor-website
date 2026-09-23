@@ -16,7 +16,9 @@ from PIL import Image, ImageOps
 
 SOURCE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
 CONTENT_WIDTHS = (480, 768, 1200, 1600)
-ICON_WIDTHS = (96, 160, 320)
+# Keep a 240px candidate so high-DPR mobile headers do not jump from 160px
+# straight to a 320px logo for a roughly 70–100px rendered mark.
+ICON_WIDTHS = (96, 160, 240, 320)
 
 
 def public_path(path: Path) -> str:
@@ -32,7 +34,13 @@ def build_variant(image: Image.Image, source_relative: Path, width: int, output_
     variant.thumbnail((width, height), Image.Resampling.LANCZOS)
     if variant.mode not in {"RGB", "RGBA"}:
         variant = variant.convert("RGBA" if "A" in variant.getbands() else "RGB")
-    variant.save(target, "WEBP", quality=86, method=5)
+    stem = source_relative.stem.lower()
+    # Preserve the original uploads as the visual fallback while making the
+    # above-the-fold hero materially smaller. The q78 content setting keeps
+    # fabric texture and tailoring detail legible; the logo gets a little more
+    # headroom for fine lettering.
+    quality = 74 if "background-hero" in stem else (84 if "logo" in stem else 78)
+    variant.save(target, "WEBP", quality=quality, method=6)
     return public_path(target_relative)
 
 
