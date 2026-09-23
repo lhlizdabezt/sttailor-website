@@ -7000,6 +7000,9 @@ html body #st-pricing-v5.stpr-ledger .stpr-priceboard__head h2 {
   font-size:clamp(38px,4.2vw,59px) !important;
   line-height:1.02 !important;
 }
+html body #st-pricing-v5.stpr-ledger .stpr-priceboard__head h2 {
+  line-height:1.16 !important;
+}
 html body #st-pricing-v5.stpr-ledger .stpr-intro h2 [lang="vi"],
 html body #st-pricing-v5.stpr-ledger .stpr-priceboard__head h2 [lang="vi"] {
   color:var(--stpr-tobacco) !important;
