@@ -20,6 +20,8 @@ const buildRevision = /^[0-9a-f]{40}$/i.test(process.env.STTAILOR_BUILD_REVISION
   : "local";
 let scriptHref = "/scripts/site.js";
 let imageManifest = {};
+const homeHeroImage = "/media/2026/06/background-hero-trang-lien-he-sttailor.webp";
+const homeHeroSizes = "(max-width: 760px) 100vw, 1717px";
 // Production measurement IDs are public browser identifiers, not credentials.
 // Keep the vendors here so every generated route receives exactly one copy.
 // Keep both measurement queues available immediately, but wait until the first
@@ -616,8 +618,10 @@ function enrichImageAttributes(html, { responsiveSizes } = {}) {
     if (!/\bheight="\d+"/i.test(output)) output = output.replace(/<img\b/i, `<img height="${metadata.height}"`);
     if (!/\bdecoding=/i.test(output)) output = output.replace(/<img\b/i, '<img decoding="async"');
     if (responsiveSizes && metadata.responsive?.length && !/\bsrcset=/i.test(output)) {
-      const srcset = metadata.responsive.map(({ src: candidate, width }) => `${candidate} ${width}w`).join(", ");
-      output = output.replace(/<img\b/i, `<img srcset="${srcset}" sizes="${responsiveSizes}"`);
+      const isHomeHero = src === homeHeroImage && /\bst-home-v6__hero-media\b/.test(output);
+      const candidates = isHomeHero ? [...metadata.responsive, { src, width: metadata.width }] : metadata.responsive;
+      const srcset = candidates.map(({ src: candidate, width }) => `${candidate} ${width}w`).join(", ");
+      output = output.replace(/<img\b/i, `<img srcset="${srcset}" sizes="${isHomeHero ? homeHeroSizes : responsiveSizes}"`);
     }
     return output;
   });
@@ -748,7 +752,9 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
   const safeImageAlt = shareImageAlt.replaceAll('"', "&quot;");
   const shareImageUrl = `https://sttailor.com${shareImage}`;
   const imageType = /\.webp$/i.test(shareImage) ? "image/webp" : "image/jpeg";
-  const heroPreload = route === "/" ? `<link rel="preload" as="image" href="${shareImage}" imagesrcset="/media/_responsive/2026/06/background-hero-trang-lien-he-sttailor-768.webp 768w, ${shareImage} 1717w" imagesizes="100vw" fetchpriority="high">` : "";
+  const heroMetadata = route === "/" ? imageManifest[shareImage.slice("/media/".length)] : null;
+  const heroCandidates = heroMetadata ? [...heroMetadata.responsive, { src: shareImage, width: heroMetadata.width }] : [];
+  const heroPreload = heroMetadata ? `<link rel="preload" as="image" href="${shareImage}" imagesrcset="${heroCandidates.map(({ src, width }) => `${src} ${width}w`).join(", ")}" imagesizes="${homeHeroSizes}" fetchpriority="high">` : "";
   const siteHeader = enrichImageAttributes(header(route), { responsiveSizes: "102px" });
   const siteFooter = enrichImageAttributes(footer(), { responsiveSizes: "160px" });
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${safeDescription}"><meta name="author" content="S.T Tailor"><meta name="application-name" content="S.T Tailor"><meta name="sttailor-build-revision" content="${buildRevision}"><meta name="color-scheme" content="light"><meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="google-site-verification" content="e1RyHPdDirO6wJIxuZKKSIY6EXYb37XMfktIVl3aJz8"><meta name="p:domain_verify" content="78c108c3384a3aa9201fb90b99f0b225"><link rel="canonical" href="${canonical}"><link rel="icon" href="/media/2026/09/logo-sttailor.png" type="image/png"><link rel="apple-touch-icon" href="/media/2026/09/logo-sttailor.png"><link rel="manifest" href="/site.webmanifest">${heroPreload}<meta property="og:title" content="${safeTitle}"><meta property="og:description" content="${safeDescription}"><meta property="og:type" content="website"><meta property="og:url" content="${canonical}"><meta property="og:site_name" content="S.T Tailor"><meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:image" content="${shareImageUrl}"><meta property="og:image:type" content="${imageType}"><meta property="og:image:alt" content="${safeImageAlt}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${safeTitle}"><meta name="twitter:description" content="${safeDescription}"><meta name="twitter:image" content="${shareImageUrl}"><meta name="twitter:image:alt" content="${safeImageAlt}"><meta name="theme-color" content="#ead1ad"><title>${safeTitle}</title>${jsonLd}${analyticsTags}<link rel="stylesheet" href="${stylesheetHref}"></head><body><div class="st-site-frame">${siteHeader}<main id="main-content">${body}</main>${siteFooter}</div><script type="module" src="${scriptHref}"></script></body></html>`;

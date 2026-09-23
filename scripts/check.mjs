@@ -166,6 +166,11 @@ for (const visualDestination of ["/gioi-thieu/", "/dich-vu/", "/gallery/", "/ban
 }
 if (!home.includes('/media/2026/09/st-tailor-client-fitted-suit.jpg') || home.includes('/media/2026/09/st-tailor-client-shoulder-fitting.jpg')) failures.push("Home FIT card does not use the approved fitted-suit image.");
 if (!home.includes('rel="preload" as="image"') || !home.includes('fetchpriority="high"')) failures.push("Home hero image preload is missing.");
+const heroImage = home.match(/<img[^>]+class="st-home-v6__hero-media"[^>]+>/)?.[0] ?? "";
+const heroPreload = home.match(/<link rel="preload" as="image"[^>]+>/)?.[0] ?? "";
+if (!heroImage.includes('sizes="(max-width: 760px) 100vw, 1717px"') || !heroImage.includes('background-hero-trang-lien-he-sttailor.webp 1717w')) failures.push("Home hero image may select a blurry desktop derivative.");
+if (!heroPreload.includes('imagesizes="(max-width: 760px) 100vw, 1717px"') || !heroPreload.includes('background-hero-trang-lien-he-sttailor.webp 1717w')) failures.push("Home hero preload and image candidates must match.");
+if (heroImage.match(/\bsrcset="([^"]+)"/)?.[1] !== heroPreload.match(/\bimagesrcset="([^"]+)"/)?.[1]) failures.push("Home hero preload must request the same candidate as the image.");
 if (!home.includes('loading="lazy"') || home.includes('loading="eager"')) failures.push("Deferred images or map loading are not configured correctly.");
 if (!home.includes('class="st-home-guide-strip"') || !home.includes('href="/cam-nang-may-do/"')) failures.push("Home tailoring-guide discovery strip is missing.");
 const footerSocial = home.match(/<nav class="st-footer-v7__social"[\s\S]*?<\/nav>/)?.[0] ?? "";
