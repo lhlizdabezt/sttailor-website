@@ -1,6 +1,6 @@
 # Technical SEO controls
 
-The build generates seven public routes with unique title and description data, a production canonical URL, Open Graph and Twitter metadata, `index, follow` directives, an XML sitemap, and `robots.txt` pointing to `https://sttailor.com/sitemap.xml`.
+The build generates 16 public routes with unique title and description data, a production canonical URL, Open Graph and Twitter metadata, `index, follow` directives, an XML sitemap, and `robots.txt` pointing to `https://sttailor.com/sitemap.xml`. The 404 document uses `noindex` without a homepage canonical. Sitemap `lastmod` dates advance for meaningful page content changes, not routine CSS or analytics deployments.
 
 The generated JSON-LD uses real business details already present in the approved source: `LocalBusiness` and `ClothingStore`, `WebSite`, `WebPage`, `SiteNavigationElement`, `OfferCatalog`, route-level services, and breadcrumbs for inner pages. It does not contain ratings, reviews, or invented popularity claims.
 

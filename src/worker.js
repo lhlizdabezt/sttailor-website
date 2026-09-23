@@ -37,7 +37,7 @@ const legacyRoutes = new Map([
   ["/refund_returns/", "/doi-tra-hoan-tien/"],
   ["/bao-hanh-sua-chua/", "/dich-vu/"]
 ]);
-const staticPrefixes = ["/media/", "/styles/", "/scripts/"];
+const staticPrefixes = ["/media/", "/icons/", "/styles/", "/scripts/"];
 const staticFiles = new Set(["/robots.txt", "/sitemap.xml", "/llms.txt", "/site.webmanifest", `/${indexNowKeyFile}`, "/404.html", "/not-found.html", "/_headers", "/build-manifest.json"]);
 
 function securityHeaders(response, pathname = "/") {
@@ -56,6 +56,8 @@ function securityHeaders(response, pathname = "/") {
   } else if (pathname.startsWith("/styles/") || pathname.startsWith("/scripts/")) {
     headers.set("Cache-Control", "public, max-age=31536000, immutable");
   } else if (pathname.startsWith("/media/")) {
+    headers.set("Cache-Control", "public, max-age=604800");
+  } else if (pathname.startsWith("/icons/")) {
     headers.set("Cache-Control", "public, max-age=604800");
   } else if (["/robots.txt", "/sitemap.xml", "/llms.txt", "/site.webmanifest", `/${indexNowKeyFile}`].includes(pathname)) {
     headers.set("Cache-Control", "public, max-age=3600");

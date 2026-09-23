@@ -11,6 +11,8 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 // reference supplied by the owner; the Worker output is derived from it.
 const sourceRoot = path.join(root, "source", "wordpress");
 const sourceMedia = path.join(root, "source", "media");
+const sourceIcons = path.join(root, "source", "icons");
+const iconPaths = JSON.parse(readFileSync(path.join(sourceIcons, "manifest.json"), "utf8"));
 const dist = path.join(root, "dist");
 let stylesheetHref = "/styles/site.css";
 const buildRevision = /^[0-9a-f]{40}$/i.test(process.env.STTAILOR_BUILD_REVISION || "")
@@ -64,7 +66,11 @@ const guideRoutes = [
 function readSource(file) {
   return readFileSync(path.join(sourceRoot, file), "utf8")
     .replaceAll("https://sttailor.com/wp-content/uploads/", "/media/")
-    .replaceAll("https://sttailor.com/", "/");
+    .replaceAll("https://sttailor.com/", "/")
+    .replace(/https:\/\/(?:cdn\.simpleicons\.org|api\.iconify\.design)\/[^"'\s<>]+/g, (url) => {
+      if (!iconPaths[url]) throw new Error(`Unmapped remote icon in ${file}: ${url}`);
+      return iconPaths[url];
+    });
 }
 
 function escapeRegex(value) {
@@ -263,7 +269,7 @@ function transformContact(html) {
   }
   html = html.replace(
     /<article class="st-contact-card st-contact-card--facebook">[\s\S]*?<\/article>/,
-    '<article class="st-contact-card st-contact-card--messenger"><span class="st-contact-card__icon"><img src="https://cdn.simpleicons.org/messenger/0084FF" alt="" aria-hidden="true"></span><h3>MESSENGER <span lang="vi">NHẮN TIN MESSENGER</span></h3><p>S.T Tailor HCM<span lang="vi">Trao đổi trực tiếp với S.T Tailor</span></p><a href="https://m.me/sttailor.hcm" target="_blank" rel="noopener noreferrer">MESSAGE S.T TAILOR&nbsp;/&nbsp;<span lang="vi">NHẮN TIN NGAY</span></a></article>'
+    '<article class="st-contact-card st-contact-card--messenger"><span class="st-contact-card__icon"><img src="/icons/simple-messenger-0084ff.svg" alt="" aria-hidden="true"></span><h3>MESSENGER <span lang="vi">NHẮN TIN MESSENGER</span></h3><p>S.T Tailor HCM<span lang="vi">Trao đổi trực tiếp với S.T Tailor</span></p><a href="https://m.me/sttailor.hcm" target="_blank" rel="noopener noreferrer">MESSAGE S.T TAILOR&nbsp;/&nbsp;<span lang="vi">NHẮN TIN NGAY</span></a></article>'
   );
   return replaceVisibleAtelier(html);
 }
@@ -511,7 +517,7 @@ function transformAbout(html) {
     .replace("S.T Tailor owner in the atelier", "S.T Tailor owner at the tailoring house")
     .replace(
       "From European cloth including Vitale Barberis Canonico to Vietnamese silk, the selection remains personal, practical and made for the occasion.<span lang=\"vi\">Từ vải Âu như Vitale Barberis Canonico đến lụa tơ tằm Việt Nam, mỗi lựa chọn đều dành riêng cho người mặc và dịp sử dụng.</span>",
-      "From structured British cloth to expressive Italian selections—including Vitale Barberis Canonico—and Vietnamese silk, every material is considered against climate, movement and occasion.<span lang=\"vi\">Từ vải Anh giàu cấu trúc, vải Ý tinh tế—including Vitale Barberis Canonico—đến lụa tơ tằm Việt Nam, mỗi chất liệu đều được cân nhắc theo khí hậu, chuyển động và dịp sử dụng.</span>"
+      "From structured British cloth to expressive Italian selections—including Vitale Barberis Canonico—and Vietnamese silk, every material is considered against climate, movement and occasion.<span lang=\"vi\">Từ vải Anh giàu cấu trúc, vải Ý tinh tế, gồm các lựa chọn của Vitale Barberis Canonico, đến lụa tơ tằm Việt Nam, mỗi chất liệu đều được cân nhắc theo khí hậu, chuyển động và dịp sử dụng.</span>"
     );
   const provenanceRange = findElementByClass(html, "section", "st-lux-provenance");
   if (!provenanceRange) throw new Error("About provenance section was not found.");
@@ -615,7 +621,7 @@ function enrichImageAttributes(html, { responsiveSizes } = {}) {
     }
     return output;
   });
-  return localImages.replace(/<img\b[^>]*\bsrc="https:\/\/(?:api\.iconify\.design|cdn\.simpleicons\.org)\/[^\"]+"[^>]*>/gi, (tag) => {
+  return localImages.replace(/<img\b[^>]*\bsrc="\/icons\/[^\"]+"[^>]*>/gi, (tag) => {
     let output = tag;
     if (!/\bwidth="\d+"/i.test(output)) output = output.replace(/<img\b/i, '<img width="24"');
     if (!/\bheight="\d+"/i.test(output)) output = output.replace(/<img\b/i, '<img height="24"');
@@ -626,21 +632,17 @@ function enrichImageAttributes(html, { responsiveSizes } = {}) {
 }
 
 const buildDate = new Date().toISOString().slice(0, 10);
+// Shared navigation gained substantial page links on this date. Advance this
+// only for a meaningful shared-content change, never for CSS, JS or copyright.
+const sharedContentModified = "2026-09-23";
 
 function lastModifiedFor(sourceFile) {
-  const trackedInputs = [
-    path.join("source", "wordpress", sourceFile),
-    path.join("source", "wordpress", "Footer.html"),
-    path.join("source", "wordpress", "CustomCSS.css"),
-    path.join("src", "styles", "standalone-shell.css"),
-    path.join("src", "scripts", "site.js"),
-    path.join("scripts", "build.mjs")
-  ];
-  const dirty = spawnSync("git", ["status", "--porcelain", "--", ...trackedInputs], { cwd: root, encoding: "utf8" });
+  const contentFile = path.join("source", "wordpress", sourceFile);
+  const dirty = spawnSync("git", ["status", "--porcelain", "--", contentFile], { cwd: root, encoding: "utf8" });
   if (dirty.status !== 0 || dirty.stdout.trim()) return buildDate;
-  const history = spawnSync("git", ["log", "-1", "--format=%cs", "--", ...trackedInputs], { cwd: root, encoding: "utf8" });
+  const history = spawnSync("git", ["log", "-1", "--format=%cs", "--", contentFile], { cwd: root, encoding: "utf8" });
   const date = history.status === 0 ? history.stdout.trim() : "";
-  return /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : buildDate;
+  return /^\d{4}-\d{2}-\d{2}$/.test(date) ? (date > sharedContentModified ? date : sharedContentModified) : buildDate;
 }
 
 function header(activePath) {
@@ -774,6 +776,18 @@ function copyAssets() {
   return assets;
 }
 
+function copyIcons() {
+  for (const iconPath of new Set(Object.values(iconPaths))) {
+    if (!/^\/icons\/[a-z0-9-]+\.svg$/.test(iconPath)) throw new Error(`Invalid icon asset path: ${iconPath}`);
+    const iconName = path.basename(iconPath);
+    const original = path.join(sourceIcons, iconName);
+    if (!existsSync(original)) throw new Error(`Missing local SVG icon: ${iconName}`);
+    const target = path.join(dist, "icons", iconName);
+    mkdirSync(path.dirname(target), { recursive: true });
+    copyFileSync(original, target);
+  }
+}
+
 function buildImageManifest() {
   const result = spawnSync("python", [path.join(root, "scripts", "build-image-manifest.py"), sourceMedia, path.join(dist, "image-manifest.json")], { encoding: "utf8" });
   if (result.status !== 0) throw new Error(`Image manifest generation failed:\n${result.stderr || result.stdout}`);
@@ -796,6 +810,7 @@ rmSync(dist, { recursive: true, force: true, maxRetries: 5, retryDelay: 250 });
 mkdirSync(dist, { recursive: true });
 assertGalleryHasNoDuplicates();
 const assets = copyAssets();
+copyIcons();
 const imageCount = buildImageManifest();
 mkdirSync(path.join(dist, "styles"), { recursive: true });
 mkdirSync(path.join(dist, "scripts"), { recursive: true });
@@ -821,7 +836,11 @@ for (const [route, sourceFile, title, description, shareImage, shareImageAlt] of
   mkdirSync(path.dirname(output), { recursive: true });
   writeFileSync(output, documentFor(route, sourceFile, title, description, shareImage, shareImageAlt, lastModified), "utf8");
 }
-const notFoundDocument = documentFor("/", "Error.html", "Page not found | S.T Tailor", "The requested S.T Tailor page was not found.", "/media/2026/06/store-sttailor-1.webp", "S.T Tailor showroom in Ho Chi Minh City", lastModifiedFor("Error.html"));
+const notFoundDocument = documentFor("/", "Error.html", "Page not found | S.T Tailor", "The requested S.T Tailor page was not found.", "/media/2026/06/store-sttailor-1.webp", "S.T Tailor showroom in Ho Chi Minh City", lastModifiedFor("Error.html"))
+  .replace(/<meta name="robots" content="[^"]+">/, '<meta name="robots" content="noindex, follow">')
+  .replace(/<meta name="googlebot" content="[^"]+">/, '<meta name="googlebot" content="noindex, follow">')
+  .replace(/<link rel="canonical" href="[^"]+">/, "")
+  .replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, "");
 writeFileSync(path.join(dist, "404.html"), notFoundDocument, "utf8");
 writeFileSync(path.join(dist, "not-found.html"), notFoundDocument, "utf8");
 writeFileSync(path.join(dist, "robots.txt"), "User-agent: *\nAllow: /\nDisallow: /build-manifest.json\nSitemap: https://sttailor.com/sitemap.xml\n", "utf8");

@@ -7,7 +7,7 @@ This is a static-first rebuild of S.T Tailor from the owner-approved, read-only 
 - Public routes: homepage, About, Services, Gallery, Pricing, Payment Methods and Contact.
 - Shared responsive header, mobile navigation and footer.
 - Versioned page fragments and the complete approved WordPress CSS in `source/wordpress`.
-- The 149 approved website uploads in `source/media`. The repository contains no database export, WordPress core, plugins, SSL certificates, API tokens or private keys.
+- Versioned approved website uploads in `source/media` and first-party interface icons in `source/icons`. The repository contains no database export, WordPress core, plugins, SSL certificates, API tokens or private keys.
 - A Worker health check at `/healthz`, legacy URL mappings, true 404 responses and security response headers.
 
 ## URL behaviour

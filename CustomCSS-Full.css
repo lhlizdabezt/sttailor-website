@@ -12239,7 +12239,7 @@ main { display: block; width: 100%; overflow: hidden; }
 .st-skip-link:focus { transform: translateY(0); }
 
 /* This header reproduces the quiet, light WordPress chrome while keeping only the original logo. */
-.st-site-header { position: sticky; top: 0; z-index: 30; width: 100%; background: linear-gradient(110deg, rgba(244, 226, 197, .97), rgba(232, 207, 171, .96) 52%, rgba(246, 231, 207, .97)); border-bottom: 1px solid rgba(125, 75, 43, .38); box-shadow: 0 8px 24px rgba(74, 39, 22, .08), inset 0 1px rgba(255, 251, 242, .72); backdrop-filter: blur(14px) saturate(112%); -webkit-backdrop-filter: blur(14px) saturate(112%); }
+.st-site-header { position: sticky; top: 0; z-index: 30; width: 100%; background: linear-gradient(110deg, #f4e2c5, #e8cfab 52%, #f6e7cf); border-bottom: 1px solid rgba(125, 75, 43, .38); box-shadow: 0 8px 24px rgba(74, 39, 22, .08), inset 0 1px rgba(255, 251, 242, .72); }
 .st-site-header__bar { display: flex; width: min(1280px, calc(100% - 56px)); min-height: 78px; margin: 0 auto; align-items: center; justify-content: space-between; gap: 28px; }
 .st-site-brand { display: inline-flex; flex: 0 0 auto; align-items: center; max-width: min(118px, 22vw); }
 .st-site-brand img { display: block; width: min(102px, 20vw); height: auto; margin: 0; background: transparent; border: 0; filter: none; }
@@ -13091,4 +13091,14 @@ html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:hover span[lang=
 @media (max-width: 860px) { html body .st-info-hero__grid, html body .st-info-section { grid-template-columns: 1fr !important; } html body .st-info-hero__image { min-height: min(115vw, 620px) !important; } html body .st-info-section { gap: 22px !important; } html body .st-info-next .st-info-shell { align-items: stretch !important; flex-direction: column !important; } }
 @media (max-width: 560px) { html body .st-info-shell { width: calc(100% - 32px) !important; } html body .st-info-hero { padding: 58px 0 !important; } html body .st-info-hero::before { inset: 8px !important; } html body .st-info-hero__image { min-height: 112vw !important; box-shadow: 8px 8px 0 rgba(87, 45, 26, .18) !important; } html body .st-info-hero__link, html body .st-info-next a { width: 100% !important; } }
 @media (prefers-reduced-motion: reduce) { html body .st-info-page a { transition: none !important; } }
+
+/* The original WordPress CSS is preserved above; these rules transfer its
+   icon sizing to the first-party SVG paths used by the standalone site. */
+html body .st-contact-page:not(.st-contact-page--v2) .st-contact-card img[src^="/icons/"] { width: 43px !important; height: 43px !important; margin-bottom: 18px !important; filter: none !important; mix-blend-mode: normal !important; }
+html body .st-contact-page--v2 .st-contact-card__icon img[src^="/icons/"] { width: 30px !important; height: 30px !important; max-width: 100% !important; margin: 0 !important; filter: none !important; mix-blend-mode: normal !important; }
+html body .st-lux-value img[src^="/icons/lucide-"],
+html body #st-home-v5 .st5-step img[src^="/icons/lucide-"],
+html body .st-contact-page .st-contact-item img[src^="/icons/lucide-"] { filter: none !important; mix-blend-mode: normal !important; }
+html body .st-contact-page .st-contact-item img[src^="/icons/lucide-"] { width: 38px !important; height: 38px !important; flex-basis: 38px !important; }
+@media (prefers-reduced-motion: reduce) { html body .st-lux-value img[src^="/icons/lucide-"], html body #st-home-v5 .st5-step img[src^="/icons/lucide-"], html body .st-contact-page .st-contact-item img[src^="/icons/lucide-"] { transition: none !important; } }
 

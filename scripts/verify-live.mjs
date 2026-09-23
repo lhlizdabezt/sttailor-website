@@ -86,6 +86,7 @@ for (const route of routes) {
   expect(footer.includes('class="st-footer-v7__bottom st-footer-v8__legal"') && footer.includes('aria-label="Client policies"'), `${route} has no client-policy bar at the footer edge`);
   expect((pageHtml.match(/g\.src="\/n31x\/"/g) || []).length === 1 && pageHtml.includes('gtag("config","G-BQDKE20XR0")') && !pageHtml.includes('googletagmanager.com/gtag/js'), `${route} has no single first-party Google Analytics 4 tag`);
   expect((pageHtml.match(/clarity\.ms\/tag\//g) || []).length === 1 && pageHtml.includes('"ymcn0kdqo0"'), `${route} has no single Microsoft Clarity tag`);
+  expect(!/https:\/\/(?:api\.iconify\.design|cdn\.simpleicons\.org)\//i.test(pageHtml), `${route} still loads third-party icon assets`);
   expect(!pageHtml.includes("data-consent-panel") && !pageHtml.includes("data-consent-open"), `${route} still has a consent control`);
   expect((pageHtml.match(/href="https:\/\/x\.com\/sttalior"/g) || []).length === 1 && pageHtml.includes('"https://x.com/sttalior"'), `${route} has no single official X profile in social links/schema`);
 }
@@ -96,6 +97,9 @@ const gatewayHealth = await fetchWithRetry(`${origin}/n31x/healthy`);
 expect(gatewayHealth.status === 200 && (await gatewayHealth.text()).trim() === "ok", "First-party Google tag gateway health check failed");
 const gatewayScript = await fetchWithRetry(`${origin}/n31x/`);
 expect(gatewayScript.status === 200 && gatewayScript.headers.get("content-type")?.includes("javascript"), "First-party Google tag script is unavailable");
+
+const icon = await fetchWithRetry(`${origin}/icons/simple-instagram-e4405f.svg`);
+expect(icon.status === 200 && icon.headers.get("content-type")?.includes("image/svg+xml"), "First-party social icons are unavailable");
 
 const home = pages.get("/");
 const siteScriptPath = home.match(/<script type="module" src="([^"]+)"/i)?.[1];
@@ -127,7 +131,7 @@ const commissionMapRule = [...css.matchAll(/\.st-service-page\s+\.st-service-com
   .find((rule) => rule.includes("margin-top:0!important"));
 expect(Boolean(navigationLinkRule), "Navigation is not forced to uppercase");
 expect(mobileNavigationRule?.includes("flex-direction:column!important"), "Mobile navigation is not a vertical list");
-expect(css.includes(".st-site-header{") && css.includes("background:linear-gradient(110deg,#f4e2c5f7"), "Old-money tan header treatment is missing");
+expect(css.includes(".st-site-header{") && css.includes("background:linear-gradient(110deg,#f4e2c5,#e8cfab 52%,#f6e7cf)"), "Opaque tan header treatment is missing");
 expect(Boolean(commissionMapRule), "Services spacing fix is missing");
 
 const contact = pages.get("/lien-he/");
@@ -177,6 +181,7 @@ const missingHtml = await missing.text();
 expect(missing.status === 404, `Unknown URL returned ${missing.status}`);
 expect(missingHtml.includes("Back to Home"), "404 page has no Back to Home action");
 expect(missing.headers.get("x-robots-tag")?.includes("noindex"), "404 response is not marked noindex");
+expect(missingHtml.includes('<meta name="robots" content="noindex, follow">') && !missingHtml.includes('<link rel="canonical"'), "404 HTML has conflicting index or canonical signals");
 
 const retiredWordPress = await fetchWithRetry(`${origin}/wp-login.php`, { redirect: "manual" });
 expect(retiredWordPress.status === 404, `Retired WordPress login returned ${retiredWordPress.status} instead of 404`);

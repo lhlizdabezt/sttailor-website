@@ -70,12 +70,14 @@ for (const route of expectedRoutes) {
   }
   if (!/<nav class="st-footer-v7__nav"[\s\S]*?<a href="\/">Home <span lang="vi">Trang chủ<\/span><\/a>/i.test(footer)) failures.push(`Footer on ${route} lacks a visible Home navigation link.`);
   if (html.includes("https://sttailor.com/wp-content/uploads/")) failures.push(`Remote WordPress upload remains: ${route}`);
+  if (/https:\/\/(?:api\.iconify\.design|cdn\.simpleicons\.org)\//i.test(html)) failures.push(`Third-party icon remains in built page: ${route}`);
   for (const image of html.matchAll(/<img\b[^>]*\bsrc="\/media\/[^"]+"[^>]*>/gi)) {
     if (!/\bwidth="\d+"/i.test(image[0]) || !/\bheight="\d+"/i.test(image[0])) failures.push(`Local image is missing intrinsic dimensions: ${route}`);
     if (!/\bsrcset="[^"]+\.webp \d+w/i.test(image[0])) failures.push(`Local image is missing responsive WebP candidates: ${route}`);
   }
-  for (const image of html.matchAll(/<img\b[^>]*\bsrc="https:\/\/(?:api\.iconify\.design|cdn\.simpleicons\.org)\/[^"]+"[^>]*>/gi)) {
-    if (!/\bwidth="\d+"/i.test(image[0]) || !/\bheight="\d+"/i.test(image[0])) failures.push(`External icon is missing intrinsic dimensions: ${route}`);
+  for (const image of html.matchAll(/<img\b[^>]*\bsrc="(\/icons\/[^"]+)"[^>]*>/gi)) {
+    if (!/\bwidth="\d+"/i.test(image[0]) || !/\bheight="\d+"/i.test(image[0])) failures.push(`Local icon is missing intrinsic dimensions: ${route}`);
+    if (!existsSync(path.join(dist, image[1].slice(1)))) failures.push(`Local icon asset is missing: ${route} ${image[1]}`);
   }
   if (/\batelier\b/i.test(visibleAndAccessibleText(html))) failures.push(`Visible or accessible Atelier wording remains: ${route}`);
   if (/\uFFFD|Ã.|Ä.|Æ.|áº.|á»./u.test(visibleAndAccessibleText(html))) failures.push(`Possible Unicode mojibake remains: ${route}`);
@@ -85,6 +87,11 @@ for (const route of expectedRoutes) {
 }
 if (pageTitles.size !== expectedRoutes.length) failures.push("Every public route must have a unique SEO title.");
 if (pageDescriptions.size !== expectedRoutes.length) failures.push("Every public route must have a unique meta description.");
+
+const missingPage = readFileSync(path.join(dist, "404.html"), "utf8");
+if (!missingPage.includes('<meta name="robots" content="noindex, follow">') || !missingPage.includes('<meta name="googlebot" content="noindex, follow">') || /<link rel="canonical"/.test(missingPage) || missingPage.includes('application/ld+json')) {
+  failures.push("The 404 document must be noindex without a homepage canonical or page schema.");
+}
 
 for (const [route, groups] of Object.entries({
   "/doi-tra-hoan-tien/": [
