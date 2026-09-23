@@ -45,7 +45,7 @@ for (const route of expectedRoutes) {
   if (!html.includes('<meta name="robots" content="index, follow')) failures.push(`Indexable robots metadata is missing: ${route}`);
   if (!html.includes('application/ld+json') || !html.includes('LocalBusiness')) failures.push(`LocalBusiness structured data is missing: ${route}`);
   if (!html.includes('SiteNavigationElement') || !html.includes('OfferCatalog')) failures.push(`Expanded navigation or service structured data is missing: ${route}`);
-  if ((html.match(/googletagmanager\.com\/gtag\/js\?id=G-BQDKE20XR0/g) ?? []).length !== 1 || !html.includes('gtag("config","G-BQDKE20XR0")')) failures.push(`Google Analytics 4 tag is missing or duplicated: ${route}`);
+  if ((html.match(/g\.src="\/n31x\/"/g) ?? []).length !== 1 || !html.includes('gtag("config","G-BQDKE20XR0")') || html.includes('googletagmanager.com/gtag/js')) failures.push(`First-party Google Analytics 4 tag is missing or duplicated: ${route}`);
   if ((html.match(/clarity\.ms\/tag\//g) ?? []).length !== 1 || !html.includes('"ymcn0kdqo0"')) failures.push(`Microsoft Clarity tag is missing or duplicated: ${route}`);
   if (html.includes("data-consent-panel") || html.includes("data-consent-open")) failures.push(`Unrequested privacy controls remain: ${route}`);
   const schemaText = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i)?.[1];
