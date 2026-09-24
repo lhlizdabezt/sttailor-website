@@ -154,6 +154,12 @@ const robots = await fetchWithRetry(`${origin}/robots.txt`);
 const robotsText = await robots.text();
 expect(robots.status === 200 && robotsText.includes(`Sitemap: ${origin}/sitemap.xml`), "robots.txt is invalid");
 
+const llms = await fetchWithRetry(`${origin}/llms.txt`);
+const llmsText = await llms.text();
+expect(llms.status === 200 && /^# S\.T Tailor$/m.test(llmsText), "llms.txt is missing its Markdown heading");
+const llmsUrls = [...llmsText.matchAll(/\[[^\]]+\]\((https:\/\/sttailor\.com\/[^)]*)\)/g)].map((match) => match[1]);
+expect(llmsUrls.length === routes.length && new Set(llmsUrls).size === routes.length && routes.every((route) => llmsUrls.includes(`${origin}${route}`)), "llms.txt does not link to all canonical routes");
+
 const indexNowKeyResponse = await fetchWithRetry(`${origin}/${indexNowKeyFile}`);
 expect(indexNowKeyResponse.status === 200 && (await indexNowKeyResponse.text()).trim() === indexNowKey, "IndexNow ownership key file is missing or invalid");
 

@@ -13,6 +13,8 @@ The protocol key is published at `https://sttailor.com/7fef6e584133598b3cb206cc3
 
 The workflow sends only canonical `https://sttailor.com` pages; it never sends `www`, legacy redirect URLs, `beta`, `workers.dev`, 404s, or media files. Bing receives the update immediately, but acceptance is a crawl hint rather than a promise of ranking or immediate indexing.
 
+The optional `https://sttailor.com/llms.txt` provides a Markdown summary and links to all 16 canonical pages for AI-agent discovery. It does not replace `robots.txt`, the sitemap, or IndexNow, and its presence does not guarantee inclusion in Bing or any AI answer.
+
 If Bing is unavailable, GitHub Actions retries three times and adds a warning without failing a verified deployment. Re-run the workflow when Bing is reachable. Do not repeatedly submit unchanged URLs by hand.
 
 ## Bing Webmaster Tools
