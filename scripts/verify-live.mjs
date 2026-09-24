@@ -84,6 +84,8 @@ for (const route of routes) {
   const footerLinks = new Set([...footer.matchAll(/\bhref="(\/[^"]*)"/g)].map((match) => match[1]));
   for (const publishedRoute of routes) expect(footerLinks.has(publishedRoute), `${route} footer omits ${publishedRoute}`);
   expect(footer.includes('class="st-footer-v7__bottom st-footer-v8__legal"') && footer.includes('aria-label="Client policies"'), `${route} has no client-policy bar at the footer edge`);
+  expect((pageHtml.match(/'GTM-TQSDB6XT'/g) || []).length === 1 && (pageHtml.match(/googletagmanager\.com\/gtm\.js\?id=/g) || []).length === 1 && pageHtml.includes('<head><meta charset="utf-8"><!-- Google Tag Manager -->'), `${route} has no single Google Tag Manager head snippet`);
+  expect((pageHtml.match(/googletagmanager\.com\/ns\.html\?id=GTM-TQSDB6XT/g) || []).length === 1 && pageHtml.includes('<body><!-- Google Tag Manager (noscript) -->'), `${route} has no single Google Tag Manager body fallback`);
   expect((pageHtml.match(/g\.src="\/n31x\/"/g) || []).length === 1 && pageHtml.includes('gtag("config","G-BQDKE20XR0")') && !pageHtml.includes('googletagmanager.com/gtag/js'), `${route} has no single first-party Google Analytics 4 tag`);
   expect((pageHtml.match(/clarity\.ms\/tag\//g) || []).length === 1 && pageHtml.includes('"ymcn0kdqo0"'), `${route} has no single Microsoft Clarity tag`);
   expect(!/https:\/\/(?:api\.iconify\.design|cdn\.simpleicons\.org)\//i.test(pageHtml), `${route} still loads third-party icon assets`);
@@ -97,6 +99,8 @@ const gatewayHealth = await fetchWithRetry(`${origin}/n31x/healthy`);
 expect(gatewayHealth.status === 200 && (await gatewayHealth.text()).trim() === "ok", "First-party Google tag gateway health check failed");
 const gatewayScript = await fetchWithRetry(`${origin}/n31x/`);
 expect(gatewayScript.status === 200 && gatewayScript.headers.get("content-type")?.includes("javascript"), "First-party Google tag script is unavailable");
+const gatewayScriptBody = await gatewayScript.text();
+expect(gatewayScriptBody.includes("GT-M3SPT65W") && gatewayScriptBody.includes("G-BQDKE20XR0"), "Existing Google tag and GA4 measurement IDs are missing from the first-party gateway");
 
 const icon = await fetchWithRetry(`${origin}/icons/simple-instagram-e4405f.svg`);
 expect(icon.status === 200 && icon.headers.get("content-type")?.includes("image/svg+xml"), "First-party social icons are unavailable");
