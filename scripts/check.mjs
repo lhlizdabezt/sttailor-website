@@ -79,6 +79,9 @@ for (const route of expectedRoutes) {
     if (!/\bwidth="\d+"/i.test(image[0]) || !/\bheight="\d+"/i.test(image[0])) failures.push(`Local icon is missing intrinsic dimensions: ${route}`);
     if (!existsSync(path.join(dist, image[1].slice(1)))) failures.push(`Local icon asset is missing: ${route} ${image[1]}`);
   }
+  for (const image of html.matchAll(/<img\b[^>]*>/gi)) {
+    if (!/\balt=("[^"]*"|'[^']*')/i.test(image[0])) failures.push(`Image is missing an alt attribute: ${route}`);
+  }
   if (/\batelier\b/i.test(visibleAndAccessibleText(html))) failures.push(`Visible or accessible Atelier wording remains: ${route}`);
   if (/\uFFFD|Ã.|Ä.|Æ.|áº.|á»./u.test(visibleAndAccessibleText(html))) failures.push(`Possible Unicode mojibake remains: ${route}`);
   for (const retired of ["/bao-hanh-sua-chua/", "/refund_returns/"]) {
