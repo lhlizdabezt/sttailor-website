@@ -35,10 +35,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->`;
 // Production measurement IDs are public browser identifiers, not credentials.
 // Keep the vendors here so every generated route receives exactly one copy.
-// Keep both measurement queues available immediately, but wait until the first
-// page paint before downloading vendor code. This preserves page_view and
-// interaction events while keeping vendor-code parsing off the LCP critical path.
-const analyticsTags = `<link rel="preconnect" href="https://www.clarity.ms"><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-BQDKE20XR0");(function(c,l,a){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)}})(window,document,"clarity");(()=>{const load=()=>{if(window.__stAnalyticsLoaded)return;window.__stAnalyticsLoaded=true;const g=document.createElement("script");g.async=true;g.src="/n31x/";document.head.appendChild(g);const clarityProjectId="ymcn0kdqo0";const c=document.createElement("script");c.async=true;c.src="https://www.clarity.ms/tag/"+clarityProjectId;document.head.appendChild(c)};const idle=window.requestIdleCallback||((cb)=>setTimeout(cb,1200));if(document.readyState==="complete")idle(load);else window.addEventListener("load",()=>idle(load),{once:true})})();</script>`;
+// Keep both measurement queues available immediately. GTM owns the published
+// Clarity tag; only the existing first-party Google tag is downloaded here,
+// after the first paint. Loading Clarity here as well records sessions twice.
+const analyticsTags = `<link rel="preconnect" href="https://www.clarity.ms"><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-BQDKE20XR0");(function(c,l,a){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)}})(window,document,"clarity");(()=>{const load=()=>{if(window.__stAnalyticsLoaded)return;window.__stAnalyticsLoaded=true;const g=document.createElement("script");g.async=true;g.src="/n31x/";document.head.appendChild(g);};const idle=window.requestIdleCallback||((cb)=>setTimeout(cb,1200));if(document.readyState==="complete")idle(load);else window.addEventListener("load",()=>idle(load),{once:true})})();</script>`;
 
 const routes = [
   ["/", "Home.html", "S.T Tailor | Bespoke Tailoring in Ho Chi Minh City", "Bespoke suits, shirts, formalwear and alterations at 258 Lê Thánh Tôn, Ho Chi Minh City. Private consultations available.", "/media/2026/06/background-hero-trang-lien-he-sttailor.webp", "Private fitting at S.T Tailor in Ho Chi Minh City"],

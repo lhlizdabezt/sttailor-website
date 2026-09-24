@@ -48,7 +48,7 @@ for (const route of expectedRoutes) {
   if ((html.match(/'GTM-TQSDB6XT'/g) ?? []).length !== 1 || (html.match(/googletagmanager\.com\/gtm\.js\?id=/g) ?? []).length !== 1 || !html.includes('<head><meta charset="utf-8"><!-- Google Tag Manager -->')) failures.push(`Google Tag Manager head snippet is missing or duplicated: ${route}`);
   if ((html.match(/googletagmanager\.com\/ns\.html\?id=GTM-TQSDB6XT/g) ?? []).length !== 1 || !html.includes('<body><!-- Google Tag Manager (noscript) -->')) failures.push(`Google Tag Manager body fallback is missing or duplicated: ${route}`);
   if ((html.match(/g\.src="\/n31x\/"/g) ?? []).length !== 1 || !html.includes('gtag("config","G-BQDKE20XR0")') || html.includes('googletagmanager.com/gtag/js')) failures.push(`First-party Google Analytics 4 tag is missing or duplicated: ${route}`);
-  if ((html.match(/clarity\.ms\/tag\//g) ?? []).length !== 1 || !html.includes('"ymcn0kdqo0"')) failures.push(`Microsoft Clarity tag is missing or duplicated: ${route}`);
+  if ((html.match(/clarity\.ms\/tag\//g) ?? []).length !== 0 || !html.includes(')(window,document,"clarity")')) failures.push(`Microsoft Clarity must be initialized for GTM without a duplicate direct loader: ${route}`);
   if (html.includes("data-consent-panel") || html.includes("data-consent-open")) failures.push(`Unrequested privacy controls remain: ${route}`);
   const schemaText = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i)?.[1];
   const schemaGraph = schemaText ? JSON.parse(schemaText)["@graph"] : [];
