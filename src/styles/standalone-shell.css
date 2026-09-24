@@ -902,7 +902,29 @@ html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6
 html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission::before {
   background: linear-gradient(90deg, rgba(16, 12, 10, .74) 0%, rgba(18, 13, 11, .59) 40%, rgba(18, 13, 11, .22) 77%, rgba(18, 13, 11, .08) 100%) !important;
 }
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission::after { display: none !important; }
+/* Corner guides echo a tailor's marking lines without covering the photograph. */
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission::after {
+  display: block !important;
+  inset: clamp(16px, 2vw, 30px) !important;
+  width: auto !important;
+  height: auto !important;
+  aspect-ratio: auto !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background:
+    linear-gradient(#f0d3a9, #f0d3a9) left top / 54px 1px no-repeat,
+    linear-gradient(#f0d3a9, #f0d3a9) left top / 1px 54px no-repeat,
+    linear-gradient(#f0d3a9, #f0d3a9) right top / 54px 1px no-repeat,
+    linear-gradient(#f0d3a9, #f0d3a9) right top / 1px 54px no-repeat,
+    linear-gradient(#f0d3a9, #f0d3a9) left bottom / 54px 1px no-repeat,
+    linear-gradient(#f0d3a9, #f0d3a9) left bottom / 1px 54px no-repeat,
+    linear-gradient(#f0d3a9, #f0d3a9) right bottom / 54px 1px no-repeat,
+    linear-gradient(#f0d3a9, #f0d3a9) right bottom / 1px 54px no-repeat !important;
+  pointer-events: none !important;
+  z-index: 3 !important;
+  animation: st-hero-mark-in 1.1s ease-out both !important;
+}
 html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-grid {
   width: min(1100px, calc(100% - 64px)) !important;
   max-width: none !important;
@@ -910,6 +932,25 @@ html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6
   padding-bottom: clamp(90px, 9vw, 126px) !important;
 }
 html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-copy { max-width: min(54%, 580px) !important; }
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-copy { position: relative !important; }
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-copy::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: -27px !important;
+  width: 74px !important;
+  height: 2px !important;
+  background: #efc896 !important;
+  transform-origin: left center !important;
+  animation: st-hero-thread-in 1s .18s ease-out both !important;
+}
+@keyframes st-hero-mark-in { from { opacity: 0; transform: translateY(8px); } to { opacity: .68; transform: translateY(0); } }
+@keyframes st-hero-thread-in { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
+@media (prefers-reduced-motion: reduce) {
+  html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission::after,
+  html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-copy::before { animation: none !important; }
+  html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission::after { opacity: .68 !important; }
+}
 html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-copy h1 {
   max-width: none !important;
   font-size: clamp(48px, 4.8vw, 70px) !important;
@@ -938,6 +979,11 @@ html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6
     padding: clamp(230px, 60vw, 350px) 0 clamp(54px, 9vw, 72px) !important;
   }
   html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-copy { max-width: 100% !important; }
+  html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission::after {
+    inset: 12px !important;
+    background-size: 30px 1px, 1px 30px, 30px 1px, 1px 30px, 30px 1px, 1px 30px, 30px 1px, 1px 30px !important;
+  }
+  html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-copy::before { top: -19px !important; width: 50px !important; }
   html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-copy h1 {
     max-width: 13ch !important;
     font-size: clamp(43px, 10.5vw, 65px) !important;
