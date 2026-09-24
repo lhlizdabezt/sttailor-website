@@ -81,6 +81,7 @@ for (const route of expectedRoutes) {
   }
   for (const image of html.matchAll(/<img\b[^>]*>/gi)) {
     if (!/\balt=("[^"]*"|'[^']*')/i.test(image[0])) failures.push(`Image is missing an alt attribute: ${route}`);
+    if (/\bsrc="\/media\//i.test(image[0]) && /\balt=(""|'')/i.test(image[0]) && !/\baria-hidden="true"/i.test(image[0])) failures.push(`Content image has empty alt text: ${route}`);
   }
   if (/\batelier\b/i.test(visibleAndAccessibleText(html))) failures.push(`Visible or accessible Atelier wording remains: ${route}`);
   if (/\uFFFD|Ã.|Ä.|Æ.|áº.|á»./u.test(visibleAndAccessibleText(html))) failures.push(`Possible Unicode mojibake remains: ${route}`);
