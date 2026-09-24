@@ -53,6 +53,18 @@ if (toggle && nav) {
 }
 
 const revealables = document.querySelectorAll(".st-motion, .st-home-v6__rise");
+// The editorial pages already have entrance motion. Give only their static,
+// below-the-fold sections the same quiet rise, without delaying first paint.
+// Elements remain visible if JavaScript, IntersectionObserver, or motion is off.
+const canReveal = "IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const viewportBottom = window.innerHeight + 24;
+const scrollTargets = canReveal
+  ? [...document.querySelectorAll("main section, main article")]
+      .filter((element) => !element.matches(".st-motion, .stpr-card, .stp-card, .st-contact-card") && !element.querySelector(".st-motion"))
+      .map((element) => ({ element, rect: element.getBoundingClientRect() }))
+      .filter(({ rect }) => rect.height > 48 && rect.top >= viewportBottom)
+      .map(({ element }) => element)
+  : [];
 if ("IntersectionObserver" in window) {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -63,9 +75,19 @@ if ("IntersectionObserver" in window) {
     });
   }, { threshold: 0.08 });
   revealables.forEach((element) => observer.observe(element));
+  scrollTargets.forEach((element) => {
+    element.classList.add("st-scroll-reveal");
+    observer.observe(element);
+  });
 } else {
   revealables.forEach((element) => element.classList.add("is-visible"));
 }
+
+// Keyboard users can jump straight to a link inside a section before the
+// observer callback fires; reveal that section as soon as it receives focus.
+document.addEventListener("focusin", (event) => {
+  if (event.target instanceof Element) event.target.closest(".st-scroll-reveal")?.classList.add("is-visible");
+});
 
 // Measurement is deliberately limited to public interaction context. Never send
 // visitor-entered content, email addresses, telephone numbers, or form fields.

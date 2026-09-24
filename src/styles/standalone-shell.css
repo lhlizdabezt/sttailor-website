@@ -989,3 +989,17 @@ html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6
     font-size: clamp(43px, 10.5vw, 65px) !important;
   }
 }
+
+/* Only sections that begin below the first viewport receive this class.
+   The source remains readable without script and the initial hero stays paintable. */
+@media (prefers-reduced-motion: no-preference) {
+  html body .st-scroll-reveal {
+    opacity: 0 !important;
+    transform: translate3d(0, 18px, 0) !important;
+    transition: opacity .72s cubic-bezier(.18, .74, .2, 1), transform .72s cubic-bezier(.18, .74, .2, 1) !important;
+  }
+  html body .st-scroll-reveal.is-visible {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
