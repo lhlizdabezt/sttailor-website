@@ -11776,8 +11776,8 @@ html body .st-service-page--folio .st-service-gallery-redirect h2 {
 html body .st-service-page--folio .st-service-gallery-redirect h2 span[lang="vi"] { display: block !important; }
 
 /* The shorter fifth service label never breaks within a word. */
-html body .st-service-page--folio .st-service-commission-map__catalogue article:nth-child(5) h3 {
-  font-size: clamp(27px, 2.2vw, 35px) !important;
+html body .st-service-page--folio .st-service-commission-map__catalogue article:nth-child(5) h2 {
+  font-size: clamp(26px, 2.2vw, 35px) !important;
   letter-spacing: -.045em !important;
   white-space: nowrap !important;
   word-break: normal !important;
@@ -11785,7 +11785,7 @@ html body .st-service-page--folio .st-service-commission-map__catalogue article:
   hyphens: none !important;
 }
 @media (max-width: 780px) {
-  html body .st-service-page--folio .st-service-commission-map__catalogue article:nth-child(5) h3 {
+  html body .st-service-page--folio .st-service-commission-map__catalogue article:nth-child(5) h2 {
     font-size: clamp(26px, 8.1vw, 31px) !important;
   }
 }
