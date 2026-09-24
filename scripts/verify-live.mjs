@@ -99,6 +99,8 @@ const gatewayHealth = await fetchWithRetry(`${origin}/n31x/healthy`);
 expect(gatewayHealth.status === 200 && (await gatewayHealth.text()).trim() === "ok", "First-party Google tag gateway health check failed");
 const gatewayScript = await fetchWithRetry(`${origin}/n31x/`);
 expect(gatewayScript.status === 200 && gatewayScript.headers.get("content-type")?.includes("javascript"), "First-party Google tag script is unavailable");
+const gatewayScriptBody = await gatewayScript.text();
+expect(gatewayScriptBody.includes("GT-M3SPT65W") && gatewayScriptBody.includes("G-BQDKE20XR0"), "Existing Google tag and GA4 measurement IDs are missing from the first-party gateway");
 
 const icon = await fetchWithRetry(`${origin}/icons/simple-instagram-e4405f.svg`);
 expect(icon.status === 200 && icon.headers.get("content-type")?.includes("image/svg+xml"), "First-party social icons are unavailable");
