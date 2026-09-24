@@ -892,7 +892,22 @@ const sitemapEntries = sitemapRouteOrder.map(([route, , , , shareImage, shareIma
 }).join("");
 writeFileSync(path.join(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">${sitemapEntries}\n</urlset>\n`, "utf8");
 writeFileSync(path.join(dist, "site.webmanifest"), JSON.stringify({ name: "S.T Tailor", short_name: "S.T Tailor", description: "Bespoke tailoring and clothing alterations in Ho Chi Minh City.", start_url: "/", scope: "/", display: "standalone", background_color: "#f3e1c5", theme_color: "#ead1ad", icons: [{ src: "/media/2026/09/logo-sttailor.png", sizes: "any", type: "image/png", purpose: "any maskable" }] }, null, 2), "utf8");
-writeFileSync(path.join(dist, "llms.txt"), "# S.T Tailor\n\nS.T Tailor is a bespoke tailoring and clothing alterations house at 258 Le Thanh Ton, Phuong Tan Dinh, Ho Chi Minh City, Vietnam.\n\n- Website: https://sttailor.com/\n- Services: https://sttailor.com/dich-vu/\n- Gallery: https://sttailor.com/gallery/\n- Pricing: https://sttailor.com/bang-gia/\n- Payment methods: https://sttailor.com/phuong-thuc-thanh-toan/\n- Returns and refunds: https://sttailor.com/doi-tra-hoan-tien/\n- Shipping and delivery: https://sttailor.com/chinh-sach-van-chuyen/\n- Terms and conditions: https://sttailor.com/dieu-khoan-dieu-kien/\n- Privacy policy: https://sttailor.com/chinh-sach-bao-mat/\n- Tailoring guide: https://sttailor.com/cam-nang-may-do/\n- Choosing cloth: https://sttailor.com/chon-vai-may-do/\n- Fitting process: https://sttailor.com/quy-trinh-thu-do/\n- Clothing alterations: https://sttailor.com/chinh-sua-trang-phuc/\n- Garment care and cleaning: https://sttailor.com/bao-quan-giat-la/\n- Contact: https://sttailor.com/lien-he/\n- Telephone: +84 909 556 258\n- Email: contact.sttailor@gmail.com\n", "utf8");
+const llmsLinks = routes.map(([route, , title]) => `- [${title}](https://sttailor.com${route})`).join("\n");
+writeFileSync(path.join(dist, "llms.txt"), `# S.T Tailor
+
+> Bespoke tailoring, clothing alterations and private fittings in Ho Chi Minh City. May đo, chỉnh sửa trang phục và tư vấn riêng tại Thành phố Hồ Chí Minh.
+
+S.T Tailor is at 258 Lê Thánh Tôn, Phường Tân Định, Thành phố Hồ Chí Minh, Việt Nam. The links below are the canonical public pages.
+
+## Pages
+
+${llmsLinks}
+
+## Direct contact
+
+- Telephone: +84 909 556 258
+- Email: contact.sttailor@gmail.com
+`, "utf8");
 writeFileSync(path.join(dist, "_headers"), "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n  X-Frame-Options: SAMEORIGIN\n  Strict-Transport-Security: max-age=15552000\n  Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests\n", "utf8");
 writeFileSync(path.join(dist, "build-manifest.json"), JSON.stringify({ source: "source/wordpress", sourceMedia: "source/media", revision: buildRevision, routes: routes.map(([route]) => route), localUploadAssets: assets.length, imageMetadata: imageCount, galleryDuplicateCheck: "passed" }, null, 2), "utf8");
 console.log(`Built ${routes.length} routes from the versioned WordPress reference with ${assets.length} local upload assets and dimensions for ${imageCount} images.`);
