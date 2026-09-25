@@ -194,9 +194,6 @@ function transformFooter(html) {
   html = removeElementByClass(html, "div", "st-footer-v7__top")
     .replace('loading="eager"', 'loading="lazy"')
     .replaceAll('alt="" aria-hidden="true">', 'alt="" aria-hidden="true" width="20" height="20">')
-    .replace(/\s*<a href="tel:[^"]+">[\s\S]*?<\/a>/, "")
-    .replace(/\s*<a href="mailto:[^"]+">[\s\S]*?<\/a>/, "")
-    .replace("Atelier gallery", "S.T Tailor gallery")
     .replace(
       '<section class="st-footer-v7__about" aria-labelledby="st-footer-title">',
       '<section class="st-footer-v7__about" aria-labelledby="st-footer-title">\n        <a class="st-footer-v7__crest" href="/" aria-label="S.T Tailor home"><img src="/media/2026/09/logo-sttailor-1000x1024.png" alt="S.T Tailor" width="1000" height="1024" loading="lazy" decoding="async"></a>'
@@ -277,13 +274,6 @@ function transformContact(html) {
       '<h2>CONTACT DETAILS<br><span lang="vi">THÔNG TIN LIÊN HỆ</span></h2>',
       '<h1>CONTACT DETAILS<br><span lang="vi">THÔNG TIN LIÊN HỆ</span></h1>'
     );
-  for (const className of ["st-contact-card--linkedin", "st-contact-card--pinterest", "st-contact-card--youtube", "st-contact-card--tiktok"]) {
-    html = removeElementByClass(html, "article", className);
-  }
-  html = html.replace(
-    /<article class="st-contact-card st-contact-card--facebook">[\s\S]*?<\/article>/,
-    '<article class="st-contact-card st-contact-card--messenger"><span class="st-contact-card__icon"><img src="/icons/simple-messenger-0084ff.svg" alt="" aria-hidden="true"></span><h3>MESSENGER <span lang="vi">NHẮN TIN MESSENGER</span></h3><p>S.T Tailor HCM<span lang="vi">Trao đổi trực tiếp với S.T Tailor</span></p><a href="https://m.me/sttailor.hcm" target="_blank" rel="noopener noreferrer">MESSAGE S.T TAILOR&nbsp;/&nbsp;<span lang="vi">NHẮN TIN NGAY</span></a></article>'
-  );
   return replaceVisibleAtelier(html);
 }
 

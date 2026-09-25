@@ -102,7 +102,10 @@ expect(gatewayScript.status === 200 && gatewayScript.headers.get("content-type")
 const gatewayScriptBody = await gatewayScript.text();
 expect(gatewayScriptBody.includes("GT-M3SPT65W") && gatewayScriptBody.includes("G-BQDKE20XR0"), "Existing Google tag and GA4 measurement IDs are missing from the first-party gateway");
 const tagManagerScript = await fetchWithRetry("https://www.googletagmanager.com/gtm.js?id=GTM-TQSDB6XT");
-expect(tagManagerScript.status === 200 && (await tagManagerScript.text()).includes("ymcn0kdqo0"), "Published GTM container no longer contains the Microsoft Clarity project tag");
+expect(tagManagerScript.status === 200, "Published GTM container is unavailable");
+const tagManagerScriptBody = await tagManagerScript.text();
+expect((tagManagerScriptBody.match(/ymcn0kdqo0/g) ?? []).length === 1, "Published GTM container must load the Microsoft Clarity project exactly once");
+expect(!tagManagerScriptBody.includes("G-BQDKE20XR0") && !tagManagerScriptBody.includes("GT-M3SPT65W"), "Published GTM container would duplicate the first-party GA4 tag");
 
 const icon = await fetchWithRetry(`${origin}/icons/simple-instagram-e4405f.svg`);
 expect(icon.status === 200 && icon.headers.get("content-type")?.includes("image/svg+xml"), "First-party social icons are unavailable");
