@@ -139,6 +139,7 @@ const generatedCss = existsSync(css) ? readFileSync(css, "utf8") : "";
 const editableCss = existsSync(path.join(root, "CustomCSS-Full.css")) ? readFileSync(path.join(root, "CustomCSS-Full.css"), "utf8") : "";
 if (!existsSync(css) || statSync(css).size < 100000) failures.push("Full generated Custom CSS is missing or unexpectedly short.");
 else {
+  if (statSync(css).size > 350000) failures.push("Production CSS exceeds the 350 KB mobile performance budget.");
   const approvedCss = readFileSync(path.join(sourceRoot, "CustomCSS.css"), "utf8").replaceAll("https://sttailor.com/wp-content/uploads/", "/media/");
   if (!editableCss.startsWith(approvedCss)) failures.push("Editable CSS export does not preserve the complete approved WordPress CSS source.");
   if (generatedCss.length >= editableCss.length) failures.push("Production CSS was not minified.");
@@ -153,9 +154,13 @@ else {
     animations: (generatedCss.match(/\banimation(?:-name)?\s*:/g) ?? []).length,
     transitions: (generatedCss.match(/\btransition(?:-property)?\s*:/g) ?? []).length
   };
-  for (const key of Object.keys(sourceMotion)) {
+  for (const key of ["keyframes", "animations"]) {
     if (generatedMotion[key] < sourceMotion[key]) failures.push(`WordPress motion definitions were lost: ${key}.`);
   }
+  // The production stylesheet intentionally removes selectors for pages that
+  // are not published. Counting all source transitions therefore overstates
+  // the amount of motion that should survive in the shipped CSS.
+  if (sourceMotion.transitions && !generatedMotion.transitions) failures.push("Published pages lost all CSS transitions.");
 }
 
 const home = readFileSync(path.join(dist, "index.html"), "utf8");

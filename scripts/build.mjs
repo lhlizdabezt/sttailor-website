@@ -846,7 +846,7 @@ const fullCustomCss = `${wordpressCss}\n\n/* Cloudflare Worker standalone shell.
 // These legacy page IDs are absent from every published route. Keep their
 // reference CSS in CustomCSS-Full.css; prune selectors dedicated to them
 // from the deployed bundle while retaining mixed selectors used elsewhere.
-const productionCss = minifyCss({
+let productionCss = minifyCss({
   filename: "site.css",
   code: Buffer.from(fullCustomCss),
   minify: true,
@@ -866,6 +866,33 @@ for (const [route, sourceFile, title, description, shareImage, shareImageAlt] of
   routeLastModified.set(route, lastModified);
   mkdirSync(path.dirname(output), { recursive: true });
   writeFileSync(output, documentFor(route, sourceFile, title, description, shareImage, shareImageAlt, lastModified), "utf8");
+}
+// Keep the full editable stylesheet, but omit project-specific selectors that
+// cannot match any published page or class inserted by the site script. This
+// deliberately ignores generic selectors and includes the 404 source so the
+// cleanup cannot remove their styles by guessing from one viewport.
+const publishedMarkup = routes.map(([route]) => readFileSync(route === "/"
+  ? path.join(dist, "index.html")
+  : path.join(dist, route.slice(1), "index.html"), "utf8")).join("\n");
+const usedSymbols = `${publishedMarkup}\n${readSource("Error.html")}\n${siteScript}`;
+const projectSymbols = [...new Set([...productionCss.matchAll(/[.#]((?:st-|stp-|stpr-)[A-Za-z0-9_-]+)/g)].map((match) => match[1]))];
+const unusedProjectSymbols = projectSymbols.filter((symbol) => !usedSymbols.includes(symbol));
+const leanCss = minifyCss({
+  filename: "site.css",
+  code: Buffer.from(fullCustomCss),
+  minify: true,
+  unusedSymbols: ["st-home-v4", "st-home-v5", "st-refund-v1", "st-privacy-v5", ...unusedProjectSymbols]
+}).code.toString();
+if (leanCss.length < productionCss.length) {
+  const previousStylesheetHref = stylesheetHref;
+  productionCss = leanCss;
+  stylesheetHref = `/styles/site.css?v=${createHash("sha256").update(productionCss).digest("hex").slice(0, 12)}`;
+  writeFileSync(path.join(dist, "styles", "site.css"), productionCss, "utf8");
+  for (const [route] of routes) {
+    const pagePath = route === "/" ? path.join(dist, "index.html") : path.join(dist, route.slice(1), "index.html");
+    const pageHtml = readFileSync(pagePath, "utf8");
+    writeFileSync(pagePath, pageHtml.replace(previousStylesheetHref, stylesheetHref), "utf8");
+  }
 }
 const notFoundDocument = documentFor("/", "Error.html", "Page not found | S.T Tailor", "The requested S.T Tailor page was not found.", "/media/2026/06/store-sttailor-1.webp", "S.T Tailor showroom in Ho Chi Minh City", lastModifiedFor("Error.html"))
   .replace(/<meta name="robots" content="[^"]+">/, '<meta name="robots" content="noindex, follow">')
