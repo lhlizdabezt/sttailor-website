@@ -12224,7 +12224,7 @@ html body .st-footer-v7.st-footer-v8 .st-footer-v7__brand img {
   }
 }
 
-/* Gallery: one framed editorial story, with readable captions on the new photographs. */
+/* Gallery: unboxed editorial captions and a heritage serif story title. */
 html body .st-gallery-page--albums .st-gallery-hero--index .st-gallery-hero__grid {
   display: grid !important;
   max-width: none !important;
@@ -12235,37 +12235,56 @@ html body .st-gallery-page--albums .st-gallery-hero--index .st-gallery-hero__gri
 html body .st-gallery-page--albums .st-gallery-hero__story {
   min-width: 0 !important;
   margin: 0 !important;
-  padding: 8px !important;
-  border: 1px solid #73492f !important;
-  background: #342017 !important;
-  box-shadow: 14px 16px 0 rgba(79, 39, 20, .14) !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 html body .st-gallery-page--albums .st-gallery-hero__story-image {
   display: block !important;
   width: 100% !important;
   height: auto !important;
   aspect-ratio: 736 / 414 !important;
+  border: 1px solid #73492f !important;
+  box-shadow: 12px 14px 0 rgba(79, 39, 20, .12) !important;
 }
 html body .st-gallery-page--albums .st-gallery-hero__story figcaption {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 4px 12px !important;
-  padding: 11px 10px 4px !important;
-  color: #fff1df !important;
-  -webkit-text-fill-color: #fff1df !important;
-  font-size: 13px !important;
-  line-height: 1.4 !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 18px 2px 0 !important;
+  background: transparent !important;
+  color: #3a2015 !important;
+  -webkit-text-fill-color: #3a2015 !important;
+  line-height: 1.2 !important;
+}
+html body .st-gallery-page--albums .st-gallery-hero__story-title {
+  display: block !important;
+  font-family: var(--st-font-display-local) !important;
+  font-size: clamp(24px, 2.5vw, 32px) !important;
+  font-style: italic !important;
+  font-weight: 600 !important;
+  letter-spacing: -.025em !important;
+  line-height: 1.08 !important;
 }
 html body .st-gallery-page--albums .st-gallery-hero__story figcaption [lang="vi"] {
-  color: #f0c892 !important;
-  -webkit-text-fill-color: #f0c892 !important;
+  display: block !important;
+  margin-top: 7px !important;
+  color: #71402a !important;
+  -webkit-text-fill-color: #71402a !important;
+  font-family: var(--st-font-copy-local) !important;
+  font-size: 14px !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  letter-spacing: .01em !important;
+  line-height: 1.35 !important;
 }
 html body .st-gallery-page--albums .st-album-grid__item.st-gallery-piece--new figcaption {
   display: block !important;
   opacity: 1 !important;
   transform: none !important;
   padding: 13px 16px !important;
-  background: rgba(34, 17, 10, .88) !important;
+  background: transparent !important;
+  text-shadow: 0 1px 3px rgba(12, 7, 5, .92), 0 2px 12px rgba(12, 7, 5, .84) !important;
   font-size: 13px !important;
   font-weight: 600 !important;
   letter-spacing: 0 !important;
