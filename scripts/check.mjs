@@ -276,7 +276,10 @@ const galleryContentImages = galleryImageTags.filter((match) => !match[1].includ
 if (galleryContentImages.length !== 111) failures.push("Gallery must contain all 111 approved editorial images.");
 const galleryImageSources = new Set(galleryContentImages.map((image) => image[1]));
 if (galleryImageSources.size !== galleryContentImages.length) failures.push("Gallery repeats an editorial image.");
-const sourceImages = Object.keys(JSON.parse(readFileSync(path.join(dist, "image-manifest.json"), "utf8")));
+const imageManifest = JSON.parse(readFileSync(path.join(dist, "image-manifest.json"), "utf8"));
+const sourceImages = Object.keys(imageManifest);
+const exteriorPhoto = imageManifest["2026/09/st-tailor-showroom-exterior-evening.jpg"];
+if (exteriorPhoto?.width !== 3000 || exteriorPhoto?.height !== 4000) failures.push("Evening storefront image must render upright in its responsive variants.");
 const galleryExempt = new Set([
   "2026/06/background-hero-trang-lien-he-sttailor.webp",
   "2026/06/chu-ky-Son.webp",
