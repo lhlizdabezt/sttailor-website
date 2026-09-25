@@ -22,6 +22,6 @@ The site publishes `contact.sttailor@gmail.com` as its contact address. No MX re
 | TXT | `*._domainkey` | `v=DKIM1; p=` |
 | TXT | `_dmarc` | `v=DMARC1; p=reject; pct=100; sp=reject; adkim=s; aspf=s;` |
 
-The DMARC TXT was confirmed through Cloudflare DNS. Apple Business Branded Mail still showed **Incomplete** after its Verify action, including when the DMARC value was temporarily changed to Apple's exact sample. Domain ownership TXT verification was already successful; the Apple brand itself remained in review. Do not represent Branded Mail as active until Apple reports Verified.
+The final DMARC TXT was confirmed through Cloudflare DNS and Google DNS after their caches refreshed. Apple Business marked the DMARC check **Verified**; its domain-ownership TXT check was also **Verified**. The overall Branded Mail setup still showed **Incomplete** because the Apple brand/logo remained **In Review**. Do not represent branded email as active until the brand is approved and a real DKIM-authenticated `@sttailor.com` sending service is configured.
 
 These records deny unauthenticated mail claiming to be from this domain. Before sending legitimate `@sttailor.com` mail, provision a real mail provider and mailbox, publish its MX/SPF/DKIM records, and test DKIM-aligned delivery before replacing the restrictive SPF and DKIM records. Keep DMARC at `p=reject; pct=100` once authorized mail passes. DNS TXT ownership records for Apple, Google, and Pinterest must remain intact.
