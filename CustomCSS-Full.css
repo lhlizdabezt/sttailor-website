@@ -12224,6 +12224,66 @@ html body .st-footer-v7.st-footer-v8 .st-footer-v7__brand img {
   }
 }
 
+/* Gallery: one framed editorial story, with readable captions on the new photographs. */
+html body .st-gallery-page--albums .st-gallery-hero--index .st-gallery-hero__grid {
+  display: grid !important;
+  max-width: none !important;
+  grid-template-columns: minmax(0, .96fr) minmax(0, 1.04fr) !important;
+  align-items: center !important;
+  gap: clamp(24px, 4vw, 56px) !important;
+}
+html body .st-gallery-page--albums .st-gallery-hero__story {
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 8px !important;
+  border: 1px solid #73492f !important;
+  background: #342017 !important;
+  box-shadow: 14px 16px 0 rgba(79, 39, 20, .14) !important;
+}
+html body .st-gallery-page--albums .st-gallery-hero__story-image {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 736 / 414 !important;
+}
+html body .st-gallery-page--albums .st-gallery-hero__story figcaption {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 4px 12px !important;
+  padding: 11px 10px 4px !important;
+  color: #fff1df !important;
+  -webkit-text-fill-color: #fff1df !important;
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+}
+html body .st-gallery-page--albums .st-gallery-hero__story figcaption [lang="vi"] {
+  color: #f0c892 !important;
+  -webkit-text-fill-color: #f0c892 !important;
+}
+html body .st-gallery-page--albums .st-album-grid__item.st-gallery-piece--new figcaption {
+  display: block !important;
+  opacity: 1 !important;
+  transform: none !important;
+  padding: 13px 16px !important;
+  background: rgba(34, 17, 10, .88) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.4 !important;
+}
+html body .st-gallery-page--albums .st-album-grid__item.st-gallery-piece--new figcaption [lang="vi"] {
+  display: block !important;
+  margin-top: 3px !important;
+  color: #f0c892 !important;
+  -webkit-text-fill-color: #f0c892 !important;
+  font-size: 12px !important;
+}
+@media (max-width: 899px) {
+  html body .st-gallery-page--albums .st-gallery-hero--index .st-gallery-hero__grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
 
 /* Cloudflare Worker standalone shell. WordPress page CSS above remains the visual source of truth. */
 :root {

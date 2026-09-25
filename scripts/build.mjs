@@ -288,6 +288,7 @@ function transformContact(html) {
 }
 
 const galleryAltText = {
+  "st-tailor-made-to-measure-stories-gallery.jpg": "S.T Tailor made-to-measure story with a client and navy jacket | Câu chuyện may đo S.T Tailor với khách hàng và áo khoác xanh navy",
   "st-tailor-gallery-brocade-dinner-jacket.jpg": "Black textured dinner jacket on a mannequin | Áo khoác dự tiệc đen dệt vân trên mannequin",
   "st-tailor-gallery-ceremonial-jacket-frame.jpg": "Burgundy ceremonial jacket with gold embroidery | Áo lễ phục đỏ burgundy thêu chỉ vàng",
   "st-tailor-gallery-duk-0010.jpg": "Black tuxedo with white shirt on a mannequin | Tuxedo đen cùng sơ mi trắng trên mannequin",
@@ -318,6 +319,9 @@ const galleryAltText = {
   "st-tailor-archive-womens-suit-window.jpg": "White women's suit on a mannequin by the window | Suit nữ trắng trên mannequin cạnh cửa sổ",
   "st-tailor-gallery-womenswear-window-frame.jpg": "Floral womenswear displayed in the showroom window | Trang phục nữ họa tiết hoa trưng bày tại cửa sổ showroom",
   "st-tailor-gallery-blush-silk-floral-dress.jpg": "Blush silk dress with floral embroidery | Đầm lụa hồng phấn thêu hoa",
+  "st-tailor-magenta-floral-wrap-dress-and-navy-suit.jpg": "Magenta floral wrap dress beside a navy suit on showroom mannequins | Trang phục nữ hoa hồng tím bên cạnh suit xanh navy trên mannequin tại showroom",
+  "st-tailor-magenta-floral-wrap-dress-full-length.jpg": "Full-length magenta floral wrap dress with tied waist | Trang phục nữ hoa hồng tím toàn thân với đai buộc eo",
+  "st-tailor-magenta-floral-wrap-dress-detail.jpg": "Magenta and violet floral pattern and wrap-front dress detail | Họa tiết hoa hồng tím và chi tiết thân trước kiểu quấn",
   "st-tailor-floral-dinner-jacket-showroom.png": "Magenta and violet floral dinner jacket in the S.T Tailor showroom | Áo khoác dự tiệc floral tông hồng tím tại showroom S.T Tailor",
   "st-tailor-floral-dinner-jacket-lapel.png": "Floral dinner jacket lapel and cloth detail | Chi tiết ve áo và chất liệu của áo khoác dự tiệc floral",
   "st-tailor-floral-dinner-jacket-front.png": "Floral dinner jacket front and pocket detail | Chi tiết thân trước và túi của áo khoác dự tiệc floral",
@@ -374,6 +378,7 @@ const galleryAltText = {
   "st-tailor-gallery-bespoke-sign-evening.jpg": "Bespoke tailoring sign outside S.T Tailor at night | Biển hiệu may đo riêng của S.T Tailor về đêm",
   "st-tailor-gallery-window-display-evening.jpg": "S.T Tailor window display in the evening | Tủ trưng bày S.T Tailor vào buổi tối",
   "st-tailor-gallery-cloth-wall-evening.jpg": "Showroom aisle with fabric and garments in the evening | Lối đi showroom với vải và trang phục vào buổi tối",
+  "st-tailor-showroom-exterior-evening.jpg": "S.T Tailor illuminated upper-storey storefront at night | Mặt tiền S.T Tailor tầng trên khi lên đèn vào buổi tối",
   "st-tailor-gallery-showroom-tailoring-display.jpg": "Tailoring display with suit and dress forms at S.T Tailor | Khu trưng bày may đo với suit và mannequin tại S.T Tailor",
   "st-tailor-garment-rack.jpeg": "Garments on a showroom rail | Trang phục trên giá treo tại showroom",
   "st-tailor-gallery-duk-0058.jpg": "S.T Tailor showroom interior with garments on display | Không gian S.T Tailor với trang phục trưng bày",
@@ -440,7 +445,17 @@ function transformGallery(html) {
   const feedback = html.slice(feedbackRange.start, feedbackRange.end);
   const archiveDetail = figureForAsset(archive, "st-tailor-archive-atelier-four.jpg");
   const archiveFabric = figureForAsset(archive, "st-tailor-gallery-partner-certificate.jpg");
+  const archivePlacement = [
+    ["st-tailor-archive-founder-one.jpeg", "album-shirts-trousers"],
+    ["st-tailor-archive-founder-two.jpeg", "album-jacket-craft"],
+    ["st-tailor-archive-founder-three.jpeg", "album-jacket-craft"],
+    ["st-tailor-archive-founder-four.jpeg", "album-suits"],
+    ["st-tailor-archive-founder-five.jpeg", "album-appointments"],
+    ["st-tailor-archive-founder-six.jpeg", "album-appointments"],
+    ["st-tailor-archive-founder-seven.jpeg", "album-appointments"]
+  ];
   const feedbackFigures = [...feedback.matchAll(/<figure\b[^>]*>[\s\S]*?<\/figure>/gi)].map((match) => match[0]);
+  for (const [asset, album] of archivePlacement) html = appendToGalleryAlbum(html, album, figureForAsset(archive, asset));
   html = appendToGalleryAlbum(html, "album-jacket-craft", archiveDetail);
   html = appendToGalleryAlbum(html, "album-cloth", archiveFabric);
   for (const figure of feedbackFigures) html = appendToGalleryAlbum(html, "album-appointments", figure);
@@ -630,9 +645,10 @@ function enrichImageAttributes(html, { responsiveSizes } = {}) {
     if (!/\bdecoding=/i.test(output)) output = output.replace(/<img\b/i, '<img decoding="async"');
     if (responsiveSizes && metadata.responsive?.length && !/\bsrcset=/i.test(output)) {
       const isHomeHero = src === homeHeroImage && /\bst-home-v6__hero-media\b/.test(output);
-      const candidates = isHomeHero ? [...metadata.responsive, { src, width: metadata.width }] : metadata.responsive;
+      const isGalleryHero = /\bst-gallery-hero__story-image\b/.test(output);
+      const candidates = isHomeHero || isGalleryHero ? [...metadata.responsive, { src, width: metadata.width }] : metadata.responsive;
       const srcset = candidates.map(({ src: candidate, width }) => `${candidate} ${width}w`).join(", ");
-      output = output.replace(/<img\b/i, `<img srcset="${srcset}" sizes="${isHomeHero ? homeHeroSizes : responsiveSizes}"`);
+      output = output.replace(/<img\b/i, `<img srcset="${srcset}" sizes="${isHomeHero ? homeHeroSizes : isGalleryHero ? "(max-width: 899px) 100vw, 50vw" : responsiveSizes}"`);
     }
     return output;
   });

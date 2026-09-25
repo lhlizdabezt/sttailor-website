@@ -273,7 +273,21 @@ if ((gallery.match(/st-gallery-numpad__card/g) ?? []).length !== 9) failures.pus
 if (!gallery.includes("st-gallery-numpad") || !gallery.includes("#album-tuxedo") || !gallery.includes("#album-showroom")) failures.push("Gallery chapter navigator is missing jump targets.");
 const galleryImageTags = [...gallery.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^\"]+)"[^>]*>/gi)];
 const galleryContentImages = galleryImageTags.filter((match) => !match[1].includes("logo-sttailor") && !match[1].endsWith("/LinkedInLogo.png"));
-if (galleryContentImages.length !== 99) failures.push("Gallery must retain exactly 99 approved editorial images.");
+if (galleryContentImages.length !== 111) failures.push("Gallery must contain all 111 approved editorial images.");
+const galleryImageSources = new Set(galleryContentImages.map((image) => image[1]));
+if (galleryImageSources.size !== galleryContentImages.length) failures.push("Gallery repeats an editorial image.");
+const sourceImages = Object.keys(JSON.parse(readFileSync(path.join(dist, "image-manifest.json"), "utf8")));
+const galleryExempt = new Set([
+  "2026/06/background-hero-trang-lien-he-sttailor.webp",
+  "2026/06/chu-ky-Son.webp",
+  "2026/06/chu-ky-thinh.webp",
+  "2026/09/LinkedInLogo.png",
+  "2026/09/logo-sttailor.png",
+  "2026/09/logo-sttailor-1000x1024.png"
+]);
+for (const asset of sourceImages) {
+  if (!galleryExempt.has(asset) && !galleryImageSources.has(`/media/${asset}`)) failures.push(`Source editorial image is absent from Gallery: ${asset}`);
+}
 for (const image of galleryContentImages) {
   const alt = /\balt="([^\"]*)"/i.exec(image[0])?.[1] ?? "";
   if (!alt || !alt.includes(" | ")) failures.push(`Gallery image is missing a bilingual alt text: ${image[1]}`);
@@ -281,7 +295,7 @@ for (const image of galleryContentImages) {
   if (!/\bsrcset="[^\"]+\.webp \d+w/i.test(image[0])) failures.push(`Gallery image is missing responsive WebP candidates: ${image[1]}`);
 }
 if (!gallery.includes('"@type":"ItemList"') || !gallery.includes(`"numberOfItems":${galleryContentImages.length}`)) failures.push("Gallery image structured data is missing or incomplete.");
-for (const requiredAsset of ["st-tailor-archive-atelier-four.jpg", "st-tailor-gallery-partner-certificate.jpg"]) {
+for (const requiredAsset of ["st-tailor-archive-atelier-four.jpg", "st-tailor-gallery-partner-certificate.jpg", "st-tailor-made-to-measure-stories-gallery.jpg", "st-tailor-magenta-floral-wrap-dress-and-navy-suit.jpg", "st-tailor-magenta-floral-wrap-dress-full-length.jpg", "st-tailor-magenta-floral-wrap-dress-detail.jpg", "st-tailor-showroom-exterior-evening.jpg"]) {
   if (galleryContentImages.filter((image) => image[1].endsWith(`/${requiredAsset}`)).length !== 1) failures.push(`Gallery retained image must appear exactly once: ${requiredAsset}`);
 }
 
@@ -308,7 +322,7 @@ if ((sitemap.match(/<url><loc>https:\/\/sttailor\.com/g) ?? []).length !== expec
 if (!sitemap.includes('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"') || !sitemap.includes("<image:image>")) failures.push("Image sitemap discovery data is missing.");
 if (!sitemap.includes("<image:title>")) failures.push("Image sitemap titles are missing.");
 const gallerySitemap = sitemap.match(/<url><loc>https:\/\/sttailor\.com\/gallery\/[\s\S]*?<\/url>/)?.[0] ?? "";
-if ((gallerySitemap.match(/<image:image>/g) ?? []).length !== 99) failures.push("Gallery image sitemap does not expose every editorial image exactly once.");
+if ((gallerySitemap.match(/<image:image>/g) ?? []).length !== 111) failures.push("Gallery image sitemap does not expose every editorial image exactly once.");
 if ((sitemap.match(/<image:loc>/g) ?? []).length !== new Set([...sitemap.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)].map((match) => match[1])).size) failures.push("Image sitemap contains duplicate image locations.");
 const mobileNavRule = [...generatedCss.matchAll(/\.st-site-nav\{[^}]*\}/g)]
   .map((match) => match[0])

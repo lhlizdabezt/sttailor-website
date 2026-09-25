@@ -150,6 +150,17 @@ expect(home.includes('"OfferCatalog"'), "OfferCatalog structured data is missing
 expect(home.includes('"SiteNavigationElement"'), "SiteNavigationElement structured data is missing");
 expect(pages.get("/dich-vu/").includes('"Service"'), "Services structured data is missing");
 
+const galleryHtml = pages.get("/gallery/");
+const galleryImages = [...galleryHtml.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^\"]+)"[^>]*>/gi)]
+  .filter((match) => !/(?:logo-sttailor|LinkedInLogo)/i.test(match[1]));
+expect(galleryImages.length === 111 && new Set(galleryImages.map((match) => match[1])).size === 111, "Gallery is missing images or repeats an image");
+for (const asset of ["st-tailor-made-to-measure-stories-gallery.jpg", "st-tailor-magenta-floral-wrap-dress-and-navy-suit.jpg", "st-tailor-magenta-floral-wrap-dress-full-length.jpg", "st-tailor-magenta-floral-wrap-dress-detail.jpg", "st-tailor-showroom-exterior-evening.jpg"]) {
+  const path = `/media/2026/09/${asset}`;
+  expect(galleryImages.filter((match) => match[1] === path).length === 1, `Gallery must show ${asset} exactly once`);
+  const image = await fetchWithRetry(`${origin}${path}`);
+  expect(image.status === 200 && image.headers.get("content-type")?.includes("image/jpeg"), `Gallery image is unavailable: ${asset}`);
+}
+
 const robots = await fetchWithRetry(`${origin}/robots.txt`);
 const robotsText = await robots.text();
 expect(robots.status === 200 && robotsText.includes(`Sitemap: ${origin}/sitemap.xml`), "robots.txt is invalid");
@@ -170,6 +181,8 @@ expect((sitemapText.match(/<url>/g) || []).length === routes.length, `sitemap.xm
 expect(sitemapText.includes("xmlns:image="), "Image sitemap namespace is missing");
 expect(sitemapText.includes("<image:image>"), "Image sitemap entries are missing");
 expect(sitemapText.includes("<image:title>"), "Image sitemap titles are missing");
+const gallerySitemap = sitemapText.match(/<url><loc>https:\/\/sttailor\.com\/gallery\/[\s\S]*?<\/url>/)?.[0] ?? "";
+expect((gallerySitemap.match(/<image:image>/g) || []).length === 111, "Gallery sitemap omits one or more editorial images");
 
 const manifest = await fetchWithRetry(`${origin}/site.webmanifest`);
 expect(manifest.status === 200 && (await manifest.text()).includes('"name": "S.T Tailor"'), "site.webmanifest is invalid");
