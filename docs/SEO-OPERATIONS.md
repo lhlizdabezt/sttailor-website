@@ -17,6 +17,14 @@ The optional `https://sttailor.com/llms.txt` provides a Markdown summary and lin
 
 If Bing is unavailable, GitHub Actions retries three times and adds a warning without failing a verified deployment. Re-run the workflow when Bing is reachable. Do not repeatedly submit unchanged URLs by hand.
 
+## AI search crawl access
+
+Google's AI search features use the normal Search indexing and snippet controls; there is no special AI schema or text file to submit. Keep useful service information in the public HTML, maintain internal links and the sitemap, and check that Cloudflare serves the same canonical page to ordinary visitors and crawlers. OpenAI distinguishes `OAI-SearchBot` (ChatGPT search) from `GPTBot` (model training); allowing one does not require a policy decision about the other. Bing uses the sitemap and IndexNow as discovery signals, not ranking guarantees.
+
+The 2026-09-27 production audit found `robots.txt` allowing public paths and Cloudflare AI Crawl Control switches off for search crawlers. The live smoke test now requests canonical HTML as Googlebot, bingbot, and OAI-SearchBot after every deployment. A spoofed user-agent smoke test is useful for catching broad blocks, but it cannot prove verified crawler identity or guarantee inclusion in an AI answer. Review Cloudflare AI Crawl Control and Google/Bing crawl reports if the test fails or organic discovery drops. Cloudflare Content Signals are crawler-use preferences, and Markdown Negotiation is an optional paid feature; neither is a prerequisite for Google AI search eligibility.
+
+References: [Google Search Central: AI features](https://developers.google.com/search/docs/appearance/ai-features), [OpenAI crawler overview](https://developers.openai.com/api/docs/bots), [Bing on sitemaps in AI search](https://blogs.bing.com/webmaster/2025/7/Keeping-Content-Discoverable-with-Sitemaps-in-AI-Powered-Search/).
+
 ## Bing Webmaster Tools
 
 Add and verify the apex property `https://sttailor.com/`, then submit this sitemap once:

@@ -169,6 +169,15 @@ for (const asset of ["st-tailor-made-to-measure-stories-gallery.jpg", "st-tailor
 const robots = await fetchWithRetry(`${origin}/robots.txt`);
 const robotsText = await robots.text();
 expect(robots.status === 200 && robotsText.includes(`Sitemap: ${origin}/sitemap.xml`), "robots.txt is invalid");
+expect(/^User-agent:\s*\*\s*$/mi.test(robotsText) && /^Allow:\s*\/\s*$/mi.test(robotsText) && !/^Disallow:\s*\/\s*$/mi.test(robotsText), "robots.txt must allow public pages to be crawled");
+
+// A reachable sitemap alone does not prove Cloudflare serves HTML to search
+// crawlers. Smoke-test the canonical HTML with representative crawler UAs.
+for (const [agent, route] of [["Googlebot", "/"], ["bingbot", "/"], ["OAI-SearchBot", "/gallery/"]]) {
+  const response = await fetchWithRetry(`${origin}${route}`, { headers: { "User-Agent": agent } });
+  const html = await response.text();
+  expect(response.status === 200 && html.includes(`<link rel="canonical" href="${origin}${route}">`) && html.includes('<main id="main-content">'), `${agent} cannot read the canonical HTML for ${route}`);
+}
 
 const llms = await fetchWithRetry(`${origin}/llms.txt`);
 const llmsText = await llms.text();
