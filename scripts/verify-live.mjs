@@ -91,6 +91,7 @@ for (const route of routes) {
   expect(!/https:\/\/(?:api\.iconify\.design|cdn\.simpleicons\.org)\//i.test(pageHtml), `${route} still loads third-party icon assets`);
   expect(!pageHtml.includes("data-consent-panel") && !pageHtml.includes("data-consent-open"), `${route} still has a consent control`);
   expect((pageHtml.match(/href="https:\/\/x\.com\/sttalior"/g) || []).length === 1 && pageHtml.includes('"https://x.com/sttalior"'), `${route} has no single official X profile in social links/schema`);
+  expect((pageHtml.match(/href="https:\/\/www\.threads\.com\/@sttailorhcm"/g) || []).length === 1 && pageHtml.includes('"https://www.threads.com/@sttailorhcm"'), `${route} has no single official Threads profile in social links/schema`);
 }
 
 if (expectedBuildRevision) expect(pages.get("/").includes(`name="sttailor-build-revision" content="${expectedBuildRevision}"`), "Production did not serve the revision deployed by this workflow.");

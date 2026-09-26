@@ -54,6 +54,7 @@ for (const route of expectedRoutes) {
   const schemaGraph = schemaText ? JSON.parse(schemaText)["@graph"] : [];
   const businessSchema = schemaGraph.find((item) => Array.isArray(item["@type"]) && item["@type"].includes("LocalBusiness"));
   if ((html.match(/href="https:\/\/x\.com\/sttalior"/g) ?? []).length !== 1 || (businessSchema?.sameAs ?? []).filter((url) => url === "https://x.com/sttalior").length !== 1) failures.push(`Official X profile is missing or duplicated in social links/schema: ${route}`);
+  if ((html.match(/href="https:\/\/www\.threads\.com\/@sttailorhcm"/g) ?? []).length !== 1 || (businessSchema?.sameAs ?? []).filter((url) => url === "https://www.threads.com/@sttailorhcm").length !== 1) failures.push(`Official Threads profile is missing or duplicated in social links/schema: ${route}`);
   for (const marker of ['rel="manifest" href="/site.webmanifest"', 'name="twitter:image:alt"', 'name="google-site-verification"', 'name="p:domain_verify"']) {
     if (!html.includes(marker)) failures.push(`SEO/discovery marker is missing on ${route}: ${marker}`);
   }
@@ -185,7 +186,7 @@ if (heroImage.match(/\bsrcset="([^"]+)"/)?.[1] !== heroPreload.match(/\bimagesrc
 if (!home.includes('loading="lazy"') || home.includes('loading="eager"')) failures.push("Deferred images or map loading are not configured correctly.");
 if (!home.includes('class="st-home-guide-strip"') || !home.includes('href="/cam-nang-may-do/"')) failures.push("Home tailoring-guide discovery strip is missing.");
 const footerSocial = home.match(/<nav class="st-footer-v7__social"[\s\S]*?<\/nav>/)?.[0] ?? "";
-for (const channel of ["Facebook", "Zalo", "Instagram", "YouTube", "LinkedIn", "WhatsApp", "Pinterest", "TikTok"]) {
+for (const channel of ["Facebook", "Zalo", "Instagram", "Threads", "YouTube", "LinkedIn", "WhatsApp", "Pinterest", "TikTok", "X"]) {
   if (!footerSocial.includes(channel)) failures.push(`Footer social channel missing: ${channel}`);
 }
 for (const excluded of ["Telephone", "Email"]) {
@@ -200,7 +201,7 @@ const contactCards = contact.match(/st-contact-card--[a-z]+/g) ?? [];
 for (const channel of ["hotline", "whatsapp", "zalo", "email", "instagram", "messenger"]) {
   if (!contactCards.includes(`st-contact-card--${channel}`)) failures.push(`Contact channel missing: ${channel}`);
 }
-for (const excluded of ["linkedin", "facebook", "pinterest", "youtube", "tiktok"]) {
+for (const excluded of ["linkedin", "facebook", "pinterest", "youtube", "tiktok", "threads", "x"]) {
   if (contactCards.includes(`st-contact-card--${excluded}`)) failures.push(`Retired contact channel remains: ${excluded}`);
 }
 if (contact.includes("st-contact-hero") || contact.includes("Tell us what you are dressing for") || contact.includes("Hãy chia sẻ dịp sử dụng")) failures.push("Contact hero band still remains after the requested removal.");

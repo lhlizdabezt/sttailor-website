@@ -63,7 +63,7 @@ In GA4 administration, keep Enhanced Measurement on, set event-data retention to
 
 ## Local discovery standards
 
-Keep the same business name, address, phone, opening hours, website, directions URL, service list, and original photographs across Google Business Profile, Apple Business Connect, Bing Places, social profiles, and eligible directories. The official X profile is `https://x.com/sttalior` and is published both in the footer and `LocalBusiness.sameAs`. Request only genuine customer reviews and never use automated reviews, traffic, backlinks, or keyword-stuffed business names.
+Keep the same business name, address, phone, opening hours, website, directions URL, service list, and original photographs across Google Business Profile, Apple Business Connect, Bing Places, social profiles, and eligible directories. The official X profile is `https://x.com/sttalior`; the official Threads profile is `https://www.threads.com/@sttailorhcm`. Both are published in the footer and `LocalBusiness.sameAs`. External social profiles do not belong in the site's XML sitemap or IndexNow submissions. Request only genuine customer reviews and never use automated reviews, traffic, backlinks, or keyword-stuffed business names.
 
 ## Source change gate
 

@@ -713,7 +713,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     paymentAccepted: "Credit Card, Debit Card, Visa, Mastercard, American Express, JCB, Apple Pay, Google Pay, Samsung Pay, PayPal, Wise",
     hasMap: "https://maps.app.goo.gl/j8N26uiQUC4J95vT6",
     knowsAbout: ["Bespoke tailoring", "Clothing alterations", "European suiting cloth", "Vietnamese silk", "Fittings and pattern cutting"],
-    sameAs: ["https://facebook.com/sttailor.hcm/", "https://www.instagram.com/sttailorhcm/", "https://wa.me/84909556258", "https://zalo.me/0909556258", "https://www.linkedin.com/company/sttailorhcm/", "https://youtube.com/@S.Ttailor", "https://www.tiktok.com/@sttailorhcm", "https://pinterest.com/sttailorhcm/", "https://x.com/sttalior"]
+    sameAs: ["https://facebook.com/sttailor.hcm/", "https://www.instagram.com/sttailorhcm/", "https://www.threads.com/@sttailorhcm", "https://wa.me/84909556258", "https://zalo.me/0909556258", "https://www.linkedin.com/company/sttailorhcm/", "https://youtube.com/@S.Ttailor", "https://www.tiktok.com/@sttailorhcm", "https://pinterest.com/sttailorhcm/", "https://x.com/sttalior"]
   };
   business.makesOffer = {
     "@type": "OfferCatalog",
