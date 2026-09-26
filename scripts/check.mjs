@@ -11,6 +11,7 @@ const failures = [];
 const expectedRoutes = ["/", "/gioi-thieu/", "/dich-vu/", "/gallery/", "/bang-gia/", "/phuong-thuc-thanh-toan/", "/lien-he/", "/cam-nang-may-do/", "/chon-vai-may-do/", "/quy-trinh-thu-do/", "/chinh-sua-trang-phuc/", "/bao-quan-giat-la/", "/doi-tra-hoan-tien/", "/chinh-sach-van-chuyen/", "/dieu-khoan-dieu-kien/", "/chinh-sach-bao-mat/"];
 const pageTitles = new Set();
 const pageDescriptions = new Set();
+const anchorIds = new Map();
 
 function visibleAndAccessibleText(html) {
   const alts = [...html.matchAll(/\balt=(['"])([\s\S]*?)\1/gi)].map((match) => match[2]);
@@ -53,6 +54,7 @@ for (const route of expectedRoutes) {
   const schemaText = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i)?.[1];
   const schemaGraph = schemaText ? JSON.parse(schemaText)["@graph"] : [];
   const businessSchema = schemaGraph.find((item) => Array.isArray(item["@type"]) && item["@type"].includes("LocalBusiness"));
+  if (businessSchema?.hasOfferCatalog?.["@type"] !== "OfferCatalog" || businessSchema?.makesOffer) failures.push(`LocalBusiness service catalog uses the wrong Schema.org property: ${route}`);
   if ((html.match(/href="https:\/\/x\.com\/sttalior"/g) ?? []).length !== 1 || (businessSchema?.sameAs ?? []).filter((url) => url === "https://x.com/sttalior").length !== 1) failures.push(`Official X profile is missing or duplicated in social links/schema: ${route}`);
   if ((html.match(/href="https:\/\/www\.threads\.com\/@sttailorhcm"/g) ?? []).length !== 1 || (businessSchema?.sameAs ?? []).filter((url) => url === "https://www.threads.com/@sttailorhcm").length !== 1) failures.push(`Official Threads profile is missing or duplicated in social links/schema: ${route}`);
   for (const marker of ['rel="manifest" href="/site.webmanifest"', 'name="twitter:image:alt"', 'name="google-site-verification"', 'name="p:domain_verify"']) {
@@ -63,10 +65,20 @@ for (const route of expectedRoutes) {
   if ((html.match(/<footer class="st-footer st-footer-v7 st-footer-v8"/g) ?? []).length !== 1) failures.push(`Footer is not singular: ${route}`);
   const footer = html.match(/<footer\b[\s\S]*?<\/footer>/i)?.[0] ?? "";
   const footerLinks = new Set([...footer.matchAll(/\bhref="(\/[^"]*)"/g)].map((match) => match[1]));
-  for (const [, href] of html.matchAll(/\bhref="(\/[^"]*)"/g)) {
-    const pathname = decodeURIComponent(new URL(href, "https://sttailor.com").pathname);
+  for (const [, href] of html.matchAll(/<a\b[^>]*\bhref="([^"]+)"/gi)) {
+    const target = new URL(href, "https://sttailor.com" + route);
+    if (target.origin !== "https://sttailor.com") continue;
+    const pathname = decodeURIComponent(target.pathname);
     const asset = path.join(dist, pathname.replace(/^\/+/, ""), pathname.endsWith("/") ? "index.html" : "");
-    if (!existsSync(asset)) failures.push("Broken internal link on " + route + ": " + href);
+    if (!existsSync(asset)) {
+      failures.push("Broken internal link on " + route + ": " + href);
+    } else if (target.hash && asset.endsWith(".html")) {
+      if (!anchorIds.has(asset)) {
+        const targetHtml = readFileSync(asset, "utf8");
+        anchorIds.set(asset, new Set([...targetHtml.matchAll(/\bid=["']([^"']+)["']/gi)].map((match) => match[1])));
+      }
+      if (!anchorIds.get(asset).has(decodeURIComponent(target.hash.slice(1)))) failures.push("Broken internal anchor on " + route + ": " + href);
+    }
   }
   for (const publishedRoute of expectedRoutes) {
     if (!footerLinks.has(publishedRoute)) failures.push(`Footer on ${route} omits published page ${publishedRoute}`);

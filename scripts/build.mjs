@@ -715,7 +715,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     knowsAbout: ["Bespoke tailoring", "Clothing alterations", "European suiting cloth", "Vietnamese silk", "Fittings and pattern cutting"],
     sameAs: ["https://facebook.com/sttailor.hcm/", "https://www.instagram.com/sttailorhcm/", "https://www.threads.com/@sttailorhcm", "https://wa.me/84909556258", "https://zalo.me/0909556258", "https://www.linkedin.com/company/sttailorhcm/", "https://youtube.com/@S.Ttailor", "https://www.tiktok.com/@sttailorhcm", "https://pinterest.com/sttailorhcm/", "https://x.com/sttalior"]
   };
-  business.makesOffer = {
+  business.hasOfferCatalog = {
     "@type": "OfferCatalog",
     name: "S.T Tailor services",
     itemListElement: ["Bespoke suits and vests", "Blazers and separates", "Shirts and trousers", "Formalwear", "Womenswear", "Wedding and traditional clothing", "Clothing alterations", "Cloth consultation"].map((name) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name, provider: { "@id": "https://sttailor.com/#business" } } }))

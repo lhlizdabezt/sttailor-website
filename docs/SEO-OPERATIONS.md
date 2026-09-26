@@ -67,13 +67,16 @@ Keep the same business name, address, phone, opening hours, website, directions 
 
 ## Source change gate
 
-Before pushing content or design updates:
+Before pushing content or design updates, inspect the working tree and stage only reviewed source files. Do not stage local drafts, backup archives, credentials, or generated output by default. Replace the two example paths below with the files actually changed:
 
 ```powershell
 Set-Location E:\S.TTailor\cloudflare-worker
 npm run build
 npm run check
-git add -A
+git status --short
+git add -- source/wordpress/Gallery.html source/wordpress/CustomCSS.css
+git diff --cached --check
+git diff --cached --stat
 git commit -m "Describe the production change"
 git push origin main
 ```
