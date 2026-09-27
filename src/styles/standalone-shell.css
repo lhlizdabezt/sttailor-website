@@ -1083,6 +1083,9 @@ html body .st-gallery-page--albums .st-gallery-film__copy > p span[lang="vi"] {
 }
 html body .st-gallery-page--albums .st-gallery-film__link {
   display: inline-flex !important;
+  flex-wrap: wrap !important;
+  column-gap: .35em !important;
+  max-width: 100% !important;
   min-height: 48px !important;
   align-items: center !important;
   padding: 11px 18px !important;
