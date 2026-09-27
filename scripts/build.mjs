@@ -22,6 +22,14 @@ let scriptHref = "/scripts/site.js";
 let imageManifest = {};
 const homeHeroImage = "/media/2026/06/background-hero-trang-lien-he-sttailor.webp";
 const homeHeroSizes = "(max-width: 760px) 100vw, 1717px";
+const galleryFilm = {
+  src: "/media/2026/09/st-tailor-womenswear-fitting-film.mp4",
+  poster: "/media/2026/09/st-tailor-womenswear-fitting-poster.webp",
+  name: "A fitting in motion | Thử phom qua chuyển động",
+  description: "A client reviews the line and movement of a long black skirt during a fitting at S.T Tailor in Ho Chi Minh City.",
+  duration: 34,
+  publishedAt: "2026-09-27T13:51:00+07:00"
+};
 const googleTagManagerHead = `<!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -476,6 +484,28 @@ function transformGallery(html) {
   html = removeElementByClass(html, "section", "st-gallery-closing")
     .replace("<span>08</span> PEOPLE &amp; APPOINTMENTS", "<span>08</span> PEOPLE, APPOINTMENTS &amp; CLIENT FEEDBACK")
     .replace("A personal process, from welcome to final adjustment.<span lang=\"vi\">Một hành trình riêng, từ lời chào đón đến lần tinh chỉnh cuối cùng.</span>", "A personal process, from welcome to final adjustment.<span lang=\"vi\">Hành trình riêng từ lời chào đón đến lần tinh chỉnh cuối cùng.</span>");
+  const womenswear = findElementById(html, "section", "album-womenswear");
+  if (!womenswear) throw new Error("Womenswear gallery album was not found for the fitting film.");
+  const womenswearGrid = findElementByClass(html.slice(womenswear.start, womenswear.end), "div", "st-album-grid");
+  if (!womenswearGrid) throw new Error("Womenswear gallery grid was not found for the fitting film.");
+  const filmMarkup = `
+<section class="st-gallery-film" aria-labelledby="st-gallery-film-title">
+  <div class="st-gallery-film__copy">
+    <p class="st-gallery-film__kicker">FITTING NOTES <span lang="vi">/ GHI CHÉP BUỔI THỬ ĐỒ</span></p>
+    <h3 id="st-gallery-film-title">A fitting in motion<span lang="vi">Thử phom qua chuyển động</span></h3>
+    <p id="st-gallery-film-description">${galleryFilm.description}<span lang="vi">Khách hàng xem lại đường nét và độ chuyển động của chân váy đen dài trong buổi thử đồ tại S.T Tailor, TP. Hồ Chí Minh.</span></p>
+    <a class="st-gallery-film__link" href="/lien-he/">Arrange a fitting <span lang="vi">/ Đặt lịch thử đồ</span></a>
+  </div>
+  <figure class="st-gallery-film__media">
+    <video controls playsinline preload="none" width="720" height="1280" poster="${galleryFilm.poster}" aria-describedby="st-gallery-film-description">
+      <source src="${galleryFilm.src}" type="video/mp4">
+      <a href="${galleryFilm.src}">Watch the fitting film <span lang="vi">/ Xem video thử đồ</span></a>
+    </video>
+    <figcaption>Womenswear fitting at S.T Tailor<span lang="vi">Buổi thử trang phục nữ tại S.T Tailor</span></figcaption>
+  </figure>
+</section>`;
+  const filmInsertAt = womenswear.start + womenswearGrid.end;
+  html = `${html.slice(0, filmInsertAt)}${filmMarkup}${html.slice(filmInsertAt)}`;
   return replaceVisibleAtelier(applyGalleryAltText(html));
 }
 
@@ -746,6 +776,18 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
       item: { "@type": "ImageObject", contentUrl: `https://sttailor.com${src}`, caption: alt, inLanguage: ["en", "vi"] }
     }))
     });
+    graph.push({
+      "@type": "VideoObject",
+      "@id": `${canonical}#womenswear-fitting-film`,
+      name: galleryFilm.name,
+      description: galleryFilm.description,
+      thumbnailUrl: `https://sttailor.com${galleryFilm.poster}`,
+      contentUrl: `https://sttailor.com${galleryFilm.src}`,
+      uploadDate: galleryFilm.publishedAt,
+      duration: `PT${galleryFilm.duration}S`,
+      isPartOf: { "@id": `${canonical}#webpage` },
+      publisher: { "@id": "https://sttailor.com/#business" }
+    });
     webPage.mainEntity = { "@id": `${canonical}#images` };
   }
   if (route === "/cam-nang-may-do/") {
@@ -799,6 +841,16 @@ function copyAssets() {
   return assets;
 }
 
+function copyGalleryFilm() {
+  for (const publicPath of [galleryFilm.src, galleryFilm.poster]) {
+    const source = path.join(root, "source", "video", path.basename(publicPath));
+    if (!existsSync(source)) throw new Error(`Gallery film asset is missing: ${source}`);
+    const target = path.join(dist, publicPath.slice(1));
+    mkdirSync(path.dirname(target), { recursive: true });
+    copyFileSync(source, target);
+  }
+}
+
 function copyIcons() {
   for (const iconPath of new Set(Object.values(iconPaths))) {
     if (!/^\/icons\/[a-z0-9-]+\.svg$/.test(iconPath)) throw new Error(`Invalid icon asset path: ${iconPath}`);
@@ -833,6 +885,7 @@ rmSync(dist, { recursive: true, force: true, maxRetries: 5, retryDelay: 250 });
 mkdirSync(dist, { recursive: true });
 assertGalleryHasNoDuplicates();
 const assets = copyAssets();
+copyGalleryFilm();
 copyIcons();
 const imageCount = buildImageManifest();
 mkdirSync(path.join(dist, "styles"), { recursive: true });
@@ -921,9 +974,12 @@ const sitemapEntries = sitemapRouteOrder.map(([route, , , , shareImage, shareIma
     return true;
   });
   const imageEntries = pageImages.slice(0, 1000).map(([src, alt]) => `<image:image><image:loc>https://sttailor.com${xmlEscape(src)}</image:loc><image:title>${xmlEscape(alt)}</image:title></image:image>`).join("");
-  return `\n  <url><loc>https://sttailor.com${route}</loc><lastmod>${routeLastModified.get(route) ?? buildDate}</lastmod>${imageEntries}</url>`;
+  const videoEntry = route === "/gallery/"
+    ? `<video:video><video:thumbnail_loc>https://sttailor.com${galleryFilm.poster}</video:thumbnail_loc><video:title>${xmlEscape(galleryFilm.name)}</video:title><video:description>${xmlEscape(galleryFilm.description)}</video:description><video:content_loc>https://sttailor.com${galleryFilm.src}</video:content_loc><video:duration>${galleryFilm.duration}</video:duration><video:publication_date>${galleryFilm.publishedAt}</video:publication_date></video:video>`
+    : "";
+  return `\n  <url><loc>https://sttailor.com${route}</loc><lastmod>${routeLastModified.get(route) ?? buildDate}</lastmod>${imageEntries}${videoEntry}</url>`;
 }).join("");
-writeFileSync(path.join(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">${sitemapEntries}\n</urlset>\n`, "utf8");
+writeFileSync(path.join(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">${sitemapEntries}\n</urlset>\n`, "utf8");
 writeFileSync(path.join(dist, "site.webmanifest"), JSON.stringify({ name: "S.T Tailor", short_name: "S.T Tailor", description: "Bespoke tailoring and clothing alterations in Ho Chi Minh City.", start_url: "/", scope: "/", display: "standalone", background_color: "#f3e1c5", theme_color: "#ead1ad", icons: [{ src: "/media/2026/09/logo-sttailor.png", sizes: "any", type: "image/png", purpose: "any maskable" }] }, null, 2), "utf8");
 const llmsLinks = routes.map(([route, , title]) => `- [${title}](https://sttailor.com${route})`).join("\n");
 writeFileSync(path.join(dist, "llms.txt"), `# S.T Tailor

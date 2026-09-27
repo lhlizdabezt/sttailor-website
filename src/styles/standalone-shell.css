@@ -1028,3 +1028,114 @@ html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6
     animation-delay: .12s !important;
   }
 }
+
+/* A film note within the womenswear album: picture, type and open paper, no caption panel. */
+html body .st-gallery-page--albums .st-gallery-film {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(250px, 380px) !important;
+  align-items: center !important;
+  gap: clamp(32px, 7vw, 100px) !important;
+  margin-top: clamp(50px, 7vw, 88px) !important;
+  padding-top: clamp(36px, 5vw, 60px) !important;
+  border-top: 1px solid rgba(80, 45, 27, .34) !important;
+}
+html body .st-gallery-page--albums .st-gallery-film__copy { max-width: 580px !important; }
+html body .st-gallery-page--albums .st-gallery-film__kicker {
+  margin: 0 0 18px !important;
+  color: #75452d !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  letter-spacing: .065em !important;
+  line-height: 1.5 !important;
+}
+html body .st-gallery-page--albums .st-gallery-film__copy h3 {
+  margin: 0 0 22px !important;
+  color: #352016 !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: clamp(36px, 4.1vw, 60px) !important;
+  font-weight: 500 !important;
+  letter-spacing: -.03em !important;
+  line-height: 1.06 !important;
+}
+html body .st-gallery-page--albums .st-gallery-film__copy h3 span[lang="vi"] {
+  display: block !important;
+  margin-top: 12px !important;
+  color: #70432c !important;
+  font-family: "Segoe UI Variable Text", "Segoe UI", Arial, sans-serif !important;
+  font-size: .42em !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.4 !important;
+}
+html body .st-gallery-page--albums .st-gallery-film__copy > p:not(.st-gallery-film__kicker) {
+  max-width: 53ch !important;
+  margin: 0 0 27px !important;
+  color: #4e3528 !important;
+  font-size: 16px !important;
+  line-height: 1.75 !important;
+}
+html body .st-gallery-page--albums .st-gallery-film__copy > p span[lang="vi"] {
+  display: block !important;
+  margin-top: 9px !important;
+  color: #684838 !important;
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+}
+html body .st-gallery-page--albums .st-gallery-film__link {
+  display: inline-flex !important;
+  min-height: 48px !important;
+  align-items: center !important;
+  padding: 11px 18px !important;
+  border: 1px solid #633b27 !important;
+  background: transparent !important;
+  color: #3a2419 !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 1.45 !important;
+  text-decoration: none !important;
+  transition: background-color .2s ease, color .2s ease !important;
+}
+html body .st-gallery-page--albums .st-gallery-film__link:hover,
+html body .st-gallery-page--albums .st-gallery-film__link:focus-visible {
+  background: #633b27 !important;
+  color: #fff7ec !important;
+  outline: 2px solid #a76e48 !important;
+  outline-offset: 3px !important;
+}
+html body .st-gallery-page--albums .st-gallery-film__media {
+  width: min(100%, 380px) !important;
+  margin: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+}
+html body .st-gallery-page--albums .st-gallery-film__media video {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 9 / 16 !important;
+  border: 1px solid #856a56 !important;
+  background: #221914 !important;
+  object-fit: cover !important;
+  box-shadow: 0 24px 48px rgba(48, 28, 19, .18) !important;
+}
+html body .st-gallery-page--albums .st-gallery-film__media figcaption {
+  margin-top: 15px !important;
+  color: #584032 !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+}
+html body .st-gallery-page--albums .st-gallery-film__media figcaption span[lang="vi"] {
+  display: block !important;
+  color: #6b4d3d !important;
+  font-size: 13px !important;
+}
+@media (max-width: 760px) {
+  html body .st-gallery-page--albums .st-gallery-film {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 30px !important;
+  }
+  html body .st-gallery-page--albums .st-gallery-film__media {
+    width: min(100%, 400px) !important;
+    margin-inline: auto !important;
+  }
+}

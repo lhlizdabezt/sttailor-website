@@ -316,6 +316,18 @@ for (const image of galleryContentImages) {
   if (!/\bsrcset="[^\"]+\.webp \d+w/i.test(image[0])) failures.push(`Gallery image is missing responsive WebP candidates: ${image[1]}`);
 }
 if (!gallery.includes('"@type":"ItemList"') || !gallery.includes(`"numberOfItems":${galleryContentImages.length}`)) failures.push("Gallery image structured data is missing or incomplete.");
+const filmPath = "/media/2026/09/st-tailor-womenswear-fitting-film.mp4";
+const posterPath = "/media/2026/09/st-tailor-womenswear-fitting-poster.webp";
+const filmTag = gallery.match(/<video\b[^>]*>[\s\S]*?<\/video>/i)?.[0] ?? "";
+if ((gallery.match(/<video\b/gi) ?? []).length !== 1 || !/\bcontrols\b/.test(filmTag) || !/\bplaysinline\b/.test(filmTag) || !/\bpreload="none"/.test(filmTag) || /\bautoplay\b/.test(filmTag) || !filmTag.includes(`poster="${posterPath}"`) || !filmTag.includes(`src="${filmPath}"`)) failures.push("Gallery fitting film must be accessible, user-controlled, and load only on demand.");
+if (!gallery.includes("A fitting in motion") || !gallery.includes("Thử phom qua chuyển động") || !gallery.includes("Buổi thử trang phục nữ")) failures.push("Gallery fitting film is missing its bilingual editorial copy.");
+for (const [asset, minimum, maximum] of [[filmPath, 100_000, 8_000_000], [posterPath, 10_000, 200_000]]) {
+  const file = path.join(dist, asset.slice(1));
+  if (!existsSync(file) || statSync(file).size < minimum || statSync(file).size > maximum) failures.push(`Gallery film asset is missing or outside its delivery budget: ${asset}`);
+}
+const galleryGraph = JSON.parse(gallery.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i)?.[1] ?? "{}")["@graph"] ?? [];
+const galleryVideos = galleryGraph.filter((item) => item["@type"] === "VideoObject");
+if (galleryVideos.length !== 1 || galleryVideos[0]?.contentUrl !== `https://sttailor.com${filmPath}` || galleryVideos[0]?.thumbnailUrl !== `https://sttailor.com${posterPath}` || galleryVideos[0]?.duration !== "PT34S") failures.push("Gallery VideoObject does not describe the published fitting film.");
 for (const requiredAsset of ["st-tailor-archive-atelier-four.jpg", "st-tailor-gallery-partner-certificate.jpg", "st-tailor-made-to-measure-stories-gallery.jpg", "st-tailor-magenta-floral-wrap-dress-and-navy-suit.jpg", "st-tailor-magenta-floral-wrap-dress-full-length.jpg", "st-tailor-magenta-floral-wrap-dress-detail.jpg", "st-tailor-showroom-exterior-evening.jpg"]) {
   if (galleryContentImages.filter((image) => image[1].endsWith(`/${requiredAsset}`)).length !== 1) failures.push(`Gallery retained image must appear exactly once: ${requiredAsset}`);
 }
@@ -344,6 +356,7 @@ if (!sitemap.includes('xmlns:image="http://www.google.com/schemas/sitemap-image/
 if (!sitemap.includes("<image:title>")) failures.push("Image sitemap titles are missing.");
 const gallerySitemap = sitemap.match(/<url><loc>https:\/\/sttailor\.com\/gallery\/[\s\S]*?<\/url>/)?.[0] ?? "";
 if ((gallerySitemap.match(/<image:image>/g) ?? []).length !== 111) failures.push("Gallery image sitemap does not expose every editorial image exactly once.");
+if (!sitemap.includes('xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"') || (sitemap.match(/<video:video>/g) ?? []).length !== 1 || !gallerySitemap.includes(`<video:content_loc>https://sttailor.com${filmPath}</video:content_loc>`) || !gallerySitemap.includes(`<video:thumbnail_loc>https://sttailor.com${posterPath}</video:thumbnail_loc>`)) failures.push("Gallery video sitemap entry is missing or duplicated.");
 if ((sitemap.match(/<image:loc>/g) ?? []).length !== new Set([...sitemap.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)].map((match) => match[1])).size) failures.push("Image sitemap contains duplicate image locations.");
 const mobileNavRule = [...generatedCss.matchAll(/\.st-site-nav\{[^}]*\}/g)]
   .map((match) => match[0])

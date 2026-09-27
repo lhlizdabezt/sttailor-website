@@ -156,6 +156,11 @@ expect(home.includes('"SiteNavigationElement"'), "SiteNavigationElement structur
 expect(pages.get("/dich-vu/").includes('"Service"'), "Services structured data is missing");
 
 const galleryHtml = pages.get("/gallery/");
+const filmPath = "/media/2026/09/st-tailor-womenswear-fitting-film.mp4";
+const posterPath = "/media/2026/09/st-tailor-womenswear-fitting-poster.webp";
+const filmTag = galleryHtml.match(/<video\b[^>]*>[\s\S]*?<\/video>/i)?.[0] ?? "";
+expect((galleryHtml.match(/<video\b/gi) || []).length === 1 && /\bcontrols\b/.test(filmTag) && /\bpreload="none"/.test(filmTag) && !/\bautoplay\b/.test(filmTag) && filmTag.includes(`poster="${posterPath}"`) && filmTag.includes(`src="${filmPath}"`), "Gallery fitting film is missing or loads without user intent");
+expect(galleryHtml.includes('"@type":"VideoObject"') && galleryHtml.includes(`"contentUrl":"${origin}${filmPath}"`), "Gallery VideoObject is missing");
 const galleryImages = [...galleryHtml.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^\"]+)"[^>]*>/gi)]
   .filter((match) => !/(?:logo-sttailor|LinkedInLogo)/i.test(match[1]));
 expect(galleryImages.length === 111 && new Set(galleryImages.map((match) => match[1])).size === 111, "Gallery is missing images or repeats an image");
@@ -165,6 +170,10 @@ for (const asset of ["st-tailor-made-to-measure-stories-gallery.jpg", "st-tailor
   const image = await fetchWithRetry(`${origin}${path}`);
   expect(image.status === 200 && image.headers.get("content-type")?.includes("image/jpeg"), `Gallery image is unavailable: ${asset}`);
 }
+const film = await fetchWithRetry(`${origin}${filmPath}`, { method: "HEAD" });
+expect(film.status === 200 && film.headers.get("content-type")?.includes("video/mp4") && Number(film.headers.get("content-length")) > 100_000, "Gallery fitting film is unavailable");
+const poster = await fetchWithRetry(`${origin}${posterPath}`, { method: "HEAD" });
+expect(poster.status === 200 && poster.headers.get("content-type")?.includes("image/webp") && Number(poster.headers.get("content-length")) > 10_000, "Gallery fitting poster is unavailable");
 
 const robots = await fetchWithRetry(`${origin}/robots.txt`);
 const robotsText = await robots.text();
@@ -197,6 +206,7 @@ expect(sitemapText.includes("<image:image>"), "Image sitemap entries are missing
 expect(sitemapText.includes("<image:title>"), "Image sitemap titles are missing");
 const gallerySitemap = sitemapText.match(/<url><loc>https:\/\/sttailor\.com\/gallery\/[\s\S]*?<\/url>/)?.[0] ?? "";
 expect((gallerySitemap.match(/<image:image>/g) || []).length === 111, "Gallery sitemap omits one or more editorial images");
+expect(sitemapText.includes('xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"') && (sitemapText.match(/<video:video>/g) || []).length === 1 && gallerySitemap.includes(`<video:content_loc>${origin}${filmPath}</video:content_loc>`) && gallerySitemap.includes(`<video:thumbnail_loc>${origin}${posterPath}</video:thumbnail_loc>`), "Gallery sitemap omits or duplicates the fitting film");
 
 const manifest = await fetchWithRetry(`${origin}/site.webmanifest`);
 expect(manifest.status === 200 && (await manifest.text()).includes('"name": "S.T Tailor"'), "site.webmanifest is invalid");
