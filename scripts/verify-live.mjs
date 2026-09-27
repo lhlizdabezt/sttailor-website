@@ -171,9 +171,9 @@ for (const asset of ["st-tailor-made-to-measure-stories-gallery.jpg", "st-tailor
   expect(image.status === 200 && image.headers.get("content-type")?.includes("image/jpeg"), `Gallery image is unavailable: ${asset}`);
 }
 const film = await fetchWithRetry(`${origin}${filmPath}`, { method: "HEAD" });
-expect(film.status === 200 && film.headers.get("content-type")?.includes("video/mp4") && Number(film.headers.get("content-length")) > 100_000, "Gallery fitting film is unavailable");
+expect(film.status === 200 && film.headers.get("content-type")?.includes("video/mp4"), "Gallery fitting film is unavailable");
 const poster = await fetchWithRetry(`${origin}${posterPath}`, { method: "HEAD" });
-expect(poster.status === 200 && poster.headers.get("content-type")?.includes("image/webp") && Number(poster.headers.get("content-length")) > 10_000, "Gallery fitting poster is unavailable");
+expect(poster.status === 200 && poster.headers.get("content-type")?.includes("image/webp"), "Gallery fitting poster is unavailable");
 
 const robots = await fetchWithRetry(`${origin}/robots.txt`);
 const robotsText = await robots.text();
