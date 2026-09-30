@@ -224,6 +224,13 @@ if (!home.includes('class="st-footer-v7__bottom st-footer-v8__legal"') || !home.
 
 const contact = readFileSync(path.join(dist, "lien-he", "index.html"), "utf8");
 if (!contact.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward") || contact.includes("Tầng 1, 258 Lê Thánh Tôn")) failures.push("Contact's single-language address must be entirely in English.");
+for (const policyRoute of ["chinh-sach-bao-mat", "dieu-khoan-dieu-kien", "chinh-sach-van-chuyen"]) {
+  const policy = readFileSync(path.join(dist, policyRoute, "index.html"), "utf8");
+  if (!policy.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward, Ho Chi Minh City, Vietnam") ||
+      !policy.includes("Tầng 1, 258 Lê Thánh Tôn, Phường Tân Định, TP. Hồ Chí Minh, Việt Nam")) {
+    failures.push(`Policy address is not synchronized in English and Vietnamese: /${policyRoute}/`);
+  }
+}
 const contactCards = contact.match(/st-contact-card--[a-z]+/g) ?? [];
 for (const channel of ["hotline", "whatsapp", "zalo", "email", "instagram", "messenger"]) {
   if (!contactCards.includes(`st-contact-card--${channel}`)) failures.push(`Contact channel missing: ${channel}`);

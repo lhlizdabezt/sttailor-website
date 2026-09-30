@@ -153,6 +153,12 @@ expect(Boolean(commissionMapRule), "Services spacing fix is missing");
 const contact = pages.get("/lien-he/");
 expect(contact.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward"), "Contact page does not display the confirmed showroom floor and ward");
 expect(!contact.includes("Tầng 1, 258 Lê Thánh Tôn"), "Contact page still mixes Vietnamese into a single-language address");
+for (const policyRoute of ["/chinh-sach-bao-mat/", "/dieu-khoan-dieu-kien/", "/chinh-sach-van-chuyen/"]) {
+  const policy = pages.get(policyRoute);
+  expect(policy.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward, Ho Chi Minh City, Vietnam") &&
+    policy.includes("Tầng 1, 258 Lê Thánh Tôn, Phường Tân Định, TP. Hồ Chí Minh, Việt Nam"),
+  `${policyRoute} does not show the confirmed bilingual showroom address`);
+}
 expect(pages.get("/gioi-thieu/").includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward"), "About page does not display the confirmed showroom floor");
 expect(home.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward"), "Shared footer does not display the confirmed showroom floor and ward");
 expect(!contact.includes("Tell us what you are dressing for"), "Removed contact introduction is still present");
