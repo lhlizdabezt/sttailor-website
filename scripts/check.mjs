@@ -54,6 +54,7 @@ for (const route of expectedRoutes) {
   const schemaText = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i)?.[1];
   const schemaGraph = schemaText ? JSON.parse(schemaText)["@graph"] : [];
   const businessSchema = schemaGraph.find((item) => Array.isArray(item["@type"]) && item["@type"].includes("LocalBusiness"));
+  if (businessSchema?.address?.streetAddress !== "1st Floor, 258 Lê Thánh Tôn, Phường Tân Định") failures.push(`Showroom floor or ward differs from the confirmed address: ${route}`);
   if (businessSchema?.hasOfferCatalog?.["@type"] !== "OfferCatalog" || businessSchema?.makesOffer) failures.push(`LocalBusiness service catalog uses the wrong Schema.org property: ${route}`);
   if ((html.match(/href="https:\/\/x\.com\/sttalior"/g) ?? []).length !== 1 || (businessSchema?.sameAs ?? []).filter((url) => url === "https://x.com/sttalior").length !== 1) failures.push(`Official X profile is missing or duplicated in social links/schema: ${route}`);
   if ((html.match(/href="https:\/\/www\.threads\.com\/@sttailorhcm"/g) ?? []).length !== 1 || (businessSchema?.sameAs ?? []).filter((url) => url === "https://www.threads.com/@sttailorhcm").length !== 1) failures.push(`Official Threads profile is missing or duplicated in social links/schema: ${route}`);
@@ -372,7 +373,7 @@ const mobileNavLinkRule = [...generatedCss.matchAll(/\.st-site-nav a[^\{]*\{[^}]
 if (!mobileNavRule?.includes("left:50%!important") || !mobileNavLinkRule) failures.push("Mobile navigation is not the requested full-width, left-aligned panel.");
 
 const worker = readFileSync(path.join(root, "src", "worker.js"), "utf8");
-for (const legacyPath of ["/en/", "/about/", "/services/", "/pricing/", "/payment-methods/", "/contact/", "/refund_returns/", "/suit-fabrics-the-key-element-that-defines-true-elegance/"]) {
+for (const legacyPath of ["/en/", "/en/gioi-thieu/", "/about/", "/services/", "/pricing/", "/payment-methods/", "/contact/", "/refund_returns/", "/suit-fabrics-the-key-element-that-defines-true-elegance/"]) {
   if (!worker.includes(legacyPath)) failures.push(`Legacy 301 mapping is missing: ${legacyPath}`);
 }
 if (!worker.includes('new URL("/not-found", url)')) failures.push("404 worker fallback does not fetch the canonical HTML asset body.");

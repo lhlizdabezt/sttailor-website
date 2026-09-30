@@ -750,7 +750,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     description: "Bespoke tailoring, formalwear and clothing alterations in Ho Chi Minh City.",
     telephone: "+84 909 556 258",
     email: "contact.sttailor@gmail.com",
-    address: { "@type": "PostalAddress", streetAddress: "258 Lê Thánh Tôn, Phường Tân Định", addressLocality: "Ho Chi Minh City", addressRegion: "Ho Chi Minh City", addressCountry: "VN" },
+    address: { "@type": "PostalAddress", streetAddress: "1st Floor, 258 Lê Thánh Tôn, Phường Tân Định", addressLocality: "Ho Chi Minh City", addressRegion: "Ho Chi Minh City", addressCountry: "VN" },
     geo: { "@type": "GeoCoordinates", latitude: 10.7720874, longitude: 106.6957664 },
     openingHoursSpecification: [{ "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], opens: "09:00", closes: "20:00" }],
     areaServed: [{ "@type": "City", name: "Ho Chi Minh City" }, { "@type": "Country", name: "Vietnam" }],
@@ -1003,7 +1003,7 @@ writeFileSync(path.join(dist, "llms.txt"), `# S.T Tailor
 
 > Bespoke tailoring, clothing alterations and private fittings in Ho Chi Minh City. May đo, chỉnh sửa trang phục và tư vấn riêng tại Thành phố Hồ Chí Minh.
 
-S.T Tailor is at 258 Lê Thánh Tôn, Phường Tân Định, Thành phố Hồ Chí Minh, Việt Nam. The links below are the canonical public pages.
+S.T Tailor is on the 1st Floor at 258 Lê Thánh Tôn, Phường Tân Định, Thành phố Hồ Chí Minh, Việt Nam. The links below are the canonical public pages.
 
 ## Pages
 

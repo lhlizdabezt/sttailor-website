@@ -23,6 +23,7 @@ const routes = new Set([
 // path outside this table and the published routes remains a true 404.
 const legacyRoutes = new Map([
   ["/en/", "/"],
+  ["/en/gioi-thieu/", "/gioi-thieu/"],
   ["/about/", "/gioi-thieu/"],
   ["/services/", "/dich-vu/"],
   ["/gallery-page/", "/gallery/"],

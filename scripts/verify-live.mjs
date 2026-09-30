@@ -81,6 +81,7 @@ for (const route of routes) {
   expect(!pageHtml.toLowerCase().includes("beta.sttailor.com"), `${route} still contains the beta host`);
   expect(pageHtml.includes('name="robots" content="index, follow'), `${route} is not indexable`);
   expect(pageHtml.includes('"hasOfferCatalog":{"@type":"OfferCatalog"') && !pageHtml.includes('"makesOffer":{"@type":"OfferCatalog"'), `${route} has an invalid LocalBusiness service catalog relationship`);
+  expect(pageHtml.includes('"streetAddress":"1st Floor, 258 Lê Thánh Tôn, Phường Tân Định"'), `${route} does not show the confirmed showroom floor and ward in LocalBusiness schema`);
   const footer = pageHtml.match(/<footer\b[\s\S]*?<\/footer>/i)?.[0] ?? "";
   const tripadvisorProfile = "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor_Bespoke_Tailoring-Ho_Chi_Minh_City.html";
   expect(footer.split(`href="${tripadvisorProfile}"`).length === 2 && !footer.includes("st-footer-v7__tripadvisor") && !footer.includes("socialButtonRate") && !footer.includes("Rate us on Tripadvisor"), `${route} footer has a missing or duplicated Tripadvisor link, or still contains the removed rate widget`);
@@ -149,6 +150,9 @@ expect(css.includes(".st-site-header{") && css.includes("background:linear-gradi
 expect(Boolean(commissionMapRule), "Services spacing fix is missing");
 
 const contact = pages.get("/lien-he/");
+expect(contact.includes("Tầng 1, 258 Lê Thánh Tôn, Phường Tân Định"), "Contact page does not display the confirmed showroom floor and ward");
+expect(pages.get("/gioi-thieu/").includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward"), "About page does not display the confirmed showroom floor");
+expect(home.includes("Tầng 1, 258 Lê Thánh Tôn, Phường Tân Định"), "Shared footer does not display the confirmed showroom floor and ward");
 expect(!contact.includes("Tell us what you are dressing for"), "Removed contact introduction is still present");
 expect(!contact.includes("Hãy chia sẻ dịp sử dụng"), "Removed Vietnamese contact introduction is still present");
 expect(!contact.includes("CONTACT S.T TAILOR / LIÊN HỆ"), "Removed contact hero label is still present");
@@ -217,6 +221,8 @@ expect(manifest.status === 200 && (await manifest.text()).includes('"name": "S.T
 const legacy = await fetchWithRetry(`${origin}/about/`, { redirect: "manual" });
 expect(legacy.status === 301 && legacy.headers.get("location") === `${origin}/gioi-thieu/`, "Legacy URL mapping is not a 301");
 const oldEnglishHome = await fetchWithRetry(`${origin}/en/`, { redirect: "manual" });
+const oldEnglishAbout = await fetchWithRetry(`${origin}/en/gioi-thieu/`, { redirect: "manual" });
+expect(oldEnglishAbout.status === 301 && oldEnglishAbout.headers.get("location") === `${origin}/gioi-thieu/`, "Bing AI's old English About URL does not redirect to the current About page");
 expect(oldEnglishHome.status === 301 && oldEnglishHome.headers.get("location") === `${origin}/`, "Old English homepage does not redirect to the bilingual homepage");
 const oldFabricArticle = await fetchWithRetry(`${origin}/suit-fabrics-the-key-element-that-defines-true-elegance/`, { redirect: "manual" });
 expect(oldFabricArticle.status === 301 && oldFabricArticle.headers.get("location") === `${origin}/chon-vai-may-do/`, "Old suit-fabrics article does not redirect to the cloth guide");
