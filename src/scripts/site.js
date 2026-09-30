@@ -111,6 +111,27 @@ const pageTypes = {
 };
 const pageType = pageTypes[window.location.pathname] ?? "other";
 
+// Tripadvisor's current rated badge renders its inner "Write a review" link
+// with an empty href. Point it at the verified listing when the widget arrives.
+const tripadvisorBadge = document.querySelector("#TA_rated383");
+if (tripadvisorBadge) {
+  const listing = "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor_Bespoke_Tailoring-Ho_Chi_Minh_City.html";
+  const repairWidgetLink = () => {
+    const reviewLink = tripadvisorBadge.querySelector('a[href=""]');
+    if (!reviewLink) return false;
+    reviewLink.href = listing;
+    reviewLink.target = "_blank";
+    reviewLink.rel = "nofollow noopener noreferrer";
+    return true;
+  };
+  if (!repairWidgetLink()) {
+    const observer = new MutationObserver(() => {
+      if (repairWidgetLink()) observer.disconnect();
+    });
+    observer.observe(tripadvisorBadge, { childList: true, subtree: true });
+  }
+}
+
 const claritySet = (key, value) => {
   if (typeof window.clarity === "function") window.clarity("set", key, value);
 };

@@ -614,6 +614,22 @@ function transformAbout(html) {
   </div>
 </section>`;
   html = `${html.slice(0, provenanceRange.end)}${clothHeritage}${consultationGuide}${galleryBridge}${html.slice(provenanceRange.end)}`;
+  const tripadvisor = `
+<section class="st-tripadvisor" aria-labelledby="st-tripadvisor-title">
+  <div class="st-lux-shell st-tripadvisor__inner">
+    <div class="st-tripadvisor__copy">
+      <p class="st-lux-eyebrow">OUR TRIPADVISOR PAGE <span lang="vi">/ TRANG TRIPADVISOR CỦA CHÚNG TÔI</span></p>
+      <h2 id="st-tripadvisor-title">Find us on Tripadvisor.<span lang="vi">Gặp S.T Tailor trên Tripadvisor.</span></h2>
+      <p>Visit our new Tripadvisor page. If you have been to the showroom, you can share your experience there.<span lang="vi">Ghé xem trang Tripadvisor mới của chúng tôi. Nếu đã đến showroom, bạn có thể chia sẻ trải nghiệm của mình tại đây.</span></p>
+      <a class="st-tripadvisor__link" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor_Bespoke_Tailoring-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer">Open our Tripadvisor page <span lang="vi">Xem trang Tripadvisor</span><span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="st-tripadvisor__badge" aria-label="Official Tripadvisor widget | Huy hiệu Tripadvisor chính thức">
+      <div id="TA_rated383" class="TA_rated"><ul id="nk7KumP" class="TA_links j2AXIy9"><li id="YSiMIh" class="HfgYawPu"><a target="_blank" rel="noopener noreferrer" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor_Bespoke_Tailoring-Ho_Chi_Minh_City.html"><img src="https://www.tripadvisor.com/img/cdsi/img2/badges/ollie-11424-2.gif" alt="S.T Tailor on Tripadvisor" loading="lazy" decoding="async"></a></li></ul></div>
+      <script async src="https://www.jscache.com/wejs?wtype=rated&amp;uniq=383&amp;locationId=34701232&amp;lang=en_US&amp;display_version=2"></script>
+    </div>
+  </div>
+</section>`;
+  html = html.replace('<section class="st-lux-business st-motion st-motion-1">', `${tripadvisor}\n<section class="st-lux-business st-motion st-motion-1">`);
   return replaceVisibleAtelier(html);
 }
 
@@ -743,7 +759,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     paymentAccepted: "Credit Card, Debit Card, Visa, Mastercard, American Express, JCB, Apple Pay, Google Pay, Samsung Pay, PayPal, Wise",
     hasMap: "https://maps.app.goo.gl/j8N26uiQUC4J95vT6",
     knowsAbout: ["Bespoke tailoring", "Clothing alterations", "European suiting cloth", "Vietnamese silk", "Fittings and pattern cutting"],
-    sameAs: ["https://facebook.com/sttailor.hcm/", "https://www.instagram.com/sttailorhcm/", "https://www.threads.com/@sttailorhcm", "https://wa.me/84909556258", "https://zalo.me/0909556258", "https://www.linkedin.com/company/sttailorhcm/", "https://youtube.com/@S.Ttailor", "https://www.tiktok.com/@sttailorhcm", "https://pinterest.com/sttailorhcm/", "https://x.com/sttalior"]
+    sameAs: ["https://facebook.com/sttailor.hcm/", "https://www.instagram.com/sttailorhcm/", "https://www.threads.com/@sttailorhcm", "https://wa.me/84909556258", "https://zalo.me/0909556258", "https://www.linkedin.com/company/sttailorhcm/", "https://youtube.com/@S.Ttailor", "https://www.tiktok.com/@sttailorhcm", "https://pinterest.com/sttailorhcm/", "https://x.com/sttalior", "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor_Bespoke_Tailoring-Ho_Chi_Minh_City.html"]
   };
   business.hasOfferCatalog = {
     "@type": "OfferCatalog",
