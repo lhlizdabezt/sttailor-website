@@ -372,7 +372,7 @@ const mobileNavLinkRule = [...generatedCss.matchAll(/\.st-site-nav a[^\{]*\{[^}]
 if (!mobileNavRule?.includes("left:50%!important") || !mobileNavLinkRule) failures.push("Mobile navigation is not the requested full-width, left-aligned panel.");
 
 const worker = readFileSync(path.join(root, "src", "worker.js"), "utf8");
-for (const legacyPath of ["/about/", "/services/", "/pricing/", "/payment-methods/", "/contact/", "/refund_returns/"]) {
+for (const legacyPath of ["/en/", "/about/", "/services/", "/pricing/", "/payment-methods/", "/contact/", "/refund_returns/", "/suit-fabrics-the-key-element-that-defines-true-elegance/"]) {
   if (!worker.includes(legacyPath)) failures.push(`Legacy 301 mapping is missing: ${legacyPath}`);
 }
 if (!worker.includes('new URL("/not-found", url)')) failures.push("404 worker fallback does not fetch the canonical HTML asset body.");

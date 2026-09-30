@@ -216,6 +216,10 @@ expect(manifest.status === 200 && (await manifest.text()).includes('"name": "S.T
 
 const legacy = await fetchWithRetry(`${origin}/about/`, { redirect: "manual" });
 expect(legacy.status === 301 && legacy.headers.get("location") === `${origin}/gioi-thieu/`, "Legacy URL mapping is not a 301");
+const oldEnglishHome = await fetchWithRetry(`${origin}/en/`, { redirect: "manual" });
+expect(oldEnglishHome.status === 301 && oldEnglishHome.headers.get("location") === `${origin}/`, "Old English homepage does not redirect to the bilingual homepage");
+const oldFabricArticle = await fetchWithRetry(`${origin}/suit-fabrics-the-key-element-that-defines-true-elegance/`, { redirect: "manual" });
+expect(oldFabricArticle.status === 301 && oldFabricArticle.headers.get("location") === `${origin}/chon-vai-may-do/`, "Old suit-fabrics article does not redirect to the cloth guide");
 const oldRefund = await fetchWithRetry(`${origin}/refund_returns/`, { redirect: "manual" });
 expect(oldRefund.status === 301 && oldRefund.headers.get("location") === `${origin}/doi-tra-hoan-tien/`, "Old returns URL does not redirect to the new policy");
 

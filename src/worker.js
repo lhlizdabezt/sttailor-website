@@ -22,6 +22,7 @@ const routes = new Set([
 // Retired WordPress paths have an intentional, permanent destination. Any
 // path outside this table and the published routes remains a true 404.
 const legacyRoutes = new Map([
+  ["/en/", "/"],
   ["/about/", "/gioi-thieu/"],
   ["/services/", "/dich-vu/"],
   ["/gallery-page/", "/gallery/"],
@@ -31,6 +32,7 @@ const legacyRoutes = new Map([
   ["/contact/", "/lien-he/"],
   ["/tailoring-guide/", "/cam-nang-may-do/"],
   ["/fabric-guide/", "/chon-vai-may-do/"],
+  ["/suit-fabrics-the-key-element-that-defines-true-elegance/", "/chon-vai-may-do/"],
   ["/fitting-process/", "/quy-trinh-thu-do/"],
   ["/alterations/", "/chinh-sua-trang-phuc/"],
   ["/garment-care/", "/bao-quan-giat-la/"],
