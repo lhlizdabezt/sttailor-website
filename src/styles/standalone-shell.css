@@ -438,6 +438,30 @@ html body .st-payment-gallery-suite__frame:focus-visible { outline: 3px solid #f
 /* Footer crest uses the supplied original-colour transparent logo. */
 html body .st-footer-v7.st-footer-v8 .st-footer-v7__crest { display: inline-flex !important; width: 104px !important; margin: 0 0 22px !important; background: transparent !important; border: 0 !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v7__crest img { display: block !important; width: 100% !important; height: auto !important; background: transparent !important; border: 0 !important; filter: none !important; mix-blend-mode: normal !important; }
+/* Give every social destination a distinct, finger-sized target on mobile. */
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__social { gap: 8px !important; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__social a {
+  display: inline-flex !important;
+  min-height: 44px !important;
+  padding: 9px 11px !important;
+  align-items: center !important;
+  gap: 7px !important;
+  border: 1px solid #a1704d !important;
+  background: #f8e8d0 !important;
+  color: #3b2116 !important;
+  -webkit-text-fill-color: #3b2116 !important;
+  text-decoration: none !important;
+  transition: background-color .2s ease, border-color .2s ease, transform .2s ease !important;
+}
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__social a:hover,
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__social a:focus-visible {
+  border-color: #593321 !important;
+  background: #f1d2a9 !important;
+  color: #2d1a12 !important;
+  -webkit-text-fill-color: #2d1a12 !important;
+  text-decoration: none !important;
+}
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__social a:focus-visible { outline: 2px solid #593321 !important; outline-offset: 3px !important; }
 
 /* Home visual destinations: image-led discovery with deliberately minimal copy. */
 html body .st-home-editorial {
