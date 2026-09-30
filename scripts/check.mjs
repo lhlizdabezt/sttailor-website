@@ -68,6 +68,8 @@ for (const route of expectedRoutes) {
   if (html.includes("beta.sttailor.com")) failures.push(`Beta hostname remains in production HTML: ${route}`);
   if ((html.match(/<footer class="st-footer st-footer-v7 st-footer-v8"/g) ?? []).length !== 1) failures.push(`Footer is not singular: ${route}`);
   const footer = html.match(/<footer\b[\s\S]*?<\/footer>/i)?.[0] ?? "";
+  const tripadvisorFooter = footer.match(/<div class="st-footer-v7__tripadvisor"[\s\S]*?<\/div>/i)?.[0] ?? "";
+  if ((footer.match(/href="https:\/\/www\.tripadvisor\.com\/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor_Bespoke_Tailoring-Ho_Chi_Minh_City\.html"/g) ?? []).length !== 1 || !tripadvisorFooter.includes('loading="lazy"') || !tripadvisorFooter.includes('sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"') || (tripadvisorFooter.match(/wtype=socialButtonRate/g) ?? []).length !== 1) failures.push(`Footer Tripadvisor profile link or lazy official rate widget is missing or duplicated: ${route}`);
   const footerLinks = new Set([...footer.matchAll(/\bhref="(\/[^"]*)"/g)].map((match) => match[1]));
   for (const [, href] of html.matchAll(/<a\b[^>]*\bhref="([^"]+)"/gi)) {
     const target = new URL(href, "https://sttailor.com" + route);
@@ -202,7 +204,7 @@ if (heroImage.match(/\bsrcset="([^"]+)"/)?.[1] !== heroPreload.match(/\bimagesrc
 if (!home.includes('loading="lazy"') || home.includes('loading="eager"')) failures.push("Deferred images or map loading are not configured correctly.");
 if (!home.includes('class="st-home-guide-strip"') || !home.includes('href="/cam-nang-may-do/"')) failures.push("Home tailoring-guide discovery strip is missing.");
 const footerSocial = home.match(/<nav class="st-footer-v7__social"[\s\S]*?<\/nav>/)?.[0] ?? "";
-for (const channel of ["Facebook", "Zalo", "Instagram", "Threads", "YouTube", "LinkedIn", "WhatsApp", "Pinterest", "TikTok", "X"]) {
+for (const channel of ["Facebook", "Zalo", "Instagram", "Threads", "YouTube", "LinkedIn", "WhatsApp", "Pinterest", "TikTok", "X", "Tripadvisor"]) {
   if (!footerSocial.includes(channel)) failures.push(`Footer social channel missing: ${channel}`);
 }
 for (const excluded of ["Telephone", "Email"]) {

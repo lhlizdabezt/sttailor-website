@@ -325,6 +325,10 @@ html body .st-tripadvisor__badge .TA_rated { max-width: 100% !important; }
 html body .st-tripadvisor__badge #CDSWIDFRR { transform: scale(1.4) !important; transform-origin: center !important; }
 html body .st-tripadvisor__badge .TA_links { margin: 0 !important; padding: 0 !important; list-style: none !important; }
 html body .st-tripadvisor__badge img { max-width: 100% !important; height: auto !important; }
+html body .st-footer-v7__tripadvisor { display: flex !important; flex-wrap: wrap !important; align-items: center !important; gap: 12px 20px !important; margin-top: 21px !important; padding-top: 18px !important; border-top: 1px solid rgba(107, 52, 29, .27) !important; }
+html body .st-footer-v7__tripadvisor > span { color: #4b2e20 !important; -webkit-text-fill-color: #4b2e20 !important; font: 700 13px/1.4 var(--st-wordmark) !important; }
+html body .st-footer-v7__tripadvisor > span span[lang="vi"] { display: block !important; margin-top: 4px !important; color: #704b37 !important; -webkit-text-fill-color: #704b37 !important; font: 500 12px/1.4 var(--st-vietnamese) !important; }
+html body .st-footer-v7__tripadvisor iframe { display: block !important; width: 100px !important; height: 42px !important; border: 1px solid rgba(107, 52, 29, .36) !important; background: transparent !important; }
 
 /* About: image-led path into the full Gallery. */
 html body .st-about-gallery-bridge { padding: clamp(72px, 9vw, 128px) 0 !important; background: #2a1810 !important; border-top: 1px solid rgba(234, 200, 159, .24) !important; }
