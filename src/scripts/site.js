@@ -52,35 +52,28 @@ if (toggle && nav) {
   }, { passive: true });
 }
 
-const revealables = document.querySelectorAll(".st-motion, .st-home-v6__rise");
 // The editorial pages already have entrance motion. Give only their static,
 // below-the-fold sections the same quiet rise, without delaying first paint.
 // Elements remain visible if JavaScript, IntersectionObserver, or motion is off.
 const canReveal = "IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const viewportBottom = window.innerHeight + 24;
 const scrollTargets = canReveal
   ? [...document.querySelectorAll("main section, main article")]
       .filter((element) => !element.matches(".st-motion, .stpr-card, .stp-card, .st-contact-card") && !element.querySelector(".st-motion"))
-      .map((element) => ({ element, rect: element.getBoundingClientRect() }))
-      .filter(({ rect }) => rect.height > 48 && rect.top >= viewportBottom)
-      .map(({ element }) => element)
   : [];
-if ("IntersectionObserver" in window) {
+if (canReveal && scrollTargets.length) {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         entry.target.classList.add("is-visible");
         observer.unobserve(entry.target);
+      } else if (entry.boundingClientRect.top >= window.innerHeight + 24 && entry.boundingClientRect.height > 48) {
+        entry.target.classList.add("st-scroll-reveal");
+      } else {
+        observer.unobserve(entry.target);
       }
     });
   }, { threshold: 0.08 });
-  revealables.forEach((element) => observer.observe(element));
-  scrollTargets.forEach((element) => {
-    element.classList.add("st-scroll-reveal");
-    observer.observe(element);
-  });
-} else {
-  revealables.forEach((element) => element.classList.add("is-visible"));
+  scrollTargets.forEach((element) => observer.observe(element));
 }
 
 // Keyboard users can jump straight to a link inside a section before the

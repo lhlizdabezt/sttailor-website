@@ -183,6 +183,8 @@ else {
 }
 
 const home = readFileSync(path.join(dist, "index.html"), "utf8");
+const builtSiteScript = readFileSync(path.join(dist, "scripts", "site.js"), "utf8");
+if (builtSiteScript.includes("getBoundingClientRect(") || !builtSiteScript.includes("entry.boundingClientRect")) failures.push("Scroll motion must avoid synchronous first-load layout measurements.");
 for (const [icon, limit] of [["sttailor-favicon-48.png", 5000], ["sttailor-apple-touch-180.png", 25000], ["sttailor-app-192.png", 25000], ["sttailor-app-large-512.png", 100000]]) {
   const iconPath = path.join(dist, "icons", icon);
   if (!existsSync(iconPath) || statSync(iconPath).size > limit) failures.push(`Brand icon is missing or too large: ${icon}`);
