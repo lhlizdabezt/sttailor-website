@@ -54,7 +54,7 @@ for (const route of expectedRoutes) {
   const schemaText = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i)?.[1];
   const schemaGraph = schemaText ? JSON.parse(schemaText)["@graph"] : [];
   const businessSchema = schemaGraph.find((item) => Array.isArray(item["@type"]) && item["@type"].includes("LocalBusiness"));
-  if (businessSchema?.address?.streetAddress !== "1st Floor, 258 Lê Thánh Tôn, Phường Tân Định") failures.push(`Showroom floor or ward differs from the confirmed address: ${route}`);
+  if (businessSchema?.address?.streetAddress !== "1st Floor, 258 Le Thanh Ton, Tan Dinh Ward") failures.push(`Showroom floor or ward differs from the confirmed address: ${route}`);
   if (businessSchema?.hasOfferCatalog?.["@type"] !== "OfferCatalog" || businessSchema?.makesOffer) failures.push(`LocalBusiness service catalog uses the wrong Schema.org property: ${route}`);
   if ((html.match(/href="https:\/\/x\.com\/sttalior"/g) ?? []).length !== 1 || (businessSchema?.sameAs ?? []).filter((url) => url === "https://x.com/sttalior").length !== 1) failures.push(`Official X profile is missing or duplicated in social links/schema: ${route}`);
   if ((html.match(/href="https:\/\/www\.threads\.com\/@sttailorhcm"/g) ?? []).length !== 1 || (businessSchema?.sameAs ?? []).filter((url) => url === "https://www.threads.com/@sttailorhcm").length !== 1) failures.push(`Official Threads profile is missing or duplicated in social links/schema: ${route}`);
@@ -183,6 +183,12 @@ else {
 }
 
 const home = readFileSync(path.join(dist, "index.html"), "utf8");
+for (const [icon, limit] of [["sttailor-favicon-48.png", 5000], ["sttailor-apple-touch-180.png", 25000], ["sttailor-app-192.png", 25000], ["sttailor-app-large-512.png", 100000]]) {
+  const iconPath = path.join(dist, "icons", icon);
+  if (!existsSync(iconPath) || statSync(iconPath).size > limit) failures.push(`Brand icon is missing or too large: ${icon}`);
+}
+if (!home.includes('rel="icon" href="/icons/sttailor-favicon-48.png"') || !home.includes('rel="apple-touch-icon" href="/icons/sttailor-apple-touch-180.png"')) failures.push("Browser icons do not use compact original-color logo assets.");
+if (!home.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward") || home.includes("Tầng 1, 258 Lê Thánh Tôn")) failures.push("Shared footer must display its single-language address in English.");
 if (home.includes("st-home-v6__gallery")) failures.push("The removed home gallery strip is still present.");
 if (!home.includes("ARRANGE A PRIVATE CONSULTATION") || !home.includes("ĐẶT LỊCH TƯ VẤN RIÊNG")) failures.push("Home consultation CTA is missing.");
 for (const removedHomeRouteText of ["Five ways into the atelier", "Five ways to begin with S.T Tailor", "Năm lối để bước vào không gian atelier", "Năm lối để bắt đầu cùng S.T Tailor", "st-home-v6__routes"]) {
@@ -215,6 +221,7 @@ if (home.includes("st-footer-v7__top")) failures.push("Removed footer promotion 
 if (!home.includes('class="st-footer-v7__bottom st-footer-v8__legal"') || !home.includes('aria-label="Client policies"')) failures.push("Right-aligned client policy section is missing.");
 
 const contact = readFileSync(path.join(dist, "lien-he", "index.html"), "utf8");
+if (!contact.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward") || contact.includes("Tầng 1, 258 Lê Thánh Tôn")) failures.push("Contact's single-language address must be entirely in English.");
 const contactCards = contact.match(/st-contact-card--[a-z]+/g) ?? [];
 for (const channel of ["hotline", "whatsapp", "zalo", "email", "instagram", "messenger"]) {
   if (!contactCards.includes(`st-contact-card--${channel}`)) failures.push(`Contact channel missing: ${channel}`);

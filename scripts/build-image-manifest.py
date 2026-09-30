@@ -19,6 +19,7 @@ CONTENT_WIDTHS = (480, 768, 1200, 1600)
 # Keep a 240px candidate so high-DPR mobile headers do not jump from 160px
 # straight to a 320px logo for a roughly 70–100px rendered mark.
 ICON_WIDTHS = (96, 160, 240, 320)
+BRAND_ICON_SIZES = {"favicon": 48, "apple-touch": 180, "app": 192, "app-large": 512}
 
 
 def public_path(path: Path) -> str:
@@ -51,6 +52,7 @@ def main() -> int:
     source_root = Path(sys.argv[1])
     output_manifest = Path(sys.argv[2])
     responsive_root = output_manifest.parent / "media" / "_responsive"
+    brand_icon_root = output_manifest.parent / "icons"
     metadata: dict[str, dict[str, object]] = {}
     processed = 0
 
@@ -71,6 +73,19 @@ def main() -> int:
                 processed += 1
         except (OSError, ValueError) as error:
             raise RuntimeError(f"Could not inspect {relative}: {error}") from error
+
+    # Keep the owner's original logo colors. A warm brand-color square makes
+    # the dark mark legible in light and dark browser UI; the footer logo stays
+    # transparent. Full-size PNGs cost hundreds of KB on first load.
+    with Image.open(source_root / "2026" / "09" / "logo-sttailor.png") as opened:
+        logo = opened.convert("RGBA")
+        for name, size in BRAND_ICON_SIZES.items():
+            mark = logo.copy()
+            edge = round(size * 0.9)
+            mark.thumbnail((edge, edge), Image.Resampling.LANCZOS)
+            canvas = Image.new("RGBA", (size, size), (243, 225, 197, 255))
+            canvas.alpha_composite(mark, ((size - mark.width) // 2, (size - mark.height) // 2))
+            canvas.save(brand_icon_root / f"sttailor-{name}-{size}.png", "PNG", optimize=True)
 
     output_manifest.write_text(json.dumps(metadata, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     print(f"Image metadata: {processed} originals, responsive WebP variants generated.")

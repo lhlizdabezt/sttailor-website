@@ -81,7 +81,7 @@ for (const route of routes) {
   expect(!pageHtml.toLowerCase().includes("beta.sttailor.com"), `${route} still contains the beta host`);
   expect(pageHtml.includes('name="robots" content="index, follow'), `${route} is not indexable`);
   expect(pageHtml.includes('"hasOfferCatalog":{"@type":"OfferCatalog"') && !pageHtml.includes('"makesOffer":{"@type":"OfferCatalog"'), `${route} has an invalid LocalBusiness service catalog relationship`);
-  expect(pageHtml.includes('"streetAddress":"1st Floor, 258 Lê Thánh Tôn, Phường Tân Định"'), `${route} does not show the confirmed showroom floor and ward in LocalBusiness schema`);
+  expect(pageHtml.includes('"streetAddress":"1st Floor, 258 Le Thanh Ton, Tan Dinh Ward"'), `${route} does not show the confirmed showroom floor and ward in LocalBusiness schema`);
   const footer = pageHtml.match(/<footer\b[\s\S]*?<\/footer>/i)?.[0] ?? "";
   const tripadvisorProfile = "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor_Bespoke_Tailoring-Ho_Chi_Minh_City.html";
   expect(footer.split(`href="${tripadvisorProfile}"`).length === 2 && !footer.includes("st-footer-v7__tripadvisor") && !footer.includes("socialButtonRate") && !footer.includes("Rate us on Tripadvisor"), `${route} footer has a missing or duplicated Tripadvisor link, or still contains the removed rate widget`);
@@ -129,6 +129,7 @@ for (const visualDestination of ["/gioi-thieu/", "/dich-vu/", "/gallery/", "/ban
 }
 expect(home.includes("/media/2026/09/st-tailor-client-fitted-suit.jpg") && !home.includes("/media/2026/09/st-tailor-client-shoulder-fitting.jpg"), "Home FIT card is using the wrong image");
 expect(home.includes('rel="manifest" href="/site.webmanifest"'), "Web app manifest discovery is missing");
+expect(home.includes('rel="icon" href="/icons/sttailor-favicon-48.png"') && home.includes('rel="apple-touch-icon" href="/icons/sttailor-apple-touch-180.png"'), "Compact brand icons are missing from the live page");
 expect(home.includes('rel="preload" as="image"') && home.includes('fetchpriority="high"'), "Home hero preload is missing");
 expect(home.includes('name="twitter:image:alt"'), "Social image alternative text is missing");
 expect(home.includes('name="google-site-verification"') && home.includes('name="p:domain_verify"'), "Search ownership metadata is missing");
@@ -150,9 +151,10 @@ expect(css.includes(".st-site-header{") && css.includes("background:linear-gradi
 expect(Boolean(commissionMapRule), "Services spacing fix is missing");
 
 const contact = pages.get("/lien-he/");
-expect(contact.includes("Tầng 1, 258 Lê Thánh Tôn, Phường Tân Định"), "Contact page does not display the confirmed showroom floor and ward");
+expect(contact.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward"), "Contact page does not display the confirmed showroom floor and ward");
+expect(!contact.includes("Tầng 1, 258 Lê Thánh Tôn"), "Contact page still mixes Vietnamese into a single-language address");
 expect(pages.get("/gioi-thieu/").includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward"), "About page does not display the confirmed showroom floor");
-expect(home.includes("Tầng 1, 258 Lê Thánh Tôn, Phường Tân Định"), "Shared footer does not display the confirmed showroom floor and ward");
+expect(home.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward"), "Shared footer does not display the confirmed showroom floor and ward");
 expect(!contact.includes("Tell us what you are dressing for"), "Removed contact introduction is still present");
 expect(!contact.includes("Hãy chia sẻ dịp sử dụng"), "Removed Vietnamese contact introduction is still present");
 expect(!contact.includes("CONTACT S.T TAILOR / LIÊN HỆ"), "Removed contact hero label is still present");
@@ -217,6 +219,10 @@ expect(sitemapText.includes('xmlns:video="http://www.google.com/schemas/sitemap-
 
 const manifest = await fetchWithRetry(`${origin}/site.webmanifest`);
 expect(manifest.status === 200 && (await manifest.text()).includes('"name": "S.T Tailor"'), "site.webmanifest is invalid");
+for (const [icon, limit] of [["sttailor-favicon-48.png", 5000], ["sttailor-apple-touch-180.png", 25000], ["sttailor-app-192.png", 25000], ["sttailor-app-large-512.png", 100000]]) {
+  const response = await fetchWithRetry(`${origin}/icons/${icon}`);
+  expect(response.status === 200 && (await response.arrayBuffer()).byteLength <= limit, `Compact brand icon is missing or too large: ${icon}`);
+}
 
 const legacy = await fetchWithRetry(`${origin}/about/`, { redirect: "manual" });
 expect(legacy.status === 301 && legacy.headers.get("location") === `${origin}/gioi-thieu/`, "Legacy URL mapping is not a 301");
