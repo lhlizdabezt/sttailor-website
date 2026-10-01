@@ -12303,6 +12303,32 @@ html body .st-gallery-page--albums .st-album-grid__item.st-gallery-piece--new fi
   }
 }
 
+/* Give the About introduction its own clear, tactile appointment path. */
+html body .st-lux-text-link {
+  display: inline-flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 2px 7px !important;
+  min-height: 46px !important;
+  max-width: 100% !important;
+  padding: 11px 18px !important;
+  border: 1px solid #a1704d !important;
+  background: #3b2116 !important;
+  color: #fffaf5 !important;
+  text-decoration: none !important;
+  transition: background-color .25s ease, color .25s ease, border-color .25s ease !important;
+}
+html body .st-lux-text-link span[lang="vi"] { margin-left: 0 !important; }
+html body .st-lux-text-link:hover {
+  border-color: #3b2116 !important;
+  background: #f8e8d0 !important;
+  color: #3b2116 !important;
+}
+html body .st-lux-text-link:focus-visible {
+  outline: 2px solid #3b2116 !important;
+  outline-offset: 3px !important;
+}
+
 
 /* Cloudflare Worker standalone shell. WordPress page CSS above remains the visual source of truth. */
 :root {
