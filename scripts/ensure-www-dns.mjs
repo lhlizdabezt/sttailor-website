@@ -18,6 +18,7 @@ const zoneId = zones[0].id;
 const recordName = "www.sttailor.com";
 const records = await apiRequest(`/zones/${zoneId}/dns_records?name=${recordName}&per_page=100`);
 const appleVerification = "apple-domain-verification=yQzSEAR1bU9DtwAF";
+const facebookVerification = "facebook-domain-verification=ngnols5cd8qykojw2q69ym3qo2lco4";
 const redirectAddress = "100::";
 const existingRedirectRecord = records.find((item) => item.type === "AAAA" && item.content === redirectAddress && item.proxied === true);
 
@@ -49,7 +50,23 @@ if (!appleRecord) {
   });
 }
 
+// Ownership verification is additive: preserve every existing apex TXT record.
+let facebookRecord = apexTxtRecords.find((item) => item.content.replace(/^"|"$/g, "") === facebookVerification);
+if (!facebookRecord) {
+  facebookRecord = await apiRequest(`/zones/${zoneId}/dns_records`, {
+    method: "POST",
+    body: JSON.stringify({
+      type: "TXT",
+      name: "sttailor.com",
+      content: facebookVerification,
+      ttl: 1,
+      comment: "Meta domain verification for sttailorhcm"
+    })
+  });
+}
+
 console.log(JSON.stringify({
   www: { name: record.name, type: record.type, proxied: record.proxied },
-  appleDomainVerification: { name: appleRecord.name, type: appleRecord.type, content: appleRecord.content }
+  appleDomainVerification: { name: appleRecord.name, type: appleRecord.type, content: appleRecord.content },
+  facebookDomainVerification: { name: facebookRecord.name, type: facebookRecord.type, content: facebookRecord.content }
 }));

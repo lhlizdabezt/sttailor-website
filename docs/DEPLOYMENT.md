@@ -27,6 +27,10 @@ The repository already has the two secrets required by the successful production
 
 Keep the token only in GitHub Actions secrets. It needs the existing Worker deployment and Zone DNS permissions so the workflow can deploy the two Workers and keep `www.sttailor.com` proxied. It is not needed on the local machine for the normal push-based process.
 
+## Domain ownership verification
+
+The DNS step also maintains the Apple and Meta ownership TXT records at `sttailor.com`. Meta uses `facebook-domain-verification=ngnols5cd8qykojw2q69ym3qo2lco4` for domain asset `1091652893748374`, owned by `sttailorhcm`. This public verification value is not an API credential. The script adds it only when absent and preserves other apex TXT records. After deployment, confirm it through public DNS and select **Verify domain** in Meta Business settings. Meta verification is separate from deployment success.
+
 ## Canonical domain behaviour
 
 `https://sttailor.com` is the canonical public domain. `https://www.sttailor.com/*` returns a permanent `301` to the same path and query string on `https://sttailor.com/*`. This gives search engines one canonical URL for each page.
