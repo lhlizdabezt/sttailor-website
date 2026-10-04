@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { runInNewContext } from "node:vm";
 import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -183,6 +184,25 @@ else {
 }
 
 const home = readFileSync(path.join(dist, "index.html"), "utf8");
+// Exercise the built loader with the edge-injected script present before load
+// or arriving before idle. Each page must keep one gateway script/config only.
+const analyticsInline = [...home.matchAll(/<script>([\s\S]*?)<\/script>/g)]
+  .find((match) => match[1].includes("window.__stAnalyticsLoaded"))?.[1];
+if (!analyticsInline) failures.push("Built analytics loader is missing.");
+else for (const injectedAt of ["none", "before-load", "before-idle"]) {
+  const scripts = injectedAt === "before-load" ? [{ src: "https://sttailor.com/n31x/" }] : [];
+  const scheduled = [];
+  const browserWindow = { requestIdleCallback: (callback) => scheduled.push(callback) };
+  const browserDocument = {
+    readyState: "complete", scripts,
+    createElement: () => ({ src: "" }),
+    head: { appendChild: (script) => scripts.push({ src: new URL(script.src, "https://sttailor.com").href }) }
+  };
+  runInNewContext(analyticsInline, { window: browserWindow, document: browserDocument, location: { origin: "https://sttailor.com" }, dataLayer: browserWindow.dataLayer = [] });
+  if (injectedAt === "before-idle") scripts.push({ src: "https://sttailor.com/n31x/?edge=1" });
+  scheduled.forEach((callback) => { callback(); callback(); });
+  if (scripts.length !== 1 || browserWindow.dataLayer.filter((item) => item[0] === "config").length !== 1) failures.push(`Analytics gateway is missing or duplicated with injection ${injectedAt}.`);
+}
 const builtSiteScript = readFileSync(path.join(dist, "scripts", "site.js"), "utf8");
 if (builtSiteScript.includes("getBoundingClientRect(") || !builtSiteScript.includes("entry.boundingClientRect")) failures.push("Scroll motion must avoid synchronous first-load layout measurements.");
 for (const [icon, limit] of [["sttailor-favicon-48.png", 5000], ["sttailor-apple-touch-180.png", 25000], ["sttailor-app-192.png", 25000], ["sttailor-app-large-512.png", 100000]]) {
