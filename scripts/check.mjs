@@ -51,6 +51,9 @@ for (const route of expectedRoutes) {
   if ((html.match(/googletagmanager\.com\/ns\.html\?id=GTM-TQSDB6XT/g) ?? []).length !== 1 || !html.includes('<body><!-- Google Tag Manager (noscript) -->')) failures.push(`Google Tag Manager body fallback is missing or duplicated: ${route}`);
   if ((html.match(/g\.src="\/n31x\/"/g) ?? []).length !== 1 || !html.includes('gtag("config","G-BQDKE20XR0")') || html.includes('googletagmanager.com/gtag/js')) failures.push(`First-party Google Analytics 4 tag is missing or duplicated: ${route}`);
   if ((html.match(/clarity\.ms\/tag\//g) ?? []).length !== 0 || !html.includes(')(window,document,"clarity")')) failures.push(`Microsoft Clarity must be initialized for GTM without a duplicate direct loader: ${route}`);
+  const metaFallback = '<noscript><img height="1" width="1" style="display:none" alt="" aria-hidden="true" src="https://www.facebook.com/tr?id=2294442874726399&amp;ev=PageView&amp;noscript=1"></noscript>';
+  if (html.split(metaFallback).length !== 2 || html.indexOf(metaFallback) < html.indexOf("<body>")) failures.push(`Meta Pixel noscript fallback must appear once in the body: ${route}`);
+  if (/\bfbq\s*\(/.test(html) || html.includes("connect.facebook.net/en_US/fbevents.js")) failures.push(`Meta Pixel must be owned by GTM without a duplicate direct snippet: ${route}`);
   if (html.includes("data-consent-panel") || html.includes("data-consent-open")) failures.push(`Unrequested privacy controls remain: ${route}`);
   const schemaText = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i)?.[1];
   const schemaGraph = schemaText ? JSON.parse(schemaText)["@graph"] : [];
@@ -204,6 +207,8 @@ else for (const injectedAt of ["none", "before-load", "before-idle"]) {
   if (scripts.length !== 1 || browserWindow.dataLayer.filter((item) => item[0] === "config").length !== 1) failures.push(`Analytics gateway is missing or duplicated with injection ${injectedAt}.`);
 }
 const builtSiteScript = readFileSync(path.join(dist, "scripts", "site.js"), "utf8");
+const privacyHtml = readFileSync(path.join(dist, "chinh-sach-bao-mat", "index.html"), "utf8");
+if (!privacyHtml.includes("Meta Pixel also measures") || !privacyHtml.includes("Meta Pixel cũng đo") || !privacyHtml.includes("https://www.facebook.com/privacy/policy/")) failures.push("Meta Pixel privacy disclosure must be present in both languages.");
 if (builtSiteScript.includes("getBoundingClientRect(") || !builtSiteScript.includes("entry.boundingClientRect")) failures.push("Scroll motion must avoid synchronous first-load layout measurements.");
 for (const [icon, limit] of [["sttailor-favicon-48.png", 5000], ["sttailor-apple-touch-180.png", 25000], ["sttailor-app-192.png", 25000], ["sttailor-app-large-512.png", 100000]]) {
   const iconPath = path.join(dist, "icons", icon);

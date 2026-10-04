@@ -31,6 +31,10 @@ Keep the token only in GitHub Actions secrets. It needs the existing Worker depl
 
 The DNS step also maintains the Apple and Meta ownership TXT records at `sttailor.com`. Meta uses `facebook-domain-verification=ngnols5cd8qykojw2q69ym3qo2lco4` for domain asset `1091652893748374`, owned by `sttailorhcm`. This public verification value is not an API credential. The script adds it only when absent and preserves other apex TXT records. After deployment, confirm it through public DNS and select **Verify domain** in Meta Business settings. Meta verification is separate from deployment success.
 
+## Analytics ownership
+
+The website initializes GA4 `G-BQDKE20XR0` once through the Cloudflare `/n31x/` gateway. GTM `GTM-TQSDB6XT` owns Microsoft Clarity `ymcn0kdqo0` and Meta Pixel `2294442874726399`. Do not add another direct `fbq` base snippet to the HTML. The static body includes only the Meta `PageView` image fallback for browsers with JavaScript disabled. The GA4 Config and GA4 Event tags imported by Meta's integration are paused in GTM to prevent parallel GA4 tracking. A published-container check fails if those GA4 tags become active again or the approved Pixel disappears. Browser verification must confirm a single Meta `PageView`, rather than treating the presence of a tag as proof of delivery.
+
 ## Canonical domain behaviour
 
 `https://sttailor.com` is the canonical public domain. `https://www.sttailor.com/*` returns a permanent `301` to the same path and query string on `https://sttailor.com/*`. This gives search engines one canonical URL for each page.

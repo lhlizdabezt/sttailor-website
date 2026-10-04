@@ -73,6 +73,7 @@ for (const route of routes) {
     : { response: await fetchWithRetry(`${origin}${route}`), text: "" };
   const pageHtml = verifyingRevision ? html : await response.text();
   pages.set(route, pageHtml);
+  expect(pageHtml.includes('<noscript><img height="1" width="1" style="display:none" alt="" aria-hidden="true" src="https://www.facebook.com/tr?id=2294442874726399&amp;ev=PageView&amp;noscript=1"></noscript>') && !/\bfbq\s*\(/.test(pageHtml), `${route} must use GTM Meta Pixel with its static noscript fallback only`);
   expect(response.status === 200, `${route} returned ${response.status}`);
   expect(response.headers.get("strict-transport-security")?.includes("max-age=15552000"), `${route} has no HSTS policy`);
   expect(response.headers.get("content-security-policy")?.includes("object-src 'none'"), `${route} has no baseline CSP`);
@@ -112,6 +113,7 @@ expect(tagManagerScript.status === 200, "Published GTM container is unavailable"
 const tagManagerScriptBody = await tagManagerScript.text();
 expect((tagManagerScriptBody.match(/ymcn0kdqo0/g) ?? []).length === 1, "Published GTM container must load the Microsoft Clarity project exactly once");
 expect(!tagManagerScriptBody.includes("G-BQDKE20XR0") && !tagManagerScriptBody.includes("GT-M3SPT65W"), "Published GTM container would duplicate the first-party GA4 tag");
+expect((tagManagerScriptBody.match(/2294442874726399/g) ?? []).length === 1 && tagManagerScriptBody.includes("connect.facebook.net/en_US/fbevents.js"), "Published GTM container must contain the approved Meta Pixel exactly once");
 
 const icon = await fetchWithRetry(`${origin}/icons/simple-instagram-e4405f.svg`);
 expect(icon.status === 200 && icon.headers.get("content-type")?.includes("image/svg+xml"), "First-party social icons are unavailable");
