@@ -104,18 +104,24 @@ const pageTypes = {
 };
 const pageType = pageTypes[window.location.pathname] ?? "other";
 
-// Tripadvisor's current rated badge renders its inner "Write a review" link
-// with an empty href. Point it at the verified listing when the widget arrives.
+// The rated badge loads asynchronously with an empty review URL and an
+// unnamed overlay link. Repair both while preserving the official widget.
 const tripadvisorBadge = document.querySelector("#TA_rated383");
 if (tripadvisorBadge) {
   const listing = "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor_Bespoke_Tailoring-Ho_Chi_Minh_City.html";
   const repairWidgetLink = () => {
     const reviewLink = tripadvisorBadge.querySelector('a[href=""]');
-    if (!reviewLink) return false;
-    reviewLink.href = listing;
-    reviewLink.target = "_blank";
-    reviewLink.rel = "nofollow noopener noreferrer";
-    return true;
+    if (reviewLink) {
+      reviewLink.href = listing;
+      reviewLink.target = "_blank";
+      reviewLink.rel = "nofollow noopener noreferrer";
+    }
+    const overlayLink = tripadvisorBadge.querySelector(".widFRRClickWrap");
+    if (overlayLink) {
+      overlayLink.setAttribute("aria-label", "View S.T Tailor on Tripadvisor");
+      overlayLink.rel = "nofollow noopener noreferrer";
+    }
+    return Boolean(overlayLink) && !tripadvisorBadge.querySelector('a[href=""]');
   };
   if (!repairWidgetLink()) {
     const observer = new MutationObserver(() => {
