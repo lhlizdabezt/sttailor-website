@@ -1,4 +1,5 @@
 import { clientCareFailures } from "./client-care-contract.mjs";
+import { createHash } from "node:crypto";
 import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
 
 const origin = "https://sttailor.com";
@@ -141,14 +142,31 @@ expect(home.includes('name="twitter:image:alt"'), "Social image alternative text
 expect(home.includes('name="google-site-verification"') && home.includes('name="p:domain_verify"'), "Search ownership metadata is missing");
 const cssPath = home.match(/<link rel="stylesheet" href="([^"]+)"/)?.[1];
 expect(Boolean(cssPath), "The production stylesheet was not found");
-const css = cssPath ? await (await fetchWithRetry(new URL(cssPath, origin))).text() : "";
+const stylesheets = new Map();
+for (const [route, pageHtml] of pages) {
+  const hrefs = [...pageHtml.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)].map((match) => match[1]);
+  expect(hrefs.length === 1 && /^\/styles\/page-[a-f0-9]{12}\.css$/.test(hrefs[0] ?? ""), `${route} has no single content-addressed page stylesheet`);
+  const href = hrefs[0];
+  if (href && !stylesheets.has(href)) {
+    const response = await fetchWithRetry(new URL(href, origin));
+    expect(response.status === 200 && response.headers.get("content-type")?.includes("text/css"), `${route} stylesheet is unavailable`);
+    expect(response.headers.get("cache-control")?.includes("immutable"), `${route} stylesheet has no immutable caching`);
+    const stylesheetText = await response.text();
+    const stylesheetHash = createHash("sha256").update(stylesheetText).digest("hex").slice(0, 12);
+    expect(href === `/styles/page-${stylesheetHash}.css`, `${route} stylesheet content does not match its cache-safe filename`);
+    stylesheets.set(href, stylesheetText);
+  }
+}
+const css = stylesheets.get(cssPath) ?? "";
 const navigationLinkRule = [...css.matchAll(/\.st-site-nav a[^\{]*\{[^}]*\}/g)]
   .map((match) => match[0])
   .find((rule) => rule.includes("text-transform:uppercase"));
 const mobileNavigationRule = [...css.matchAll(/\.st-site-nav\{[^}]*\}/g)]
   .map((match) => match[0])
   .find((rule) => rule.includes("width:100vw!important"));
-const commissionMapRule = [...css.matchAll(/\.st-service-page\s+\.st-service-commission-map\{[^}]*\}/g)]
+const servicesCssPath = pages.get("/dich-vu/").match(/<link rel="stylesheet" href="([^"]+)"/)?.[1];
+const servicesCss = stylesheets.get(servicesCssPath) ?? "";
+const commissionMapRule = [...servicesCss.matchAll(/\.st-service-page\s+\.st-service-commission-map\{[^}]*\}/g)]
   .map((match) => match[0])
   .find((rule) => rule.includes("margin-top:0!important"));
 expect(Boolean(navigationLinkRule), "Navigation is not forced to uppercase");

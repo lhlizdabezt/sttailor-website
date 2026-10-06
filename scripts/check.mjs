@@ -1,5 +1,6 @@
 import { clientCareFailures } from "./client-care-contract.mjs";
 import { existsSync, readFileSync, statSync } from "node:fs";
+import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { runInNewContext } from "node:vm";
@@ -35,6 +36,22 @@ for (const route of expectedRoutes) {
     continue;
   }
   const html = readFileSync(page, "utf8");
+  const pageStylesheets = [...html.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)].map((match) => match[1]);
+  const stylesheet = manifest.routeStyles?.[route];
+  if (pageStylesheets.length !== 1 || pageStylesheets[0] !== stylesheet?.href || !/^\/styles\/page-[a-f0-9]{12}\.css$/.test(stylesheet?.href ?? "")) {
+    failures.push(`Missing or duplicated page stylesheet: ${route}`);
+  } else {
+    const file = path.join(dist, stylesheet.href.slice(1));
+    if (!existsSync(file)) failures.push(`Missing stylesheet asset: ${route}`);
+    else {
+      const contents = readFileSync(file);
+      const hash = createHash("sha256").update(contents).digest("hex").slice(0, 12);
+      if (stylesheet.href !== `/styles/page-${hash}.css`) failures.push(`Stylesheet content hash is incorrect: ${route}`);
+      if (contents.length !== stylesheet.bytes || contents.length > statSync(path.join(dist, "styles", "site.css")).size) failures.push(`Page stylesheet size is incorrect or larger than the site bundle: ${route}`);
+      if (html.includes('class="st-guide-page ') && !contents.equals(readFileSync(path.join(dist, "styles", "site.css")))) failures.push(`Guide stylesheet differs from its preserved baseline: ${route}`);
+      if (!contents.includes(Buffer.from(".st-site-header")) || !contents.includes(Buffer.from(".st-site-nav"))) failures.push(`Page stylesheet lost common navigation: ${route}`);
+    }
+  }
   const title = html.match(/<title>([^<]+)<\/title>/)?.[1] ?? "";
   const description = html.match(/<meta name="description" content="([^"]+)"/)?.[1] ?? "";
   if (!title || title.length < 30 || title.length > 65) failures.push(`SEO title length is outside the useful range: ${route}`);

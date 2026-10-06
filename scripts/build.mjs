@@ -975,6 +975,30 @@ const notFoundDocument = documentFor("/", "Error.html", "Page not found | S.T Ta
   .replace(/<meta name="googlebot" content="[^"]+">/, '<meta name="googlebot" content="noindex, follow">')
   .replace(/<link rel="canonical" href="[^"]+">/, "")
   .replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, "");
+// Each page needs its own editorial rules plus the common shell, rather than
+// every other page's project selectors. Keep generic/vendor rules and classes
+// added by the site script. Identical bundles share a content-addressed URL;
+// the complete site.css remains available for the 404 and source inspection.
+const routeStyles = {};
+const routeProjectSymbols = [...new Set([...productionCss.matchAll(/[.#]((?:st-|stp-|stpr-)[A-Za-z0-9_-]+)/g)].map((match) => match[1]))];
+for (const [route, sourceFile] of routes) {
+  const pagePath = route === "/" ? path.join(dist, "index.html") : path.join(dist, route.slice(1), "index.html");
+  const pageHtml = readFileSync(pagePath, "utf8");
+  const pageSymbols = `${pageHtml}\n${siteScript}`;
+  // Preserve the guide grids' baseline until their auto-margin styles can
+  // be independently compared without Chromium's intermittent resolution.
+  const pageCss = sourceFile.startsWith("Guide") ? Buffer.from(productionCss) : minifyCss({
+    filename: "site.css",
+    code: Buffer.from(fullCustomCss),
+    minify: true,
+    unusedSymbols: ["st-home-v4", "st-home-v5", "st-refund-v1", "st-privacy-v5", ...routeProjectSymbols.filter((symbol) => !pageSymbols.includes(symbol))]
+  }).code;
+  const cssHash = createHash("sha256").update(pageCss).digest("hex").slice(0, 12);
+  const href = `/styles/page-${cssHash}.css`;
+  writeFileSync(path.join(dist, href.slice(1)), pageCss);
+  writeFileSync(pagePath, pageHtml.replace(stylesheetHref, href), "utf8");
+  routeStyles[route] = { href, bytes: pageCss.length };
+}
 writeFileSync(path.join(dist, "404.html"), notFoundDocument, "utf8");
 writeFileSync(path.join(dist, "not-found.html"), notFoundDocument, "utf8");
 writeFileSync(path.join(dist, "robots.txt"), "User-agent: *\nAllow: /\nDisallow: /build-manifest.json\nSitemap: https://sttailor.com/sitemap.xml\n", "utf8");
@@ -1021,5 +1045,5 @@ ${llmsLinks}
 - Email: contact.sttailor@gmail.com
 `, "utf8");
 writeFileSync(path.join(dist, "_headers"), "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n  X-Frame-Options: SAMEORIGIN\n  Strict-Transport-Security: max-age=15552000\n  Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests\n", "utf8");
-writeFileSync(path.join(dist, "build-manifest.json"), JSON.stringify({ source: "source/wordpress", sourceMedia: "source/media", revision: buildRevision, routes: routes.map(([route]) => route), localUploadAssets: assets.length, imageMetadata: imageCount, galleryDuplicateCheck: "passed" }, null, 2), "utf8");
+writeFileSync(path.join(dist, "build-manifest.json"), JSON.stringify({ source: "source/wordpress", sourceMedia: "source/media", revision: buildRevision, routes: routes.map(([route]) => route), routeStyles, localUploadAssets: assets.length, imageMetadata: imageCount, galleryDuplicateCheck: "passed" }, null, 2), "utf8");
 console.log(`Built ${routes.length} routes from the versioned WordPress reference with ${assets.length} local upload assets and dimensions for ${imageCount} images.`);

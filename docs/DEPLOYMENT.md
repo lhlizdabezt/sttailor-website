@@ -25,6 +25,8 @@ The Cloudflare audit uses GET requests with the existing Actions secret. Its rep
 
 Keep `source/wordpress` as the approved baseline. Edit build transformations or current modules/styles, and include the derived CSS export when a style change updates it. Stage explicit reviewed paths; do not include unrelated drafts, private business documents, credentials or build output.
 
+The build serves a content-addressed CSS bundle for each page. It removes only project selectors absent from that page and the site script; generic and vendor rules remain. Guide pages keep the complete existing bundle: Chromium intermittently resolves their computed grid auto margins differently even with identical CSS and geometry, so those pages retain the baseline pending independent comparison. Identical page bundles share a URL. `CustomCSS-Full.css` stays complete for editing, and the complete minified `site.css` remains the 404 fallback. Checks validate each page's stylesheet, content hash and size; production verification fetches every distinct bundle and confirms its immutable cache header. When changing this pruning logic, compare computed styles, motion and mobile navigation across all routes before deployment.
+
 An IndexNow outage cannot make a verified deployment fail: the workflow retries the notification three times and emits a visible warning if Bing remains unavailable. Re-run the workflow later; do not use a local deploy as a workaround.
 
 ## Required GitHub secrets
