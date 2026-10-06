@@ -6,3 +6,14 @@ cutover-backups/
 output/
 artifacts/
 scripts/__pycache__/
+
+# Local credentials and private certificate material must never enter backups.
+.env
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+*.pem
+*.key
+*.p12
+*.pfx

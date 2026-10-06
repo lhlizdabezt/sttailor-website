@@ -13551,3 +13551,31 @@ html body .st-client-care .st-info-section__copy p:last-child { margin-bottom: 0
 html body .st-client-care .st-info-section__copy a { display: inline !important; padding: 1px 4px !important; border: 1px solid #a88665 !important; background: #f3e3ce !important; color: #57301d !important; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 @media (max-width: 860px) { html body .st-client-care .st-info-section { grid-template-columns: 1fr !important; gap: 16px !important; } }
 
+/* Keep editorial labels readable and the contact heading hierarchy consistent. */
+html body #st-home-v6.st-home-v6--mission .st-home-v6__kicker,
+html body .st-lux-about .st-lux-eyebrow,
+html body .st-lux-page.st-lux-about .st-about-atelier-panel__eyebrow,
+html body #main-content .st-service-page .st-service-commission-map__head .st-page-kicker,
+html body .st-service-page .st-page-kicker,
+html body .st-gallery-page--albums .st-gallery-kicker,
+html body #st-pricing-v5.stpr-ledger .stpr-eyebrow,
+html body .st-payment-page--focused .st-page-kicker,
+html body .st-guide-page .st-guide-kicker { font-size: 14px !important; }
+html body #st-pricing-v5.stpr-ledger .stpr-priceboard__head .stpr-eyebrow { font-size: clamp(17px, 1.75vw, 24px) !important; }
+html body #st-home-v6.st-home-v6--mission .st-home-v6__kicker [lang="vi"],
+html body #main-content .st-lux-page.st-lux-about .st-lux-eyebrow [lang="vi"],
+html body .st-lux-page.st-lux-about .st-about-atelier-panel__eyebrow span[lang="vi"],
+html body #st-pricing-v5.stpr-ledger :is(.stpr-priceboard__head, .stpr-next-card, .stpr-cta) .stpr-eyebrow [lang="vi"],
+html body :is(.st-page-kicker, .st-gallery-kicker, .st-guide-kicker) > [lang="vi"] { font-size: inherit !important; }
+html body .st-contact-page--v2 .st-contact-item h2,
+html body .st-contact-page--v2 .st-contact-card h3,
+html body .st-contact-page--v2 :is(h2, h3),
+html body .st-contact-page--v2 :is(h2, h3) [lang="vi"] { font-weight: 500 !important; }
+html body .st-lux-page.st-lux-about :is(.st-lux-provenance__materials, .st-lux-provenance__cloth) h3 { font-weight: 600 !important; }
+html body .st-site-frame :is(a, button):focus-visible { outline: 2px solid currentColor !important; outline-offset: 4px !important; }
+html body .st-site-frame main :is(a, button) { scroll-margin-block: 120px 28px; }
+@media (prefers-reduced-motion: no-preference) {
+  html body .st-client-care__header,
+  html body .st-payment-page--focused .st-payment-methods > .st-payment-shell > :is(.st-page-kicker, h1, .st-payment-methods__note) { animation: st-entry-arrive .72s cubic-bezier(.18, .74, .2, 1) both !important; }
+}
+
