@@ -1,3 +1,4 @@
+import { clientCareFailures } from "./client-care-contract.mjs";
 import { existsSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -43,6 +44,9 @@ for (const route of expectedRoutes) {
   if (!html.includes("st-site-header") || !html.includes("st-footer-v7 st-footer-v8")) failures.push(`Missing shared navigation or footer: ${route}`);
   if (!html.startsWith('<!doctype html><html lang="en">')) failures.push(`Primary document language is incorrect: ${route}`);
   if ((html.match(/<h1\b/g) ?? []).length !== 1) failures.push(`Page must contain exactly one H1: ${route}`);
+  const mainContent = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1] ?? "";
+  if (/in writing|written quotation|bằng văn bản/i.test(mainContent)) failures.push(`Rigid written-confirmation wording remains on ${route}`);
+  if (/PayPal|\bWise\b/i.test(html)) failures.push(`Removed international payment wallet remains in content or metadata on ${route}`);
   if (!html.includes('name="sttailor-build-revision"')) failures.push(`Build revision marker is missing: ${route}`);
   if (!html.includes('<meta name="robots" content="index, follow')) failures.push(`Indexable robots metadata is missing: ${route}`);
   if (!html.includes('application/ld+json') || !html.includes('LocalBusiness')) failures.push(`LocalBusiness structured data is missing: ${route}`);
@@ -135,22 +139,9 @@ for (const obsoleteId of ["st-home-v4", "st-home-v5", "st-refund-v1", "st-privac
   if (deployedCss.includes(`#${obsoleteId}{`)) failures.push(`Obsolete page root CSS was deployed: ${obsoleteId}`);
 }
 
-for (const [route, groups] of Object.entries({
-  "/doi-tra-hoan-tien/": [
-    ["We compare the delivered garment", "No sentence on this page", "Chúng tôi đối chiếu trang phục", "Không nội dung nào trên trang này"],
-    ["If a garment does not match", "Fit preferences can change", "Nếu trang phục không đúng", "Cảm nhận về độ vừa"],
-    ["Tell us in writing if you wish to cancel", "If the written order expressly", "Nếu muốn hủy đơn", "Nếu đơn hàng bằng văn bản"]
-  ]
-})) {
-  const page = path.join(dist, route.slice(1), "index.html");
-  if (!existsSync(page)) continue;
-  const html = readFileSync(page, "utf8");
-  for (const [enFirst, enSecond, viFirst, viSecond] of groups) {
-    const positions = [enFirst, enSecond, viFirst, viSecond].map((text) => html.indexOf(text));
-    if (positions.some((position) => position < 0) || positions.some((position, index) => index > 0 && position <= positions[index - 1])) {
-      failures.push(`Bilingual paragraphs must read English-English then Vietnamese-Vietnamese on ${route}: ${enFirst}`);
-    }
-  }
+for (const route of ["doi-tra-hoan-tien", "chinh-sach-van-chuyen", "dieu-khoan-dieu-kien", "chinh-sach-bao-mat"]) {
+  const html = readFileSync(path.join(dist, route, "index.html"), "utf8");
+  failures.push(...clientCareFailures(html).map((issue) => `/${route}/: ${issue}`));
 }
 
 for (const retiredDirectory of ["bao-hanh-sua-chua", "refund_returns"]) {
@@ -208,7 +199,9 @@ else for (const injectedAt of ["none", "before-load", "before-idle"]) {
 }
 const builtSiteScript = readFileSync(path.join(dist, "scripts", "site.js"), "utf8");
 const privacyHtml = readFileSync(path.join(dist, "chinh-sach-bao-mat", "index.html"), "utf8");
-if (!privacyHtml.includes("Meta Pixel also measures") || !privacyHtml.includes("Meta Pixel cũng đo") || !privacyHtml.includes("https://www.facebook.com/privacy/policy/")) failures.push("Meta Pixel privacy disclosure must be present in both languages.");
+for (const disclosure of ["Google Analytics 4", "Microsoft Clarity", "Meta Pixel measures", "Meta Pixel đo", "cookie identifiers", "mã cookie", "body measurements", "số đo cơ thể", "withdraw consent", "rút lại đồng ý"]) {
+  if (!privacyHtml.includes(disclosure)) failures.push(`Privacy disclosure missing: ${disclosure}`);
+}
 if (builtSiteScript.includes("getBoundingClientRect(") || !builtSiteScript.includes("entry.boundingClientRect")) failures.push("Scroll motion must avoid synchronous first-load layout measurements.");
 for (const [icon, limit] of [["sttailor-favicon-48.png", 5000], ["sttailor-apple-touch-180.png", 25000], ["sttailor-app-192.png", 25000], ["sttailor-app-large-512.png", 100000]]) {
   const iconPath = path.join(dist, "icons", icon);
@@ -249,13 +242,8 @@ if (!home.includes('class="st-footer-v7__bottom st-footer-v8__legal"') || !home.
 
 const contact = readFileSync(path.join(dist, "lien-he", "index.html"), "utf8");
 if (!contact.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward") || contact.includes("Tầng 1, 258 Lê Thánh Tôn")) failures.push("Contact's single-language address must be entirely in English.");
-for (const policyRoute of ["chinh-sach-bao-mat", "dieu-khoan-dieu-kien", "chinh-sach-van-chuyen"]) {
-  const policy = readFileSync(path.join(dist, policyRoute, "index.html"), "utf8");
-  if (!policy.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward, Ho Chi Minh City, Vietnam") ||
-      !policy.includes("Tầng 1, 258 Lê Thánh Tôn, Phường Tân Định, TP. Hồ Chí Minh, Việt Nam")) {
-    failures.push(`Policy address is not synchronized in English and Vietnamese: /${policyRoute}/`);
-  }
-}
+const shippingPolicy = readFileSync(path.join(dist, "chinh-sach-van-chuyen", "index.html"), "utf8");
+if (!shippingPolicy.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward, Ho Chi Minh City, Vietnam") || !shippingPolicy.includes("Tầng 1, 258 Lê Thánh Tôn, Phường Tân Định, TP. Hồ Chí Minh, Việt Nam")) failures.push("Shipping collection address must stay synchronized in both languages.");
 const contactCards = contact.match(/st-contact-card--[a-z]+/g) ?? [];
 for (const channel of ["hotline", "whatsapp", "zalo", "email", "instagram", "messenger"]) {
   if (!contactCards.includes(`st-contact-card--${channel}`)) failures.push(`Contact channel missing: ${channel}`);
@@ -293,13 +281,7 @@ for (const pricingGalleryFeature of ["st-pricing-gallery-suite", 'href="/gallery
 }
 
 const payment = readFileSync(path.join(dist, "phuong-thuc-thanh-toan", "index.html"), "utf8");
-for (const paymentFeature of ["st-payment-compliance", "PAYMENT &amp; ORDER TERMS", "ĐIỀU KHOẢN THANH TOÁN", "Visa", "Mastercard", "American Express", "JCB", "Apple Pay", "Google Wallet", "Samsung Wallet", "PayPal", "Wise", "19/2023/QH15", "20/2023/QH15", "52/2024/NĐ-CP", "70/2025/NĐ-CP", "91/2025/QH15"]) {
-  if (!payment.includes(paymentFeature)) failures.push(`Payment terms or legal framework is missing: ${paymentFeature}`);
-}
-for (const paymentGalleryFeature of ["st-payment-gallery-suite", 'href="/gallery/"', "st-tailor-gallery-showroom-tailoring-display.jpg", "ENTER THE GALLERY"]) {
-  if (!payment.includes(paymentGalleryFeature)) failures.push(`Payment visual Gallery route is missing: ${paymentGalleryFeature}`);
-}
-if (!payment.includes("st-policy-refund-link") || !payment.includes('href="/doi-tra-hoan-tien/"') || payment.includes("contacting the atelier")) failures.push("Payment must link to the current returns policy without retired wording.");
+failures.push(...clientCareFailures(payment, true).map((issue) => `Payment: ${issue}`));
 
 const about = readFileSync(path.join(dist, "gioi-thieu", "index.html"), "utf8");
 for (const removedBlock of ["st-lux-gallery-redirect", "st-lux-appointment", "st-lux-provenance__archive-note", "WHAT GUIDES THE WORK"]) {

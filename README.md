@@ -52,6 +52,6 @@ Use this only when GitHub Actions is unavailable. Ordinary deployments run entir
 
 ## Content updates after cutover
 
-Pages are generated from the versioned HTML fragments in `source/wordpress`. Update transformations in `scripts/build.mjs`, add approved media to `source/media`, then run `npm run build` and `npm run check` before pushing.
+Pages are generated from the versioned HTML fragments in `source/wordpress`. The current compact Returns, Shipping, Terms and Privacy copy lives in `src/client-care-pages.js`; Payment keeps only the approved method band through `scripts/build.mjs`. Update these current sources and transformations, add approved media to `source/media`, then run `npm run build` and `npm run check` before pushing. `scripts/client-care-contract.mjs` validates the same content scope locally and on production.
 
 The contact form is deliberately represented by direct contact channels in this initial migration. If a form needs server-side delivery later, add a Cloudflare Turnstile-protected endpoint and a transactional email provider before accepting submissions.

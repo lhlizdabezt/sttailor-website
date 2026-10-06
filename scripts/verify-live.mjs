@@ -1,3 +1,4 @@
+import { clientCareFailures } from "./client-care-contract.mjs";
 import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
 
 const origin = "https://sttailor.com";
@@ -93,6 +94,9 @@ for (const route of routes) {
   expect((pageHtml.match(/'GTM-TQSDB6XT'/g) || []).length === 1 && (pageHtml.match(/googletagmanager\.com\/gtm\.js\?id=/g) || []).length === 1 && pageHtml.includes('<head><meta charset="utf-8"><!-- Google Tag Manager -->'), `${route} has no single Google Tag Manager head snippet`);
   expect((pageHtml.match(/googletagmanager\.com\/ns\.html\?id=GTM-TQSDB6XT/g) || []).length === 1 && pageHtml.includes('<body><!-- Google Tag Manager (noscript) -->'), `${route} has no single Google Tag Manager body fallback`);
   expect((pageHtml.match(/g\.src="\/n31x\/"/g) || []).length === 1 && pageHtml.includes('gtag("config","G-BQDKE20XR0")') && !pageHtml.includes('googletagmanager.com/gtag/js'), `${route} has no single first-party Google Analytics 4 tag`);
+  const mainContent = pageHtml.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1] ?? "";
+  expect(!/in writing|written quotation|bằng văn bản/i.test(mainContent), `${route} still uses rigid written-confirmation wording`);
+  expect(!/PayPal|\bWise\b/i.test(pageHtml), `${route} still lists removed international payment wallets in content or metadata`);
   expect((pageHtml.match(/clarity\.ms\/tag\//g) || []).length === 0 && pageHtml.includes(')(window,document,"clarity")'), `${route} has a duplicate direct Microsoft Clarity loader or no event queue`);
   expect(!/https:\/\/(?:api\.iconify\.design|cdn\.simpleicons\.org)\//i.test(pageHtml), `${route} still loads third-party icon assets`);
   expect(!pageHtml.includes("data-consent-panel") && !pageHtml.includes("data-consent-open"), `${route} still has a consent control`);
@@ -155,12 +159,11 @@ expect(Boolean(commissionMapRule), "Services spacing fix is missing");
 const contact = pages.get("/lien-he/");
 expect(contact.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward"), "Contact page does not display the confirmed showroom floor and ward");
 expect(!contact.includes("Tầng 1, 258 Lê Thánh Tôn"), "Contact page still mixes Vietnamese into a single-language address");
-for (const policyRoute of ["/chinh-sach-bao-mat/", "/dieu-khoan-dieu-kien/", "/chinh-sach-van-chuyen/"]) {
-  const policy = pages.get(policyRoute);
-  expect(policy.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward, Ho Chi Minh City, Vietnam") &&
-    policy.includes("Tầng 1, 258 Lê Thánh Tôn, Phường Tân Định, TP. Hồ Chí Minh, Việt Nam"),
-  `${policyRoute} does not show the confirmed bilingual showroom address`);
+for (const policyRoute of ["/doi-tra-hoan-tien/", "/chinh-sach-bao-mat/", "/dieu-khoan-dieu-kien/", "/chinh-sach-van-chuyen/"]) {
+  for (const issue of clientCareFailures(pages.get(policyRoute))) expect(false, `${policyRoute}: ${issue}`);
 }
+for (const issue of clientCareFailures(pages.get("/phuong-thuc-thanh-toan/"), true)) expect(false, `Payment: ${issue}`);
+expect(pages.get("/chinh-sach-van-chuyen/").includes("Tầng 1, 258 Lê Thánh Tôn, Phường Tân Định"), "Shipping collection address is missing its Vietnamese version");
 expect(pages.get("/gioi-thieu/").includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward"), "About page does not display the confirmed showroom floor");
 expect(home.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward"), "Shared footer does not display the confirmed showroom floor and ward");
 expect(!contact.includes("Tell us what you are dressing for"), "Removed contact introduction is still present");

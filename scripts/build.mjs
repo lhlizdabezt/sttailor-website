@@ -5,6 +5,7 @@ import { transform as minifyCss } from "lightningcss";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
+import { clientCarePage } from "../src/client-care-pages.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 // This directory is intentionally read-only. It is the approved WordPress
@@ -57,14 +58,14 @@ const routes = [
   ["/dich-vu/", "Services.html", "Bespoke Tailoring & Alterations in HCMC | S.T Tailor", "Explore bespoke suits, shirts, formalwear, womenswear, fittings and clothing alterations by S.T Tailor in central Ho Chi Minh City.", "/media/2026/09/st-tailor-client-fabric-consultation.jpg", "Client reviewing tailoring fabrics with S.T Tailor | Khách hàng chọn vải may đo cùng S.T Tailor"],
   ["/gallery/", "Gallery.html", "Bespoke Tailoring Gallery in HCMC | S.T Tailor", "View S.T Tailor's cloth, fittings, suits, formalwear, womenswear, garment details and showroom in Ho Chi Minh City.", "/media/2026/09/st-tailor-gallery-showroom-tailoring-display.jpg", "S.T Tailor showroom and tailoring display"],
   ["/bang-gia/", "Pricing.html", "Bespoke Tailoring Prices in HCMC | S.T Tailor", "Review starting prices for bespoke suits, shirts, formalwear and clothing alterations before consulting S.T Tailor in Ho Chi Minh City.", "/media/2026/09/st-tailor-navy-double-breasted-front.jpeg", "Navy double-breasted suit by S.T Tailor"],
-  ["/phuong-thuc-thanh-toan/", "Payment.html", "Payment Methods & Terms | S.T Tailor HCMC", "Review payment terms for S.T Tailor bespoke and alteration orders, including cards, bank transfer, digital wallets, deposits, invoices and refunds.", "/media/2026/06/store-sttailor-2.webp", "S.T Tailor showroom in Ho Chi Minh City"],
+  ["/phuong-thuc-thanh-toan/", "Payment.html", "Payment Methods | S.T Tailor HCMC", "Pay S.T Tailor in VND cash, by bank transfer or QR, with international credit/debit cards, or via Apple Pay, Google Pay and Samsung Pay NFC payments.", "/media/2026/06/store-sttailor-2.webp", "S.T Tailor showroom in Ho Chi Minh City"],
   ["/lien-he/", "Contact.html", "Contact S.T Tailor HCMC | Private Consultation", "Contact S.T Tailor by telephone, email, Messenger, Zalo, Instagram or WhatsApp and arrange a private tailoring consultation.", "/media/2026/06/store-sttailor-1.webp", "S.T Tailor showroom at 258 Le Thanh Ton"],
   ["/cam-nang-may-do/", "GuideHub.html", "Tailoring Guide in HCMC | S.T Tailor", "Read practical bilingual guidance from S.T Tailor on choosing cloth, fittings, alterations and caring for tailored garments in Ho Chi Minh City.", "/media/2026/09/fabric-focus-swatch-books.jpg", "Tailoring cloth swatches at S.T Tailor"],
   ["/chon-vai-may-do/", "GuideCloth.html", "How to Choose Suit Fabric in HCMC | S.T Tailor", "Choose suit and formalwear cloth by occasion, climate, drape and care with practical bilingual guidance from S.T Tailor in Ho Chi Minh City.", "/media/2026/09/st-tailor-gallery-canonico-cloth-books.jpg", "Vitale Barberis Canonico cloth books at S.T Tailor"],
   ["/quy-trinh-thu-do/", "GuideFitting.html", "Bespoke Fitting Process in HCMC | S.T Tailor", "Understand consultation, measurement, fittings, refinement and handover for a bespoke garment at S.T Tailor in central Ho Chi Minh City.", "/media/2026/09/st-tailor-client-measurement-session.jpg", "Tailor measuring a client during a fitting at S.T Tailor"],
   ["/chinh-sua-trang-phuc/", "GuideAlterations.html", "Clothing Alterations in HCMC | S.T Tailor Guide", "Learn what S.T Tailor assesses before altering trouser hems, waists, jacket sleeves and garment repairs in central Ho Chi Minh City.", "/media/2026/09/st-tailor-gallery-trouser-interior-detail.jpg", "Tailored trouser interior and seam finishing at S.T Tailor"],
   ["/bao-quan-giat-la/", "GuideCare.html", "Suit Care & Garment Cleaning Guide | S.T Tailor", "Follow a practical bilingual guide to airing, brushing, storing, spot care, washing, ironing and professional cleaning for tailored garments.", "/media/2026/09/st-tailor-gallery-jacket-lining-mannequin.jpg", "Tailored jacket lining and construction at S.T Tailor"],
-  ["/doi-tra-hoan-tien/", "Returns.html", "Returns & Refunds for Tailored Garments | S.T Tailor", "Read S.T Tailor's bilingual returns and refunds policy for made-to-measure garments, alterations, order concerns, cancellations and documented refunds.", "/media/2026/09/fabric-focus-cloth-books.jpg", "Tailoring cloth books used when confirming a S.T Tailor order"],
+  ["/doi-tra-hoan-tien/", "Returns.html", "Returns & Refunds for Tailored Garments | S.T Tailor", "Read S.T Tailor's bilingual returns and refunds policy for made-to-measure garments, alterations, order concerns, cancellations and refunds.", "/media/2026/09/fabric-focus-cloth-books.jpg", "Tailoring cloth books used when confirming a S.T Tailor order"],
   ["/chinh-sach-van-chuyen/", "Shipping.html", "Shipping & Delivery for Tailored Garments | S.T Tailor", "Explore S.T Tailor's bilingual delivery options for showroom collection, Ho Chi Minh City couriers, Vietnam shipping and international dispatch.", "/media/2026/06/store-sttailor-2.webp", "S.T Tailor showroom for garment collection and handover"],
   ["/dieu-khoan-dieu-kien/", "Terms.html", "Terms & Conditions for Tailoring Orders | S.T Tailor", "Review S.T Tailor's bilingual order terms covering quotations, bespoke fittings, payments, delivery, changes and consumer rights in Vietnam.", "/media/2026/09/fabric-focus-cloth-books.jpg", "S.T Tailor fabric library for bespoke orders"],
   ["/chinh-sach-bao-mat/", "Privacy.html", "Privacy Policy & Client Data | S.T Tailor", "Learn how S.T Tailor handles enquiries, measurements, order details and website analytics, with bilingual privacy information and contact options.", "/media/2026/06/store-sttailor-1.webp", "S.T Tailor showroom in Ho Chi Minh City"]
@@ -514,50 +515,30 @@ function transformGallery(html) {
 }
 
 function transformPayment(html) {
-  html = removeElementByClass(html, "section", "st-payment-terms");
-  const compliance = `
-  <section class="st-payment-compliance" aria-labelledby="st-payment-compliance-title">
-    <div class="st-payment-shell">
-      <header class="st-payment-compliance__head st-motion st-motion-1">
-        <p class="st-page-kicker">PAYMENT &amp; ORDER TERMS / ĐIỀU KHOẢN THANH TOÁN &amp; ĐƠN HÀNG</p>
-        <h2 id="st-payment-compliance-title">Clear before confirmation.<span lang="vi">Rõ ràng trước khi xác nhận.</span></h2>
-        <p>These terms explain how S.T Tailor records payment for bespoke tailoring, alterations and showroom services. The written quotation and confirmed order remain the specific record for each commission.<span lang="vi">Các điều khoản này giải thích cách S.T Tailor ghi nhận thanh toán cho dịch vụ may đo, chỉnh sửa trang phục và dịch vụ tại showroom. Báo giá bằng văn bản và đơn hàng đã xác nhận là căn cứ cụ thể cho từng đơn may.</span></p>
-      </header>
-      <div class="st-payment-compliance__grid">
-        <article class="st-motion st-motion-1"><span>01</span><h3>PRICE, CURRENCY &amp; FEES <b lang="vi">GIÁ, TIỀN TỆ &amp; CHI PHÍ</b></h3><p>The written quotation identifies the payable amount, currency, whether applicable taxes and delivery charges are included, any payment expressly agreed as a performance deposit, and the payment milestones before confirmation. A bank, card issuer, wallet or transfer provider may apply its own exchange rate or fee; any known S.T Tailor charge is disclosed before payment.<span lang="vi">Báo giá bằng văn bản ghi rõ số tiền, loại tiền tệ, giá đã bao gồm thuế và phí giao hàng áp dụng hay chưa, khoản nào được thỏa thuận là tiền đặt cọc bảo đảm thực hiện, cùng các mốc thanh toán trước khi xác nhận. Ngân hàng, tổ chức phát hành thẻ, ví điện tử hoặc đơn vị chuyển tiền có thể áp dụng tỷ giá hay phí riêng; mọi khoản phí do S.T Tailor biết sẽ được thông báo trước khi thanh toán.</span></p></article>
-        <article class="st-motion st-motion-2"><span>02</span><h3>DEPOSIT &amp; ORDER RECORD <b lang="vi">ĐẶT CỌC &amp; XÁC NHẬN ĐƠN</b></h3><p>Production or cloth reservation begins after the order terms are confirmed and the required deposit has cleared. The deposit amount and payment schedule follow the written quotation; no universal deposit rate applies unless it is stated for that order.<span lang="vi">Việc giữ vải hoặc sắp xếp sản xuất bắt đầu sau khi điều khoản đơn hàng được xác nhận và khoản đặt cọc cần thiết đã được ghi có. Mức cọc và lịch thanh toán theo báo giá bằng văn bản; không áp dụng một tỷ lệ cọc chung nếu đơn hàng không ghi rõ.</span></p></article>
-        <article class="st-motion st-motion-3"><span>03</span><h3>PAYMENT CONFIRMATION <b lang="vi">XÁC NHẬN THANH TOÁN</b></h3><p>Payment is recorded after confirmation from the relevant bank or provider. A transfer screenshot helps reconciliation but does not by itself confirm cleared funds. S.T Tailor may request proportionate transaction details to resolve errors or suspected fraud.<span lang="vi">Thanh toán được ghi nhận sau khi có xác nhận từ ngân hàng hoặc đơn vị cung cấp liên quan. Ảnh chụp giao dịch hỗ trợ đối soát nhưng không tự thay thế xác nhận tiền đã ghi có. S.T Tailor có thể yêu cầu thông tin giao dịch ở mức cần thiết để xử lý sai sót hoặc dấu hiệu gian lận.</span></p></article>
-        <article class="st-motion st-motion-4"><span>04</span><h3>CANCELLATION, ERROR &amp; REFUND <b lang="vi">HỦY, SAI SÓT &amp; HOÀN TIỀN</b></h3><p>Cancellation and refund requests are reviewed against the confirmed order, work completed and materials committed, without limiting mandatory consumer rights. Duplicate or incorrect payments are reconciled using the transaction record; an approved refund returns through the original channel where supported, or another lawful method agreed in writing. Bank or provider processing time may apply.<span lang="vi">Yêu cầu hủy hoặc hoàn tiền được xem xét theo đơn hàng đã xác nhận, phần việc đã thực hiện và vật liệu đã cam kết, đồng thời không hạn chế các quyền bắt buộc của người tiêu dùng. Khoản thanh toán trùng hoặc sai được đối soát theo chứng từ giao dịch; khoản hoàn tiền đã được chấp thuận sẽ đi qua kênh ban đầu khi được hỗ trợ hoặc qua phương thức hợp pháp khác được thống nhất bằng văn bản. Thời gian xử lý của ngân hàng hoặc đơn vị cung cấp có thể được áp dụng.</span></p></article>
-        <article class="st-motion st-motion-5"><span>05</span><h3>RECEIPT &amp; ELECTRONIC INVOICE <b lang="vi">CHỨNG TỪ &amp; HÓA ĐƠN ĐIỆN TỬ</b></h3><p>Provide the correct purchaser name, address, tax code and invoice email before invoice issuance when an invoice is required. S.T Tailor issues payment records and electronic invoices in line with the confirmed transaction and applicable Vietnamese tax and invoice rules.<span lang="vi">Khi cần hóa đơn, vui lòng cung cấp đúng tên người mua, địa chỉ, mã số thuế và email nhận hóa đơn trước thời điểm lập hóa đơn. S.T Tailor lập chứng từ thanh toán và hóa đơn điện tử theo giao dịch đã xác nhận cùng quy định thuế, hóa đơn hiện hành của Việt Nam.</span></p></article>
-        <article class="st-motion st-motion-6"><span>06</span><h3>DATA &amp; PAYMENT SECURITY <b lang="vi">DỮ LIỆU &amp; AN TOÀN THANH TOÁN</b></h3><p>Only transaction information reasonably needed to verify and service the order should be shared. Card credentials and wallet authorisation are handled through the relevant bank or payment provider where that channel is used. Never send a password, PIN, OTP or banking login through chat or email.<span lang="vi">Chỉ nên chia sẻ thông tin giao dịch cần thiết để xác minh và phục vụ đơn hàng. Khi sử dụng thẻ hoặc ví, thông tin xác thực được xử lý qua ngân hàng hoặc đơn vị thanh toán liên quan. Không gửi mật khẩu, mã PIN, OTP hoặc thông tin đăng nhập ngân hàng qua tin nhắn hay email.</span></p></article>
-      </div>
-      <div class="st-payment-compliance__law st-motion st-motion-2">
-        <div><p class="st-page-kicker">VIETNAM LEGAL FRAMEWORK / CĂN CỨ PHÁP LUẬT VIỆT NAM</p><p>This page follows the current framework for consumer protection, electronic transactions, non-cash payments, electronic invoices and personal-data protection. It provides general operating information and does not reduce rights granted by mandatory law.<span lang="vi">Trang này tuân theo khung pháp lý hiện hành về bảo vệ người tiêu dùng, giao dịch điện tử, thanh toán không dùng tiền mặt, hóa đơn điện tử và bảo vệ dữ liệu cá nhân. Nội dung cung cấp thông tin vận hành chung và không làm giảm các quyền được pháp luật bắt buộc bảo vệ.</span></p></div>
-        <ul>
-          <li><a href="https://vanban.chinhphu.vn/?classid=1&amp;docid=208363&amp;orggroupid=1&amp;pageid=27160&amp;previousPage=other+articles" target="_blank" rel="noopener external">Law 19/2023/QH15 <span lang="vi">Luật Bảo vệ quyền lợi người tiêu dùng</span></a></li>
-          <li><a href="https://vanban.chinhphu.vn/?classid=1&amp;docid=208421&amp;pageid=27160&amp;typegroupid=3" target="_blank" rel="noopener external">Law 20/2023/QH15 <span lang="vi">Luật Giao dịch điện tử</span></a></li>
-          <li><a href="https://vanban.chinhphu.vn/?classid=1&amp;docid=210262&amp;orggroupid=2&amp;pageid=27160" target="_blank" rel="noopener external">Decree 52/2024/NĐ-CP <span lang="vi">Thanh toán không dùng tiền mặt</span></a></li>
-          <li><a href="https://vanban.chinhphu.vn/?docid=213179&amp;lang=vi&amp;pageid=27160" target="_blank" rel="noopener external">Decree 70/2025/NĐ-CP <span lang="vi">Hóa đơn, chứng từ</span></a></li>
-          <li><a href="https://vanban.chinhphu.vn/?classid=1&amp;docid=214590&amp;pageid=27160" target="_blank" rel="noopener external">Law 91/2025/QH15 <span lang="vi">Luật Bảo vệ dữ liệu cá nhân</span></a></li>
-        </ul>
-      </div>
-    </div>
-  </section>`;
-  const gallerySuite = `
-  <section class="st-payment-gallery-suite" aria-labelledby="st-payment-gallery-suite-title">
-    <div class="st-payment-shell">
-      <a class="st-payment-gallery-suite__frame" href="/gallery/" aria-describedby="st-payment-gallery-suite-description">
-        <figure class="st-motion st-motion-1"><img src="/media/2026/09/st-tailor-gallery-showroom-tailoring-display.jpg" alt="Navy suit and womenswear displayed inside S.T Tailor | Suit xanh navy và trang phục nữ trưng bày tại S.T Tailor" width="1080" height="1920" loading="lazy" decoding="async"></figure>
-        <span class="st-payment-gallery-suite__copy st-motion st-motion-2">
-          <small>BEYOND THE TRANSACTION <span lang="vi">SAU MỖI GIAO DỊCH</span></small>
-          <strong id="st-payment-gallery-suite-title">See what each commission becomes.<span lang="vi">Khám phá thành phẩm sau mỗi đơn may.</span></strong>
-          <span id="st-payment-gallery-suite-description">ENTER THE GALLERY <b lang="vi">ĐẾN THƯ VIỆN HÌNH ẢNH</b><i aria-hidden="true">→</i></span>
-        </span>
-      </a>
-    </div>
-  </section>`;
-  html = html.replace('  <section class="st-payment-security"', `${compliance}\n${gallerySuite}\n\n  <section class="st-payment-security"`);
-  return replaceVisibleAtelier(html);
+  const range = findElementByClass(html, "section", "st-payment-methods");
+  if (!range) throw new Error("The approved payment-method band is missing.");
+  let methods = html.slice(range.start, range.end)
+    .replace('<h2 id="st-methods-title">', '<h1 id="st-methods-title">')
+    .replace('</h2>', '</h1>')
+    .replace(/<p class="st-payment-methods__note">[\s\S]*?<\/p>/, '<p class="st-payment-methods__note">Choose a convenient method; we will share the payment details for your order.<span lang="vi">Chọn phương thức thuận tiện; chúng tôi sẽ cung cấp thông tin thanh toán cho đơn của bạn.</span></p>');
+  const copy = [
+    ['Pay in Vietnamese dong (VND) cash at the showroom, by bank transfer or by QR using details provided directly by S.T Tailor.', 'Thanh toán tiền mặt bằng đồng Việt Nam (VND) tại showroom, chuyển khoản hoặc quét mã QR theo thông tin S.T Tailor cung cấp trực tiếp.'],
+    ['We accept international credit and debit cards: Visa, Mastercard, American Express, JCB, UnionPay, Discover and Diners Club. We will guide you to the appropriate payment channel for your card.', 'Chúng tôi chấp nhận thẻ tín dụng và ghi nợ quốc tế: Visa, Mastercard, American Express, JCB, UnionPay, Discover và Diners Club. Chúng tôi sẽ hướng dẫn kênh thanh toán phù hợp với thẻ của bạn.'],
+    ['Pay with Apple Pay, Google Pay or Samsung Pay using a compatible NFC device and supported card. Ask us for help with contactless payment at the showroom.', 'Thanh toán chạm bằng Apple Pay, Google Pay hoặc Samsung Pay với thiết bị NFC và thẻ tương thích. Chúng tôi hỗ trợ thanh toán không tiếp xúc tại showroom.']
+  ];
+  let card = 0;
+  methods = methods.replace(/<article class="st-payment-card">[\s\S]*?<\/article>/g, (article) => {
+    const index = card++;
+    if (index >= copy.length) return "";
+    if (index === 2) article = article.replace(/<h3>[\s\S]*?<\/h3>/, '<h3>NFC MOBILE PAYMENTS<br><span lang="vi">THANH TOÁN DI ĐỘNG NFC</span></h3>');
+    const headEnd = article.indexOf("</h3>") + 5;
+    if (headEnd < 5) throw new Error("Payment method heading is missing.");
+    const [en, vi] = copy[index];
+    return `${article.slice(0, headEnd)}<p>${en}<span lang="vi">${vi}</span></p></article>`;
+  });
+  if (card !== 4) throw new Error("The approved payment reference must contain four original method cards.");
+  methods = methods.replaceAll("<h3>", "<h2>").replaceAll("</h3>", "</h2>");
+  return `<div class="st-payment-page st-payment-page--focused">${methods}</div>`;
 }
 
 function transformAbout(html) {
@@ -661,10 +642,19 @@ function transformPage(sourceFile, html) {
     "Contact.html": transformContact,
     "Gallery.html": transformGallery,
     "Payment.html": transformPayment,
+    "Returns.html": () => clientCarePage("Returns.html"),
+    "Shipping.html": () => clientCarePage("Shipping.html"),
+    "Terms.html": () => clientCarePage("Terms.html"),
+    "Privacy.html": () => clientCarePage("Privacy.html"),
     "About.html": transformAbout,
     "Error.html": transformError
   };
-  return (transforms[sourceFile] ?? replaceVisibleAtelier)(html);
+  return (transforms[sourceFile] ?? replaceVisibleAtelier)(html)
+    .replaceAll("Confirm the work, finish and timing in writing.", "Discuss the work, finish and timing with us.")
+    .replaceAll("Xác nhận hạng mục, hoàn thiện và thời gian bằng văn bản.", "Trao đổi hạng mục, hoàn thiện và thời gian cùng chúng tôi.")
+    .replaceAll("written quotation", "quotation")
+    .replaceAll("báo giá bằng văn bản", "báo giá")
+    .replaceAll("Báo giá bằng văn bản", "Báo giá");
 }
 
 function imageMetadata(html) {
@@ -708,6 +698,14 @@ const buildDate = new Date().toISOString().slice(0, 10);
 const sharedContentModified = "2026-09-23";
 
 function lastModifiedFor(sourceFile) {
+  // These pages now derive their current copy from the client-care module.
+  if (["Payment.html", "Returns.html", "Shipping.html", "Terms.html", "Privacy.html"].includes(sourceFile)) {
+    const inputs = ["scripts/build.mjs", ...(sourceFile === "Payment.html" ? [] : ["src/client-care-pages.js"])];
+    const changed = spawnSync("git", ["status", "--porcelain", "--", ...inputs], { cwd: root, encoding: "utf8" });
+    if (changed.status !== 0 || changed.stdout.trim()) return buildDate;
+    const latest = spawnSync("git", ["log", "-1", "--format=%cs", "--", ...inputs], { cwd: root, encoding: "utf8" });
+    if (/^\d{4}-\d{2}-\d{2}$/.test(latest.stdout.trim())) return latest.stdout.trim();
+  }
   const contentFile = path.join("source", "wordpress", sourceFile);
   const dirty = spawnSync("git", ["status", "--porcelain", "--", contentFile], { cwd: root, encoding: "utf8" });
   if (dirty.status !== 0 || dirty.stdout.trim()) return buildDate;
@@ -760,7 +758,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     contactPoint: { "@type": "ContactPoint", telephone: "+84 909 556 258", email: "contact.sttailor@gmail.com", contactType: "customer service", areaServed: "VN", availableLanguage: ["Vietnamese", "English"] },
     priceRange: "$$$",
     currenciesAccepted: "VND, USD",
-    paymentAccepted: "Credit Card, Debit Card, Visa, Mastercard, American Express, JCB, Apple Pay, Google Pay, Samsung Pay, PayPal, Wise",
+    paymentAccepted: "Cash (VND), Bank Transfer, QR, Credit Card, Debit Card, Visa, Mastercard, American Express, JCB, UnionPay, Discover, Diners Club, Apple Pay, Google Pay, Samsung Pay (NFC)",
     hasMap: "https://maps.app.goo.gl/j8N26uiQUC4J95vT6",
     knowsAbout: ["Bespoke tailoring", "Clothing alterations", "European suiting cloth", "Vietnamese silk", "Fittings and pattern cutting"],
     sameAs: ["https://facebook.com/sttailor.hcm/", "https://www.instagram.com/sttailorhcm/", "https://www.threads.com/@sttailorhcm", "https://wa.me/84909556258", "https://zalo.me/0909556258", "https://www.linkedin.com/company/sttailorhcm/", "https://youtube.com/@S.Ttailor", "https://www.tiktok.com/@sttailorhcm", "https://pinterest.com/sttailorhcm/", "https://x.com/sttalior", "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor_Bespoke_Tailoring-Ho_Chi_Minh_City.html"]
