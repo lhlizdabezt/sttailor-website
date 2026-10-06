@@ -82,7 +82,7 @@ Set-Location E:\S.TTailor\cloudflare-worker
 npm run build
 npm run check
 git status --short
-git add -- source/wordpress/Gallery.html source/wordpress/CustomCSS.css
+git add -- src/styles/standalone-shell.css scripts/build.mjs
 git diff --cached --check
 git diff --cached --stat
 git commit -m "Describe the production change"

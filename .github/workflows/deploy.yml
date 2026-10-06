@@ -84,6 +84,19 @@ jobs:
         env:
           EXPECTED_BUILD_REVISION: ${{ github.sha }}
 
+      - name: Audit Cloudflare production configuration (read-only)
+        id: cloudflare-audit
+        # Missing read permissions are recorded as coverage gaps. An audit
+        # outage must not invalidate the already verified website deployment.
+        continue-on-error: true
+        run: node scripts/cloudflare-production-audit.mjs
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
+      - name: Record unavailable Cloudflare audit
+        if: steps.cloudflare-audit.outcome == 'failure'
+        run: echo "::warning title=Cloudflare audit unavailable::Production was verified, but the read-only infrastructure audit could not resolve the zone. Check the audit step; do not expand token permissions automatically."
+
       - name: Notify Bing IndexNow after verified production deployment
         id: indexnow
         # IndexNow is a crawl notification, never a condition for publishing a

@@ -44,6 +44,12 @@ for (const route of expectedRoutes) {
   if (!html.includes("st-site-header") || !html.includes("st-footer-v7 st-footer-v8")) failures.push(`Missing shared navigation or footer: ${route}`);
   if (!html.startsWith('<!doctype html><html lang="en">')) failures.push(`Primary document language is incorrect: ${route}`);
   if ((html.match(/<h1\b/g) ?? []).length !== 1) failures.push(`Page must contain exactly one H1: ${route}`);
+  const pageIds = new Set([...html.matchAll(/\bid=["']([^"']+)["']/gi)].map((match) => match[1]));
+  for (const [, attribute, ids] of html.matchAll(/\b(aria-labelledby|aria-describedby|aria-controls)="([^"]+)"/gi)) {
+    for (const id of ids.trim().split(/\s+/)) {
+      if (!pageIds.has(id)) failures.push(`Missing ${attribute} target on ${route}: ${id}`);
+    }
+  }
   const mainContent = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1] ?? "";
   if (/in writing|written quotation|bằng văn bản/i.test(mainContent)) failures.push(`Rigid written-confirmation wording remains on ${route}`);
   if (/PayPal|\bWise\b/i.test(html)) failures.push(`Removed international payment wallet remains in content or metadata on ${route}`);

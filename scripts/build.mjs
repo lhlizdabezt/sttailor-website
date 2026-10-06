@@ -204,6 +204,7 @@ function transformHome(html) {
 
 function transformFooter(html) {
   html = removeElementByClass(html, "div", "st-footer-v7__top")
+    .replace('<div class="st-footer-v7__guide-links"', '<div role="navigation" class="st-footer-v7__guide-links"')
     .replace('loading="eager"', 'loading="lazy"')
     .replaceAll('alt="" aria-hidden="true">', 'alt="" aria-hidden="true" width="20" height="20">')
     .replace(
@@ -215,6 +216,7 @@ function transformFooter(html) {
 }
 
 function transformServices(html) {
+  html = html.replace('aria-labelledby="st-service-title"', 'aria-labelledby="st-service-commission-map-title"');
   for (const [tag, className] of [
     ["header", "st-service-hero"],
     ["section", "st-service-offerings"],
@@ -545,6 +547,9 @@ function transformAbout(html) {
   html = removeElementByClass(html, "section", "st-lux-gallery-redirect");
   html = removeElementByClass(html, "section", "st-lux-appointment");
   html = html
+    .replace(/ aria-label="Open S\.T Tailor address in Google Maps[^\"]*"/, "")
+    .replace('<div aria-label="Fabric selection"', '<div role="group" aria-label="Fabric selection"')
+    .replace('<div aria-label="S.T Tailor work record"', '<div role="group" aria-label="S.T Tailor work record"')
     .replace(/\s*<p class="st-lux-provenance__archive-note[^"]*">[\s\S]*?<\/p>/, "")
     .replace(/<p class="st-lux-eyebrow">WHAT GUIDES THE WORK[\s\S]*?<\/p>/, "")
     .replace("S.T Tailor owner in the atelier", "S.T Tailor owner at the tailoring house")
@@ -608,7 +613,7 @@ function transformAbout(html) {
       <p>Visit our new Tripadvisor page. If you have been to the showroom, you can share your experience there.<span lang="vi">Ghé xem trang Tripadvisor mới của chúng tôi. Nếu đã đến showroom, bạn có thể chia sẻ trải nghiệm của mình tại đây.</span></p>
       <a class="st-tripadvisor__link" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor_Bespoke_Tailoring-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer">Open our Tripadvisor page <span lang="vi">Xem trang Tripadvisor</span><span aria-hidden="true">↗</span></a>
     </div>
-    <div class="st-tripadvisor__badge" aria-label="Official Tripadvisor widget | Huy hiệu Tripadvisor chính thức">
+    <div class="st-tripadvisor__badge" role="group" aria-label="Official Tripadvisor widget | Huy hiệu Tripadvisor chính thức">
       <div id="TA_rated383" class="TA_rated"><ul id="nk7KumP" class="TA_links j2AXIy9"><li id="YSiMIh" class="HfgYawPu"><a target="_blank" rel="noopener noreferrer" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor_Bespoke_Tailoring-Ho_Chi_Minh_City.html"><img src="https://www.tripadvisor.com/img/cdsi/img2/badges/ollie-11424-2.gif" alt="S.T Tailor on Tripadvisor" loading="lazy" decoding="async"></a></li></ul></div>
       <script async src="https://www.jscache.com/wejs?wtype=rated&amp;uniq=383&amp;locationId=34701232&amp;lang=en_US&amp;display_version=2"></script>
     </div>
