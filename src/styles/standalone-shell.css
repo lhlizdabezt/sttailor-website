@@ -1241,6 +1241,33 @@ html body .st-contact-page--v2 :is(h2, h3) [lang="vi"] { font-weight: 500 !impor
 html body .st-lux-page.st-lux-about :is(.st-lux-provenance__materials, .st-lux-provenance__cloth) h3 { font-weight: 600 !important; }
 html body .st-site-frame :is(a, button):focus-visible { outline: 2px solid currentColor !important; outline-offset: 4px !important; }
 html body .st-site-frame main :is(a, button) { scroll-margin-block: 120px 28px; }
+
+/* Gallery notes must be readable without hover, including on touch screens.
+   An opaque ground keeps both languages legible over every photograph. */
+html body #main-content .st-gallery-page--albums .st-album-grid__item figcaption {
+  display: block !important;
+  opacity: 1 !important;
+  transform: none !important;
+  padding: 12px 16px !important;
+  background: #3a2116 !important;
+  color: #fff9ef !important;
+  -webkit-text-fill-color: #fff9ef !important;
+  text-shadow: none !important;
+  font-family: var(--st-vietnamese) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.5 !important;
+}
+html body #main-content .st-gallery-page--albums .st-album-grid__item figcaption span[lang="vi"] {
+  display: block !important;
+  margin-top: 4px !important;
+  color: #f3d2a4 !important;
+  -webkit-text-fill-color: #f3d2a4 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1.5 !important;
+}
 @media (prefers-reduced-motion: no-preference) {
   html body .st-client-care__header,
   html body .st-payment-page--focused .st-payment-methods > .st-payment-shell > :is(.st-page-kicker, h1, .st-payment-methods__note) { animation: st-entry-arrive .72s cubic-bezier(.18, .74, .2, 1) both !important; }

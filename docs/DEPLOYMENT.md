@@ -4,6 +4,8 @@
 
 GitHub Actions is the deployment connection. Cloudflare does not need Git installed locally, and a normal local update does not require `wrangler deploy`.
 
+`npm run deploy` dispatches the same GitHub Actions workflow for the committed `main` branch; it does not publish local files or use local Cloudflare credentials. Use it only to redeploy the current remote source. Commit and push reviewed changes first when updating the site.
+
 ```powershell
 Set-Location E:\S.TTailor\cloudflare-worker
 git status
@@ -17,7 +19,7 @@ git commit -m "Describe the change"
 git push origin main
 ```
 
-Each push to `main` runs [the deployment workflow](../.github/workflows/deploy.yml). It installs locked dependencies, builds the production site, checks redirects and SEO output, deploys the apex site, maintains the proxied `www` DNS record, deploys the `www` redirect Worker, then tests production. Only after that exact revision is live does it audit Cloudflare configuration and notify Bing IndexNow with the canonical URLs from `sitemap.xml`.
+Each push to `main` runs [the deployment workflow](../.github/workflows/deploy.yml). It installs locked dependencies, checks npm security advisories and stops for high or critical findings, builds the production site, checks redirects and SEO output, deploys the apex site, maintains the proxied `www` DNS record, deploys the `www` redirect Worker, then tests production. Only after that exact revision is live does it audit Cloudflare configuration and notify Bing IndexNow with the canonical URLs from `sitemap.xml`.
 
 The Cloudflare audit uses GET requests with the existing Actions secret. Its report lists endpoint coverage, public DNS, security settings and Worker binding names/types; it never prints binding values or raw API error text. Restricted endpoints remain explicitly unverified. An unavailable audit produces a warning without invalidating a verified deployment. Do not broaden token permissions automatically.
 

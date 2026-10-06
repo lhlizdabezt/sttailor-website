@@ -10,10 +10,10 @@
     "verify:live": "node scripts/verify-live.mjs",
     "notify:indexnow": "node scripts/submit-indexnow.mjs",
     "dev": "npm run build && wrangler dev",
-    "deploy": "npm run build && npm run check && wrangler deploy && wrangler deploy --config wrangler.www.jsonc"
+    "deploy": "gh workflow run deploy.yml --ref main"
   },
   "devDependencies": {
     "lightningcss": "1.33.0",
-    "wrangler": "^4.135.0"
+    "wrangler": "4.147.0"
   }
 }
