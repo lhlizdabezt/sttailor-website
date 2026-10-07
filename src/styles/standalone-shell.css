@@ -1046,6 +1046,15 @@ html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6
   }
 }
 
+/* The legacy card selectors outrank the global reduced-motion fallback. */
+@media (prefers-reduced-motion: reduce) {
+  html body #main-content .st-gallery-page .st-gallery-numpad__card,
+  html body #main-content .st-gallery-page .st-gallery-numpad__card > i {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
 /* The opening copy receives the same editorial arrival as About and Gallery.
    Keep the initial paint visible so animation does not postpone the LCP. */
 @keyframes st-entry-arrive {
