@@ -107,6 +107,12 @@ export default {
     if (request.method !== "GET" && request.method !== "HEAD") {
       return new Response("Method not allowed", { status: 405, headers: { Allow: "GET, HEAD" } });
     }
+    // Retired WordPress attachment and WooCommerce AJAX URLs are not pages.
+    // Serving the homepage for them creates misleading soft-404 duplicates.
+    // Ordinary campaign/query parameters continue to reach the requested page.
+    if (url.searchParams.has("attachment_id") || url.searchParams.has("wc-ajax")) {
+      return notFound(request, env, url);
+    }
     const pathWithSlash = pathname === "/" || pathname.endsWith("/") ? pathname : `${pathname}/`;
     const legacyTarget = legacyRoutes.get(pathWithSlash);
     if (legacyTarget) {

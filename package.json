@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "check": "node scripts/check.mjs && node --test scripts/check-cloudflare-audit.mjs",
+    "check": "node scripts/check.mjs && node --test scripts/check-cloudflare-audit.mjs scripts/check-worker-routing.mjs",
     "verify:live": "node scripts/verify-live.mjs",
     "notify:indexnow": "node scripts/submit-indexnow.mjs",
     "dev": "npm run build && wrangler dev",

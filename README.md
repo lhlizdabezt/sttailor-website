@@ -15,6 +15,7 @@ This is a static-first rebuild of S.T Tailor from the owner-approved, read-only 
 - A mapped legacy URL returns `301` to its retained destination.
 - A published URL returns `200`.
 - Any unknown or mistyped URL keeps the requested address, returns `404`, renders the generated error document and provides `Back to Home / Về trang chủ`.
+- Retired WordPress `attachment_id` and WooCommerce `wc-ajax` query endpoints also return a non-indexable `404`; ordinary campaign parameters remain available.
 
 ## Build and preview
 

@@ -21,3 +21,5 @@
 | `/bao-hanh-sua-chua/` | `/dich-vu/` | 301 | Closest existing service page |
 
 Unknown paths return a real 404 and are not redirected to the homepage. There is one redirect authority for `www`: the dedicated redirect Worker.
+
+Retired WordPress attachment (`attachment_id`) and WooCommerce AJAX (`wc-ajax`) query URLs return `404` with `noindex, follow` and no redirect. The standalone website does not implement these endpoints. UTM and other campaign parameters continue to work on published pages and mapped redirects.

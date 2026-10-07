@@ -284,6 +284,14 @@ const retiredWordPress = await fetchWithRetry(`${origin}/wp-login.php`, { redire
 expect(retiredWordPress.status === 404, `Retired WordPress login returned ${retiredWordPress.status} instead of 404`);
 expect(retiredWordPress.headers.get("x-robots-tag")?.includes("noindex"), "Retired WordPress login is not marked noindex");
 
+for (const query of ["attachment_id=3263", "wc-ajax=%25%25endpoint%25%25"]) {
+  const retired = await fetchWithRetry(`${origin}/?${query}`, { redirect: "manual" });
+  expect(retired.status === 404 && !retired.headers.has("location"), `Retired query endpoint is not a true 404: ${query}`);
+  expect(retired.headers.get("x-robots-tag")?.includes("noindex"), `Retired query endpoint is not noindex: ${query}`);
+}
+const campaignPage = await fetchWithRetry(`${origin}/?utm_source=facebook&utm_medium=social`, { redirect: "manual" });
+expect(campaignPage.status === 200, "Campaign parameters incorrectly block the published homepage");
+
 if (failures.length) {
   console.error(failures.map((failure) => `FAIL: ${failure}`).join("\n"));
   process.exit(1);

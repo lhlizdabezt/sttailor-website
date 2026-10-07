@@ -951,13 +951,26 @@ const publishedMarkup = routes.map(([route]) => readFileSync(route === "/"
   ? path.join(dist, "index.html")
   : path.join(dist, route.slice(1), "index.html"), "utf8")).join("\n");
 const usedSymbols = `${publishedMarkup}\n${readSource("Error.html")}\n${siteScript}`;
+// Flatsome's retired WordPress chrome is absent from the standalone site.
+// Compare complete class/ID tokens: substring matching confuses `header`
+// with the retained `st-site-header` and keeps thousands of unused rules.
+// Keep the editable export intact; prune only these known theme selectors.
+const publishedTokens = new Set([...`${publishedMarkup}\n${readSource("Error.html")}`.matchAll(/\b(?:class|id)="([^"]*)"/g)]
+  .flatMap((match) => match[1].split(/\s+/)));
+const retiredThemeSymbols = ["header", "header-wrapper", "header-main", "header-bg", "header-bg-color", "logo",
+  "header-logo-dark", "header-logo-sticky", "nav", "header-nav", "icon-menu", "icon-search", "icon-shopping-bag",
+  "current-menu-item", "nav-dropdown", "sub-menu", "footer-wrapper", "header-bottom", "stuck", "mobile-nav",
+  "header-logo", "footer", "footer-1", "footer-2", "section", "section-content", "section-bg", "bg-fill",
+  "absolute-footer", "header-button", "menu-item", "button", "menu-item-button", "header-nav-main", "header-inner",
+  "nav-spacing-xlarge", "nav-icon", "main-menu", "nav-left", "nav-right", "hide-for-medium", "flex-left",
+  "flex-right", "show-for-medium"].filter((symbol) => !publishedTokens.has(symbol) && !siteScript.includes(`"${symbol}"`) && !siteScript.includes(`'${symbol}'`));
 const projectSymbols = [...new Set([...productionCss.matchAll(/[.#]((?:st-|stp-|stpr-)[A-Za-z0-9_-]+)/g)].map((match) => match[1]))];
 const unusedProjectSymbols = projectSymbols.filter((symbol) => !usedSymbols.includes(symbol));
 const leanCss = minifyCss({
   filename: "site.css",
   code: Buffer.from(fullCustomCss),
   minify: true,
-  unusedSymbols: ["st-home-v4", "st-home-v5", "st-refund-v1", "st-privacy-v5", ...unusedProjectSymbols]
+  unusedSymbols: ["st-home-v4", "st-home-v5", "st-refund-v1", "st-privacy-v5", ...unusedProjectSymbols, ...retiredThemeSymbols]
 }).code.toString();
 if (leanCss.length < productionCss.length) {
   const previousStylesheetHref = stylesheetHref;
@@ -991,7 +1004,7 @@ for (const [route, sourceFile] of routes) {
     filename: "site.css",
     code: Buffer.from(fullCustomCss),
     minify: true,
-    unusedSymbols: ["st-home-v4", "st-home-v5", "st-refund-v1", "st-privacy-v5", ...routeProjectSymbols.filter((symbol) => !pageSymbols.includes(symbol))]
+    unusedSymbols: ["st-home-v4", "st-home-v5", "st-refund-v1", "st-privacy-v5", ...routeProjectSymbols.filter((symbol) => !pageSymbols.includes(symbol)), ...retiredThemeSymbols]
   }).code;
   const cssHash = createHash("sha256").update(pageCss).digest("hex").slice(0, 12);
   const href = `/styles/page-${cssHash}.css`;
