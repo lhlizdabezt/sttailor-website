@@ -15,5 +15,8 @@
   "devDependencies": {
     "lightningcss": "1.33.0",
     "wrangler": "4.147.0"
+  },
+  "overrides": {
+    "sharp": "0.35.5"
   }
 }

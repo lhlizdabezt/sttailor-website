@@ -21,6 +21,8 @@ git push origin main
 
 Each push to `main` runs [the deployment workflow](../.github/workflows/deploy.yml). It installs locked dependencies, checks npm security advisories and stops for high or critical findings, builds the production site, checks redirects and SEO output, deploys the apex site, maintains the proxied `www` DNS record, deploys the `www` redirect Worker, then tests production. Only after that exact revision is live does it audit Cloudflare configuration and notify Bing IndexNow with the canonical URLs from `sitemap.xml`.
 
+The dependency lock overrides `sharp` to 0.35.5 because Wrangler's Miniflare dependency still pins vulnerable 0.35.4 (GHSA-wq5f-xc86-pv6w). This patches the local/CI toolchain; the public static Worker does not process images with Sharp. Keep the override until the upstream dependency accepts a patched version. Verify with `npm ci`, `npm ls sharp`, `npm audit --audit-level=high` and a Wrangler dry-run before changing it. Do not use `npm audit fix --force`, which currently proposes an unrelated Wrangler downgrade.
+
 The Cloudflare audit uses GET requests with the existing Actions secret. Its report lists endpoint coverage, public DNS, security settings and Worker binding names/types; it never prints binding values or raw API error text. Restricted endpoints remain explicitly unverified. An unavailable audit produces a warning without invalidating a verified deployment. Do not broaden token permissions automatically.
 
 Keep `source/wordpress` as the approved baseline. Edit build transformations or current modules/styles, and include the derived CSS export when a style change updates it. Stage explicit reviewed paths; do not include unrelated drafts, private business documents, credentials or build output.
