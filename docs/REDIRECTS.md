@@ -17,6 +17,7 @@
 | `/fitting-process/` | `/quy-trinh-thu-do/` | 301 | Current fitting guide |
 | `/alterations/` | `/chinh-sua-trang-phuc/` | 301 | Current alterations guide |
 | `/garment-care/` | `/bao-quan-giat-la/` | 301 | Current care guide |
+| `/10-cach-bao-quan-vest-nam-luon-nhu-moi-bi-quyet-giu-phom-chuan-theo-thoi-gian/` | `/bao-quan-giat-la/` | 301 | Retired suit-care article reported by Bing; relevant bilingual replacement |
 | `/refund_returns/` | `/doi-tra-hoan-tien/` | 301 | Current returns and refunds policy |
 | `/bao-hanh-sua-chua/` | `/dich-vu/` | 301 | Closest existing service page |
 

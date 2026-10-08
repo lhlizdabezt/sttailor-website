@@ -1002,7 +1002,9 @@ for (const [route, sourceFile] of routes) {
   // be independently compared without Chromium's intermittent resolution.
   const pageCss = sourceFile.startsWith("Guide") ? Buffer.from(productionCss) : minifyCss({
     filename: "site.css",
-    code: Buffer.from(fullCustomCss),
+    // Start from the globally cleaned bundle. Re-reading the editable source
+    // here restores legacy rules whose symbols were already removed above.
+    code: Buffer.from(productionCss),
     minify: true,
     unusedSymbols: ["st-home-v4", "st-home-v5", "st-refund-v1", "st-privacy-v5", ...routeProjectSymbols.filter((symbol) => !pageSymbols.includes(symbol)), ...retiredThemeSymbols]
   }).code;

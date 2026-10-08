@@ -28,7 +28,9 @@ npm run check
 npm run dev
 ```
 
-`npm run build` produces `dist/`. The generated [full Custom CSS](CustomCSS-Full.css) is a single replacement file for select-all/copy/paste use. It contains the complete approved `DoNotWriteJustRead/CustomCSS.css`, with local media URLs, followed by the small standalone shell needed outside Flatsome.
+`npm run build` produces `dist/`. The generated [full Custom CSS](CustomCSS-Full.css) is a single replacement file for select-all/copy/paste use. It contains the complete approved `source/wordpress/CustomCSS.css`, with local media URLs, followed by the small standalone shell needed outside Flatsome.
+
+Page CSS is derived from the globally cleaned production bundle, so route-specific builds cannot restore retired rules from the editable source. `npm run check` verifies this for every published route. Guide pages retain their existing common CSS baseline.
 
 ## Automated production deployment
 

@@ -15,6 +15,7 @@ const expectedRoutes = ["/", "/gioi-thieu/", "/dich-vu/", "/gallery/", "/bang-gi
 const pageTitles = new Set();
 const pageDescriptions = new Set();
 const anchorIds = new Map();
+const siteCssSymbols = new Set([...readFileSync(path.join(dist, "styles", "site.css"), "utf8").matchAll(/[.#]((?:st-|stp-|stpr-)[A-Za-z0-9_-]+)/g)].map((match) => match[1]));
 
 function visibleAndAccessibleText(html) {
   const alts = [...html.matchAll(/\balt=(['"])([\s\S]*?)\1/gi)].map((match) => match[2]);
@@ -50,6 +51,8 @@ for (const route of expectedRoutes) {
       if (contents.length !== stylesheet.bytes || contents.length > statSync(path.join(dist, "styles", "site.css")).size) failures.push(`Page stylesheet size is incorrect or larger than the site bundle: ${route}`);
       if (html.includes('class="st-guide-page ') && !contents.equals(readFileSync(path.join(dist, "styles", "site.css")))) failures.push(`Guide stylesheet differs from its preserved baseline: ${route}`);
       if (!contents.includes(Buffer.from(".st-site-header")) || !contents.includes(Buffer.from(".st-site-nav"))) failures.push(`Page stylesheet lost common navigation: ${route}`);
+      const restoredSymbols = [...new Set([...contents.toString().matchAll(/[.#]((?:st-|stp-|stpr-)[A-Za-z0-9_-]+)/g)].map((match) => match[1]))].filter((symbol) => !siteCssSymbols.has(symbol));
+      if (restoredSymbols.length) failures.push(`Page stylesheet restored selectors removed from the common bundle on ${route}: ${restoredSymbols.join(", ")}`);
     }
   }
   const title = html.match(/<title>([^<]+)<\/title>/)?.[1] ?? "";

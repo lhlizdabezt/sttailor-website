@@ -37,6 +37,7 @@ const legacyRoutes = new Map([
   ["/fitting-process/", "/quy-trinh-thu-do/"],
   ["/alterations/", "/chinh-sua-trang-phuc/"],
   ["/garment-care/", "/bao-quan-giat-la/"],
+  ["/10-cach-bao-quan-vest-nam-luon-nhu-moi-bi-quyet-giu-phom-chuan-theo-thoi-gian/", "/bao-quan-giat-la/"],
   ["/refund_returns/", "/doi-tra-hoan-tien/"],
   ["/bao-hanh-sua-chua/", "/dich-vu/"]
 ]);

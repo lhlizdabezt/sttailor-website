@@ -263,6 +263,8 @@ const oldFabricArticle = await fetchWithRetry(`${origin}/suit-fabrics-the-key-el
 expect(oldFabricArticle.status === 301 && oldFabricArticle.headers.get("location") === `${origin}/chon-vai-may-do/`, "Old suit-fabrics article does not redirect to the cloth guide");
 const oldRefund = await fetchWithRetry(`${origin}/refund_returns/`, { redirect: "manual" });
 expect(oldRefund.status === 301 && oldRefund.headers.get("location") === `${origin}/doi-tra-hoan-tien/`, "Old returns URL does not redirect to the new policy");
+const oldSuitCare = await fetchWithRetry(`${origin}/10-cach-bao-quan-vest-nam-luon-nhu-moi-bi-quyet-giu-phom-chuan-theo-thoi-gian/?utm_source=bing`, { redirect: "manual" });
+expect(oldSuitCare.status === 301 && oldSuitCare.headers.get("location") === `${origin}/bao-quan-giat-la/?utm_source=bing`, "Bing's retired suit-care article does not redirect to the garment-care guide with attribution intact");
 
 const expectedWwwLocation = `${origin}/gallery/?source=www`;
 const www = await fetchUntil(

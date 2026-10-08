@@ -33,3 +33,12 @@ test("unmatched retired products retain a true 404 instead of a homepage redirec
   assert.equal(response.status, 404);
   assert.equal(response.headers.get("Location"), null);
 });
+
+test("retired suit-care article redirects to its relevant guide and preserves attribution", async () => {
+  const oldPath = "/10-cach-bao-quan-vest-nam-luon-nhu-moi-bi-quyet-giu-phom-chuan-theo-thoi-gian/";
+  for (const method of ["GET", "HEAD"]) {
+    const response = await worker.fetch(new Request(`https://sttailor.com${oldPath}?utm_source=bing`, { method }), env);
+    assert.equal(response.status, 301, method);
+    assert.equal(response.headers.get("Location"), "https://sttailor.com/bao-quan-giat-la/?utm_source=bing", method);
+  }
+});
