@@ -119,6 +119,7 @@ const tagManagerScriptBody = await tagManagerScript.text();
 expect((tagManagerScriptBody.match(/ymcn0kdqo0/g) ?? []).length === 1, "Published GTM container must load the Microsoft Clarity project exactly once");
 expect(!tagManagerScriptBody.includes("G-BQDKE20XR0") && !tagManagerScriptBody.includes("GT-M3SPT65W"), "Published GTM container would duplicate the first-party GA4 tag");
 expect((tagManagerScriptBody.match(/2294442874726399/g) ?? []).length === 1 && tagManagerScriptBody.includes("connect.facebook.net/en_US/fbevents.js"), "Published GTM container must contain the approved Meta Pixel exactly once");
+expect(tagManagerScriptBody.includes('"arg1":"^(gtm|gtag)\\\\."'), "Published GTM must exclude internal gtm/gtag events from Meta custom-event tracking");
 
 const icon = await fetchWithRetry(`${origin}/icons/simple-instagram-e4405f.svg`);
 expect(icon.status === 200 && icon.headers.get("content-type")?.includes("image/svg+xml"), "First-party social icons are unavailable");

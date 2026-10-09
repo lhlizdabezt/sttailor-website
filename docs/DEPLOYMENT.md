@@ -48,6 +48,8 @@ The DNS step also maintains the Apple and Meta ownership TXT records at `sttailo
 
 The website initializes GA4 `G-BQDKE20XR0` once through the Cloudflare `/n31x/` gateway. GTM `GTM-TQSDB6XT` owns Microsoft Clarity `ymcn0kdqo0` and Meta Pixel `2294442874726399`. Do not add another direct `fbq` base snippet to the HTML. The static body includes only the Meta `PageView` image fallback for browsers with JavaScript disabled. The GA4 Config and GA4 Event tags imported by Meta's integration are paused in GTM to prevent parallel GA4 tracking. A published-container check fails if those GA4 tags become active again or the approved Pixel disappears. Browser verification must confirm a single Meta `PageView`, rather than treating the presence of a tag as proof of delivery.
 
+GTM version 5 filters the Meta custom-event trigger with `Event does not match RegEx ^(gtm|gtag)\.`. This prevents the internal `gtag.config` command from being reported as a customer event. Preserve the separate DOM Ready trigger for `PageView` and check contact events after changing this filter. The production check also confirms that the published container retains the technical-event exclusion.
+
 ## Canonical domain behaviour
 
 `https://sttailor.com` is the canonical public domain. `https://www.sttailor.com/*` returns a permanent `301` to the same path and query string on `https://sttailor.com/*`. This gives search engines one canonical URL for each page.
