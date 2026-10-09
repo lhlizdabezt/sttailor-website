@@ -265,6 +265,8 @@ const oldRefund = await fetchWithRetry(`${origin}/refund_returns/`, { redirect: 
 expect(oldRefund.status === 301 && oldRefund.headers.get("location") === `${origin}/doi-tra-hoan-tien/`, "Old returns URL does not redirect to the new policy");
 const oldSuitCare = await fetchWithRetry(`${origin}/10-cach-bao-quan-vest-nam-luon-nhu-moi-bi-quyet-giu-phom-chuan-theo-thoi-gian/?utm_source=bing`, { redirect: "manual" });
 expect(oldSuitCare.status === 301 && oldSuitCare.headers.get("location") === `${origin}/bao-quan-giat-la/?utm_source=bing`, "Bing's retired suit-care article does not redirect to the garment-care guide with attribution intact");
+const oldBodyFit = await fetchWithRetry(`${origin}/how-to-choose-the-right-mens-suit-for-your-body-type/?utm_source=google&gclid=example`, { redirect: "manual" });
+expect(oldBodyFit.status === 301 && oldBodyFit.headers.get("location") === `${origin}/quy-trinh-thu-do/?utm_source=google&gclid=example`, "Search Console's retired body-fit article does not redirect to the fitting guide with attribution intact");
 
 const expectedWwwLocation = `${origin}/gallery/?source=www`;
 const www = await fetchUntil(

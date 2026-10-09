@@ -42,3 +42,11 @@ test("retired suit-care article redirects to its relevant guide and preserves at
     assert.equal(response.headers.get("Location"), "https://sttailor.com/bao-quan-giat-la/?utm_source=bing", method);
   }
 });
+
+test("retired body-fit article redirects to fitting guidance without losing campaign parameters", async () => {
+  for (const method of ["GET", "HEAD"]) {
+    const response = await worker.fetch(new Request("https://sttailor.com/how-to-choose-the-right-mens-suit-for-your-body-type/?utm_source=google&gclid=example", { method }), env);
+    assert.equal(response.status, 301, method);
+    assert.equal(response.headers.get("Location"), "https://sttailor.com/quy-trinh-thu-do/?utm_source=google&gclid=example", method);
+  }
+});

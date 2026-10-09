@@ -15,6 +15,7 @@
 | `/tailoring-guide/` | `/cam-nang-may-do/` | 301 | Current tailoring guide |
 | `/fabric-guide/`, `/suit-fabrics-the-key-element-that-defines-true-elegance/` | `/chon-vai-may-do/` | 301 | Current cloth guide |
 | `/fitting-process/` | `/quy-trinh-thu-do/` | 301 | Current fitting guide |
+| `/how-to-choose-the-right-mens-suit-for-your-body-type/` | `/quy-trinh-thu-do/` | 301 | Retired body-fit article found in Search Console; current guidance covers posture, proportion, balance and movement |
 | `/alterations/` | `/chinh-sua-trang-phuc/` | 301 | Current alterations guide |
 | `/garment-care/` | `/bao-quan-giat-la/` | 301 | Current care guide |
 | `/10-cach-bao-quan-vest-nam-luon-nhu-moi-bi-quyet-giu-phom-chuan-theo-thoi-gian/` | `/bao-quan-giat-la/` | 301 | Retired suit-care article reported by Bing; relevant bilingual replacement |

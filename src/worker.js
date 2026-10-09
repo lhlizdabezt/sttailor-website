@@ -35,6 +35,7 @@ const legacyRoutes = new Map([
   ["/fabric-guide/", "/chon-vai-may-do/"],
   ["/suit-fabrics-the-key-element-that-defines-true-elegance/", "/chon-vai-may-do/"],
   ["/fitting-process/", "/quy-trinh-thu-do/"],
+  ["/how-to-choose-the-right-mens-suit-for-your-body-type/", "/quy-trinh-thu-do/"],
   ["/alterations/", "/chinh-sua-trang-phuc/"],
   ["/garment-care/", "/bao-quan-giat-la/"],
   ["/10-cach-bao-quan-vest-nam-luon-nhu-moi-bi-quyet-giu-phom-chuan-theo-thoi-gian/", "/bao-quan-giat-la/"],
