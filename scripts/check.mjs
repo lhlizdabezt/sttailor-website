@@ -204,6 +204,24 @@ else {
 }
 
 const home = readFileSync(path.join(dist, "index.html"), "utf8");
+// Early interactions must survive deferred loading, and the interaction/idle
+// race must not insert a second container (which would duplicate vendor tags).
+const gtmInline = [...home.matchAll(/<script>([\s\S]*?)<\/script>/g)]
+  .find((match) => match[1].includes("'gtm.start'"))?.[1];
+if (!gtmInline) failures.push("Built GTM loader is missing.");
+else for (const useIdle of [true, false]) {
+  const handlers = {}, scheduled = [], inserted = [];
+  const browserWindow = { addEventListener: (event, callback) => { handlers[event] = callback; }, setTimeout: (callback) => scheduled.push(callback) };
+  if (useIdle) browserWindow.requestIdleCallback = (callback) => scheduled.push(callback);
+  const browserDocument = { readyState: "loading", createElement: () => ({}), getElementsByTagName: () => [{ parentNode: { insertBefore: (script) => inserted.push(script) } }] };
+  runInNewContext(gtmInline, { window: browserWindow, document: browserDocument });
+  const earlyEvent = { event: "contact_click", contact_method: "whatsapp" };
+  browserWindow.dataLayer.push(earlyEvent);
+  if (inserted.length) failures.push("GTM downloads before load or visitor interaction.");
+  handlers.pointerdown(); handlers.load(); handlers.keydown();
+  scheduled.forEach((callback) => { callback(); callback(); });
+  if (inserted.length !== 1 || !inserted[0].src.endsWith("id=GTM-TQSDB6XT") || !browserWindow.dataLayer.includes(earlyEvent)) failures.push(`GTM loses an early event or duplicates its container with idle support ${useIdle}.`);
+}
 // Exercise the built loader with the edge-injected script present before load
 // or arriving before idle. Each page must keep one gateway script/config only.
 const analyticsInline = [...home.matchAll(/<script>([\s\S]*?)<\/script>/g)]

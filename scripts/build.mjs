@@ -33,9 +33,12 @@ const galleryFilm = {
 };
 const googleTagManagerHead = `<!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+new Date().getTime(),event:'gtm.js'});var started=false;function load(){if(started)return;started=true;var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+}function schedule(){if(w.requestIdleCallback)w.requestIdleCallback(load,{timeout:1200});else w.setTimeout(load,1200)}
+if(d.readyState==='complete')schedule();else w.addEventListener('load',schedule,{once:true});
+w.addEventListener('pointerdown',load,{once:true,passive:true});w.addEventListener('keydown',load,{once:true});
 })(window,document,'script','dataLayer','GTM-TQSDB6XT');</script>
 <!-- End Google Tag Manager -->`;
 const googleTagManagerNoScript = `<!-- Google Tag Manager (noscript) -->

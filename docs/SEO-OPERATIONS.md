@@ -54,6 +54,8 @@ Add the domain property and submit the same production sitemap. A focused weekly
 
 The shared HTML template loads Google Analytics 4 measurement ID `G-BQDKE20XR0` through the first-party `/n31x/` gateway. GTM container `GTM-TQSDB6XT` owns the published Microsoft Clarity project tag `ymcn0kdqo0`. The page initializes the Clarity event queue but does not download a second Clarity tag. Google Analytics measures acquisition, engagement and conversion events; Clarity supplies session recordings, heatmaps and usability signals such as dead clicks and excessive scrolling.
 
+The GTM event queue is available immediately. Its external container loads in idle time after the document load, with a 1.2-second scheduling deadline; pointer or keyboard interaction can load it earlier. This keeps the initial image and stylesheet ahead of non-rendering measurement work. Early interaction events remain queued. The loader runs once even when the idle and interaction paths both fire. Verify real fresh-navigation PageViews after changes; very short visits can still end before external tags finish downloading.
+
 Use the two tools together: find a high-exit or low-conversion page in GA4, then inspect representative Clarity recordings or heatmaps before changing the page. Do not add duplicate analytics snippets through Cloudflare, a tag manager, or a page fragment. Review privacy disclosures and consent obligations applicable to the business before enabling additional advertising, remarketing, or cross-site tracking features.
 
 ### Event and Clarity configuration
