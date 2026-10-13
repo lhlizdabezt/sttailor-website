@@ -22,6 +22,10 @@ if (toggle && nav) {
     if (isOpen() && !nav.contains(event.target) && !toggle.contains(event.target)) setOpen(false);
   });
 
+  document.addEventListener("focusin", (event) => {
+    if (mobile() && isOpen() && !nav.contains(event.target) && !toggle.contains(event.target)) setOpen(false);
+  });
+
   document.addEventListener("keydown", (event) => {
     if (event.altKey && event.key.toLowerCase() === "m" && mobile() && !editable(event.target)) {
       event.preventDefault();
