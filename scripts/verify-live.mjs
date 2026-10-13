@@ -1,5 +1,8 @@
 import { clientCareFailures } from "./client-care-contract.mjs";
 import { createHash } from "node:crypto";
+import { readdirSync, statSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
 
 const origin = "https://sttailor.com";
@@ -218,6 +221,30 @@ const robots = await fetchWithRetry(`${origin}/robots.txt`);
 const robotsText = await robots.text();
 expect(robots.status === 200 && robotsText.includes(`Sitemap: ${origin}/sitemap.xml`), "robots.txt is invalid");
 expect(/^User-agent:\s*\*\s*$/mi.test(robotsText) && /^Allow:\s*\/\s*$/mi.test(robotsText) && !/^Disallow:\s*\/\s*$/mi.test(robotsText), "robots.txt must allow public pages to be crawled");
+expect(!/^Disallow:\s*\S+/mi.test(robotsText), "robots.txt must not block a published public resource");
+
+// Inspect every shipped image derivative, icon, stylesheet and script, rather
+// than inferring accessibility from a few sampled gallery images.
+const dist = fileURLToPath(new URL("../dist/", import.meta.url));
+const publicAssets = readdirSync(dist, { recursive: true })
+  .filter((file) => /^(media|icons|styles|scripts)[\\/]/.test(file) && statSync(path.join(dist, file)).isFile())
+  .map((file) => `/${file.replaceAll("\\", "/")}`);
+publicAssets.push("/build-manifest.json", "/image-manifest.json", "/n31x/");
+let assetCursor = 0;
+await Promise.all(Array.from({ length: 6 }, async () => {
+  while (assetCursor < publicAssets.length) {
+    const asset = publicAssets[assetCursor++];
+    try {
+      const response = await fetchWithRetry(`${origin}${asset}`, { method: "HEAD", signal: AbortSignal.timeout(15000) }, 2);
+      expect(response.status === 200, `Public asset ${asset} returned ${response.status}`);
+      expect(!/\b(?:noindex|none|noimageindex)\b/i.test(response.headers.get("x-robots-tag") ?? ""), `Public asset ${asset} has an indexing restriction`);
+      expect(!response.headers.get("content-type")?.includes("text/html"), `Public asset ${asset} returned HTML instead of its file`);
+    } catch {
+      failures.push(`Public asset ${asset} could not be reached after retry`);
+    }
+  }
+}));
+console.log(`Audited ${publicAssets.length} public assets: originals, responsive images, icons, CSS, JavaScript, public build metadata and the first-party measurement gateway.`);
 
 // A reachable sitemap alone does not prove Cloudflare serves HTML to search
 // crawlers. Smoke-test the canonical HTML with representative crawler UAs.

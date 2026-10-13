@@ -43,7 +43,7 @@ const legacyRoutes = new Map([
   ["/bao-hanh-sua-chua/", "/dich-vu/"]
 ]);
 const staticPrefixes = ["/media/", "/icons/", "/styles/", "/scripts/"];
-const staticFiles = new Set(["/robots.txt", "/sitemap.xml", "/llms.txt", "/site.webmanifest", `/${indexNowKeyFile}`, "/404.html", "/not-found.html", "/_headers", "/build-manifest.json"]);
+const staticFiles = new Set(["/robots.txt", "/sitemap.xml", "/llms.txt", "/site.webmanifest", `/${indexNowKeyFile}`, "/404.html", "/not-found.html", "/_headers", "/build-manifest.json", "/image-manifest.json"]);
 
 function securityHeaders(response, pathname = "/") {
   const headers = new Headers(response.headers);

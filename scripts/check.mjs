@@ -204,6 +204,7 @@ else {
 }
 
 const home = readFileSync(path.join(dist, "index.html"), "utf8");
+if (/^Disallow:\s*\S+/mi.test(readFileSync(path.join(dist, "robots.txt"), "utf8"))) failures.push("robots.txt blocks a published public resource.");
 // Early interactions must survive deferred loading, and the interaction/idle
 // race must not insert a second container (which would duplicate vendor tags).
 const gtmInline = [...home.matchAll(/<script>([\s\S]*?)<\/script>/g)]

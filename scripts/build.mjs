@@ -1019,7 +1019,7 @@ for (const [route, sourceFile] of routes) {
 }
 writeFileSync(path.join(dist, "404.html"), notFoundDocument, "utf8");
 writeFileSync(path.join(dist, "not-found.html"), notFoundDocument, "utf8");
-writeFileSync(path.join(dist, "robots.txt"), "User-agent: *\nAllow: /\nDisallow: /build-manifest.json\nSitemap: https://sttailor.com/sitemap.xml\n", "utf8");
+writeFileSync(path.join(dist, "robots.txt"), "User-agent: *\nAllow: /\nSitemap: https://sttailor.com/sitemap.xml\n", "utf8");
 writeFileSync(path.join(dist, indexNowKeyFile), `${indexNowKey}\n`, "utf8");
 const xmlEscape = (value) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&apos;");
 const publishedImageLocations = new Set();
