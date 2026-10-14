@@ -112,7 +112,7 @@ const pageType = pageTypes[window.location.pathname] ?? "other";
 // unnamed overlay link. Repair both while preserving the official widget.
 const tripadvisorBadge = document.querySelector("#TA_rated383");
 if (tripadvisorBadge) {
-  const listing = "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor_Bespoke_Tailoring-Ho_Chi_Minh_City.html";
+  const listing = "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html";
   const repairWidgetLink = () => {
     const reviewLink = tripadvisorBadge.querySelector('a[href=""]');
     if (reviewLink) {

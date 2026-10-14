@@ -32,7 +32,7 @@ Legal verification contacts are separate from the public showroom number. Do not
 | Pinterest | https://www.pinterest.com/sttailorhcm/ |
 | X | https://x.com/sttalior |
 | Threads | https://www.threads.com/@sttailorhcm |
-| Tripadvisor | https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor_Bespoke_Tailoring-Ho_Chi_Minh_City.html |
+| Tripadvisor | https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html |
 
 The Contact page has six direct channels: telephone, email, Messenger, Zalo, Instagram and WhatsApp. FOLLOW has eleven unique social/profile destinations, without telephone or email. Zalo appears once. Preserve the real X handle above; do not manufacture a matching handle.
 
