@@ -365,7 +365,7 @@ if ((gallery.match(/st-gallery-numpad__card/g) ?? []).length !== 9) failures.pus
 if (!gallery.includes("st-gallery-numpad") || !gallery.includes("#album-tuxedo") || !gallery.includes("#album-showroom")) failures.push("Gallery chapter navigator is missing jump targets.");
 const galleryImageTags = [...gallery.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^\"]+)"[^>]*>/gi)];
 const galleryContentImages = galleryImageTags.filter((match) => !match[1].includes("logo-sttailor") && !match[1].endsWith("/LinkedInLogo.png"));
-if (galleryContentImages.length !== 111) failures.push("Gallery must contain all 111 approved editorial images.");
+if (galleryContentImages.length !== 117) failures.push("Gallery must contain all 117 approved editorial images.");
 const galleryImageSources = new Set(galleryContentImages.map((image) => image[1]));
 if (galleryImageSources.size !== galleryContentImages.length) failures.push("Gallery repeats an editorial image.");
 const imageManifest = JSON.parse(readFileSync(path.join(dist, "image-manifest.json"), "utf8"));
@@ -429,7 +429,8 @@ if ((sitemap.match(/<url><loc>https:\/\/sttailor\.com/g) ?? []).length !== expec
 if (!sitemap.includes('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"') || !sitemap.includes("<image:image>")) failures.push("Image sitemap discovery data is missing.");
 if (!sitemap.includes("<image:title>")) failures.push("Image sitemap titles are missing.");
 const gallerySitemap = sitemap.match(/<url><loc>https:\/\/sttailor\.com\/gallery\/[\s\S]*?<\/url>/)?.[0] ?? "";
-if ((gallerySitemap.match(/<image:image>/g) ?? []).length !== 111) failures.push("Gallery image sitemap does not expose every editorial image exactly once.");
+if ((gallerySitemap.match(/<image:image>/g) ?? []).length !== 117) failures.push("Gallery image sitemap does not expose every editorial image exactly once.");
+if ((gallerySitemap.match(/<lastmod>([^<]+)<\/lastmod>/)?.[1] ?? "") < "2026-10-15") failures.push("Gallery lastmod predates the newly published client photographs.");
 if (!sitemap.includes('xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"') || (sitemap.match(/<video:video>/g) ?? []).length !== 1 || !gallerySitemap.includes(`<video:content_loc>https://sttailor.com${filmPath}</video:content_loc>`) || !gallerySitemap.includes(`<video:thumbnail_loc>https://sttailor.com${posterPath}</video:thumbnail_loc>`)) failures.push("Gallery video sitemap entry is missing or duplicated.");
 if ((sitemap.match(/<image:loc>/g) ?? []).length !== new Set([...sitemap.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)].map((match) => match[1])).size) failures.push("Image sitemap contains duplicate image locations.");
 const mobileNavRule = [...generatedCss.matchAll(/\.st-site-nav\{[^}]*\}/g)]

@@ -13586,6 +13586,64 @@ html body .st-lux-page.st-lux-about :is(.st-lux-provenance__materials, .st-lux-p
 html body .st-site-frame :is(a, button):focus-visible { outline: 2px solid currentColor !important; outline-offset: 4px !important; }
 html body .st-site-frame main :is(a, button) { scroll-margin-block: 120px 28px; }
 
+/* Keep the client series uncropped and separate from the archival mosaic. */
+html body #main-content .st-gallery-client-series { margin-top: 40px; }
+html body #main-content .st-gallery-client-series h3 {
+  margin: 0 0 24px;
+  color: #fff9ef;
+  font-size: clamp(24px, 2.2vw, 32px);
+  font-weight: 500 !important;
+  line-height: 1.35;
+}
+html body #main-content .st-gallery-client-series h3 span[lang="vi"] {
+  display: block;
+  margin-top: 8px;
+  color: #f3d2a4;
+  font-family: var(--st-vietnamese);
+  font-size: .75em;
+  font-weight: inherit !important;
+}
+html body #main-content .st-gallery-client-series__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+html body #main-content .st-gallery-client-series__card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+  margin: 0;
+  border: 1px solid #a77c53;
+  background: #3a2116;
+}
+html body #main-content .st-gallery-client-series__card img {
+  display: block;
+  align-self: start;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: contain !important;
+}
+html body #main-content .st-gallery-client-series__card figcaption {
+  padding: 14px 16px;
+  color: #fff9ef;
+  font-family: var(--st-vietnamese);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+html body #main-content .st-gallery-client-series__card figcaption span[lang="vi"] {
+  display: block;
+  margin-top: 4px;
+  color: #f3d2a4;
+}
+@media (max-width: 900px) {
+  html body #main-content .st-gallery-client-series__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  html body #main-content .st-gallery-client-series__grid { grid-template-columns: minmax(0, 1fr); }
+}
+
 /* Gallery notes must be readable without hover, including on touch screens.
    An opaque ground keeps both languages legible over every photograph. */
 html body #main-content .st-gallery-page--albums .st-album-grid__item figcaption {

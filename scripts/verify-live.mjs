@@ -205,7 +205,7 @@ expect((galleryHtml.match(/<video\b/gi) || []).length === 1 && /\bcontrols\b/.te
 expect(galleryHtml.includes('"@type":"VideoObject"') && galleryHtml.includes(`"contentUrl":"${origin}${filmPath}"`), "Gallery VideoObject is missing");
 const galleryImages = [...galleryHtml.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^\"]+)"[^>]*>/gi)]
   .filter((match) => !/(?:logo-sttailor|LinkedInLogo)/i.test(match[1]));
-expect(galleryImages.length === 111 && new Set(galleryImages.map((match) => match[1])).size === 111, "Gallery is missing images or repeats an image");
+expect(galleryImages.length === 117 && new Set(galleryImages.map((match) => match[1])).size === 117, "Gallery is missing images or repeats an image");
 for (const asset of ["st-tailor-made-to-measure-stories-gallery.jpg", "st-tailor-magenta-floral-wrap-dress-and-navy-suit.jpg", "st-tailor-magenta-floral-wrap-dress-full-length.jpg", "st-tailor-magenta-floral-wrap-dress-detail.jpg", "st-tailor-showroom-exterior-evening.jpg"]) {
   const path = `/media/2026/09/${asset}`;
   expect(galleryImages.filter((match) => match[1] === path).length === 1, `Gallery must show ${asset} exactly once`);
@@ -271,7 +271,7 @@ expect(sitemapText.includes("xmlns:image="), "Image sitemap namespace is missing
 expect(sitemapText.includes("<image:image>"), "Image sitemap entries are missing");
 expect(sitemapText.includes("<image:title>"), "Image sitemap titles are missing");
 const gallerySitemap = sitemapText.match(/<url><loc>https:\/\/sttailor\.com\/gallery\/[\s\S]*?<\/url>/)?.[0] ?? "";
-expect((gallerySitemap.match(/<image:image>/g) || []).length === 111, "Gallery sitemap omits one or more editorial images");
+expect((gallerySitemap.match(/<image:image>/g) || []).length === 117, "Gallery sitemap omits one or more editorial images");
 expect(sitemapText.includes('xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"') && (sitemapText.match(/<video:video>/g) || []).length === 1 && gallerySitemap.includes(`<video:content_loc>${origin}${filmPath}</video:content_loc>`) && gallerySitemap.includes(`<video:thumbnail_loc>${origin}${posterPath}</video:thumbnail_loc>`), "Gallery sitemap omits or duplicates the fitting film");
 
 const manifest = await fetchWithRetry(`${origin}/site.webmanifest`);

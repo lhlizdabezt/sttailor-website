@@ -295,7 +295,17 @@ function transformContact(html) {
   return replaceVisibleAtelier(html);
 }
 
+const franceClientPhotos = [
+  ["st-tailor-red-waistcoat-bouquet-back.jpg", "Red patterned waistcoat with a bouquet over the shoulder", "Áo gile đỏ họa tiết cùng bó hoa trên vai"],
+  ["st-tailor-red-waistcoat-side-profile.jpg", "Side profile of the red waistcoat, white shirt and bouquet", "Góc nghiêng áo gile đỏ, sơ mi trắng và bó hoa"],
+  ["st-tailor-red-waistcoat-full-length.jpg", "Full-length back view of the red waistcoat and blue-grey trousers", "Toàn cảnh phía sau áo gile đỏ và quần xanh xám"],
+  ["st-tailor-red-waistcoat-marina-evening.jpg", "Red waistcoat and jacket carried beside the marina at night", "Áo gile đỏ cùng áo khoác cầm tay bên bến du thuyền về đêm"],
+  ["st-tailor-red-waistcoat-turning-view.jpg", "Turning view showing the red waistcoat and adjustable back strap", "Góc xoay người thể hiện áo gile đỏ và đai điều chỉnh phía sau"],
+  ["st-tailor-red-waistcoat-bouquet-marina.jpg", "Red waistcoat and flowers against the illuminated marina", "Áo gile đỏ và bó hoa bên bến du thuyền lên đèn"]
+];
+
 const galleryAltText = {
+  ...Object.fromEntries(franceClientPhotos.map(([file, en, vi]) => [file, `${en} | ${vi}`])),
   "st-tailor-made-to-measure-stories-gallery.jpg": "S.T Tailor made-to-measure story with a client and navy jacket | Câu chuyện may đo S.T Tailor với khách hàng và áo khoác xanh navy",
   "st-tailor-gallery-brocade-dinner-jacket.jpg": "Black textured dinner jacket on a mannequin | Áo khoác dự tiệc đen dệt vân trên mannequin",
   "st-tailor-gallery-ceremonial-jacket-frame.jpg": "Burgundy ceremonial jacket with gold embroidery | Áo lễ phục đỏ burgundy thêu chỉ vàng",
@@ -469,6 +479,12 @@ function transformGallery(html) {
   for (const figure of feedbackFigures) html = appendToGalleryAlbum(html, "album-appointments", figure);
   html = removeElementById(html, "section", "album-archive");
   html = removeElementById(html, "section", "album-client-feedback");
+  const evening = findElementById(html, "section", "album-tuxedo");
+  const eveningGrid = evening && findElementByClass(html.slice(evening.start, evening.end), "div", "st-album-grid");
+  if (!eveningGrid) throw new Error("Evening gallery grid was not found for the client photographs.");
+  const series = `<section class="st-gallery-client-series" aria-labelledby="st-gallery-client-series-title"><h3 id="st-gallery-client-series-title">Red waistcoat, after dark.<span lang="vi">Áo gile đỏ trong khung cảnh đêm.</span></h3><div class="st-gallery-client-series__grid">${franceClientPhotos.map(([file, en, vi]) => `<figure class="st-gallery-client-series__card"><img src="/media/2026/10/${file}" alt="" loading="lazy" decoding="async"><figcaption>${en}<span lang="vi">${vi}</span></figcaption></figure>`).join("")}</div></section>`;
+  const seriesInsertAt = evening.start + eveningGrid.end;
+  html = `${html.slice(0, seriesInsertAt)}${series}${html.slice(seriesInsertAt)}`;
   const galleryIndex = `
 <section class="st-gallery-numpad" aria-labelledby="st-gallery-numpad-title">
   <div class="st-gallery-shell">
@@ -706,9 +722,9 @@ const buildDate = new Date().toISOString().slice(0, 10);
 const sharedContentModified = "2026-09-23";
 
 function lastModifiedFor(sourceFile) {
-  // These pages now derive their current copy from the client-care module.
-  if (["Payment.html", "Returns.html", "Shipping.html", "Terms.html", "Privacy.html"].includes(sourceFile)) {
-    const inputs = ["scripts/build.mjs", ...(sourceFile === "Payment.html" ? [] : ["src/client-care-pages.js"])];
+  // Derived copy and Gallery additions can change without touching the baseline.
+  if (["Payment.html", "Returns.html", "Shipping.html", "Terms.html", "Privacy.html", "Gallery.html"].includes(sourceFile)) {
+    const inputs = ["scripts/build.mjs", ...(sourceFile === "Gallery.html" ? ["source/media"] : sourceFile === "Payment.html" ? [] : ["src/client-care-pages.js"])];
     const changed = spawnSync("git", ["status", "--porcelain", "--", ...inputs], { cwd: root, encoding: "utf8" });
     if (changed.status !== 0 || changed.stdout.trim()) return buildDate;
     const latest = spawnSync("git", ["log", "-1", "--format=%cs", "--", ...inputs], { cwd: root, encoding: "utf8" });
@@ -851,6 +867,7 @@ function collectAssetPaths() {
   const matcher = /https?:\/\/sttailor\.com\/wp-content\/uploads\/([^\"' )]+)/g;
   const found = new Set(["2026/09/logo-sttailor.png", "2026/09/logo-sttailor-1000x1024.png"]);
   for (const match of content.matchAll(matcher)) found.add(match[1]);
+  for (const [file] of franceClientPhotos) found.add(`2026/10/${file}`);
   return [...found].filter((asset) => !asset.includes(".."));
 }
 
