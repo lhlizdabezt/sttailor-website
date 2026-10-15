@@ -29,6 +29,8 @@ Keep `source/wordpress` as the approved baseline. Edit build transformations or 
 
 The build serves a content-addressed CSS bundle for each page. It removes only project selectors absent from that page and the site script; generic and vendor rules remain. Guide pages keep the complete existing bundle: Chromium intermittently resolves their computed grid auto margins differently even with identical CSS and geometry, so those pages retain the baseline pending independent comparison. Identical page bundles share a URL. `CustomCSS-Full.css` stays complete for editing, and the complete minified `site.css` remains the 404 fallback. Checks validate each page's stylesheet, content hash and size; production verification fetches every distinct bundle and confirms its immutable cache header. When changing this pruning logic, compare computed styles, motion and mobile navigation across all routes before deployment.
 
+Lazy responsive images use `sizes="auto, …"` with the existing viewport sizes as a fallback. This lets supporting browsers select candidates using the actual card width, including narrow Gallery mosaic cells. Preserve intrinsic width and height attributes, and keep the eager hero images on their explicit sizes. A 412 px, DPR 1.75 browser check must select the 480 px ceremonial-jacket variant for its approximately 186 px Gallery card rather than the oversized 768 px variant.
+
 An IndexNow outage cannot make a verified deployment fail: the workflow retries the notification three times and emits a visible warning if Bing remains unavailable. Re-run the workflow later; do not use a local deploy as a workaround.
 
 ## Required GitHub secrets

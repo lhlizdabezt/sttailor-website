@@ -702,7 +702,9 @@ function enrichImageAttributes(html, { responsiveSizes } = {}) {
       const isGalleryHero = /\bst-gallery-hero__story-image\b/.test(output);
       const candidates = isHomeHero || isGalleryHero ? [...metadata.responsive, { src, width: metadata.width }] : metadata.responsive;
       const srcset = candidates.map(({ src: candidate, width }) => `${candidate} ${width}w`).join(", ");
-      output = output.replace(/<img\b/i, `<img srcset="${srcset}" sizes="${isHomeHero ? homeHeroSizes : isGalleryHero ? "(max-width: 899px) 100vw, 50vw" : responsiveSizes}"`);
+      const sizes = isHomeHero ? homeHeroSizes : isGalleryHero ? "(max-width: 899px) 100vw, 50vw" : responsiveSizes;
+      const lazyAuto = /\bloading="lazy"/i.test(output) ? "auto, " : "";
+      output = output.replace(/<img\b/i, `<img srcset="${srcset}" sizes="${lazyAuto}${sizes}"`);
     }
     return output;
   });

@@ -388,6 +388,7 @@ for (const image of galleryContentImages) {
   if (!alt || !alt.includes(" | ")) failures.push(`Gallery image is missing a bilingual alt text: ${image[1]}`);
   if (!/\bwidth="\d+"/i.test(image[0]) || !/\bheight="\d+"/i.test(image[0])) failures.push(`Gallery image is missing intrinsic dimensions: ${image[1]}`);
   if (!/\bsrcset="[^\"]+\.webp \d+w/i.test(image[0])) failures.push(`Gallery image is missing responsive WebP candidates: ${image[1]}`);
+  if (/\bloading="lazy"/i.test(image[0]) && !/\bsizes="auto, /i.test(image[0])) failures.push(`Lazy Gallery image must use its rendered width with a fallback size: ${image[1]}`);
 }
 if (!gallery.includes('"@type":"ItemList"') || !gallery.includes(`"numberOfItems":${galleryContentImages.length}`)) failures.push("Gallery image structured data is missing or incomplete.");
 const filmPath = "/media/2026/09/st-tailor-womenswear-fitting-film.mp4";
