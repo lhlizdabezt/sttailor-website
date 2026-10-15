@@ -298,7 +298,7 @@ function transformContact(html) {
 const franceClientPhotos = [
   ["st-tailor-red-waistcoat-bouquet-back.jpg", "Red patterned waistcoat with a bouquet over the shoulder", "Áo gile đỏ họa tiết cùng bó hoa trên vai"],
   ["st-tailor-red-waistcoat-side-profile.jpg", "Side profile of the red waistcoat, white shirt and bouquet", "Góc nghiêng áo gile đỏ, sơ mi trắng và bó hoa"],
-  ["st-tailor-red-waistcoat-full-length.jpg", "Full-length back view of the red waistcoat and blue-grey trousers", "Toàn cảnh phía sau áo gile đỏ và quần xanh xám"],
+  ["st-tailor-red-waistcoat-full-length.jpg", "Back view of the red waistcoat and blue-grey trousers", "Áo gile đỏ và quần xanh xám nhìn từ phía sau"],
   ["st-tailor-red-waistcoat-marina-evening.jpg", "Red waistcoat and jacket carried beside the marina at night", "Áo gile đỏ cùng áo khoác cầm tay bên bến du thuyền về đêm"],
   ["st-tailor-red-waistcoat-turning-view.jpg", "Turning view showing the red waistcoat and adjustable back strap", "Góc xoay người thể hiện áo gile đỏ và đai điều chỉnh phía sau"],
   ["st-tailor-red-waistcoat-bouquet-marina.jpg", "Red waistcoat and flowers against the illuminated marina", "Áo gile đỏ và bó hoa bên bến du thuyền lên đèn"]
