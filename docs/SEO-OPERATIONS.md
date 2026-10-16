@@ -52,6 +52,39 @@ Add the domain property and submit the same production sitemap. A focused weekly
 
 ## Traffic and behaviour measurement
 
+### Verification on 2026-10-16
+
+The production review covered all 16 canonical routes and 515 public assets, plus
+64 rendered cases at viewport widths of 320, 375, 768 and 1440 pixels. No overflow,
+missing image alt attributes, inverted logo filters, heading-weight hierarchy
+failures or automated accessibility violations were found. Automated checks left
+some contrast and video-caption items for manual assessment; this is not a claim
+of complete accessibility certification or field Core Web Vitals compliance.
+
+Google's aggregate Page indexing report was dated October 12 and still listed
+several current pages as excluded. Individual URL Inspection on October 16
+reported the gallery, alterations, returns, terms, shipping and privacy pages as
+indexed, each with HTTPS and one valid breadcrumb item. Inspect a specific URL
+before treating an older aggregate count as a current failure. Bing's four
+technical recommendation categories all pointed to the retired suit-care article;
+its redirect to the current care guide is covered by live verification. The
+separate inbound-link recommendation remains an external discovery concern.
+
+Clarity recorded two `Can't find variable: zaloJSV2` errors in one iOS visit opened
+through Zalo. The website source contains no use of that identifier, and no Zalo
+SDK was present in the observed script list. Repeating the same campaign URL and
+opening the gallery produced no page errors, one GA4 PageView per navigation,
+and one loaded Clarity tag and GTM container per document. The iOS/Zalo cause
+remains unverified. Do not hide the error or add a placeholder global: obtain a
+reproduction or script source before changing the website integration.
+
+Cloudflare AI Crawl Control showed all 32 listed crawler block switches off.
+Successful requests were visible for Googlebot, BingBot, OAI-SearchBot and
+ChatGPT-User. This does not mean every crawler request succeeded or that any
+provider guarantees indexing. Public DNS also retained the domain-ownership TXT
+records, a rejecting DMARC policy and `v=spf1 -all` for the domain, which does not
+send mail. The business contact address remains the existing Gmail address.
+
 The shared HTML template loads Google Analytics 4 measurement ID `G-BQDKE20XR0` through the first-party `/n31x/` gateway. GTM container `GTM-TQSDB6XT` owns the published Microsoft Clarity project tag `ymcn0kdqo0`. The page initializes the Clarity event queue but does not download a second Clarity tag. Google Analytics measures acquisition, engagement and conversion events; Clarity supplies session recordings, heatmaps and usability signals such as dead clicks and excessive scrolling.
 
 The GTM event queue is available immediately. Its external container loads in idle time after the document load, with a 1.2-second scheduling deadline; pointer or keyboard interaction can load it earlier. This keeps the initial image and stylesheet ahead of non-rendering measurement work. Early interaction events remain queued. The loader runs once even when the idle and interaction paths both fire. Verify real fresh-navigation PageViews after changes; very short visits can still end before external tags finish downloading.
