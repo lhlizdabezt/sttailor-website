@@ -12422,8 +12422,8 @@ html body .st-gallery-numpad__card > span { grid-row: 1 / span 2 !important; ali
 html body .st-gallery-numpad__card > strong { color: #382017 !important; -webkit-text-fill-color: #382017 !important; font: 500 clamp(18px, 1.6vw, 24px)/1.04 var(--st-wordmark) !important; }
 html body .st-gallery-numpad__card > em { margin-top: 8px !important; color: #76503a !important; -webkit-text-fill-color: #76503a !important; font: 500 13px/1.3 var(--st-vietnamese) !important; font-style: normal !important; }
 html body .st-gallery-numpad__card > i { grid-column: 3 !important; grid-row: 1 / span 2 !important; align-self: center !important; color: #8c502f !important; -webkit-text-fill-color: #8c502f !important; font: 400 21px/1 var(--st-wordmark) !important; font-style: normal !important; transition: transform .28s ease !important; }
-html body .st-gallery-numpad__card:hover, html body .st-gallery-numpad__card:focus-visible { border-color: #4a2719 !important; background: #f4dfc3 !important; box-shadow: 9px 9px 0 #9a603a !important; color: #321b12 !important; -webkit-text-fill-color: #321b12 !important; transform: translate(-3px, -3px) !important; outline: 0 !important; }
-html body .st-gallery-numpad__card:hover > i, html body .st-gallery-numpad__card:focus-visible > i { transform: translate(4px, -4px) !important; }
+html body .st-gallery-numpad__card:hover, html body .st-gallery-numpad__card:focus-visible { border-color: #4a2719 !important; background: #f4dfc3 !important; box-shadow: 5px 5px 0 rgba(117, 71, 43, .18) !important; color: #321b12 !important; -webkit-text-fill-color: #321b12 !important; transform: none !important; outline: 0 !important; }
+html body .st-gallery-numpad__card:hover > i, html body .st-gallery-numpad__card:focus-visible > i { transform: none !important; }
 
 /* Pricing ends with two equally weighted, legible choices: quotation and payment. */
 .stpr-ledger .stpr-hero .stpr-kicker,
@@ -12562,7 +12562,7 @@ html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible {
   background: #4a2819 !important;
   color: #fff7ec !important;
   -webkit-text-fill-color: #fff7ec !important;
-  transform: translateY(-3px) !important;
+  transform: none !important;
 }
 html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:hover span[lang="vi"],
 html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible span[lang="vi"],
@@ -12571,7 +12571,7 @@ html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible s
 html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:hover::after,
 html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible::after { color: #f3cf9e !important; -webkit-text-fill-color: #f3cf9e !important; }
 html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:hover::after,
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible::after { transform: translate(4px, -50%) !important; }
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible::after { transform: translateY(-50%) !important; }
 html body .st-site-frame #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump {
   background: #f6e2c1 !important;
   color: #3d2014 !important;
