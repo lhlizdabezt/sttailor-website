@@ -1254,6 +1254,13 @@ html body .st-site-frame :is(a, button):focus-visible { outline: 2px solid curre
 /* Reserve header clearance when tabbing backwards through page and footer links. */
 html body .st-site-frame :is(main, footer) :is(a, button) { scroll-margin-block: 120px 28px; }
 
+/* Keep the section directory available without expanding the footer. */
+html body .st-footer-sections { margin: 12px 0 18px; }
+html body .st-footer-sections summary { width: 100%; min-height: 48px; padding: 12px 14px; border: 1px solid #70432a; color: #4a2618; background: #f8ead5; font: 600 14px/1.5 var(--st-vietnamese); cursor: pointer; }
+html body .st-footer-sections summary span[lang="vi"] { display: block; margin-left: 14px; font-weight: 400; }
+html body .st-footer-sections summary:is(:hover, :focus-visible) { background: #ead1ad; outline: 2px solid #593321; outline-offset: 3px; }
+html body .st-footer-sections[open] > .st-footer-v7__guide-links { margin-top: 16px !important; }
+
 /* Keep the client series uncropped and separate from the archival mosaic. */
 html body #main-content .st-gallery-client-series { margin-top: 40px; }
 html body #main-content .st-gallery-client-series h3 {

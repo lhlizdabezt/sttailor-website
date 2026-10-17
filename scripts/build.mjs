@@ -79,8 +79,6 @@ const primaryNavigation = [
   ["/dich-vu/", "Services"],
   ["/gallery/", "Gallery"],
   ["/bang-gia/", "Pricing"],
-  ["/phuong-thuc-thanh-toan/", "Payment methods"],
-  ["/doi-tra-hoan-tien/", "Client care"],
   ["/lien-he/", "Contact"]
 ];
 
@@ -215,6 +213,23 @@ function transformFooter(html) {
       '<section class="st-footer-v7__about" aria-labelledby="st-footer-title">\n        <a class="st-footer-v7__crest" href="/" aria-label="S.T Tailor home"><img src="/media/2026/09/logo-sttailor-1000x1024.png" alt="S.T Tailor" width="1000" height="1024" loading="lazy" decoding="async"></a>'
     );
   html = html.replace(/(<nav class="st-footer-v7__social"[\s\S]*?)(<\/nav>)/, `$1<a href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer"><img src="https://static.tacdn.com/img2/brand_refresh/Tripadvisor_logomark.svg" alt="" aria-hidden="true" width="20" height="20" loading="lazy" decoding="async"><span>Tripadvisor</span></a>$2`);
+  const sectionLinks = [
+    ["/gioi-thieu/#st-about-story", "Our story", "Câu chuyện nhà may"],
+    ["/gioi-thieu/#st-cloth-heritage-title", "European cloth & Vietnamese silk", "Vải Âu & lụa Việt"],
+    ["/gioi-thieu/#st-tripadvisor-title", "Tripadvisor reviews", "Đánh giá Tripadvisor"],
+    ["/dich-vu/#st-bespoke-process-title", "The bespoke process", "Quy trình may đo"],
+    ["/gallery/#album-tuxedo", "Evening tailoring", "Lễ phục"],
+    ["/gallery/#album-suits", "Suits & jackets", "Suit & áo khoác"],
+    ["/gallery/#album-womenswear", "Womenswear", "Trang phục nữ"],
+    ["/gallery/#album-shirts-trousers", "Shirts & trousers", "Sơ mi & quần"],
+    ["/gallery/#album-jacket-craft", "Garment details", "Chi tiết trang phục"],
+    ["/gallery/#album-cloth", "Cloth library", "Thư viện vải"],
+    ["/gallery/#album-fitting", "Fittings", "Thử đồ"],
+    ["/gallery/#album-appointments", "Consultations", "Tư vấn riêng"],
+    ["/gallery/#album-showroom", "The showroom", "Không gian nhà may"]
+  ];
+  const sections = `<details class="st-footer-sections"><summary>Browse sections <span lang="vi">Xem các mục</span></summary><div class="st-footer-v7__guide-links">${sectionLinks.map(([href, en, vi]) => `<a href="${href}">${en}<span lang="vi">${vi}</span></a>`).join("")}</div></details>`;
+  html = html.replace(/(<a href="\/gallery\/">[\s\S]*?<\/a>)/, `$1${sections}`);
   return replaceVisibleAtelier(html);
 }
 

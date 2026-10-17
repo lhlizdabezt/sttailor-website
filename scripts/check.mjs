@@ -103,6 +103,11 @@ for (const route of expectedRoutes) {
   if (html.includes("beta.sttailor.com")) failures.push(`Beta hostname remains in production HTML: ${route}`);
   if ((html.match(/<footer class="st-footer st-footer-v7 st-footer-v8"/g) ?? []).length !== 1) failures.push(`Footer is not singular: ${route}`);
   const footer = html.match(/<footer\b[\s\S]*?<\/footer>/i)?.[0] ?? "";
+  const primaryNav = html.match(/<nav id="primary-navigation"[\s\S]*?<\/nav>/)?.[0] ?? "";
+  const primaryLinks = [...primaryNav.matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
+  if (JSON.stringify(primaryLinks) !== JSON.stringify(["/gioi-thieu/", "/dich-vu/", "/gallery/", "/bang-gia/", "/lien-he/"])) failures.push(`Header must keep its five main destinations: ${route}`);
+  if (!footer.includes('class="st-footer-sections"') || !footer.includes('/gallery/#album-showroom') || !footer.includes('/dich-vu/#st-bespoke-process-title')) failures.push(`Footer section directory is incomplete: ${route}`);
+  if (html.includes("\uFFFD") || !html.includes('<meta charset="utf-8">')) failures.push(`Page has invalid Unicode or lacks UTF-8: ${route}`);
   if ((footer.match(/href="https:\/\/www\.tripadvisor\.com\/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City\.html"/g) ?? []).length !== 1 || footer.includes("st-footer-v7__tripadvisor") || footer.includes("socialButtonRate") || footer.includes("Rate us on Tripadvisor")) failures.push(`Footer Tripadvisor link is missing, duplicated, or still includes the removed rate widget: ${route}`);
   const footerLinks = new Set([...footer.matchAll(/\bhref="(\/[^"]*)"/g)].map((match) => match[1]));
   for (const [, href] of html.matchAll(/<a\b[^>]*\bhref="([^"]+)"/gi)) {

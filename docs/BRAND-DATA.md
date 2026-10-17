@@ -38,6 +38,8 @@ The Contact page has six direct channels: telephone, email, Messenger, Zalo, Ins
 
 ## Content and payment contract
 
+- The primary header has five destinations: About, Services, Gallery, Pricing and Contact. All sixteen published pages remain in the footer, with an expandable bilingual directory for the story, cloth, reviews, process and nine gallery chapters.
+- Preserve Vietnamese diacritics, UTF-8 encoding and language attributes. Check both Chromium and WebKit layouts; WebKit emulation does not establish physical iPhone or iPad compatibility.
 - Website content remains Vietnamese and English. WhatsApp business copy is English.
 - Preserve original logo colors. Use Tailor or Tailoring in brand copy.
 - Describe European cloth, including Vitale Barberis Canonico, and Vietnamese silk without claiming unverified supplier partnerships.
