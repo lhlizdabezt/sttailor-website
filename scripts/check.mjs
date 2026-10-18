@@ -106,7 +106,7 @@ for (const route of expectedRoutes) {
   const primaryNav = html.match(/<nav id="primary-navigation"[\s\S]*?<\/nav>/)?.[0] ?? "";
   const primaryLinks = [...primaryNav.matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
   if (JSON.stringify(primaryLinks) !== JSON.stringify(["/gioi-thieu/", "/dich-vu/", "/gallery/", "/bang-gia/", "/lien-he/"])) failures.push(`Header must keep its five main destinations: ${route}`);
-  if (!footer.includes('class="st-footer-sections"') || !footer.includes('/gallery/#album-showroom') || !footer.includes('/dich-vu/#st-bespoke-process-title')) failures.push(`Footer section directory is incomplete: ${route}`);
+  if (footer.includes('st-footer-sections') || /Browse sections|Xem các mục/i.test(footer) || /href="[^"]*#/.test(footer)) failures.push(`Footer must contain page links without a section directory or anchor shortcuts: ${route}`);
   if (html.includes("\uFFFD") || !html.includes('<meta charset="utf-8">')) failures.push(`Page has invalid Unicode or lacks UTF-8: ${route}`);
   if ((footer.match(/href="https:\/\/www\.tripadvisor\.com\/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City\.html"/g) ?? []).length !== 1 || footer.includes("st-footer-v7__tripadvisor") || footer.includes("socialButtonRate") || footer.includes("Rate us on Tripadvisor")) failures.push(`Footer Tripadvisor link is missing, duplicated, or still includes the removed rate widget: ${route}`);
   const footerLinks = new Set([...footer.matchAll(/\bhref="(\/[^"]*)"/g)].map((match) => match[1]));
