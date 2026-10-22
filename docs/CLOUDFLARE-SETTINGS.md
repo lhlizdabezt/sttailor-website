@@ -1,6 +1,8 @@
 # Cloudflare production settings
 
-The following active Free-plan settings were audited on 2026-09-21.
+The following Free-plan settings describe the production baseline audited on 2026-09-21. They are historical evidence; use a fresh audit to establish current values.
+
+For a current read-only API check, run **Audit Cloudflare production (read-only)** from GitHub Actions, or `gh workflow run audit-cloudflare.yml --ref main`. It uses the existing encrypted production token, runs the audit's GET-only and secret-redaction test, and reports all nine endpoint results in the run summary and sanitized job log. A denied or unreachable endpoint fails this audit instead of appearing as an empty successful result. The workflow does not deploy, change DNS/settings, or expand token permissions. The ordinary deployment workflow remains separate.
 
 | Setting | Value | Purpose | Risk / verification |
 | --- | --- | --- | --- |
