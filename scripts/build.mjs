@@ -91,6 +91,8 @@ const guideRoutes = [
 
 function readSource(file) {
   return readFileSync(path.join(sourceRoot, file), "utf8")
+    // Git can check out the preserved .txt fragments with Windows line endings.
+    .replace(/\r\n?/g, "\n")
     .replaceAll("https://sttailor.com/wp-content/uploads/", "/media/")
     .replaceAll("https://sttailor.com/", "/")
     .replace(/https:\/\/(?:cdn\.simpleicons\.org|api\.iconify\.design)\/[^"'\s<>]+/g, (url) => {
@@ -252,8 +254,7 @@ function transformServices(html) {
 
 function transformPricing(html) {
   html = removeElementByClass(html, "header", "stpr-hero")
-    .replace('<h2 id="stpr-priceboard-title">', '<h1 id="stpr-priceboard-title">')
-    .replace('</span></h2>\n          </div>\n          <p>Each starting price is a guide', '</span></h1>\n          </div>\n          <p>Each starting price is a guide')
+    .replace(/<h2 id="stpr-priceboard-title">([\s\S]*?)<\/h2>/, '<h1 id="stpr-priceboard-title">$1</h1>')
     .replace(/\s*<p>Each starting price is a guide[\s\S]*?<\/p>/, "")
     .replace("THE ATELIER GALLERY <span lang=\"vi\">THƯ VIỆN ATELIER</span>", "PRIVATE CONSULTATION <span lang=\"vi\">TƯ VẤN VÀ BÁO GIÁ</span>")
     .replace("See the references behind each commission.<span lang=\"vi\">Khám phá cảm hứng phía sau mỗi đơn may.</span>", "Let us prepare your quotation.<span lang=\"vi\">Nhận tư vấn và báo giá.</span>")
@@ -720,15 +721,22 @@ const buildDate = new Date().toISOString().slice(0, 10);
 // Shared navigation gained substantial page links on this date. Advance this
 // only for a meaningful shared-content change, never for CSS, JS or copyright.
 const sharedContentModified = "2026-09-23";
+// Advance the relevant date when transformed copy changes, not for build fixes.
+const derivedContentModified = {
+  "Gallery.html": "2026-10-18", "Payment.html": "2026-10-18",
+  "Returns.html": "2026-10-18", "Shipping.html": "2026-10-18",
+  "Terms.html": "2026-10-18", "Privacy.html": "2026-10-18"
+};
 
 function lastModifiedFor(sourceFile) {
   // Derived copy and Gallery additions can change without touching the baseline.
-  if (["Payment.html", "Returns.html", "Shipping.html", "Terms.html", "Privacy.html", "Gallery.html"].includes(sourceFile)) {
-    const inputs = ["scripts/build.mjs", ...(sourceFile === "Gallery.html" ? ["source/media"] : sourceFile === "Payment.html" ? [] : ["src/client-care-pages.js"])];
+  if (derivedContentModified[sourceFile]) {
+    const inputs = [path.join("source", "wordpress", sourceFile), ...(sourceFile === "Gallery.html" ? ["source/media"] : sourceFile === "Payment.html" ? [] : ["src/client-care-pages.js"])];
     const changed = spawnSync("git", ["status", "--porcelain", "--", ...inputs], { cwd: root, encoding: "utf8" });
     if (changed.status !== 0 || changed.stdout.trim()) return buildDate;
     const latest = spawnSync("git", ["log", "-1", "--format=%cs", "--", ...inputs], { cwd: root, encoding: "utf8" });
-    if (/^\d{4}-\d{2}-\d{2}$/.test(latest.stdout.trim())) return latest.stdout.trim();
+    const date = latest.stdout.trim();
+    return /^\d{4}-\d{2}-\d{2}$/.test(date) && date > derivedContentModified[sourceFile] ? date : derivedContentModified[sourceFile];
   }
   const contentFile = path.join("source", "wordpress", sourceFile);
   const dirty = spawnSync("git", ["status", "--porcelain", "--", contentFile], { cwd: root, encoding: "utf8" });
