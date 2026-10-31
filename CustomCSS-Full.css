@@ -13713,3 +13713,17 @@ html body .st-footer-v7.st-footer-v8 .st-footer-v7__eyebrow {
   line-height: 1.55 !important;
 }
 
+/* Navigation and social labels remain legible at the end of every page. */
+html body .st-footer-v7.st-footer-v8 :is(.st-footer-v7__nav, .st-footer-v7__visit) h3,
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__social-label {
+  font-size: 16px !important;
+  letter-spacing: .08em !important;
+  line-height: 1.5 !important;
+}
+html body .st-footer-v7.st-footer-v8 :is(.st-footer-v7__nav, .st-footer-v7__visit) h3 [lang="vi"],
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__social-label span[lang="vi"] {
+  font-size: 13px !important;
+  letter-spacing: .02em !important;
+  line-height: 1.5 !important;
+}
+
