@@ -8,8 +8,8 @@ import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
 import { clientCarePage } from "../src/client-care-pages.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-// This directory is intentionally read-only. It is the approved WordPress
-// reference supplied by the owner; the Worker output is derived from it.
+// The approved WordPress layout remains the baseline; current page refinements
+// are derived below. Its retired social link was removed at the owner's request.
 const sourceRoot = path.join(root, "source", "wordpress");
 const sourceMedia = path.join(root, "source", "media");
 const sourceIcons = path.join(root, "source", "icons");
@@ -22,7 +22,9 @@ const buildRevision = /^[0-9a-f]{40}$/i.test(process.env.STTAILOR_BUILD_REVISION
 let scriptHref = "/scripts/site.js";
 let imageManifest = {};
 const homeHeroImage = "/media/2026/06/background-hero-trang-lien-he-sttailor.webp";
-const homeHeroSizes = "(max-width: 760px) 100vw, 1717px";
+// The portrait cover is up to 740px tall: 740 * 1717 / 916 needs ~1387 source pixels.
+// A viewport-width hint would upscale the 480px derivative and blur the fitting.
+const homeHeroSizes = "(max-width: 760px) 1400px, 1717px";
 const galleryFilm = {
   src: "/media/2026/09/st-tailor-womenswear-fitting-film.mp4",
   poster: "/media/2026/09/st-tailor-womenswear-fitting-poster.webp",
@@ -628,8 +630,8 @@ function transformAbout(html) {
     <div class="st-tripadvisor__copy">
       <p class="st-lux-eyebrow">OUR TRIPADVISOR PAGE <span lang="vi">/ TRANG TRIPADVISOR CỦA CHÚNG TÔI</span></p>
       <h2 id="st-tripadvisor-title">Find us on Tripadvisor.<span lang="vi">Gặp S.T Tailor trên Tripadvisor.</span></h2>
-      <p>Visit our new Tripadvisor page. If you have been to the showroom, you can share your experience there.<span lang="vi">Ghé xem trang Tripadvisor mới của chúng tôi. Nếu đã đến showroom, bạn có thể chia sẻ trải nghiệm của mình tại đây.</span></p>
-      <a class="st-tripadvisor__link" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer">Open our Tripadvisor page <span lang="vi">Xem trang Tripadvisor</span><span aria-hidden="true">↗</span></a>
+      <p>Read independent client reviews and explore visits to our showroom. If you have visited S.T Tailor, you are welcome to share your experience.<span lang="vi">Đọc đánh giá độc lập của khách hàng và tìm hiểu trải nghiệm tại showroom. Nếu đã ghé S.T Tailor, bạn có thể chia sẻ cảm nhận của mình.</span></p>
+      <a class="st-tripadvisor__link" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer">Read client reviews <span lang="vi">Đọc đánh giá khách hàng</span><span aria-hidden="true">↗</span></a>
     </div>
     <div class="st-tripadvisor__badge" role="group" aria-label="Official Tripadvisor widget | Huy hiệu Tripadvisor chính thức">
       <div id="TA_rated383" class="TA_rated"><ul id="nk7KumP" class="TA_links j2AXIy9"><li id="YSiMIh" class="HfgYawPu"><a target="_blank" rel="noopener noreferrer" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html"><img src="https://www.tripadvisor.com/img/cdsi/img2/badges/ollie-11424-2.gif" alt="S.T Tailor on Tripadvisor" loading="lazy" decoding="async"></a></li></ul></div>
@@ -793,7 +795,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     paymentAccepted: "Cash (VND), Bank Transfer, QR, Credit Card, Debit Card, Visa, Mastercard, American Express, JCB, UnionPay, Discover, Diners Club, Apple Pay, Google Pay, Samsung Pay (NFC)",
     hasMap: "https://maps.app.goo.gl/j8N26uiQUC4J95vT6",
     knowsAbout: ["Bespoke tailoring", "Clothing alterations", "European suiting cloth", "Vietnamese silk", "Fittings and pattern cutting"],
-    sameAs: ["https://facebook.com/sttailor.hcm/", "https://www.instagram.com/sttailorhcm/", "https://www.threads.com/@sttailorhcm", "https://wa.me/84909556258", "https://zalo.me/0909556258", "https://www.linkedin.com/company/sttailorhcm/", "https://youtube.com/@S.Ttailor", "https://www.tiktok.com/@sttailorhcm", "https://pinterest.com/sttailorhcm/", "https://x.com/sttalior", "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html"]
+    sameAs: ["https://facebook.com/sttailor.hcm/", "https://www.instagram.com/sttailorhcm/", "https://www.threads.com/@sttailorhcm", "https://wa.me/84909556258", "https://zalo.me/0909556258", "https://www.linkedin.com/company/sttailorhcm/", "https://youtube.com/@S.Ttailor", "https://www.tiktok.com/@sttailorhcm", "https://pinterest.com/sttailorhcm/", "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html"]
   };
   business.hasOfferCatalog = {
     "@type": "OfferCatalog",
@@ -866,7 +868,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
   const heroPreload = heroMetadata ? `<link rel="preload" as="image" href="${shareImage}" imagesrcset="${heroCandidates.map(({ src, width }) => `${src} ${width}w`).join(", ")}" imagesizes="${homeHeroSizes}" fetchpriority="high">` : "";
   const siteHeader = enrichImageAttributes(header(route), { responsiveSizes: "102px" });
   const siteFooter = enrichImageAttributes(footer(), { responsiveSizes: "160px" });
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8">${googleTagManagerHead}<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${safeDescription}"><meta name="author" content="S.T Tailor"><meta name="application-name" content="S.T Tailor"><meta name="sttailor-build-revision" content="${buildRevision}"><meta name="color-scheme" content="light"><meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="google-site-verification" content="e1RyHPdDirO6wJIxuZKKSIY6EXYb37XMfktIVl3aJz8"><meta name="p:domain_verify" content="78c108c3384a3aa9201fb90b99f0b225"><link rel="canonical" href="${canonical}"><link rel="icon" href="/icons/sttailor-favicon-48.png" type="image/png" sizes="48x48"><link rel="apple-touch-icon" href="/icons/sttailor-apple-touch-180.png" sizes="180x180"><link rel="manifest" href="/site.webmanifest">${heroPreload}<meta property="og:title" content="${safeTitle}"><meta property="og:description" content="${safeDescription}"><meta property="og:type" content="website"><meta property="og:url" content="${canonical}"><meta property="og:site_name" content="S.T Tailor"><meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:image" content="${shareImageUrl}"><meta property="og:image:type" content="${imageType}"><meta property="og:image:alt" content="${safeImageAlt}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${safeTitle}"><meta name="twitter:description" content="${safeDescription}"><meta name="twitter:image" content="${shareImageUrl}"><meta name="twitter:image:alt" content="${safeImageAlt}"><meta name="theme-color" content="#ead1ad"><title>${safeTitle}</title>${jsonLd}${analyticsTags}<link rel="stylesheet" href="${stylesheetHref}"></head><body>${googleTagManagerNoScript}${metaPixelNoScript}<div class="st-site-frame">${siteHeader}<main id="main-content">${body}</main>${siteFooter}</div><script type="module" src="${scriptHref}"></script></body></html>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8">${googleTagManagerHead}<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${safeDescription}"><meta name="author" content="S.T Tailor"><meta name="application-name" content="S.T Tailor"><meta name="sttailor-build-revision" content="${buildRevision}"><meta name="color-scheme" content="light"><meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="google-site-verification" content="e1RyHPdDirO6wJIxuZKKSIY6EXYb37XMfktIVl3aJz8"><meta name="p:domain_verify" content="78c108c3384a3aa9201fb90b99f0b225"><link rel="canonical" href="${canonical}"><link rel="icon" href="/icons/sttailor-favicon-48.png" type="image/png" sizes="48x48"><link rel="apple-touch-icon" href="/icons/sttailor-apple-touch-180.png" sizes="180x180"><link rel="manifest" href="/site.webmanifest">${heroPreload}<meta property="og:title" content="${safeTitle}"><meta property="og:description" content="${safeDescription}"><meta property="og:type" content="website"><meta property="og:url" content="${canonical}"><meta property="og:site_name" content="S.T Tailor"><meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:image" content="${shareImageUrl}"><meta property="og:image:type" content="${imageType}"><meta property="og:image:alt" content="${safeImageAlt}"><meta name="theme-color" content="#ead1ad"><title>${safeTitle}</title>${jsonLd}${analyticsTags}<link rel="stylesheet" href="${stylesheetHref}"></head><body>${googleTagManagerNoScript}${metaPixelNoScript}<div class="st-site-frame">${siteHeader}<main id="main-content">${body}</main>${siteFooter}</div><script type="module" src="${scriptHref}"></script></body></html>`;
 }
 
 function collectAssetPaths() {

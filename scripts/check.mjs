@@ -100,19 +100,21 @@ for (const route of expectedRoutes) {
   const businessSchema = schemaGraph.find((item) => Array.isArray(item["@type"]) && item["@type"].includes("LocalBusiness"));
   if (businessSchema?.address?.streetAddress !== "1st Floor, 258 Le Thanh Ton, Tan Dinh Ward") failures.push(`Showroom floor or ward differs from the confirmed address: ${route}`);
   if (businessSchema?.hasOfferCatalog?.["@type"] !== "OfferCatalog" || businessSchema?.makesOffer) failures.push(`LocalBusiness service catalog uses the wrong Schema.org property: ${route}`);
-  if ((html.match(/href="https:\/\/x\.com\/sttalior"/g) ?? []).length !== 1 || (businessSchema?.sameAs ?? []).filter((url) => url === "https://x.com/sttalior").length !== 1) failures.push(`Official X profile is missing or duplicated in social links/schema: ${route}`);
+  if (/https?:\/\/(?:[a-z0-9-]+\.)*(?:x|twitter)\.com(?:[\/:?"\s]|$)|name=["']twitter:/i.test(html)) failures.push(`Retired social integration remains on ${route}`);
   if ((html.match(/href="https:\/\/www\.threads\.com\/@sttailorhcm"/g) ?? []).length !== 1 || (businessSchema?.sameAs ?? []).filter((url) => url === "https://www.threads.com/@sttailorhcm").length !== 1) failures.push(`Official Threads profile is missing or duplicated in social links/schema: ${route}`);
   const tripadvisorUrl = "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html";
   if ((businessSchema?.sameAs ?? []).filter((url) => url === tripadvisorUrl).length !== 1) failures.push(`Official Tripadvisor listing is missing or duplicated in LocalBusiness schema: ${route}`);
   const widgetCount = (html.match(/www\.jscache\.com\/wejs\?wtype=rated/g) ?? []).length;
   if (route === "/gioi-thieu/" ? widgetCount !== 1 || !html.includes(`href="${tripadvisorUrl}"`) : widgetCount !== 0) failures.push(`Tripadvisor badge or review link is missing, duplicated, or loaded on the wrong page: ${route}`);
-  for (const marker of ['rel="manifest" href="/site.webmanifest"', 'name="twitter:image:alt"', 'name="google-site-verification"', 'name="p:domain_verify"']) {
+  for (const marker of ['rel="manifest" href="/site.webmanifest"', 'property="og:image:alt"', 'name="google-site-verification"', 'name="p:domain_verify"']) {
     if (!html.includes(marker)) failures.push(`SEO/discovery marker is missing on ${route}: ${marker}`);
   }
   if (/<meta name="keywords"/i.test(html)) failures.push(`Obsolete keyword meta tag must not be used: ${route}`);
   if (html.includes("beta.sttailor.com")) failures.push(`Beta hostname remains in production HTML: ${route}`);
   if ((html.match(/<footer class="st-footer st-footer-v7 st-footer-v8"/g) ?? []).length !== 1) failures.push(`Footer is not singular: ${route}`);
   const footer = html.match(/<footer\b[\s\S]*?<\/footer>/i)?.[0] ?? "";
+  const followLinks = [...(footer.match(/<nav class="st-footer-v7__social"[\s\S]*?<\/nav>/)?.[0] ?? "").matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
+  if (followLinks.length !== 10 || new Set(followLinks).size !== 10 || businessSchema?.sameAs?.length !== 10) failures.push(`Ten unique social profiles are required in FOLLOW and structured data: ${route}`);
   const primaryNav = html.match(/<nav id="primary-navigation"[\s\S]*?<\/nav>/)?.[0] ?? "";
   const primaryLinks = [...primaryNav.matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
   if (JSON.stringify(primaryLinks) !== JSON.stringify(["/gioi-thieu/", "/dich-vu/", "/gallery/", "/bang-gia/", "/lien-he/"])) failures.push(`Header must keep its five main destinations: ${route}`);
@@ -284,13 +286,16 @@ if (!home.includes('/media/2026/09/st-tailor-client-fitted-suit.jpg') || home.in
 if (!home.includes('rel="preload" as="image"') || !home.includes('fetchpriority="high"')) failures.push("Home hero image preload is missing.");
 const heroImage = home.match(/<img[^>]+class="st-home-v6__hero-media"[^>]+>/)?.[0] ?? "";
 const heroPreload = home.match(/<link rel="preload" as="image"[^>]+>/)?.[0] ?? "";
-if (!heroImage.includes('sizes="(max-width: 760px) 100vw, 1717px"') || !heroImage.includes('background-hero-trang-lien-he-sttailor.webp 1717w')) failures.push("Home hero image may select a blurry desktop derivative.");
-if (!heroPreload.includes('imagesizes="(max-width: 760px) 100vw, 1717px"') || !heroPreload.includes('background-hero-trang-lien-he-sttailor.webp 1717w')) failures.push("Home hero preload and image candidates must match.");
+if (!heroImage.includes('sizes="(max-width: 760px) 1400px, 1717px"') || !heroImage.includes('background-hero-trang-lien-he-sttailor.webp 1717w')) failures.push("Home hero image may select a blurry portrait or desktop derivative.");
+if (!heroPreload.includes('imagesizes="(max-width: 760px) 1400px, 1717px"') || !heroPreload.includes('background-hero-trang-lien-he-sttailor.webp 1717w')) failures.push("Home hero preload and image candidates must match.");
 if (heroImage.match(/\bsrcset="([^"]+)"/)?.[1] !== heroPreload.match(/\bimagesrcset="([^"]+)"/)?.[1]) failures.push("Home hero preload must request the same candidate as the image.");
 if (!home.includes('loading="lazy"') || home.includes('loading="eager"')) failures.push("Deferred images or map loading are not configured correctly.");
 if (!home.includes('class="st-home-guide-strip"') || !home.includes('href="/cam-nang-may-do/"')) failures.push("Home tailoring-guide discovery strip is missing.");
 const footerSocial = home.match(/<nav class="st-footer-v7__social"[\s\S]*?<\/nav>/)?.[0] ?? "";
-for (const channel of ["Facebook", "Zalo", "Instagram", "Threads", "YouTube", "LinkedIn", "WhatsApp", "Pinterest", "TikTok", "X", "Tripadvisor"]) {
+const socialDestinations = [...footerSocial.matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
+if (socialDestinations.length !== 10 || new Set(socialDestinations).size !== 10) failures.push("FOLLOW must contain exactly ten unique approved social destinations.");
+if (existsSync(path.join(dist, "icons", "simple-x-000000.svg"))) failures.push("Retired social icon must not be published.");
+for (const channel of ["Facebook", "Zalo", "Instagram", "Threads", "YouTube", "LinkedIn", "WhatsApp", "Pinterest", "TikTok", "Tripadvisor"]) {
   if (!footerSocial.includes(channel)) failures.push(`Footer social channel missing: ${channel}`);
 }
 for (const excluded of ["Telephone", "Email"]) {

@@ -12550,10 +12550,11 @@ html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump::after {
 }
 html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump span {
   font-family: var(--st-vietnamese) !important;
-  font-size: 11px !important;
-  letter-spacing: .105em !important;
+  font-size: 14px !important;
+  letter-spacing: .055em !important;
+  line-height: 1.45 !important;
 }
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump span[lang="vi"] { color: #78452e !important; -webkit-text-fill-color: #78452e !important; }
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump span[lang="vi"] { font-size: 13px !important; letter-spacing: .035em !important; color: #78452e !important; -webkit-text-fill-color: #78452e !important; }
 /* Keep the bilingual separator with the Vietnamese label; the inherited WordPress cream made it look detached. */
 html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump span[lang="vi"]::before { color: #78452e !important; -webkit-text-fill-color: #78452e !important; }
 html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:hover,
@@ -13568,10 +13569,13 @@ html body .st-lux-about .st-lux-eyebrow,
 html body .st-lux-page.st-lux-about .st-about-atelier-panel__eyebrow,
 html body #main-content .st-service-page .st-service-commission-map__head .st-page-kicker,
 html body .st-service-page .st-page-kicker,
+html body .st-service-page .st-bespoke-process__head .st-page-kicker,
 html body .st-gallery-page--albums .st-gallery-kicker,
+html body .st-gallery-page--albums .st-gallery-film__kicker,
 html body #st-pricing-v5.stpr-ledger .stpr-eyebrow,
 html body .st-payment-page--focused .st-page-kicker,
-html body .st-guide-page .st-guide-kicker { font-size: 14px !important; }
+html body .st-guide-page .st-guide-kicker,
+html body .st-client-care .st-info-kicker { font-size: 16px !important; line-height: 1.55 !important; }
 html body #st-pricing-v5.stpr-ledger .stpr-priceboard__head .stpr-eyebrow { font-size: clamp(17px, 1.75vw, 24px) !important; }
 html body #st-home-v6.st-home-v6--mission .st-home-v6__kicker [lang="vi"],
 html body #main-content .st-lux-page.st-lux-about .st-lux-eyebrow [lang="vi"],
@@ -13675,5 +13679,37 @@ html body #main-content .st-gallery-page--albums .st-album-grid__item figcaption
 @media (prefers-reduced-motion: no-preference) {
   html body .st-client-care__header,
   html body .st-payment-page--focused .st-payment-methods > .st-payment-shell > :is(.st-page-kicker, h1, .st-payment-methods__note) { animation: st-entry-arrive .72s cubic-bezier(.18, .74, .2, 1) both !important; }
+}
+
+/* Equal social destinations keep the complete FOLLOW list calm and easy to scan. */
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__social {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px !important;
+  width: 100%;
+}
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__social a {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 46px !important;
+  padding: 10px 8px !important;
+  box-sizing: border-box !important;
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+}
+html body .st-tripadvisor__link { font-size: 14px !important; flex-wrap: wrap; }
+
+/* Footer headings follow the same restrained weight hierarchy as page titles. */
+html body .st-footer-v7.st-footer-v8 #st-footer-title,
+html body .st-footer-v7.st-footer-v8 :is(.st-footer-v7__nav, .st-footer-v7__visit) h3 {
+  font-weight: 400 !important;
+}
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__eyebrow {
+  font-size: 16px !important;
+  line-height: 1.55 !important;
 }
 

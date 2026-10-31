@@ -89,6 +89,8 @@ for (const route of routes) {
   expect(pageHtml.includes('"hasOfferCatalog":{"@type":"OfferCatalog"') && !pageHtml.includes('"makesOffer":{"@type":"OfferCatalog"'), `${route} has an invalid LocalBusiness service catalog relationship`);
   expect(pageHtml.includes('"streetAddress":"1st Floor, 258 Le Thanh Ton, Tan Dinh Ward"'), `${route} does not show the confirmed showroom floor and ward in LocalBusiness schema`);
   const footer = pageHtml.match(/<footer\b[\s\S]*?<\/footer>/i)?.[0] ?? "";
+  const followLinks = [...(footer.match(/<nav class="st-footer-v7__social"[\s\S]*?<\/nav>/)?.[0] ?? "").matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
+  expect(followLinks.length === 10 && new Set(followLinks).size === 10, `${route} must publish exactly ten unique FOLLOW destinations`);
   const tripadvisorProfile = "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html";
   expect(footer.split(`href="${tripadvisorProfile}"`).length === 2 && !footer.includes("st-footer-v7__tripadvisor") && !footer.includes("socialButtonRate") && !footer.includes("Rate us on Tripadvisor"), `${route} footer has a missing or duplicated Tripadvisor link, or still contains the removed rate widget`);
   if (route === "/gioi-thieu/") expect(pageHtml.includes('id="TA_rated383"') && pageHtml.includes("wtype=rated") && pageHtml.includes(`href="${tripadvisorProfile}"`), "About page lost its official Tripadvisor badge or profile link");
@@ -104,7 +106,7 @@ for (const route of routes) {
   expect((pageHtml.match(/clarity\.ms\/tag\//g) || []).length === 0 && pageHtml.includes(')(window,document,"clarity")'), `${route} has a duplicate direct Microsoft Clarity loader or no event queue`);
   expect(!/https:\/\/(?:api\.iconify\.design|cdn\.simpleicons\.org)\//i.test(pageHtml), `${route} still loads third-party icon assets`);
   expect(!pageHtml.includes("data-consent-panel") && !pageHtml.includes("data-consent-open"), `${route} still has a consent control`);
-  expect((pageHtml.match(/href="https:\/\/x\.com\/sttalior"/g) || []).length === 1 && pageHtml.includes('"https://x.com/sttalior"'), `${route} has no single official X profile in social links/schema`);
+  expect(!/https?:\/\/(?:[a-z0-9-]+\.)*(?:x|twitter)\.com(?:[\/:?"\s]|$)|name=["']twitter:/i.test(pageHtml), `${route} still contains a retired social integration`);
   expect((pageHtml.match(/href="https:\/\/www\.threads\.com\/@sttailorhcm"/g) || []).length === 1 && pageHtml.includes('"https://www.threads.com/@sttailorhcm"'), `${route} has no single official Threads profile in social links/schema`);
 }
 
@@ -142,7 +144,7 @@ expect(home.includes("/media/2026/09/st-tailor-client-fitted-suit.jpg") && !home
 expect(home.includes('rel="manifest" href="/site.webmanifest"'), "Web app manifest discovery is missing");
 expect(home.includes('rel="icon" href="/icons/sttailor-favicon-48.png"') && home.includes('rel="apple-touch-icon" href="/icons/sttailor-apple-touch-180.png"'), "Compact brand icons are missing from the live page");
 expect(home.includes('rel="preload" as="image"') && home.includes('fetchpriority="high"'), "Home hero preload is missing");
-expect(home.includes('name="twitter:image:alt"'), "Social image alternative text is missing");
+expect(home.includes('property="og:image:alt"'), "Social image alternative text is missing");
 expect(home.includes('name="google-site-verification"') && home.includes('name="p:domain_verify"'), "Search ownership metadata is missing");
 const cssPath = home.match(/<link rel="stylesheet" href="([^"]+)"/)?.[1];
 expect(Boolean(cssPath), "The production stylesheet was not found");

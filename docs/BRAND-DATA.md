@@ -30,15 +30,14 @@ Legal verification contacts are separate from the public showroom number. Do not
 | YouTube | https://www.youtube.com/@S.Ttailor |
 | TikTok | https://www.tiktok.com/@sttailorhcm |
 | Pinterest | https://www.pinterest.com/sttailorhcm/ |
-| X | https://x.com/sttalior |
 | Threads | https://www.threads.com/@sttailorhcm |
 | Tripadvisor | https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html |
 
-The Contact page has six direct channels: telephone, email, Messenger, Zalo, Instagram and WhatsApp. FOLLOW has eleven unique social/profile destinations, without telephone or email. Zalo appears once. Preserve the real X handle above; do not manufacture a matching handle.
+The Contact page has six direct channels: telephone, email, Messenger, Zalo, Instagram and WhatsApp. FOLLOW has ten unique social/profile destinations, without telephone or email. Zalo appears once. As requested on 31 October 2026, X/Twitter is retired: do not publish its profile, sharing controls, widget, icon or platform metadata.
 
 ## Content and payment contract
 
-- The primary header has five destinations: About, Services, Gallery, Pricing and Contact. The footer links to all sixteen published pages, with no section directory, disclosure box or # anchor shortcuts. Retain all eleven FOLLOW links, telephone, email, Client Care policies, showroom details and map.
+- The primary header has five destinations: About, Services, Gallery, Pricing and Contact. The footer links to all sixteen published pages, with no section directory, disclosure box or # anchor shortcuts. Retain all ten FOLLOW links, telephone, email, Client Care policies, showroom details and map.
 - Preserve Vietnamese diacritics, UTF-8 encoding and language attributes. Check both Chromium and WebKit layouts; WebKit emulation does not establish physical iPhone or iPad compatibility.
 - Website content remains Vietnamese and English. WhatsApp business copy is English.
 - Preserve original logo colors. Use Tailor or Tailoring in brand copy.
