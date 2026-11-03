@@ -934,9 +934,11 @@ html body .st-lux-page .st-lux-section-heading h2 span[lang="vi"],
 html body .st-lux-page .st-lux-values .st-lux-value h3 span[lang="vi"] { color: #843f20 !important; -webkit-text-fill-color: #843f20 !important; }
 
 /* Keep the full-resolution consultation photograph behind the opening words.
+   The inner grid owns spacing so legacy outer padding cannot push the CTA below the fold.
    A single translucent scrim provides contrast without a separate color band. */
 html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission {
   background-color: #1d1a18 !important;
+  padding: 0 !important;
 }
 html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-media {
   inset: 0 !important;
