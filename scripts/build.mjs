@@ -25,6 +25,7 @@ const homeHeroImage = "/media/2026/06/background-hero-trang-lien-he-sttailor.web
 // The portrait cover is up to 740px tall: 740 * 1717 / 916 needs ~1387 source pixels.
 // A viewport-width hint would upscale the 480px derivative and blur the fitting.
 const homeHeroSizes = "(max-width: 760px) 1400px, 1717px";
+const fittingFilmRoute = "/phim-thu-do/";
 const galleryFilm = {
   src: "/media/2026/09/st-tailor-womenswear-fitting-film.mp4",
   poster: "/media/2026/09/st-tailor-womenswear-fitting-poster.webp",
@@ -62,6 +63,7 @@ const routes = [
   ["/gioi-thieu/", "About.html", "About S.T Tailor | Bespoke Tailoring & Alterations in HCMC", "Meet S.T Tailor in Ho Chi Minh City for bespoke suits, formalwear, clothing alterations, British and Italian cloth, Vietnamese silk and private fittings.", "/media/2026/09/fabric-focus-cloth-books.jpg", "Tailoring cloth books selected at S.T Tailor"],
   ["/dich-vu/", "Services.html", "Bespoke Tailoring & Alterations in HCMC | S.T Tailor", "Explore bespoke suits, shirts, formalwear, womenswear, fittings and clothing alterations by S.T Tailor in central Ho Chi Minh City.", "/media/2026/09/st-tailor-client-fabric-consultation.jpg", "Client reviewing tailoring fabrics with S.T Tailor | Khách hàng chọn vải may đo cùng S.T Tailor"],
   ["/gallery/", "Gallery.html", "Bespoke Tailoring Gallery in HCMC | S.T Tailor", "View S.T Tailor's cloth, fittings, suits, formalwear, womenswear, garment details and showroom in Ho Chi Minh City.", "/media/2026/09/st-tailor-gallery-showroom-tailoring-display.jpg", "S.T Tailor showroom and tailoring display"],
+  [fittingFilmRoute, "FittingFilm.html", "A Fitting in Motion | S.T Tailor Film", galleryFilm.description, galleryFilm.poster, "Client trying on a long black skirt at S.T Tailor | Khách thử chân váy đen dài tại S.T Tailor"],
   ["/bang-gia/", "Pricing.html", "Bespoke Tailoring Prices in HCMC | S.T Tailor", "Review starting prices for bespoke suits, shirts, formalwear and clothing alterations before consulting S.T Tailor in Ho Chi Minh City.", "/media/2026/09/st-tailor-navy-double-breasted-front.jpeg", "Navy double-breasted suit by S.T Tailor"],
   ["/phuong-thuc-thanh-toan/", "Payment.html", "Payment Methods | S.T Tailor HCMC", "Pay S.T Tailor in VND cash, by bank transfer or QR, with international credit/debit cards, or via Apple Pay, Google Pay and Samsung Pay NFC payments.", "/media/2026/06/store-sttailor-2.webp", "S.T Tailor showroom in Ho Chi Minh City"],
   ["/lien-he/", "Contact.html", "Contact S.T Tailor HCMC | Private Consultation", "Contact S.T Tailor by telephone, email, Messenger, Zalo, Instagram or WhatsApp and arrange a private tailoring consultation.", "/media/2026/06/store-sttailor-1.webp", "S.T Tailor showroom at 258 Le Thanh Ton"],
@@ -452,6 +454,13 @@ function appendToGalleryAlbum(html, id, figure) {
   return `${html.slice(0, at)}${figure}${html.slice(at)}`;
 }
 
+function fittingFilmPlayer(descriptionId) {
+  return `<video controls playsinline preload="none" width="720" height="1280" poster="${galleryFilm.poster}" aria-describedby="${descriptionId}">
+      <source src="${galleryFilm.src}" type="video/mp4">
+      <a href="${galleryFilm.src}">Watch the fitting film <span lang="vi">/ Xem video thử đồ</span></a>
+    </video>`;
+}
+
 function transformGallery(html) {
   html = html.replace(
     /\s*<p>Eleven albums gather tailoring[\s\S]*?<\/p>/,
@@ -522,12 +531,10 @@ function transformGallery(html) {
     <h3 id="st-gallery-film-title">A fitting in motion<span lang="vi">Thử phom qua chuyển động</span></h3>
     <p id="st-gallery-film-description">${galleryFilm.description}<span lang="vi">Khách hàng xem lại đường nét và độ chuyển động của chân váy đen dài trong buổi thử đồ tại S.T Tailor, TP. Hồ Chí Minh.</span></p>
     <a class="st-gallery-film__link" href="/lien-he/">Arrange a fitting <span lang="vi">/ Đặt lịch thử đồ</span></a>
+    <a class="st-gallery-film__link" href="${fittingFilmRoute}">Open the film page <span lang="vi">/ Mở trang xem phim</span></a>
   </div>
   <figure class="st-gallery-film__media">
-    <video controls playsinline preload="none" width="720" height="1280" poster="${galleryFilm.poster}" aria-describedby="st-gallery-film-description">
-      <source src="${galleryFilm.src}" type="video/mp4">
-      <a href="${galleryFilm.src}">Watch the fitting film <span lang="vi">/ Xem video thử đồ</span></a>
-    </video>
+    ${fittingFilmPlayer("st-gallery-film-description")}
     <figcaption>Womenswear fitting at S.T Tailor<span lang="vi">Buổi thử trang phục nữ tại S.T Tailor</span></figcaption>
   </figure>
 </section>`;
@@ -666,6 +673,7 @@ function transformPage(sourceFile, html) {
     "Pricing.html": transformPricing,
     "Contact.html": transformContact,
     "Gallery.html": transformGallery,
+    "FittingFilm.html": (source) => source.replace("<!-- FITTING_FILM_PLAYER -->", fittingFilmPlayer("st-fitting-film-description")),
     "Payment.html": transformPayment,
     "Returns.html": () => clientCarePage("Returns.html"),
     "Shipping.html": () => clientCarePage("Shipping.html"),
@@ -828,6 +836,9 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
       item: { "@type": "ImageObject", contentUrl: `https://sttailor.com${src}`, caption: alt, inLanguage: ["en", "vi"] }
     }))
     });
+    webPage.mainEntity = { "@id": `${canonical}#images` };
+  }
+  if (route === fittingFilmRoute) {
     graph.push({
       "@type": "VideoObject",
       "@id": `${canonical}#womenswear-fitting-film`,
@@ -840,7 +851,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
       isPartOf: { "@id": `${canonical}#webpage` },
       publisher: { "@id": "https://sttailor.com/#business" }
     });
-    webPage.mainEntity = { "@id": `${canonical}#images` };
+    webPage.mainEntity = { "@id": `${canonical}#womenswear-fitting-film` };
   }
   if (route === "/cam-nang-may-do/") {
     graph.push({ "@type": "ItemList", "@id": `${canonical}#guides`, name: "S.T Tailor tailoring guide | Cẩm nang may đo S.T Tailor", numberOfItems: guideRoutes.length, itemListElement: guideRoutes.map(([url, english, vietnamese], index) => ({ "@type": "ListItem", position: index + 1, name: `${english} | ${vietnamese}`, url: `https://sttailor.com${url}` })) });
@@ -1051,22 +1062,21 @@ writeFileSync(path.join(dist, indexNowKeyFile), `${indexNowKey}\n`, "utf8");
 const xmlEscape = (value) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&apos;");
 const publishedImageLocations = new Set();
 const sitemapRouteOrder = [routes.find(([route]) => route === "/gallery/"), ...routes.filter(([route]) => route !== "/gallery/")];
-const sitemapEntries = sitemapRouteOrder.map(([route, , , , shareImage, shareImageAlt]) => {
+const sitemapEntries = sitemapRouteOrder.map(([route, , , , shareImage]) => {
   const pagePath = route === "/" ? path.join(dist, "index.html") : path.join(dist, route.slice(1), "index.html");
   const pageHtml = readFileSync(pagePath, "utf8");
-  const imageMap = new Map([[shareImage, shareImageAlt]]);
+  const imageLocations = new Set([shareImage]);
   for (const match of pageHtml.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^"]+)"[^>]*>/gi)) {
     if (route === "/gallery/" && /(?:logo-sttailor|LinkedInLogo)/i.test(match[1])) continue;
-    const alt = /\balt="([^"]*)"/i.exec(match[0])?.[1] || "S.T Tailor";
-    if (!imageMap.has(match[1])) imageMap.set(match[1], alt);
+    imageLocations.add(match[1]);
   }
-  const pageImages = [...imageMap].filter(([src]) => {
+  const pageImages = [...imageLocations].filter((src) => {
     if (publishedImageLocations.has(src)) return false;
     publishedImageLocations.add(src);
     return true;
   });
-  const imageEntries = pageImages.slice(0, 1000).map(([src, alt]) => `<image:image><image:loc>https://sttailor.com${xmlEscape(src)}</image:loc><image:title>${xmlEscape(alt)}</image:title></image:image>`).join("");
-  const videoEntry = route === "/gallery/"
+  const imageEntries = pageImages.slice(0, 1000).map((src) => `<image:image><image:loc>https://sttailor.com${xmlEscape(src)}</image:loc></image:image>`).join("");
+  const videoEntry = route === fittingFilmRoute
     ? `<video:video><video:thumbnail_loc>https://sttailor.com${galleryFilm.poster}</video:thumbnail_loc><video:title>${xmlEscape(galleryFilm.name)}</video:title><video:description>${xmlEscape(galleryFilm.description)}</video:description><video:content_loc>https://sttailor.com${galleryFilm.src}</video:content_loc><video:duration>${galleryFilm.duration}</video:duration><video:publication_date>${galleryFilm.publishedAt}</video:publication_date></video:video>`
     : "";
   return `\n  <url><loc>https://sttailor.com${route}</loc><lastmod>${routeLastModified.get(route) ?? buildDate}</lastmod>${imageEntries}${videoEntry}</url>`;

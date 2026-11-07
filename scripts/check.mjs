@@ -11,7 +11,7 @@ const sourceRoot = path.join(root, "source", "wordpress");
 const dist = path.join(root, "dist");
 const manifest = JSON.parse(readFileSync(path.join(dist, "build-manifest.json"), "utf8"));
 const failures = [];
-const expectedRoutes = ["/", "/gioi-thieu/", "/dich-vu/", "/gallery/", "/bang-gia/", "/phuong-thuc-thanh-toan/", "/lien-he/", "/cam-nang-may-do/", "/chon-vai-may-do/", "/quy-trinh-thu-do/", "/chinh-sua-trang-phuc/", "/bao-quan-giat-la/", "/doi-tra-hoan-tien/", "/chinh-sach-van-chuyen/", "/dieu-khoan-dieu-kien/", "/chinh-sach-bao-mat/"];
+const expectedRoutes = ["/", "/gioi-thieu/", "/dich-vu/", "/gallery/", "/phim-thu-do/", "/bang-gia/", "/phuong-thuc-thanh-toan/", "/lien-he/", "/cam-nang-may-do/", "/chon-vai-may-do/", "/quy-trinh-thu-do/", "/chinh-sua-trang-phuc/", "/bao-quan-giat-la/", "/doi-tra-hoan-tien/", "/chinh-sach-van-chuyen/", "/dieu-khoan-dieu-kien/", "/chinh-sach-bao-mat/"];
 const pageTitles = new Set();
 const pageDescriptions = new Set();
 const anchorIds = new Map();
@@ -421,8 +421,11 @@ for (const [asset, minimum, maximum] of [[filmPath, 100_000, 8_000_000], [poster
   if (!existsSync(file) || statSync(file).size < minimum || statSync(file).size > maximum) failures.push(`Gallery film asset is missing or outside its delivery budget: ${asset}`);
 }
 const galleryGraph = JSON.parse(gallery.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i)?.[1] ?? "{}")["@graph"] ?? [];
-const galleryVideos = galleryGraph.filter((item) => item["@type"] === "VideoObject");
-if (galleryVideos.length !== 1 || galleryVideos[0]?.contentUrl !== `https://sttailor.com${filmPath}` || galleryVideos[0]?.thumbnailUrl !== `https://sttailor.com${posterPath}` || galleryVideos[0]?.duration !== "PT34S") failures.push("Gallery VideoObject does not describe the published fitting film.");
+const watchPage = readFileSync(path.join(dist, "phim-thu-do", "index.html"), "utf8");
+const watchGraph = JSON.parse(watchPage.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i)?.[1] ?? "{}")["@graph"] ?? [];
+const watchVideos = watchGraph.filter((item) => item["@type"] === "VideoObject");
+if (galleryGraph.some((item) => item["@type"] === "VideoObject") || watchVideos.length !== 1 || watchVideos[0]?.contentUrl !== `https://sttailor.com${filmPath}` || watchVideos[0]?.thumbnailUrl !== `https://sttailor.com${posterPath}` || watchVideos[0]?.duration !== "PT34S") failures.push("The fitting watch page must own the VideoObject.");
+if (!gallery.includes('href="/phim-thu-do/"') || !watchPage.includes(`src="${filmPath}"`)) failures.push("The fitting watch page or its Gallery link is incomplete.");
 for (const requiredAsset of ["st-tailor-archive-atelier-four.jpg", "st-tailor-gallery-partner-certificate.jpg", "st-tailor-made-to-measure-stories-gallery.jpg", "st-tailor-magenta-floral-wrap-dress-and-navy-suit.jpg", "st-tailor-magenta-floral-wrap-dress-full-length.jpg", "st-tailor-magenta-floral-wrap-dress-detail.jpg", "st-tailor-showroom-exterior-evening.jpg"]) {
   if (galleryContentImages.filter((image) => image[1].endsWith(`/${requiredAsset}`)).length !== 1) failures.push(`Gallery retained image must appear exactly once: ${requiredAsset}`);
 }
@@ -448,11 +451,11 @@ if (existsSync(path.join(dist, indexNowKeyFile)) && readFileSync(path.join(dist,
 const sitemap = readFileSync(path.join(dist, "sitemap.xml"), "utf8");
 if ((sitemap.match(/<url><loc>https:\/\/sttailor\.com/g) ?? []).length !== expectedRoutes.length || sitemap.includes("beta.sttailor.com")) failures.push("Sitemap does not contain the complete production route set.");
 if (!sitemap.includes('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"') || !sitemap.includes("<image:image>")) failures.push("Image sitemap discovery data is missing.");
-if (!sitemap.includes("<image:title>")) failures.push("Image sitemap titles are missing.");
 const gallerySitemap = sitemap.match(/<url><loc>https:\/\/sttailor\.com\/gallery\/[\s\S]*?<\/url>/)?.[0] ?? "";
 if ((gallerySitemap.match(/<image:image>/g) ?? []).length !== 117) failures.push("Gallery image sitemap does not expose every editorial image exactly once.");
 if ((gallerySitemap.match(/<lastmod>([^<]+)<\/lastmod>/)?.[1] ?? "") < "2026-10-15") failures.push("Gallery lastmod predates the newly published client photographs.");
-if (!sitemap.includes('xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"') || (sitemap.match(/<video:video>/g) ?? []).length !== 1 || !gallerySitemap.includes(`<video:content_loc>https://sttailor.com${filmPath}</video:content_loc>`) || !gallerySitemap.includes(`<video:thumbnail_loc>https://sttailor.com${posterPath}</video:thumbnail_loc>`)) failures.push("Gallery video sitemap entry is missing or duplicated.");
+const watchSitemap = sitemap.match(/<url><loc>https:\/\/sttailor\.com\/phim-thu-do\/[\s\S]*?<\/url>/)?.[0] ?? "";
+if (!sitemap.includes('xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"') || (sitemap.match(/<video:video>/g) ?? []).length !== 1 || !watchSitemap.includes(`<video:content_loc>https://sttailor.com${filmPath}</video:content_loc>`) || !watchSitemap.includes(`<video:thumbnail_loc>https://sttailor.com${posterPath}</video:thumbnail_loc>`)) failures.push("Fitting watch page video sitemap entry is missing or duplicated.");
 if ((sitemap.match(/<image:loc>/g) ?? []).length !== new Set([...sitemap.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)].map((match) => match[1])).size) failures.push("Image sitemap contains duplicate image locations.");
 const mobileNavRule = [...generatedCss.matchAll(/\.st-site-nav\{[^}]*\}/g)]
   .map((match) => match[0])

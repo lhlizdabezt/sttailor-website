@@ -7,13 +7,15 @@ Every successful push to `main` follows this order:
 1. Build the public static assets and validate technical SEO.
 2. Deploy the apex Worker and the `www` redirect Worker from GitHub Actions.
 3. Verify that production serves the exact Git revision, HTTPS canonical URLs, `robots.txt`, `sitemap.xml`, and the IndexNow ownership key.
-4. Send the canonical URLs from `dist/sitemap.xml` to Bing IndexNow in one batch. The current site has 16 public routes; the script reads the sitemap so this count stays accurate as pages change.
+4. Send the canonical URLs from `dist/sitemap.xml` to Bing IndexNow in one batch. The script reads the sitemap so the submission follows the published route set.
 
 The protocol key is published at `https://sttailor.com/7fef6e584133598b3cb206cc3a57f7c2d65f3d2aa8a077d84fe34b88b89cf373.txt`. It is public by design and only proves control of the domain. It is unrelated to Cloudflare or GitHub secrets.
 
 The workflow sends only canonical `https://sttailor.com` pages; it never sends `www`, legacy redirect URLs, `beta`, `workers.dev`, 404s, or media files. Bing receives the update immediately, but acceptance is a crawl hint rather than a promise of ranking or immediate indexing.
 
-The optional `https://sttailor.com/llms.txt` provides a Markdown summary and links to all 16 canonical pages for AI-agent discovery. It does not replace `robots.txt`, the sitemap, or IndexNow, and its presence does not guarantee inclusion in Bing or any AI answer.
+The optional `https://sttailor.com/llms.txt` provides a Markdown summary and links to all canonical pages for AI-agent discovery. It does not replace `robots.txt`, the sitemap, or IndexNow, and its presence does not guarantee inclusion in Bing or any AI answer.
+
+The fitting film is playable on the Gallery and on its dedicated `/phim-thu-do/` watch page. The video sitemap and `VideoObject` point to the watch page, where the player is the primary content. The Gallery sitemap continues to list its photographs. Image descriptions remain in page alt text and the Gallery's structured data.
 
 If Bing is unavailable, GitHub Actions retries three times and adds a warning without failing a verified deployment. Re-run the workflow when Bing is reachable. Do not repeatedly submit unchanged URLs by hand.
 
