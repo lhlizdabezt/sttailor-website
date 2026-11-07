@@ -12658,6 +12658,17 @@ html body .st-tripadvisor__badge { display: grid !important; min-height: 164px !
 html body .st-tripadvisor__badge :is(.TA_rated, #CDSWIDFRR) { max-width: 100% !important; }
 html body .st-tripadvisor__badge .TA_links { margin: 0 !important; padding: 0 !important; list-style: none !important; }
 html body .st-tripadvisor__badge img { max-width: 100% !important; height: auto !important; }
+html body .st-tripadvisor__fallback {
+  display: block;
+  padding: 10px 14px;
+  border: 1px solid #815c40;
+  color: #352116;
+  text-align: center;
+  text-decoration: none;
+  font: 600 15px/1.4 var(--st-vietnamese);
+}
+html body .st-tripadvisor__fallback:hover { background: #ead5b8; }
+html body .st-tripadvisor__fallback span { display: block; font-weight: 400; }
 
 html body .st-fitting-film {
   margin-inline: auto;

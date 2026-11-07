@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import worker from "../src/worker.js";
 
 const env = {
@@ -34,11 +35,15 @@ test("unmatched retired products retain a true 404 instead of a homepage redirec
   assert.equal(response.headers.get("Location"), null);
 });
 
-test("the canonical fitting film is served by the Worker", async () => {
-  const response = await worker.fetch(new Request("https://sttailor.com/phim-thu-do/"), env);
-  assert.equal(response.status, 200);
-  assert.match(response.headers.get("X-Robots-Tag"), /^index, follow\b/);
-  assert.equal(await response.text(), "Published page");
+test("the Worker serves every route in the public build manifest", async () => {
+  const { routes } = JSON.parse(readFileSync(new URL("../dist/build-manifest.json", import.meta.url), "utf8"));
+  assert.ok(routes.length);
+  for (const route of routes) {
+    const response = await worker.fetch(new Request(new URL(route, "https://sttailor.com")), env);
+    assert.equal(response.status, 200, route);
+    assert.match(response.headers.get("X-Robots-Tag"), /^index, follow\b/, route);
+    assert.equal(await response.text(), "Published page", route);
+  }
 });
 
 test("retired suit-care article redirects to its relevant guide and preserves attribution", async () => {

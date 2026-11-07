@@ -640,8 +640,8 @@ function transformAbout(html) {
       <p>Read independent client reviews and explore visits to our showroom. If you have visited S.T Tailor, you are welcome to share your experience.<span lang="vi">Đọc đánh giá độc lập của khách hàng và tìm hiểu trải nghiệm tại showroom. Nếu đã ghé S.T Tailor, bạn có thể chia sẻ cảm nhận của mình.</span></p>
       <a class="st-tripadvisor__link" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer">Read client reviews <span lang="vi">Đọc đánh giá khách hàng</span><span aria-hidden="true">↗</span></a>
     </div>
-    <div class="st-tripadvisor__badge" role="group" aria-label="Official Tripadvisor widget | Huy hiệu Tripadvisor chính thức">
-      <div id="TA_rated383" class="TA_rated"><ul id="nk7KumP" class="TA_links j2AXIy9"><li id="YSiMIh" class="HfgYawPu"><a target="_blank" rel="noopener noreferrer" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html"><img src="https://www.tripadvisor.com/img/cdsi/img2/badges/ollie-11424-2.gif" alt="S.T Tailor on Tripadvisor" loading="lazy" decoding="async"></a></li></ul></div>
+    <div class="st-tripadvisor__badge" role="group" aria-label="Tripadvisor listing | Hồ sơ Tripadvisor">
+      <div id="TA_rated383" class="TA_rated"><ul id="nk7KumP" class="TA_links j2AXIy9"><li id="YSiMIh" class="HfgYawPu"><a class="st-tripadvisor__fallback" target="_blank" rel="noopener noreferrer" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html">S.T Tailor on Tripadvisor<span lang="vi">S.T Tailor trên Tripadvisor</span></a></li></ul></div>
       <script async src="https://www.jscache.com/wejs?wtype=rated&amp;uniq=383&amp;locationId=34701232&amp;lang=en_US&amp;display_version=2"></script>
     </div>
   </div>
