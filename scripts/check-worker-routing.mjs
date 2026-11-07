@@ -34,6 +34,13 @@ test("unmatched retired products retain a true 404 instead of a homepage redirec
   assert.equal(response.headers.get("Location"), null);
 });
 
+test("the canonical fitting film is served by the Worker", async () => {
+  const response = await worker.fetch(new Request("https://sttailor.com/phim-thu-do/"), env);
+  assert.equal(response.status, 200);
+  assert.match(response.headers.get("X-Robots-Tag"), /^index, follow\b/);
+  assert.equal(await response.text(), "Published page");
+});
+
 test("retired suit-care article redirects to its relevant guide and preserves attribution", async () => {
   const oldPath = "/10-cach-bao-quan-vest-nam-luon-nhu-moi-bi-quyet-giu-phom-chuan-theo-thoi-gian/";
   for (const method of ["GET", "HEAD"]) {

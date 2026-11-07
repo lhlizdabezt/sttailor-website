@@ -6,6 +6,7 @@ const routes = new Set([
   "/gioi-thieu/",
   "/dich-vu/",
   "/gallery/",
+  "/phim-thu-do/",
   "/bang-gia/",
   "/phuong-thuc-thanh-toan/",
   "/lien-he/",

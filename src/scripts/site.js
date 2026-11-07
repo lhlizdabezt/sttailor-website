@@ -93,6 +93,7 @@ const pageTypes = {
   "/gioi-thieu/": "about",
   "/dich-vu/": "services",
   "/gallery/": "gallery",
+  "/phim-thu-do/": "fitting_film",
   "/bang-gia/": "pricing",
   "/phuong-thuc-thanh-toan/": "payment",
   "/lien-he/": "contact",
