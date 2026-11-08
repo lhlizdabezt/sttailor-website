@@ -637,7 +637,7 @@ function transformAbout(html) {
     <div class="st-tripadvisor__copy">
       <p class="st-lux-eyebrow">OUR TRIPADVISOR PAGE <span lang="vi">/ TRANG TRIPADVISOR CỦA CHÚNG TÔI</span></p>
       <h2 id="st-tripadvisor-title">Find us on Tripadvisor.<span lang="vi">Gặp S.T Tailor trên Tripadvisor.</span></h2>
-      <p>Read independent client reviews and explore visits to our showroom. If you have visited S.T Tailor, you are welcome to share your experience.<span lang="vi">Đọc đánh giá độc lập của khách hàng và tìm hiểu trải nghiệm tại showroom. Nếu đã ghé S.T Tailor, bạn có thể chia sẻ cảm nhận của mình.</span></p>
+      <p>Read independent reviews from clients who visited our Ho Chi Minh City showroom. If you have visited S.T Tailor, you can share your experience on the same listing.<span lang="vi">Đọc đánh giá độc lập từ khách hàng từng ghé showroom của chúng tôi tại TP. Hồ Chí Minh. Nếu đã ghé S.T Tailor, bạn cũng có thể chia sẻ trải nghiệm trên trang Tripadvisor này.</span></p>
       <a class="st-tripadvisor__link" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer">Read client reviews <span lang="vi">Đọc đánh giá khách hàng</span><span aria-hidden="true">↗</span></a>
     </div>
     <div class="st-tripadvisor__badge" role="group" aria-label="Tripadvisor listing | Hồ sơ Tripadvisor">
@@ -733,6 +733,7 @@ const buildDate = new Date().toISOString().slice(0, 10);
 const sharedContentModified = "2026-09-23";
 // Advance the relevant date when transformed copy changes, not for build fixes.
 const derivedContentModified = {
+  "About.html": "2026-11-08",
   "Gallery.html": "2026-10-18", "Payment.html": "2026-10-18",
   "Returns.html": "2026-10-18", "Shipping.html": "2026-10-18",
   "Terms.html": "2026-10-18", "Privacy.html": "2026-10-18"
@@ -741,7 +742,9 @@ const derivedContentModified = {
 function lastModifiedFor(sourceFile) {
   // Derived copy and Gallery additions can change without touching the baseline.
   if (derivedContentModified[sourceFile]) {
-    const inputs = [path.join("source", "wordpress", sourceFile), ...(sourceFile === "Gallery.html" ? ["source/media"] : sourceFile === "Payment.html" ? [] : ["src/client-care-pages.js"])];
+    const inputs = [path.join("source", "wordpress", sourceFile)];
+    if (sourceFile === "Gallery.html") inputs.push("source/media");
+    if (["Returns.html", "Shipping.html", "Terms.html", "Privacy.html"].includes(sourceFile)) inputs.push("src/client-care-pages.js");
     const changed = spawnSync("git", ["status", "--porcelain", "--", ...inputs], { cwd: root, encoding: "utf8" });
     if (changed.status !== 0 || changed.stdout.trim()) return buildDate;
     const latest = spawnSync("git", ["log", "-1", "--format=%cs", "--", ...inputs], { cwd: root, encoding: "utf8" });

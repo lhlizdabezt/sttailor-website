@@ -109,31 +109,26 @@ const pageTypes = {
 };
 const pageType = pageTypes[window.location.pathname] ?? "other";
 
-// The rated badge loads asynchronously with an empty review URL and an
-// unnamed overlay link. Repair both while preserving the official widget.
+// Tripadvisor can populate its links in several asynchronous steps.
 const tripadvisorBadge = document.querySelector("#TA_rated383");
-if (tripadvisorBadge) {
-  const listing = "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html";
-  const repairWidgetLink = () => {
-    const reviewLink = tripadvisorBadge.querySelector('a[href=""]');
-    if (reviewLink) {
-      reviewLink.href = listing;
-      reviewLink.target = "_blank";
-      reviewLink.rel = "nofollow noopener noreferrer";
+const tripadvisorListing = tripadvisorBadge?.closest(".st-tripadvisor")?.querySelector(".st-tripadvisor__link")?.href;
+if (tripadvisorListing) {
+  const repairWidgetLinks = () => {
+    for (const link of tripadvisorBadge.querySelectorAll('a:not([href]), a[href=""], a.widFRRClickWrap')) {
+      if (link.href !== tripadvisorListing) link.href = tripadvisorListing;
+      link.target = "_blank";
+      link.rel = "nofollow noopener noreferrer";
+      if (link.classList.contains("widFRRClickWrap")) {
+        link.setAttribute("aria-label", "View S.T Tailor on Tripadvisor");
+      }
     }
-    const overlayLink = tripadvisorBadge.querySelector(".widFRRClickWrap");
-    if (overlayLink) {
-      overlayLink.setAttribute("aria-label", "View S.T Tailor on Tripadvisor");
-      overlayLink.rel = "nofollow noopener noreferrer";
-    }
-    return Boolean(overlayLink) && !tripadvisorBadge.querySelector('a[href=""]');
   };
-  if (!repairWidgetLink()) {
-    const observer = new MutationObserver(() => {
-      if (repairWidgetLink()) observer.disconnect();
-    });
-    observer.observe(tripadvisorBadge, { childList: true, subtree: true });
-  }
+  repairWidgetLinks();
+  new MutationObserver(repairWidgetLinks).observe(tripadvisorBadge, {
+    childList: true,
+    subtree: true,
+    attributeFilter: ["href", "class"],
+  });
 }
 
 const claritySet = (key, value) => {
