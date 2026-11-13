@@ -117,7 +117,7 @@ for (const route of expectedRoutes) {
   if ((businessSchema?.sameAs ?? []).filter((url) => url === tripadvisorUrl).length !== 1) failures.push(`Official Tripadvisor listing is missing or duplicated in LocalBusiness schema: ${route}`);
   const widgetCount = (html.match(/www\.jscache\.com\/wejs\?wtype=rated/g) ?? []).length;
   if (route === "/gioi-thieu/" ? widgetCount !== 1 || !html.includes(`href="${tripadvisorUrl}"`) : widgetCount !== 0) failures.push(`Tripadvisor badge or review link is missing, duplicated, or loaded on the wrong page: ${route}`);
-  if (route === "/gioi-thieu/" && (!html.includes('data-widget-src="https://www.jscache.com/wejs') || !html.includes('class="st-tripadvisor__fallback"') || !html.includes('href="/lien-he/">Showroom hours &amp; directions'))) failures.push("The Tripadvisor panel needs its deferred loader, direct fallback and showroom link.");
+  if (route === "/gioi-thieu/" && (!html.includes('<script async src="https://www.jscache.com/wejs') || !html.includes('class="st-tripadvisor__fallback"') || !html.includes('href="/lien-he/">Showroom hours &amp; directions'))) failures.push("The Tripadvisor panel needs its page-load script, direct fallback and showroom link.");
   if (businessSchema?.currenciesAccepted !== "VND") failures.push(`LocalBusiness currency must match the payment page: ${route}`);
   for (const marker of ['rel="manifest" href="/site.webmanifest"', 'property="og:image:alt"', 'name="google-site-verification"', 'name="p:domain_verify"']) {
     if (!html.includes(marker)) failures.push(`SEO/discovery marker is missing on ${route}: ${marker}`);

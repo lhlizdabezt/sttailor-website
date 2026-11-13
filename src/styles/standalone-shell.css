@@ -366,6 +366,8 @@ html body .st-tripadvisor__visit h3 { margin: 0 0 12px; color: #352116; font: 50
 html body .st-tripadvisor__visit h3 span { display: block; margin-top: 4px; font: 500 16px/1.4 var(--st-vietnamese); }
 html body .st-tripadvisor__visit address { color: #4e3527; font: 400 15px/1.55 var(--st-vietnamese); }
 html body .st-tripadvisor__visit address span { display: block; margin-top: 6px; }
+html body .st-tripadvisor__hours { margin: 12px 0 0; color: #4e3527; font: 600 14px/1.55 var(--st-vietnamese); }
+html body .st-tripadvisor__hours span { display: block; font-weight: 400; }
 html body .st-tripadvisor__visit > a {
   display: block; margin-top: 16px; padding: 10px 12px; border: 1px solid #815c40;
   color: #352116; font: 600 14px/1.4 var(--st-vietnamese); text-decoration: none;
