@@ -12343,6 +12343,24 @@ html { background: #fffaf4; }
 body { min-width: 320px; margin: 0; background: #fffaf4; color: #302019; font-family: var(--st-vietnamese); }
 img { max-width: 100%; }
 main { display: block; width: 100%; overflow: hidden; }
+.st-breadcrumb {
+  padding: 8px max(16px, calc((100% - 1220px) / 2));
+  border-bottom: 1px solid #d8bb9b;
+  background: #f8eddd;
+  color: #493123;
+  font: 600 14px/1.3 var(--st-vietnamese);
+}
+.st-breadcrumb ol { display: flex; flex-wrap: wrap; gap: 4px 20px; margin: 0; padding: 0; list-style: none; }
+.st-breadcrumb li { position: relative; min-width: 0; }
+.st-breadcrumb li + li::before {
+  position: absolute; top: 16px; left: -12px; width: 5px; height: 5px;
+  border-top: 1px solid #825536; border-right: 1px solid #825536;
+  content: ""; transform: rotate(45deg);
+}
+.st-breadcrumb :is(a, .st-breadcrumb__current) { display: grid; gap: 2px; padding: 4px 0; }
+.st-breadcrumb a { min-height: 40px; color: #663819; text-decoration: underline; text-underline-offset: 3px; }
+.st-breadcrumb [lang="vi"] { font-size: 13px; font-weight: 500; }
+.st-breadcrumb a:focus-visible { outline: 2px solid #663819; outline-offset: 3px; }
 .st-site-frame { width: 100%; overflow: clip; }
 .st-skip-link { position: fixed; z-index: 100; top: 10px; left: 10px; transform: translateY(-150%); padding: 10px 14px; background: #6c371e; color: #fffaf4; font: 700 12px/1 var(--st-vietnamese); text-decoration: none; }
 .st-skip-link:focus { transform: translateY(0); }
@@ -13421,7 +13439,7 @@ html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6
   }
   html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-grid {
     width: min(100% - 34px, 620px) !important;
-    padding: clamp(230px, 60vw, 350px) 0 clamp(54px, 9vw, 72px) !important;
+    padding: clamp(158px, 46vw, 290px) 0 clamp(36px, 8vw, 64px) !important;
   }
   html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-copy { max-width: 100% !important; }
   html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission::after {
@@ -13431,7 +13449,7 @@ html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6
   html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-copy::before { top: -19px !important; width: 50px !important; }
   html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-copy h1 {
     max-width: 13ch !important;
-    font-size: clamp(43px, 10.5vw, 65px) !important;
+    font-size: clamp(39px, 10vw, 62px) !important;
   }
 }
 

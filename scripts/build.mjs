@@ -93,6 +93,42 @@ const guideRoutes = [
   ["/bao-quan-giat-la/", "Garment care and cleaning", "Bảo quản và giặt là"]
 ];
 
+const pageLabels = new Map([
+  ["/", ["Home", "Trang chủ"]],
+  ...primaryNavigation.map(([route, ...labels]) => [route, labels]),
+  ...guideRoutes.map(([route, ...labels]) => [route, labels]),
+  [fittingFilmRoute, ["A fitting in motion", "Thử phom qua chuyển động"]],
+  ["/phuong-thuc-thanh-toan/", ["Payment methods", "Phương thức thanh toán"]],
+  ["/cam-nang-may-do/", ["Tailoring guide", "Cẩm nang may đo"]],
+  ["/doi-tra-hoan-tien/", ["Returns and refunds", "Đổi trả và hoàn tiền"]],
+  ["/chinh-sach-van-chuyen/", ["Shipping and delivery", "Vận chuyển và giao nhận"]],
+  ["/dieu-khoan-dieu-kien/", ["Terms and conditions", "Điều khoản và điều kiện"]],
+  ["/chinh-sach-bao-mat/", ["Privacy policy", "Chính sách bảo mật"]]
+]);
+
+function breadcrumbTrail(route) {
+  if (route === "/") return [];
+  const trail = ["/"];
+  if (guideRoutes.some(([guideRoute]) => guideRoute === route)) trail.push("/cam-nang-may-do/");
+  if (route === fittingFilmRoute) trail.push("/gallery/");
+  trail.push(route);
+  return trail.map((href) => {
+    const [english, vietnamese] = pageLabels.get(href);
+    return { href, english, vietnamese };
+  });
+}
+
+function breadcrumbNavigation(trail) {
+  if (!trail.length) return "";
+  const items = trail.map(({ href, english, vietnamese }, index) => {
+    const label = `<span>${english}</span><span lang="vi">${vietnamese}</span>`;
+    return index === trail.length - 1
+      ? `<li><span class="st-breadcrumb__current" aria-current="page">${label}</span></li>`
+      : `<li><a href="${href}">${label}</a></li>`;
+  });
+  return `<nav class="st-breadcrumb" aria-label="Breadcrumb | Đường dẫn trang"><ol>${items.join("")}</ol></nav>`;
+}
+
 function readSource(file) {
   return readFileSync(path.join(sourceRoot, file), "utf8")
     // Git can check out the preserved .txt fragments with Windows line endings.
@@ -172,6 +208,7 @@ function replaceVisibleAtelier(html) {
 
 function transformHome(html) {
   html = html
+    .replace("S.T TAILOR / THÀNH PHỐ HỒ CHÍ MINH</span></p>", "S.T TAILOR / TP. HỒ CHÍ MINH</span></p>")
     .replace(
       /<a class="st-home-v6__hero-jump"[^>]*>[\s\S]*?<\/a>/,
       '<a class="st-home-v6__hero-jump" href="/lien-he/"><span>ARRANGE A PRIVATE CONSULTATION</span><span lang="vi">ĐẶT LỊCH TƯ VẤN RIÊNG</span></a>'
@@ -637,17 +674,16 @@ function transformAbout(html) {
     <div class="st-tripadvisor__copy">
       <p class="st-lux-eyebrow">TRIPADVISOR</p>
       <h2 id="st-tripadvisor-title">Reviews from our clients<span lang="vi">Đánh giá của khách hàng</span></h2>
-      <p>Read what clients say about choosing cloth, attending fittings and collecting their garments at our Ho Chi Minh City showroom. After your visit, you can share your experience on the same Tripadvisor listing.<span lang="vi">Đọc chia sẻ của khách hàng về quá trình chọn vải, thử đồ và nhận trang phục tại nhà may ở TP. Hồ Chí Minh. Sau khi ghé thăm, bạn cũng có thể chia sẻ trải nghiệm trên trang Tripadvisor của S.T Tailor.</span></p>
+      <p>Read how clients chose their cloth, what changed during fittings and how their finished garments felt. You can also share your own experience on the S.T Tailor listing after your visit.<span lang="vi">Đọc chia sẻ của khách hàng về cách họ chọn vải, những điểm được chỉnh trong buổi thử đồ và cảm nhận khi mặc trang phục hoàn thiện. Sau khi ghé nhà may, bạn cũng có thể chia sẻ trải nghiệm của mình trên trang Tripadvisor của S.T Tailor.</span></p>
       <a class="st-tripadvisor__link" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer"><span>Read reviews on Tripadvisor</span><span lang="vi">Đọc đánh giá trên Tripadvisor</span></a>
     </div>
     <div class="st-tripadvisor__badge">
-      <div id="TA_rated383" class="TA_rated"><ul id="nk7KumP" class="TA_links j2AXIy9"><li id="YSiMIh" class="HfgYawPu"><a class="st-tripadvisor__fallback" target="_blank" rel="noopener noreferrer" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html">S.T Tailor on Tripadvisor<span lang="vi">S.T Tailor trên Tripadvisor</span></a></li></ul></div>
+      <div id="TA_rated383" class="TA_rated" data-widget-src="https://www.jscache.com/wejs?wtype=rated&amp;uniq=383&amp;locationId=34701232&amp;lang=en_US&amp;display_version=2"><ul id="nk7KumP" class="TA_links j2AXIy9"><li id="YSiMIh" class="HfgYawPu"><a class="st-tripadvisor__fallback" target="_blank" rel="noopener noreferrer" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html">S.T Tailor on Tripadvisor<span lang="vi">S.T Tailor trên Tripadvisor</span></a></li></ul></div>
       <div class="st-tripadvisor__visit">
         <h3>Visit S.T Tailor <span lang="vi">Ghé S.T Tailor</span></h3>
         <address>1st Floor, 258 Le Thanh Ton, Tan Dinh Ward<br>Ho Chi Minh City, Vietnam<span lang="vi">Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định<br>Thành phố Hồ Chí Minh, Việt Nam</span></address>
         <a href="/lien-he/">Showroom hours &amp; directions <span lang="vi">Giờ mở cửa và chỉ đường</span></a>
       </div>
-      <script async src="https://www.jscache.com/wejs?wtype=rated&amp;uniq=383&amp;locationId=34701232&amp;lang=en_US&amp;display_version=2"></script>
     </div>
   </div>
 </section>`;
@@ -869,11 +905,11 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     graph.push({ "@type": "Article", "@id": `${canonical}#article`, headline: title.split(" | ")[0], description, image: `https://sttailor.com${shareImage}`, author: { "@id": "https://sttailor.com/#business" }, publisher: { "@id": "https://sttailor.com/#business" }, mainEntityOfPage: { "@id": `${canonical}#webpage` }, dateModified: lastModified, inLanguage: ["en", "vi"] });
     webPage.mainEntity = { "@id": `${canonical}#article` };
   }
-  if (route !== "/") {
-    const isGuideArticle = guideRoutes.some(([guideRoute]) => guideRoute === route);
-    const itemListElement = isGuideArticle
-      ? [{ "@type": "ListItem", position: 1, name: "Home", item: "https://sttailor.com/" }, { "@type": "ListItem", position: 2, name: "Tailoring guide", item: "https://sttailor.com/cam-nang-may-do/" }, { "@type": "ListItem", position: 3, name: title.split(" | ")[0], item: canonical }]
-      : [{ "@type": "ListItem", position: 1, name: "Home", item: "https://sttailor.com/" }, { "@type": "ListItem", position: 2, name: title.split(" | ")[0], item: canonical }];
+  const trail = breadcrumbTrail(route);
+  if (trail.length) {
+    const itemListElement = trail.map(({ href, english }, index) => ({
+      "@type": "ListItem", position: index + 1, name: english, item: `https://sttailor.com${href}`
+    }));
     webPage.breadcrumb = { "@id": `${canonical}#breadcrumb` };
     graph.push({ "@type": "BreadcrumbList", "@id": `${canonical}#breadcrumb`, itemListElement });
   }
@@ -890,7 +926,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
   const heroPreload = heroMetadata ? `<link rel="preload" as="image" href="${shareImage}" imagesrcset="${heroCandidates.map(({ src, width }) => `${src} ${width}w`).join(", ")}" imagesizes="${homeHeroSizes}" fetchpriority="high">` : "";
   const siteHeader = enrichImageAttributes(header(route), { responsiveSizes: "102px" });
   const siteFooter = enrichImageAttributes(footer(), { responsiveSizes: "160px" });
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8">${googleTagManagerHead}<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${safeDescription}"><meta name="author" content="S.T Tailor"><meta name="application-name" content="S.T Tailor"><meta name="sttailor-build-revision" content="${buildRevision}"><meta name="color-scheme" content="light"><meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="google-site-verification" content="e1RyHPdDirO6wJIxuZKKSIY6EXYb37XMfktIVl3aJz8"><meta name="p:domain_verify" content="78c108c3384a3aa9201fb90b99f0b225"><link rel="canonical" href="${canonical}"><link rel="icon" href="/icons/sttailor-favicon-48.png" type="image/png" sizes="48x48"><link rel="apple-touch-icon" href="/icons/sttailor-apple-touch-180.png" sizes="180x180"><link rel="manifest" href="/site.webmanifest">${heroPreload}<meta property="og:title" content="${safeTitle}"><meta property="og:description" content="${safeDescription}"><meta property="og:type" content="website"><meta property="og:url" content="${canonical}"><meta property="og:site_name" content="S.T Tailor"><meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:image" content="${shareImageUrl}"><meta property="og:image:type" content="${imageType}"><meta property="og:image:alt" content="${safeImageAlt}">${shareDimensions}<meta name="theme-color" content="#ead1ad"><title>${safeTitle}</title>${jsonLd}${analyticsTags}<link rel="stylesheet" href="${stylesheetHref}"></head><body>${googleTagManagerNoScript}${metaPixelNoScript}<div class="st-site-frame">${siteHeader}<main id="main-content">${body}</main>${siteFooter}</div><script type="module" src="${scriptHref}"></script></body></html>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8">${googleTagManagerHead}<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${safeDescription}"><meta name="author" content="S.T Tailor"><meta name="application-name" content="S.T Tailor"><meta name="sttailor-build-revision" content="${buildRevision}"><meta name="color-scheme" content="light"><meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="google-site-verification" content="e1RyHPdDirO6wJIxuZKKSIY6EXYb37XMfktIVl3aJz8"><meta name="p:domain_verify" content="78c108c3384a3aa9201fb90b99f0b225"><link rel="canonical" href="${canonical}"><link rel="icon" href="/icons/sttailor-favicon-48.png" type="image/png" sizes="48x48"><link rel="apple-touch-icon" href="/icons/sttailor-apple-touch-180.png" sizes="180x180"><link rel="manifest" href="/site.webmanifest">${heroPreload}<meta property="og:title" content="${safeTitle}"><meta property="og:description" content="${safeDescription}"><meta property="og:type" content="website"><meta property="og:url" content="${canonical}"><meta property="og:site_name" content="S.T Tailor"><meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:image" content="${shareImageUrl}"><meta property="og:image:type" content="${imageType}"><meta property="og:image:alt" content="${safeImageAlt}">${shareDimensions}<meta name="theme-color" content="#ead1ad"><title>${safeTitle}</title>${jsonLd}${analyticsTags}<link rel="stylesheet" href="${stylesheetHref}"></head><body>${googleTagManagerNoScript}${metaPixelNoScript}<div class="st-site-frame">${siteHeader}<main id="main-content">${breadcrumbNavigation(trail)}${body}</main>${siteFooter}</div><script type="module" src="${scriptHref}"></script></body></html>`;
 }
 
 function collectAssetPaths() {
@@ -1094,16 +1130,21 @@ const sitemapEntries = sitemapRouteOrder.map(([route, , , , shareImage]) => {
 }).join("");
 writeFileSync(path.join(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">${sitemapEntries}\n</urlset>\n`, "utf8");
 writeFileSync(path.join(dist, "site.webmanifest"), JSON.stringify({ name: "S.T Tailor", short_name: "S.T Tailor", description: "Bespoke tailoring and clothing alterations in Ho Chi Minh City.", start_url: "/", scope: "/", display: "standalone", background_color: "#f3e1c5", theme_color: "#ead1ad", icons: [{ src: "/icons/sttailor-app-192.png", sizes: "192x192", type: "image/png", purpose: "any" }, { src: "/icons/sttailor-app-large-512.png", sizes: "512x512", type: "image/png", purpose: "any" }] }, null, 2), "utf8");
-const llmsLinks = routes.map(([route, , title]) => `- [${title}](https://sttailor.com${route})`).join("\n");
+const llmsLink = ([route, , , description]) => `- [${pageLabels.get(route)[0]}](https://sttailor.com${route}): ${description}`;
+const policyRoutes = new Set(["/doi-tra-hoan-tien/", "/chinh-sach-van-chuyen/", "/dieu-khoan-dieu-kien/", "/chinh-sach-bao-mat/"]);
+const guidePaths = new Set(["/cam-nang-may-do/", ...guideRoutes.map(([route]) => route)]);
+const llmsSections = [
+  ["Showroom and services", routes.filter(([route]) => !policyRoutes.has(route) && !guidePaths.has(route))],
+  ["Tailoring guide", routes.filter(([route]) => guidePaths.has(route))],
+  ["Client Care", routes.filter(([route]) => policyRoutes.has(route))]
+].map(([heading, entries]) => `## ${heading}\n\n${entries.map(llmsLink).join("\n")}`).join("\n\n");
 writeFileSync(path.join(dist, "llms.txt"), `# S.T Tailor
 
 > Bespoke tailoring, clothing alterations and private fittings in Ho Chi Minh City. May đo, chỉnh sửa trang phục và tư vấn riêng tại Thành phố Hồ Chí Minh.
 
-S.T Tailor is on the 1st Floor at 258 Le Thanh Ton, Tan Dinh Ward, Ho Chi Minh City, Vietnam. The links below are the canonical public pages.
+S.T Tailor is on the 1st Floor at 258 Le Thanh Ton, Tan Dinh Ward, Ho Chi Minh City, Vietnam. Regular showroom hours are 09:00–20:00 daily (Asia/Ho_Chi_Minh). The pages below are available in English and Vietnamese on the same canonical URL.
 
-## Pages
-
-${llmsLinks}
+${llmsSections}
 
 ## Direct contact
 

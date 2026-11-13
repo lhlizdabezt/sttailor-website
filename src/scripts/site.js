@@ -129,6 +129,23 @@ if (tripadvisorListing) {
     subtree: true,
     attributeFilter: ["href", "class"],
   });
+
+  const loadBadge = () => {
+    const script = document.createElement("script");
+    script.src = tripadvisorBadge.dataset.widgetSrc;
+    script.async = true;
+    tripadvisorBadge.after(script);
+  };
+  if ("IntersectionObserver" in window) {
+    const nearBadge = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      nearBadge.disconnect();
+      loadBadge();
+    }, { rootMargin: "300px" });
+    nearBadge.observe(tripadvisorBadge);
+  } else {
+    loadBadge();
+  }
 }
 
 const claritySet = (key, value) => {

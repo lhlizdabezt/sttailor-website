@@ -97,6 +97,17 @@ for (const route of expectedRoutes) {
   if (html.includes("data-consent-panel") || html.includes("data-consent-open")) failures.push(`Unrequested privacy controls remain: ${route}`);
   const schemaText = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i)?.[1];
   const schemaGraph = schemaText ? JSON.parse(schemaText)["@graph"] : [];
+  const breadcrumb = schemaGraph.find((item) => item["@type"] === "BreadcrumbList");
+  const breadcrumbHtml = mainContent.match(/<nav class="st-breadcrumb"[\s\S]*?<\/nav>/)?.[0];
+  if (route === "/") {
+    if (breadcrumb || breadcrumbHtml) failures.push("The home page must start the breadcrumb hierarchy.");
+  } else {
+    const trail = [...(breadcrumbHtml ?? "").matchAll(/href="([^"]+)"/g)].map((match) => match[1]).concat(route);
+    const schemaTrail = breadcrumb?.itemListElement.map(({ item }) => item);
+    if (!breadcrumbHtml?.includes('aria-current="page"') || JSON.stringify(schemaTrail) !== JSON.stringify(trail.map((href) => `https://sttailor.com${href}`))) {
+      failures.push(`The visible breadcrumb and structured data differ: ${route}`);
+    }
+  }
   const businessSchema = schemaGraph.find((item) => Array.isArray(item["@type"]) && item["@type"].includes("LocalBusiness"));
   if (businessSchema?.address?.streetAddress !== "1st Floor, 258 Le Thanh Ton, Tan Dinh Ward") failures.push(`Showroom floor or ward differs from the confirmed address: ${route}`);
   if (businessSchema?.hasOfferCatalog?.["@type"] !== "OfferCatalog" || businessSchema?.makesOffer) failures.push(`LocalBusiness service catalog uses the wrong Schema.org property: ${route}`);
@@ -106,7 +117,7 @@ for (const route of expectedRoutes) {
   if ((businessSchema?.sameAs ?? []).filter((url) => url === tripadvisorUrl).length !== 1) failures.push(`Official Tripadvisor listing is missing or duplicated in LocalBusiness schema: ${route}`);
   const widgetCount = (html.match(/www\.jscache\.com\/wejs\?wtype=rated/g) ?? []).length;
   if (route === "/gioi-thieu/" ? widgetCount !== 1 || !html.includes(`href="${tripadvisorUrl}"`) : widgetCount !== 0) failures.push(`Tripadvisor badge or review link is missing, duplicated, or loaded on the wrong page: ${route}`);
-  if (route === "/gioi-thieu/" && (!html.includes('class="st-tripadvisor__fallback"') || !html.includes('href="/lien-he/">Showroom hours &amp; directions'))) failures.push("The Tripadvisor panel needs its direct fallback and showroom link.");
+  if (route === "/gioi-thieu/" && (!html.includes('data-widget-src="https://www.jscache.com/wejs') || !html.includes('class="st-tripadvisor__fallback"') || !html.includes('href="/lien-he/">Showroom hours &amp; directions'))) failures.push("The Tripadvisor panel needs its deferred loader, direct fallback and showroom link.");
   if (businessSchema?.currenciesAccepted !== "VND") failures.push(`LocalBusiness currency must match the payment page: ${route}`);
   for (const marker of ['rel="manifest" href="/site.webmanifest"', 'property="og:image:alt"', 'name="google-site-verification"', 'name="p:domain_verify"']) {
     if (!html.includes(marker)) failures.push(`SEO/discovery marker is missing on ${route}: ${marker}`);
