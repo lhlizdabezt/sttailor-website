@@ -28,11 +28,17 @@ const legacyRoutes = new Map([
   ["/about/", "/gioi-thieu/"],
   ["/services/", "/dich-vu/"],
   ["/gallery-page/", "/gallery/"],
+  ["/product-category/blazer/", "/gallery/#album-suits"],
+  ["/product-category/trouser/trouser-women/", "/gallery/#album-womenswear"],
+  ["/san-pham/blazer-mau-be/", "/gallery/#album-suits"],
+  ["/product/mens-formal-blazer-jacket/", "/gallery/#album-suits"],
   ["/pricing/", "/bang-gia/"],
   ["/payment/", "/phuong-thuc-thanh-toan/"],
   ["/payment-methods/", "/phuong-thuc-thanh-toan/"],
   ["/contact/", "/lien-he/"],
   ["/tailoring-guide/", "/cam-nang-may-do/"],
+  ["/mens-suits-a-timeless-wardrobe-essential-for-the-modern-gentleman/", "/dich-vu/"],
+  ["/office-suits-a-professional-appearance-that-leads-to-success/", "/dich-vu/"],
   ["/fabric-guide/", "/chon-vai-may-do/"],
   ["/suit-fabrics-the-key-element-that-defines-true-elegance/", "/chon-vai-may-do/"],
   ["/fitting-process/", "/quy-trinh-thu-do/"],
@@ -119,7 +125,9 @@ export default {
     const pathWithSlash = pathname === "/" || pathname.endsWith("/") ? pathname : `${pathname}/`;
     const legacyTarget = legacyRoutes.get(pathWithSlash);
     if (legacyTarget) {
-      return Response.redirect(new URL(`${legacyTarget}${url.search}`, url), 301);
+      const destination = new URL(legacyTarget, url);
+      destination.search = url.search;
+      return Response.redirect(destination, 301);
     }
     if (pathname !== "/" && !pathname.endsWith("/") && routes.has(`${pathname}/`)) {
       return Response.redirect(new URL(`${pathname}/${url.search}`, url), 301);

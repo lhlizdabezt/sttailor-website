@@ -35,6 +35,28 @@ test("unmatched retired products retain a true 404 instead of a homepage redirec
   assert.equal(response.headers.get("Location"), null);
 });
 
+test("retired tailoring pages redirect to related content and preserve campaign parameters", async () => {
+  const redirects = [
+    ["/product-category/blazer/", "/gallery/#album-suits"],
+    ["/product-category/trouser/trouser-women/", "/gallery/#album-womenswear"],
+    ["/san-pham/blazer-mau-be/", "/gallery/#album-suits"],
+    ["/product/mens-formal-blazer-jacket/", "/gallery/#album-suits"],
+    ["/mens-suits-a-timeless-wardrobe-essential-for-the-modern-gentleman/", "/dich-vu/"],
+    ["/office-suits-a-professional-appearance-that-leads-to-success/", "/dich-vu/"],
+  ];
+  for (const [oldPath, newPath] of redirects) {
+    const destination = new URL(newPath, "https://sttailor.com");
+    destination.search = "?utm_source=google";
+    const response = await worker.fetch(new Request(`https://sttailor.com${oldPath}?utm_source=google`), env);
+    assert.equal(response.status, 301, oldPath);
+    assert.equal(response.headers.get("Location"), destination.href, oldPath);
+    if (destination.hash) {
+      const gallery = readFileSync(new URL("../dist/gallery/index.html", import.meta.url), "utf8");
+      assert.ok(gallery.includes(`id="${destination.hash.slice(1)}"`), newPath);
+    }
+  }
+});
+
 test("the Worker serves every route in the public build manifest", async () => {
   const { routes } = JSON.parse(readFileSync(new URL("../dist/build-manifest.json", import.meta.url), "utf8"));
   assert.ok(routes.length);
