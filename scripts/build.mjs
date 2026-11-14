@@ -526,6 +526,8 @@ function transformGallery(html) {
   for (const figure of feedbackFigures) html = appendToGalleryAlbum(html, "album-appointments", figure);
   html = removeElementById(html, "section", "album-archive");
   html = removeElementById(html, "section", "album-client-feedback");
+  // Keep the existing deep links and let the browser focus the named album.
+  html = html.replace(/(<section\b[^>]*\bid="album-[\w-]+")>/g, '$1 tabindex="-1">');
   const evening = findElementById(html, "section", "album-tuxedo");
   const eveningGrid = evening && findElementByClass(html.slice(evening.start, evening.end), "div", "st-album-grid");
   if (!eveningGrid) throw new Error("Evening gallery grid was not found for the client photographs.");

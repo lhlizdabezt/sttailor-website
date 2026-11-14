@@ -75,6 +75,19 @@ html body .st-site-frame #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump 
 .st-service-page .st-service-commission-map__head .st-page-kicker { font-size: clamp(13px, 1.4vw, 17px) !important; letter-spacing: .11em !important; }
 .st-service-page .st-service-commission-map__catalogue h2 { font-size: clamp(24px, 2.25vw, 38px) !important; line-height: 1.05 !important; }
 .st-service-page .st-service-commission-map__catalogue p { font-size: clamp(15px, 1.2vw, 18px) !important; line-height: 1.55 !important; }
+.st-service-page .st-service-commission-map__gallery-link {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 46px;
+  margin-top: 14px;
+  padding: 8px 14px;
+  border: 1px solid currentColor;
+  color: #653a25;
+  font: 600 15px/1.35 var(--st-vietnamese);
+}
+.st-service-page .st-service-commission-map__gallery-link:hover { background: #fff8ee; text-decoration: underline; }
 .st-service-page .st-service-booking h2 { font-family: var(--st-wordmark) !important; font-weight: 600 !important; }
 /* The removed house-standard band must not leave the old commission-map top gutter behind. */
 html body .st-service-page .st-service-commission-map { margin-top: 0 !important; }
@@ -93,6 +106,7 @@ html body .st-service-page .st-service-commission-map { margin-top: 0 !important
 .st-gallery-page .st-album-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
 .st-gallery-page .st-gallery-album__heading h2 { font-family: var(--st-wordmark) !important; font-weight: 600 !important; }
 .st-gallery-page .st-gallery-album__heading h2 [lang="vi"] { font-family: var(--st-wordmark) !important; font-weight: 500 !important; }
+.st-gallery-page .st-gallery-album:focus-visible { outline: 2px solid currentColor; outline-offset: -4px; }
 
 /* Gallery chapter navigator: a tactile 3x3 heritage index that jumps to each photographic album. */
 html body .st-gallery-numpad { position: relative !important; padding: clamp(68px, 9vw, 120px) 0 !important; overflow: hidden !important; background: #ead2b7 !important; color: #3a2116 !important; }
