@@ -25,6 +25,10 @@ const homeHeroImage = "/media/2026/06/background-hero-trang-lien-he-sttailor.web
 // The portrait cover is up to 740px tall: 740 * 1717 / 916 needs ~1387 source pixels.
 // A viewport-width hint would upscale the 480px derivative and blur the fitting.
 const homeHeroSizes = "(max-width: 760px) 1400px, 1717px";
+
+function imageSourceSet(candidates) {
+  return candidates.map(({ src, width }) => `${src} ${width}w`).join(", ");
+}
 const fittingFilmRoute = "/phim-thu-do/";
 const galleryFilm = {
   src: "/media/2026/09/st-tailor-womenswear-fitting-film.mp4",
@@ -755,8 +759,8 @@ function enrichImageAttributes(html, { responsiveSizes } = {}) {
     if (responsiveSizes && metadata.responsive?.length && !/\bsrcset=/i.test(output)) {
       const isHomeHero = src === homeHeroImage && /\bst-home-v6__hero-media\b/.test(output);
       const isGalleryHero = /\bst-gallery-hero__story-image\b/.test(output);
-      const candidates = isHomeHero || isGalleryHero ? [...metadata.responsive, { src, width: metadata.width }] : metadata.responsive;
-      const srcset = candidates.map(({ src: candidate, width }) => `${candidate} ${width}w`).join(", ");
+      const candidates = isGalleryHero ? [...metadata.responsive, { src, width: metadata.width }] : metadata.responsive;
+      const srcset = imageSourceSet(candidates);
       const sizes = isHomeHero ? homeHeroSizes : isGalleryHero ? "(max-width: 899px) 100vw, 50vw" : responsiveSizes;
       const lazyAuto = /\bloading="lazy"/i.test(output) ? "auto, " : "";
       output = output.replace(/<img\b/i, `<img srcset="${srcset}" sizes="${lazyAuto}${sizes}"`);
@@ -927,8 +931,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
   const shareMetadata = imageManifest[shareImage.slice("/media/".length)];
   const shareDimensions = shareMetadata ? `<meta property="og:image:width" content="${shareMetadata.width}"><meta property="og:image:height" content="${shareMetadata.height}">` : "";
   const heroMetadata = route === "/" ? shareMetadata : null;
-  const heroCandidates = heroMetadata ? [...heroMetadata.responsive, { src: shareImage, width: heroMetadata.width }] : [];
-  const heroPreload = heroMetadata ? `<link rel="preload" as="image" href="${shareImage}" imagesrcset="${heroCandidates.map(({ src, width }) => `${src} ${width}w`).join(", ")}" imagesizes="${homeHeroSizes}" fetchpriority="high">` : "";
+  const heroPreload = heroMetadata ? `<link rel="preload" as="image" imagesrcset="${imageSourceSet(heroMetadata.responsive)}" imagesizes="${homeHeroSizes}" fetchpriority="high">` : "";
   const siteHeader = enrichImageAttributes(header(route), { responsiveSizes: "102px" });
   const siteFooter = enrichImageAttributes(footer(), { responsiveSizes: "160px" });
   return `<!doctype html><html lang="en"><head><meta charset="utf-8">${googleTagManagerHead}<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${safeDescription}"><meta name="author" content="S.T Tailor"><meta name="application-name" content="S.T Tailor"><meta name="sttailor-build-revision" content="${buildRevision}"><meta name="color-scheme" content="light"><meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="google-site-verification" content="e1RyHPdDirO6wJIxuZKKSIY6EXYb37XMfktIVl3aJz8"><meta name="p:domain_verify" content="78c108c3384a3aa9201fb90b99f0b225"><link rel="canonical" href="${canonical}"><link rel="icon" href="/icons/sttailor-favicon-48.png" type="image/png" sizes="48x48"><link rel="apple-touch-icon" href="/icons/sttailor-apple-touch-180.png" sizes="180x180"><link rel="manifest" href="/site.webmanifest">${heroPreload}<meta property="og:title" content="${safeTitle}"><meta property="og:description" content="${safeDescription}"><meta property="og:type" content="website"><meta property="og:url" content="${canonical}"><meta property="og:site_name" content="S.T Tailor"><meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:image" content="${shareImageUrl}"><meta property="og:image:type" content="${imageType}"><meta property="og:image:alt" content="${safeImageAlt}">${shareDimensions}<meta name="theme-color" content="#ead1ad"><title>${safeTitle}</title>${jsonLd}${analyticsTags}<link rel="stylesheet" href="${stylesheetHref}"></head><body>${googleTagManagerNoScript}${metaPixelNoScript}<div class="st-site-frame">${siteHeader}<main id="main-content">${breadcrumbNavigation(trail)}${body}</main>${siteFooter}</div><script type="module" src="${scriptHref}"></script></body></html>`;

@@ -16,6 +16,7 @@ from PIL import Image, ImageOps
 
 SOURCE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
 CONTENT_WIDTHS = (480, 768, 1200, 1600)
+HOME_HERO = "2026/06/background-hero-trang-lien-he-sttailor.webp"
 # Keep a 240px candidate so high-DPR mobile headers do not jump from 160px
 # straight to a 320px logo for a roughly 70–100px rendered mark.
 ICON_WIDTHS = (96, 160, 240, 320)
@@ -69,6 +70,10 @@ def main() -> int:
                 for candidate in responsive_widths:
                     if candidate < width:
                         variants.append({"src": build_variant(image, relative, candidate, responsive_root), "width": candidate})
+                if relative.as_posix() == HOME_HERO:
+                    # The tall mobile hero crops the landscape photograph. Retain
+                    # native pixel density without sending the larger upload.
+                    variants.append({"src": build_variant(image, relative, width, responsive_root), "width": width})
                 metadata[relative.as_posix()] = {"width": width, "height": height, "responsive": variants}
                 processed += 1
         except (OSError, ValueError) as error:
