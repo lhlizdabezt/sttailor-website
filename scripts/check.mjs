@@ -5,6 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { runInNewContext } from "node:vm";
 import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
+import { inlineScriptHashes } from "../src/security-policy.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const sourceRoot = path.join(root, "source", "wordpress");
@@ -37,6 +38,11 @@ for (const route of expectedRoutes) {
     continue;
   }
   const html = readFileSync(page, "utf8");
+  for (const [, attributes, body] of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
+    if (!body.trim() || /\btype="application\/ld\+json"/i.test(attributes)) continue;
+    const hash = createHash("sha256").update(body.replace(/\r\n?/g, "\n")).digest("base64");
+    if (!inlineScriptHashes.includes(hash)) failures.push(`Executable inline script is absent from the CSP on ${route}: ${hash}`);
+  }
   const pageStylesheets = [...html.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)].map((match) => match[1]);
   const stylesheet = manifest.routeStyles?.[route];
   if (pageStylesheets.length !== 1 || pageStylesheets[0] !== stylesheet?.href || !/^\/styles\/page-[a-f0-9]{12}\.css$/.test(stylesheet?.href ?? "")) {

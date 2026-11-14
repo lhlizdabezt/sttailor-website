@@ -64,6 +64,11 @@ test("the Worker serves every route in the public build manifest", async () => {
     const response = await worker.fetch(new Request(new URL(route, "https://sttailor.com")), env);
     assert.equal(response.status, 200, route);
     assert.match(response.headers.get("X-Robots-Tag"), /^index, follow\b/, route);
+    const policy = response.headers.get("Content-Security-Policy");
+    assert.match(policy, /(?:^|; )script-src 'self' 'sha256-/);
+    assert.match(policy, /(?:^|; )script-src-attr 'none'/);
+    assert.doesNotMatch(policy, /'unsafe-(?:inline|eval)'/);
+    assert.equal(policy.includes("https://www.tripadvisor.com"), route === "/gioi-thieu/");
     assert.equal(await response.text(), "Published page", route);
   }
 });

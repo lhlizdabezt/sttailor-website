@@ -12693,7 +12693,12 @@ html body .st-tripadvisor__fallback {
 }
 html body .st-tripadvisor__fallback:hover { background: #ead5b8; }
 html body .st-tripadvisor__badge a:focus-visible { outline: 2px solid #6c371e !important; outline-offset: 3px; }
-html body .st-tripadvisor__fallback span { display: block; font-weight: 400; }
+html body .st-tripadvisor__fallback span[lang="vi"] {
+  display: block;
+  color: #624330 !important;
+  -webkit-text-fill-color: #624330 !important;
+  font-weight: 400;
+}
 html body .st-tripadvisor__visit { width: 100%; padding: clamp(22px, 3vw, 34px); border: 1px solid #b99672; background: #f8ecdb; }
 html body .st-tripadvisor__visit h3 { margin: 0 0 12px; color: #352116; font: 500 24px/1.2 var(--st-wordmark); }
 html body .st-tripadvisor__visit h3 span { display: block; margin-top: 4px; font: 500 16px/1.4 var(--st-vietnamese); }

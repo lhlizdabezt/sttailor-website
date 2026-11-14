@@ -18,3 +18,5 @@ For a current read-only API check, run **Audit Cloudflare production (read-only)
 | Cache level | Standard/basic | Uses Static Assets caching safely | No zone-wide Cache Everything |
 
 The Worker sets `max-age=0, must-revalidate` for HTML, a one-year immutable policy for versioned CSS/JS, and seven days for stable media URLs. No paid Cloudflare feature, Polish, Mirage, Rocket Loader, or global HTML cache rule is enabled.
+
+HTML responses enforce a script allowlist. The Tripadvisor sources are scoped to the About page. If Cloudflare changes its Google tag gateway snippets, review the returned script contents and update the matching hashes in `src/security-policy.js`. To verify changes, test GA4 page views and consultation events, Clarity, the Meta Pixel and the Tripadvisor link in a real browser. The live smoke check verifies the policy and inline hashes on every published route.

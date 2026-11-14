@@ -4,6 +4,7 @@ import { readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
+import { contentSecurityPolicy } from "../src/security-policy.js";
 
 const origin = "https://sttailor.com";
 const expectedBuildRevision = process.env.EXPECTED_BUILD_REVISION;
@@ -82,7 +83,13 @@ for (const route of routes) {
   expect(pageHtml.includes('<noscript><img height="1" width="1" style="display:none" alt="" aria-hidden="true" src="https://www.facebook.com/tr?id=2294442874726399&amp;ev=PageView&amp;noscript=1"></noscript>') && !/\bfbq\s*\(/.test(pageHtml), `${route} must use GTM Meta Pixel with its static noscript fallback only`);
   expect(response.status === 200, `${route} returned ${response.status}`);
   expect(response.headers.get("strict-transport-security")?.includes("max-age=15552000"), `${route} has no HSTS policy`);
-  expect(response.headers.get("content-security-policy")?.includes("object-src 'none'"), `${route} has no baseline CSP`);
+  const policy = response.headers.get("content-security-policy") ?? "";
+  expect(policy === contentSecurityPolicy(route), `${route} does not enforce the expected CSP`);
+  for (const [, attributes, body] of pageHtml.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
+    if (!body.trim() || /\btype="application\/ld\+json"/i.test(attributes)) continue;
+    const hash = createHash("sha256").update(body.replace(/\r\n?/g, "\n")).digest("base64");
+    expect(policy.includes(`'sha256-${hash}'`), `${route} has an inline script blocked by CSP: ${hash}`);
+  }
   expect(response.headers.get("x-robots-tag")?.includes("index, follow"), `${route} has no indexable X-Robots-Tag`);
   expect(pageHtml.includes(`<link rel="canonical" href="${origin}${route}">`), `${route} has no production canonical`);
   expect(!pageHtml.toLowerCase().includes("beta.sttailor.com"), `${route} still contains the beta host`);

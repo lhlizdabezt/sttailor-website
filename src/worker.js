@@ -1,4 +1,5 @@
 import { indexNowKeyFile } from "./indexnow.js";
+import { contentSecurityPolicy } from "./security-policy.js";
 
 const canonicalHost = "sttailor.com";
 const routes = new Set([
@@ -59,10 +60,10 @@ function securityHeaders(response, pathname = "/") {
   headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
   headers.set("X-Frame-Options", "SAMEORIGIN");
   headers.set("Strict-Transport-Security", "max-age=15552000");
-  headers.set("Content-Security-Policy", "base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests");
   const contentType = headers.get("Content-Type") || "";
   const isHtml = routes.has(pathname) || pathname.endsWith(".html") || pathname === "/not-found" || contentType.includes("text/html");
   if (isHtml) {
+    headers.set("Content-Security-Policy", contentSecurityPolicy(pathname));
     headers.set("X-Robots-Tag", "index, follow, max-image-preview:large");
     headers.set("Cache-Control", "public, max-age=0, must-revalidate");
   } else if (pathname.startsWith("/styles/") || pathname.startsWith("/scripts/")) {
