@@ -262,7 +262,7 @@ console.log(`Audited ${publicAssets.length} public assets: originals, responsive
 for (const [agent, route] of [["Googlebot", "/"], ["bingbot", "/"], ["OAI-SearchBot", "/gallery/"]]) {
   const response = await fetchWithRetry(`${origin}${route}`, { headers: { "User-Agent": agent } });
   const html = await response.text();
-  expect(response.status === 200 && html.includes(`<link rel="canonical" href="${origin}${route}">`) && html.includes('<main id="main-content">'), `${agent} cannot read the canonical HTML for ${route}`);
+  expect(response.status === 200 && html.includes(`<link rel="canonical" href="${origin}${route}">`) && /<main\b[^>]*\bid="main-content"(?:\s|>)/.test(html), `${agent} cannot read the canonical HTML for ${route}`);
 }
 
 const llms = await fetchWithRetry(`${origin}/llms.txt`);
