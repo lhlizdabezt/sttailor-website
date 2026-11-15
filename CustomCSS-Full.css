@@ -13469,6 +13469,7 @@ html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6
     max-width: 13ch !important;
     font-size: clamp(39px, 10vw, 62px) !important;
   }
+  html body .st-home-v6__city { white-space: nowrap; }
 }
 
 /* Only sections that begin below the first viewport receive this class.

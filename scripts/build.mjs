@@ -213,6 +213,7 @@ function replaceVisibleAtelier(html) {
 
 function transformHome(html) {
   html = html
+    .replace('Bespoke tailoring in Ho Chi Minh City<span lang="vi">', 'Bespoke tailoring in <span class="st-home-v6__city">Ho Chi Minh City</span><span lang="vi">')
     .replace("S.T TAILOR / THÀNH PHỐ HỒ CHÍ MINH</span></p>", "S.T TAILOR / TP. HỒ CHÍ MINH</span></p>")
     .replace(
       /<a class="st-home-v6__hero-jump"[^>]*>[\s\S]*?<\/a>/,
@@ -496,8 +497,8 @@ function appendToGalleryAlbum(html, id, figure) {
   return `${html.slice(0, at)}${figure}${html.slice(at)}`;
 }
 
-function fittingFilmPlayer(descriptionId) {
-  return `<video controls playsinline preload="none" width="720" height="1280" poster="${galleryFilm.poster}" aria-describedby="${descriptionId}">
+function fittingFilmPlayer(descriptionId, { lazy = false } = {}) {
+  return `<video controls playsinline preload="none"${lazy ? ' loading="lazy"' : ""} width="720" height="1280" poster="${galleryFilm.poster}" aria-describedby="${descriptionId}">
       <source src="${galleryFilm.src}" type="video/mp4">
       <a href="${galleryFilm.src}">Watch the fitting film <span lang="vi">/ Xem video thử đồ</span></a>
     </video>`;
@@ -578,7 +579,7 @@ function transformGallery(html) {
     <a class="st-gallery-film__link" href="${fittingFilmRoute}">Open the film page <span lang="vi">/ Mở trang xem phim</span></a>
   </div>
   <figure class="st-gallery-film__media">
-    ${fittingFilmPlayer("st-gallery-film-description")}
+    ${fittingFilmPlayer("st-gallery-film-description", { lazy: true })}
     <figcaption>Womenswear fitting at S.T Tailor<span lang="vi">Buổi thử trang phục nữ tại S.T Tailor</span></figcaption>
   </figure>
 </section>`;
@@ -828,11 +829,12 @@ function footer() {
 }
 
 function documentFor(route, sourceFile, title, description, shareImage, shareImageAlt, lastModified) {
-  const responsiveSizes = route === "/gallery/"
-    ? "(max-width: 760px) 100vw, (max-width: 1080px) 50vw, 33vw"
-    : route === "/"
-      ? "(max-width: 760px) 100vw, (max-width: 1120px) 50vw, 20vw"
-      : "(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 800px";
+  const responsiveSizes = {
+    "/gallery/": "(max-width: 760px) 100vw, (max-width: 1080px) 50vw, 33vw",
+    "/": "(max-width: 760px) 100vw, (max-width: 1120px) 50vw, 20vw",
+    // The square guide photo covers a 560px-tall frame on desktop.
+    "/cam-nang-may-do/": "(max-width: 560px) calc(100vw - 28px), (max-width: 860px) calc(100vw - 48px), 560px"
+  }[route] ?? "(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 800px";
   const body = enrichImageAttributes(transformPage(sourceFile, readSource(sourceFile)), { responsiveSizes });
   const galleryImages = route === "/gallery/" ? imageMetadata(body) : [];
   const canonical = `https://sttailor.com${route}`;
