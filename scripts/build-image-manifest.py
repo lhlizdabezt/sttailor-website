@@ -46,6 +46,16 @@ def build_variant(image: Image.Image, source_relative: Path, width: int, output_
     return public_path(target_relative)
 
 
+def build_mobile_hero(image: Image.Image, relative: Path, output_root: Path) -> str:
+    # Match the mobile hero's 62% object position. Removing the unseen sides
+    # preserves native vertical detail and the existing framing on phones.
+    width = min(image.width, round(image.height * 1.05))
+    left = round((image.width - width) * 0.62)
+    crop = image.crop((left, 0, left + width, image.height))
+    name = relative.with_stem(f"{relative.stem}-portrait")
+    return build_variant(crop, name, width, output_root)
+
+
 def main() -> int:
     if len(sys.argv) != 3:
         raise SystemExit("Usage: build-image-manifest.py SOURCE_MEDIA OUTPUT_MANIFEST")
@@ -70,11 +80,11 @@ def main() -> int:
                 for candidate in responsive_widths:
                     if candidate < width:
                         variants.append({"src": build_variant(image, relative, candidate, responsive_root), "width": candidate})
+                entry = {"width": width, "height": height, "responsive": variants}
                 if relative.as_posix() == HOME_HERO:
-                    # The tall mobile hero crops the landscape photograph. Retain
-                    # native pixel density without sending the larger upload.
                     variants.append({"src": build_variant(image, relative, width, responsive_root), "width": width})
-                metadata[relative.as_posix()] = {"width": width, "height": height, "responsive": variants}
+                    entry["portrait"] = build_mobile_hero(image, relative, responsive_root)
+                metadata[relative.as_posix()] = entry
                 processed += 1
         except (OSError, ValueError) as error:
             raise RuntimeError(f"Could not inspect {relative}: {error}") from error
