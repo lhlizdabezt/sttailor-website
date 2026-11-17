@@ -331,6 +331,18 @@ for (const excluded of ["Telephone", "Email"]) {
   if (footerSocial.includes(excluded)) failures.push(`Footer social channel must not include: ${excluded}`);
 }
 if (!home.includes("S.T Tailor showroom map")) failures.push("Shared footer is missing the Google Maps embed.");
+for (const route of expectedRoutes) {
+  const html = readFileSync(path.join(dist, route.slice(1), "index.html"), "utf8");
+  const sharedFooter = html.match(/<footer\b[\s\S]*?<\/footer>/)?.[0] ?? "";
+  const mapTemplate = sharedFooter.match(/<template data-map-template>[\s\S]*?<\/template>/)?.[0] ?? "";
+  if (!mapTemplate.includes('title="S.T Tailor showroom map"') || /<iframe\b[^>]*src="https:\/\/www.google.com\/maps\//.test(sharedFooter.replace(mapTemplate, ""))) {
+    failures.push(`Google Maps must remain available on request without an automatic iframe load: ${route}`);
+  }
+  if (!html.includes('data-map-load hidden') || !html.includes('class="st-footer-v7__map" href="https://maps.app.goo.gl/')) failures.push(`Map activation or independent directions link missing: ${route}`);
+}
+const securityText = readFileSync(path.join(dist, ".well-known", "security.txt"), "utf8");
+const securityExpiry = Date.parse(securityText.match(/^Expires: (.+)$/m)?.[1] ?? "");
+if (!securityText.includes("Contact: mailto:contact.sttailor@gmail.com") || !securityText.includes("Canonical: https://sttailor.com/.well-known/security.txt") || !(securityExpiry > Date.now())) failures.push("Security disclosure contact must be valid and unexpired.");
 if (home.includes("st-footer-v7__top")) failures.push("Removed footer promotion band is still present.");
 if (!home.includes('class="st-footer-v7__bottom st-footer-v8__legal"') || !home.includes('aria-label="Client policies"')) failures.push("Right-aligned client policy section is missing.");
 

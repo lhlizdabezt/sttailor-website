@@ -1,6 +1,23 @@
 const toggle = document.querySelector("[data-nav-toggle]");
 const nav = document.querySelector("[data-site-nav]");
 
+// Load the interactive map only after an explicit mouse or keyboard request.
+// The adjacent directions link works independently when JavaScript is off.
+for (const button of document.querySelectorAll("[data-map-load]")) {
+  const panel = button.closest("[data-map-panel]");
+  const template = panel?.querySelector("template[data-map-template]");
+  if (!template) continue;
+  button.hidden = false;
+  button.addEventListener("click", () => {
+    const content = template.content.cloneNode(true);
+    const frame = content.querySelector("iframe");
+    if (!frame) return;
+    frame.loading = "eager";
+    panel.replaceChildren(content);
+    frame.focus();
+  }, { once: true });
+}
+
 if (toggle && nav) {
   const links = [...nav.querySelectorAll("a")];
   const mobile = () => window.matchMedia("(max-width: 980px)").matches;

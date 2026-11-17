@@ -35,6 +35,18 @@ test("unmatched retired products retain a true 404 instead of a homepage redirec
   assert.equal(response.headers.get("Location"), null);
 });
 
+test("security disclosure is a public text resource while unknown well-known paths remain missing", async () => {
+  const disclosureEnv = { ASSETS: { fetch: async () => new Response("Contact: mailto:contact.sttailor@gmail.com\n", { headers: { "Content-Type": "text/plain; charset=utf-8" } }) } };
+  for (const method of ["GET", "HEAD"]) {
+    const response = await worker.fetch(new Request("https://sttailor.com/.well-known/security.txt", { method }), disclosureEnv);
+    assert.equal(response.status, 200);
+    assert.match(response.headers.get("Content-Type"), /^text\/plain/);
+    assert.equal(response.headers.get("Cache-Control"), "public, max-age=3600");
+  }
+  const missing = await worker.fetch(new Request("https://sttailor.com/.well-known/private.txt"), env);
+  assert.equal(missing.status, 404);
+});
+
 test("retired tailoring pages redirect to related content and preserve campaign parameters", async () => {
   const redirects = [
     ["/product-category/blazer/", "/gallery/#album-suits"],

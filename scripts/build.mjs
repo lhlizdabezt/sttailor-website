@@ -253,6 +253,10 @@ function transformHome(html) {
 }
 
 function transformFooter(html) {
+  // An iframe inside a template is inert until the visitor requests the map.
+  // Keep the independent directions link available, including without JS.
+  html = html.replace(/(<iframe\b[^>]*title="S.T Tailor showroom map"[^>]*><\/iframe>)/,
+    `<div class="st-footer-v7__map-surface" data-map-panel><button class="st-footer-v7__map-load" type="button" data-map-load hidden><span>View showroom map</span><span lang="vi">Xem bản đồ showroom</span><small>Google Maps<span lang="vi">Bản đồ Google</span></small></button><template data-map-template>$1</template></div>`);
   html = removeElementByClass(html, "div", "st-footer-v7__top")
     .replace('<div class="st-footer-v7__guide-links"', '<div role="navigation" class="st-footer-v7__guide-links"')
     .replace('loading="eager"', 'loading="lazy"')
@@ -1020,7 +1024,7 @@ mkdirSync(path.join(dist, "scripts"), { recursive: true });
 
 const wordpressCss = readFileSync(path.join(sourceRoot, "CustomCSS.css"), "utf8").replaceAll("https://sttailor.com/wp-content/uploads/", "/media/");
 const standaloneCss = readFileSync(path.join(root, "src", "styles", "standalone-shell.css"), "utf8");
-const fullCustomCss = `${wordpressCss}\n\n/* Cloudflare Worker standalone shell. WordPress page CSS above remains the visual source of truth. */\n${standaloneCss}\n`;
+const fullCustomCss = `${wordpressCss}\n\n/* Cloudflare Worker standalone shell. WordPress page CSS above remains the visual source of truth. */\n${standaloneCss.trimEnd()}\n`;
 // The editable export remains complete for owner maintenance. Only the served
 // asset is minified, and its content hash keeps its immutable cache safe.
 // These legacy page IDs are absent from every published route. Keep their
@@ -1146,6 +1150,8 @@ const sitemapEntries = sitemapRouteOrder.map(([route, , , , shareImage]) => {
 }).join("");
 writeFileSync(path.join(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">${sitemapEntries}\n</urlset>\n`, "utf8");
 writeFileSync(path.join(dist, "site.webmanifest"), JSON.stringify({ name: "S.T Tailor", short_name: "S.T Tailor", description: "Bespoke tailoring and clothing alterations in Ho Chi Minh City.", start_url: "/", scope: "/", display: "standalone", background_color: "#f3e1c5", theme_color: "#ead1ad", icons: [{ src: "/icons/sttailor-app-192.png", sizes: "192x192", type: "image/png", purpose: "any" }, { src: "/icons/sttailor-app-large-512.png", sizes: "512x512", type: "image/png", purpose: "any" }] }, null, 2), "utf8");
+mkdirSync(path.join(dist, ".well-known"), { recursive: true });
+copyFileSync(path.join(root, "source", "security.txt"), path.join(dist, ".well-known", "security.txt"));
 const llmsLink = ([route, , , description]) => `- [${pageLabels.get(route)[0]}](https://sttailor.com${route}): ${description}`;
 const policyRoutes = new Set(["/doi-tra-hoan-tien/", "/chinh-sach-van-chuyen/", "/dieu-khoan-dieu-kien/", "/chinh-sach-bao-mat/"]);
 const guidePaths = new Set(["/cam-nang-may-do/", ...guideRoutes.map(([route]) => route)]);

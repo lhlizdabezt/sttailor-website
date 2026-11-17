@@ -51,7 +51,7 @@ const legacyRoutes = new Map([
   ["/bao-hanh-sua-chua/", "/dich-vu/"]
 ]);
 const staticPrefixes = ["/media/", "/icons/", "/styles/", "/scripts/"];
-const staticFiles = new Set(["/robots.txt", "/sitemap.xml", "/llms.txt", "/site.webmanifest", `/${indexNowKeyFile}`, "/404.html", "/not-found.html", "/_headers", "/build-manifest.json", "/image-manifest.json"]);
+const staticFiles = new Set(["/robots.txt", "/sitemap.xml", "/llms.txt", "/.well-known/security.txt", "/site.webmanifest", `/${indexNowKeyFile}`, "/404.html", "/not-found.html", "/_headers", "/build-manifest.json", "/image-manifest.json"]);
 
 function securityHeaders(response, pathname = "/") {
   const headers = new Headers(response.headers);
@@ -72,7 +72,7 @@ function securityHeaders(response, pathname = "/") {
     headers.set("Cache-Control", "public, max-age=604800");
   } else if (pathname.startsWith("/icons/")) {
     headers.set("Cache-Control", "public, max-age=604800");
-  } else if (["/robots.txt", "/sitemap.xml", "/llms.txt", "/site.webmanifest", `/${indexNowKeyFile}`].includes(pathname)) {
+  } else if (["/robots.txt", "/sitemap.xml", "/llms.txt", "/.well-known/security.txt", "/site.webmanifest", `/${indexNowKeyFile}`].includes(pathname)) {
     headers.set("Cache-Control", "public, max-age=3600");
   }
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers });

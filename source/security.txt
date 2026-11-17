@@ -1,0 +1,4 @@
+Contact: mailto:contact.sttailor@gmail.com
+Expires: 2027-11-01T00:00:00Z
+Preferred-Languages: en, vi
+Canonical: https://sttailor.com/.well-known/security.txt

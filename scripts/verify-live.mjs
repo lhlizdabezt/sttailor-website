@@ -230,6 +230,9 @@ expect(poster.status === 200 && poster.headers.get("content-type")?.includes("im
 
 const robots = await fetchWithRetry(`${origin}/robots.txt`);
 const robotsText = await robots.text();
+const disclosure = await fetchWithRetry(`${origin}/.well-known/security.txt`);
+const disclosureText = await disclosure.text();
+expect(disclosure.status === 200 && disclosure.headers.get("content-type")?.includes("text/plain") && disclosureText.includes("Contact: mailto:contact.sttailor@gmail.com") && Date.parse(disclosureText.match(/^Expires: (.+)$/m)?.[1] ?? "") > Date.now(), "security.txt must publish a current vulnerability-reporting contact as plain text");
 expect(robots.status === 200 && robotsText.includes(`Sitemap: ${origin}/sitemap.xml`), "robots.txt is invalid");
 expect(/^User-agent:\s*\*\s*$/mi.test(robotsText) && /^Allow:\s*\/\s*$/mi.test(robotsText) && !/^Disallow:\s*\/\s*$/mi.test(robotsText), "robots.txt must allow public pages to be crawled");
 expect(!/^Disallow:\s*\S+/mi.test(robotsText), "robots.txt must not block a published public resource");
