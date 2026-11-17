@@ -9,31 +9,6 @@
 html { background: #fffaf4; }
 body { min-width: 320px; margin: 0; background: #fffaf4; color: #302019; font-family: var(--st-vietnamese); }
 img { max-width: 100%; }
-/* Preserve the map's footprint without contacting Google until requested. */
-html body .st-footer-v7__map-load {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  width: 100%;
-  min-height: 180px;
-  padding: 24px 16px;
-  border: 1px solid #bd9565;
-  border-radius: 0;
-  outline: 1px solid #bd9565;
-  outline-offset: -6px;
-  background: #3a2116;
-  color: #fff9ef;
-  font: 600 16px/1.5 var(--st-vietnamese);
-  cursor: pointer;
-}
-html body .st-footer-v7__map-load[hidden] { display: none; }
-html body .st-footer-v7__map-load > [lang="vi"] { color: #f3d2a4; font-size: 14px; }
-html body .st-footer-v7__map-load small { margin-top: 8px; font: 400 12px/1.5 var(--st-vietnamese); }
-html body .st-footer-v7__map-load small [lang="vi"] { display: block; }
-html body .st-footer-v7__map-load:is(:hover, :focus-visible) { background: #503020; }
-html body .st-footer-v7__map-load:focus-visible { outline: 3px solid #f3d2a4; outline-offset: 3px; }
 main { display: block; width: 100%; overflow: hidden; }
 .st-breadcrumb {
   padding: 8px max(16px, calc((100% - 1220px) / 2));

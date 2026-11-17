@@ -253,10 +253,6 @@ function transformHome(html) {
 }
 
 function transformFooter(html) {
-  // An iframe inside a template is inert until the visitor requests the map.
-  // Keep the independent directions link available, including without JS.
-  html = html.replace(/(<iframe\b[^>]*title="S.T Tailor showroom map"[^>]*><\/iframe>)/,
-    `<div class="st-footer-v7__map-surface" data-map-panel><button class="st-footer-v7__map-load" type="button" data-map-load hidden><span>View showroom map</span><span lang="vi">Xem bản đồ showroom</span><small>Google Maps<span lang="vi">Bản đồ Google</span></small></button><template data-map-template>$1</template></div>`);
   html = removeElementByClass(html, "div", "st-footer-v7__top")
     .replace('<div class="st-footer-v7__guide-links"', '<div role="navigation" class="st-footer-v7__guide-links"')
     .replace('loading="eager"', 'loading="lazy"')

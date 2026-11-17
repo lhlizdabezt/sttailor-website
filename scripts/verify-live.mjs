@@ -97,6 +97,9 @@ for (const route of routes) {
   expect(pageHtml.includes('"hasOfferCatalog":{"@type":"OfferCatalog"') && !pageHtml.includes('"makesOffer":{"@type":"OfferCatalog"'), `${route} has an invalid LocalBusiness service catalog relationship`);
   expect(pageHtml.includes('"streetAddress":"1st Floor, 258 Le Thanh Ton, Tan Dinh Ward"'), `${route} does not show the confirmed showroom floor and ward in LocalBusiness schema`);
   const footer = pageHtml.match(/<footer\b[\s\S]*?<\/footer>/i)?.[0] ?? "";
+  const directFooter = footer.replace(/<template\b[\s\S]*?<\/template>/gi, "");
+  expect(/<iframe\b[^>]*src="https:\/\/www\.google\.com\/maps\/embed\?[^>]*title="S\.T Tailor showroom map"[^>]*><\/iframe>/.test(directFooter) && !/data-map-(?:load|template|panel)/.test(footer), `${route} must embed Google Maps directly without a click-to-display control`);
+  expect(footer.includes('class="st-footer-v7__map" href="https://maps.app.goo.gl/'), `${route} has no independent Google Maps directions link`);
   const followLinks = [...(footer.match(/<nav class="st-footer-v7__social"[\s\S]*?<\/nav>/)?.[0] ?? "").matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
   expect(followLinks.length === 10 && new Set(followLinks).size === 10, `${route} must publish exactly ten unique FOLLOW destinations`);
   const tripadvisorProfile = "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html";

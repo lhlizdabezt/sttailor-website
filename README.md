@@ -59,6 +59,6 @@ Pages are generated from the versioned HTML fragments in `source/wordpress`. The
 
 The contact form is deliberately represented by direct contact channels in this initial migration. If a form needs server-side delivery later, add a Cloudflare Turnstile-protected endpoint and a transactional email provider before accepting submissions.
 
-The shared footer loads its interactive Google Maps embed only when a visitor activates the bilingual map button. The directions link remains available without JavaScript. The Contact page retains its dedicated location map.
+The shared footer displays its Google Maps embed directly, with native browser lazy loading and no click-to-display control. The embedded map and independent directions link remain available without site JavaScript. The Contact page retains its dedicated location map. Do not add a button or filter that visitors must activate before seeing either map.
 
 The public vulnerability-reporting contact is maintained in `source/security.txt` and served at `/.well-known/security.txt`. Review the contact and renew its expiry before 1 November 2027; the build checks reject an expired file. This file does not establish a bug-bounty programme or permission to test the site.

@@ -334,11 +334,11 @@ if (!home.includes("S.T Tailor showroom map")) failures.push("Shared footer is m
 for (const route of expectedRoutes) {
   const html = readFileSync(path.join(dist, route.slice(1), "index.html"), "utf8");
   const sharedFooter = html.match(/<footer\b[\s\S]*?<\/footer>/)?.[0] ?? "";
-  const mapTemplate = sharedFooter.match(/<template data-map-template>[\s\S]*?<\/template>/)?.[0] ?? "";
-  if (!mapTemplate.includes('title="S.T Tailor showroom map"') || /<iframe\b[^>]*src="https:\/\/www.google.com\/maps\//.test(sharedFooter.replace(mapTemplate, ""))) {
-    failures.push(`Google Maps must remain available on request without an automatic iframe load: ${route}`);
+  const directFooter = sharedFooter.replace(/<template\b[\s\S]*?<\/template>/gi, "");
+  if (!/<iframe\b[^>]*src="https:\/\/www\.google\.com\/maps\/embed\?[^>]*title="S\.T Tailor showroom map"[^>]*><\/iframe>/.test(directFooter) || /data-map-(?:load|template|panel)/.test(sharedFooter)) {
+    failures.push(`Google Maps must be embedded directly without a click-to-display control: ${route}`);
   }
-  if (!html.includes('data-map-load hidden') || !html.includes('class="st-footer-v7__map" href="https://maps.app.goo.gl/')) failures.push(`Map activation or independent directions link missing: ${route}`);
+  if (!sharedFooter.includes('class="st-footer-v7__map" href="https://maps.app.goo.gl/')) failures.push(`Independent directions link missing: ${route}`);
 }
 const securityText = readFileSync(path.join(dist, ".well-known", "security.txt"), "utf8");
 const securityExpiry = Date.parse(securityText.match(/^Expires: (.+)$/m)?.[1] ?? "");
