@@ -13262,6 +13262,14 @@ html body .st-guide-article__body > section h2 { margin: 0 !important; color: va
 html body .st-guide-article__body > section h2 span[lang="vi"] { display: block !important; margin-top: 11px !important; color: #75452c !important; font-size: .48em !important; line-height: 1.16 !important; }
 html body .st-guide-article__body > section > p:last-child { margin: 0 !important; color: #53372a !important; font: 400 16px/1.75 var(--st-vietnamese) !important; }
 html body .st-guide-article__body > section > p:last-child span[lang="vi"] { display: block !important; margin-top: 10px !important; color: #76513e !important; }
+html body .st-guide-article__body > section > p a {
+  padding: 1px 4px;
+  border: 1px solid #a88665;
+  color: #57301d;
+  text-underline-offset: .15em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
 html body .st-guide-next { display: flex !important; margin-top: 22px !important; gap: 12px !important; justify-content: space-between !important; }
 html body .st-guide-next a,
 html body .st-guide-cta a { display: inline-flex !important; min-height: 50px !important; padding: 13px 18px !important; align-items: center !important; justify-content: center !important; gap: 7px !important; flex-wrap: wrap !important; border: 1px solid currentColor !important; color: inherit !important; font: 750 12px/1.35 var(--st-vietnamese) !important; letter-spacing: .07em !important; text-align: center !important; text-decoration: none !important; }
