@@ -351,6 +351,7 @@ const franceClientPhotos = [
 ];
 
 const galleryAltText = {
+  "background-hero-trang-lien-he-sttailor.webp": "Tailor checking the shoulder and lapel of a navy suit on a client at S.T Tailor | Thợ may kiểm tra vai và ve áo suit xanh navy trên người khách tại S.T Tailor",
   ...Object.fromEntries(franceClientPhotos.map(([file, en, vi]) => [file, `${en} | ${vi}`])),
   "st-tailor-made-to-measure-stories-gallery.jpg": "S.T Tailor made-to-measure story with a client and navy jacket | Câu chuyện may đo S.T Tailor với khách hàng và áo khoác xanh navy",
   "st-tailor-gallery-brocade-dinner-jacket.jpg": "Black textured dinner jacket on a mannequin | Áo khoác dự tiệc đen dệt vân trên mannequin",
@@ -682,20 +683,20 @@ function transformAbout(html) {
     <div class="st-tripadvisor__copy">
       <p class="st-lux-eyebrow">TRIPADVISOR</p>
       <h2 id="st-tripadvisor-title">Reviews from our clients<span lang="vi">Đánh giá của khách hàng</span></h2>
-      <p>Read how clients chose their cloth, what changed during fittings and how their finished garments felt. You can also share your own experience on the S.T Tailor listing after your visit.<span lang="vi">Đọc chia sẻ của khách hàng về cách họ chọn vải, những điểm được chỉnh trong buổi thử đồ và cảm nhận khi mặc trang phục hoàn thiện. Sau khi ghé nhà may, bạn cũng có thể chia sẻ trải nghiệm của mình trên trang Tripadvisor của S.T Tailor.</span></p>
+      <p>On Tripadvisor, clients share how they chose their cloth, what changed during fittings and how the finished garment felt. After your visit, you can share your experience on the same listing.<span lang="vi">Trên Tripadvisor, khách hàng chia sẻ cách họ chọn vải, những điểm được điều chỉnh khi thử đồ và cảm nhận khi mặc trang phục hoàn thiện. Sau khi ghé nhà may, bạn cũng có thể chia sẻ trải nghiệm của mình tại đây.</span></p>
       <a class="st-tripadvisor__link" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer"><span>Read reviews on Tripadvisor</span><span lang="vi">Đọc đánh giá trên Tripadvisor</span></a>
+      <div class="st-tripadvisor__rating" role="group" aria-label="Tripadvisor listing / Trang thông tin trên Tripadvisor">
+        <div id="TA_rated383" class="TA_rated"><ul id="nk7KumP" class="TA_links j2AXIy9"><li id="YSiMIh" class="HfgYawPu"><a class="st-tripadvisor__fallback" target="_blank" rel="noopener noreferrer" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html">S.T Tailor on Tripadvisor<span lang="vi">S.T Tailor trên Tripadvisor</span></a></li></ul></div>
+      </div>
     </div>
-    <div class="st-tripadvisor__badge">
-      <div id="TA_rated383" class="TA_rated"><ul id="nk7KumP" class="TA_links j2AXIy9"><li id="YSiMIh" class="HfgYawPu"><a class="st-tripadvisor__fallback" target="_blank" rel="noopener noreferrer" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html">S.T Tailor on Tripadvisor<span lang="vi">S.T Tailor trên Tripadvisor</span></a></li></ul></div>
-      <div class="st-tripadvisor__visit">
+    <div class="st-tripadvisor__visit">
         <h3>Visit S.T Tailor <span lang="vi">Ghé S.T Tailor</span></h3>
         <address>1st Floor, 258 Le Thanh Ton, Tan Dinh Ward<br>Ho Chi Minh City, Vietnam<span lang="vi">Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định<br>Thành phố Hồ Chí Minh, Việt Nam</span></address>
         <p class="st-tripadvisor__hours">Open daily, 09:00–20:00<span lang="vi">Mở cửa mỗi ngày, 09:00–20:00</span></p>
         <a href="/lien-he/">Showroom hours &amp; directions <span lang="vi">Giờ mở cửa và chỉ đường</span></a>
-      </div>
-      <!-- The official badge registers a window load callback. -->
-      <script async src="https://www.jscache.com/wejs?wtype=rated&amp;uniq=383&amp;locationId=34701232&amp;lang=en_US&amp;display_version=2"></script>
     </div>
+    <!-- The official badge registers a window load callback. -->
+    <script async src="https://www.jscache.com/wejs?wtype=rated&amp;uniq=383&amp;locationId=34701232&amp;lang=en_US&amp;display_version=2"></script>
   </div>
 </section>`;
   html = html.replace('<section class="st-lux-business st-motion st-motion-1">', `${tripadvisor}\n<section class="st-lux-business st-motion st-motion-1">`);
@@ -788,7 +789,7 @@ const buildDate = new Date().toISOString().slice(0, 10);
 const sharedContentModified = "2026-11-13";
 // Advance the relevant date when transformed copy changes, not for build fixes.
 const derivedContentModified = {
-  "About.html": "2026-11-13",
+  "About.html": "2026-11-18",
   "Gallery.html": "2026-10-18", "Payment.html": "2026-10-18",
   "Returns.html": "2026-10-18", "Shipping.html": "2026-10-18",
   "Terms.html": "2026-10-18", "Privacy.html": "2026-10-18"

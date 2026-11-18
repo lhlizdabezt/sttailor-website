@@ -107,6 +107,20 @@ html body .st-service-page .st-service-commission-map { margin-top: 0 !important
 .st-gallery-page .st-gallery-album__heading h2 { font-family: var(--st-wordmark) !important; font-weight: 600 !important; }
 .st-gallery-page .st-gallery-album__heading h2 [lang="vi"] { font-family: var(--st-wordmark) !important; font-weight: 500 !important; }
 .st-gallery-page .st-gallery-album:focus-visible { outline: 2px solid currentColor; outline-offset: -4px; }
+html body .st-gallery-page .st-gallery-album__guide {
+  display: inline-grid;
+  min-height: 48px;
+  margin-top: 20px;
+  padding: 10px 18px;
+  border: 1px solid currentColor;
+  color: #603822;
+  font: 600 15px/1.45 var(--st-vietnamese);
+  text-align: center;
+  text-decoration: none;
+}
+html body .st-gallery-page .st-gallery-album--dark .st-gallery-album__guide { color: #f9ddba; }
+html body .st-gallery-page .st-gallery-album__guide span { font-weight: 400; }
+html body .st-gallery-page .st-gallery-album__guide:hover { text-decoration: underline; text-underline-offset: .2em; }
 
 /* Gallery chapter navigator: a tactile 3x3 heritage index that jumps to each photographic album. */
 html body .st-gallery-numpad { position: relative !important; padding: clamp(68px, 9vw, 120px) 0 !important; overflow: hidden !important; background: #ead2b7 !important; color: #3a2116 !important; }
@@ -358,11 +372,11 @@ html body .st-tripadvisor__link { display: inline-grid !important; min-height: 5
 html body .st-tripadvisor__link span[lang="vi"] { color: #edd0aa !important; -webkit-text-fill-color: #edd0aa !important; }
 html body .st-tripadvisor__link:hover { background: #5a3520 !important; transform: translateY(-2px) !important; }
 html body .st-tripadvisor__link:focus-visible { outline: 3px solid #764225 !important; outline-offset: 4px !important; }
-html body .st-tripadvisor__badge { display: grid !important; min-width: 0; padding: 0 !important; gap: 24px; place-items: center !important; background: transparent !important; border: 0; text-align: center; }
-html body .st-tripadvisor__badge .TA_rated { display: grid; min-height: 86px; place-items: center; }
-html body .st-tripadvisor__badge :is(.TA_rated, #CDSWIDFRR) { max-width: 100% !important; }
-html body .st-tripadvisor__badge .TA_links { margin: 0 !important; padding: 0 !important; list-style: none !important; }
-html body .st-tripadvisor__badge img { max-width: 100% !important; height: auto !important; }
+html body .st-tripadvisor__rating { display: grid; min-width: 0; margin-top: 18px; justify-items: start; }
+html body .st-tripadvisor__rating .TA_rated { display: grid; min-height: 86px; place-items: center; }
+html body .st-tripadvisor__rating :is(.TA_rated, #CDSWIDFRR) { max-width: 100% !important; }
+html body .st-tripadvisor__rating .TA_links { margin: 0 !important; padding: 0 !important; list-style: none !important; }
+html body .st-tripadvisor__rating img { max-width: 100% !important; height: auto !important; }
 html body .st-tripadvisor__fallback {
   display: block;
   padding: 10px 14px;
@@ -373,14 +387,14 @@ html body .st-tripadvisor__fallback {
   font: 600 15px/1.4 var(--st-vietnamese);
 }
 html body .st-tripadvisor__fallback:hover { background: #ead5b8; }
-html body .st-tripadvisor__badge a:focus-visible { outline: 2px solid #6c371e !important; outline-offset: 3px; }
+html body .st-tripadvisor :is(.st-tripadvisor__rating, .st-tripadvisor__visit) a:focus-visible { outline: 2px solid #6c371e !important; outline-offset: 3px; }
 html body .st-tripadvisor__fallback span[lang="vi"] {
   display: block;
   color: #624330 !important;
   -webkit-text-fill-color: #624330 !important;
   font-weight: 400;
 }
-html body .st-tripadvisor__visit { width: 100%; padding: clamp(22px, 3vw, 34px); border: 1px solid #b99672; background: #f8ecdb; }
+html body .st-tripadvisor__visit { width: 100%; box-sizing: border-box; padding: clamp(22px, 3vw, 34px); border: 1px solid #b99672; background: #f8ecdb; }
 html body .st-tripadvisor__visit h3 { margin: 0 0 12px; color: #352116; font: 500 24px/1.2 var(--st-wordmark); }
 html body .st-tripadvisor__visit h3 span { display: block; margin-top: 4px; font: 500 16px/1.4 var(--st-vietnamese); }
 html body .st-tripadvisor__visit address { color: #4e3527; font: 400 15px/1.55 var(--st-vietnamese); }
@@ -1308,6 +1322,7 @@ html body .st-gallery-page--albums .st-gallery-film__media figcaption span[lang=
   html body .st-tripadvisor { padding: 48px 0 !important; }
   html body .st-tripadvisor__inner { gap: 24px !important; }
   html body .st-tripadvisor__link { width: 100% !important; margin-top: 24px !important; justify-content: center !important; text-align: center; }
+  html body .st-tripadvisor__rating { justify-items: center; }
 }
 /* Focused payment band and compact, bilingual client-care pages. */
 html body .st-payment-page--focused .st-payment-methods { padding-top: clamp(48px, 6vw, 80px) !important; }

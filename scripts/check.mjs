@@ -426,7 +426,6 @@ if ((gallery.match(/st-gallery-numpad__card/g) ?? []).length !== 9) failures.pus
 if (!gallery.includes("st-gallery-numpad") || !gallery.includes("#album-tuxedo") || !gallery.includes("#album-showroom")) failures.push("Gallery chapter navigator is missing jump targets.");
 const galleryImageTags = [...gallery.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^\"]+)"[^>]*>/gi)];
 const galleryContentImages = galleryImageTags.filter((match) => !match[1].includes("logo-sttailor") && !match[1].endsWith("/LinkedInLogo.png"));
-if (galleryContentImages.length !== 117) failures.push("Gallery must contain all 117 approved editorial images.");
 const galleryImageSources = new Set(galleryContentImages.map((image) => image[1]));
 if (galleryImageSources.size !== galleryContentImages.length) failures.push("Gallery repeats an editorial image.");
 const imageManifest = JSON.parse(readFileSync(path.join(dist, "image-manifest.json"), "utf8"));
@@ -434,7 +433,7 @@ const sourceImages = Object.keys(imageManifest);
 const exteriorPhoto = imageManifest["2026/09/st-tailor-showroom-exterior-evening.jpg"];
 if (exteriorPhoto?.width !== 3000 || exteriorPhoto?.height !== 4000) failures.push("Evening storefront image must render upright in its responsive variants.");
 const galleryExempt = new Set([
-  "2026/06/background-hero-trang-lien-he-sttailor.webp",
+  // Signatures belong to their About profiles. The shared logo and social icon are branding.
   "2026/06/chu-ky-Son.webp",
   "2026/06/chu-ky-thinh.webp",
   "2026/09/LinkedInLogo.png",
@@ -444,7 +443,14 @@ const galleryExempt = new Set([
 for (const asset of sourceImages) {
   if (!galleryExempt.has(asset) && !galleryImageSources.has(`/media/${asset}`)) failures.push(`Source editorial image is absent from Gallery: ${asset}`);
 }
+const galleryImageDigests = new Map();
 for (const image of galleryContentImages) {
+  const file = path.join(dist, image[1].slice(1));
+  if (existsSync(file)) {
+    const digest = createHash("sha256").update(readFileSync(file)).digest("hex");
+    if (galleryImageDigests.has(digest)) failures.push(`Gallery repeats the same image bytes at ${image[1]} and ${galleryImageDigests.get(digest)}.`);
+    galleryImageDigests.set(digest, image[1]);
+  }
   const alt = /\balt="([^\"]*)"/i.exec(image[0])?.[1] ?? "";
   if (!alt || !alt.includes(" | ")) failures.push(`Gallery image is missing a bilingual alt text: ${image[1]}`);
   if (!/\bwidth="\d+"/i.test(image[0]) || !/\bheight="\d+"/i.test(image[0])) failures.push(`Gallery image is missing intrinsic dimensions: ${image[1]}`);
@@ -493,7 +499,8 @@ const sitemap = readFileSync(path.join(dist, "sitemap.xml"), "utf8");
 if ((sitemap.match(/<url><loc>https:\/\/sttailor\.com/g) ?? []).length !== expectedRoutes.length || sitemap.includes("beta.sttailor.com")) failures.push("Sitemap does not contain the complete production route set.");
 if (!sitemap.includes('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"') || !sitemap.includes("<image:image>")) failures.push("Image sitemap discovery data is missing.");
 const gallerySitemap = sitemap.match(/<url><loc>https:\/\/sttailor\.com\/gallery\/[\s\S]*?<\/url>/)?.[0] ?? "";
-if ((gallerySitemap.match(/<image:image>/g) ?? []).length !== 117) failures.push("Gallery image sitemap does not expose every editorial image exactly once.");
+const gallerySitemapImages = [...gallerySitemap.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)].map((match) => match[1]);
+if (gallerySitemapImages.length !== galleryContentImages.length || [...galleryImageSources].some((src) => !gallerySitemapImages.includes(`https://sttailor.com${src}`))) failures.push("Gallery image sitemap does not expose every editorial image exactly once.");
 if ((gallerySitemap.match(/<lastmod>([^<]+)<\/lastmod>/)?.[1] ?? "") < "2026-10-15") failures.push("Gallery lastmod predates the newly published client photographs.");
 const watchSitemap = sitemap.match(/<url><loc>https:\/\/sttailor\.com\/phim-thu-do\/[\s\S]*?<\/url>/)?.[0] ?? "";
 if (!sitemap.includes('xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"') || (sitemap.match(/<video:video>/g) ?? []).length !== 1 || !watchSitemap.includes(`<video:content_loc>https://sttailor.com${filmPath}</video:content_loc>`) || !watchSitemap.includes(`<video:thumbnail_loc>https://sttailor.com${posterPath}</video:thumbnail_loc>`)) failures.push("Fitting watch page video sitemap entry is missing or duplicated.");

@@ -219,7 +219,7 @@ const watchHtml = pages.get("/phim-thu-do/");
 expect(galleryHtml.includes('href="/phim-thu-do/"') && !galleryHtml.includes('"@type":"VideoObject"') && watchHtml.includes('"@type":"VideoObject"') && watchHtml.includes(`"contentUrl":"${origin}${filmPath}"`) && watchHtml.includes(`src="${filmPath}"`), "Fitting watch page, VideoObject or Gallery link is missing");
 const galleryImages = [...galleryHtml.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^\"]+)"[^>]*>/gi)]
   .filter((match) => !/(?:logo-sttailor|LinkedInLogo)/i.test(match[1]));
-expect(galleryImages.length === 117 && new Set(galleryImages.map((match) => match[1])).size === 117, "Gallery is missing images or repeats an image");
+expect(galleryImages.length === 118 && new Set(galleryImages.map((match) => match[1])).size === galleryImages.length, "Gallery is missing images or repeats an image");
 for (const asset of ["st-tailor-made-to-measure-stories-gallery.jpg", "st-tailor-magenta-floral-wrap-dress-and-navy-suit.jpg", "st-tailor-magenta-floral-wrap-dress-full-length.jpg", "st-tailor-magenta-floral-wrap-dress-detail.jpg", "st-tailor-showroom-exterior-evening.jpg"]) {
   const path = `/media/2026/09/${asset}`;
   expect(galleryImages.filter((match) => match[1] === path).length === 1, `Gallery must show ${asset} exactly once`);
@@ -287,7 +287,8 @@ expect((sitemapText.match(/<url>/g) || []).length === routes.length, `sitemap.xm
 expect(sitemapText.includes("xmlns:image="), "Image sitemap namespace is missing");
 expect(sitemapText.includes("<image:image>"), "Image sitemap entries are missing");
 const gallerySitemap = sitemapText.match(/<url><loc>https:\/\/sttailor\.com\/gallery\/[\s\S]*?<\/url>/)?.[0] ?? "";
-expect((gallerySitemap.match(/<image:image>/g) || []).length === 117, "Gallery sitemap omits one or more editorial images");
+const gallerySitemapImages = [...gallerySitemap.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)].map((match) => match[1]);
+expect(gallerySitemapImages.length === galleryImages.length && galleryImages.every((match) => gallerySitemapImages.includes(`${origin}${match[1]}`)), "Gallery sitemap omits one or more editorial images");
 const watchSitemap = sitemapText.match(/<url><loc>https:\/\/sttailor\.com\/phim-thu-do\/[\s\S]*?<\/url>/)?.[0] ?? "";
 expect(sitemapText.includes('xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"') && (sitemapText.match(/<video:video>/g) || []).length === 1 && watchSitemap.includes(`<video:content_loc>${origin}${filmPath}</video:content_loc>`) && watchSitemap.includes(`<video:thumbnail_loc>${origin}${posterPath}</video:thumbnail_loc>`), "Video sitemap omits or duplicates the fitting watch page");
 
