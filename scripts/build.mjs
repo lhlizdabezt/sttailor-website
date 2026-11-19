@@ -683,17 +683,18 @@ function transformAbout(html) {
     <div class="st-tripadvisor__copy">
       <p class="st-lux-eyebrow">TRIPADVISOR</p>
       <h2 id="st-tripadvisor-title">Reviews from our clients<span lang="vi">Đánh giá của khách hàng</span></h2>
-      <p>On Tripadvisor, clients share how they chose their cloth, what changed during fittings and how the finished garment felt. After your visit, you can share your experience on the same listing.<span lang="vi">Trên Tripadvisor, khách hàng chia sẻ cách họ chọn vải, những điểm được điều chỉnh khi thử đồ và cảm nhận khi mặc trang phục hoàn thiện. Sau khi ghé nhà may, bạn cũng có thể chia sẻ trải nghiệm của mình tại đây.</span></p>
+      <p>Read how clients chose their cloth, what changed at their fittings and how the finished garments felt. You can share your own experience on Tripadvisor after your visit.<span lang="vi">Đọc chia sẻ của khách hàng về cách chọn vải, những điều chỉnh khi thử đồ và cảm nhận khi mặc trang phục hoàn thiện. Sau khi ghé nhà may, bạn cũng có thể chia sẻ trải nghiệm trên Tripadvisor.</span></p>
       <a class="st-tripadvisor__link" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer"><span>Read reviews on Tripadvisor</span><span lang="vi">Đọc đánh giá trên Tripadvisor</span></a>
       <div class="st-tripadvisor__rating" role="group" aria-label="Tripadvisor listing / Trang thông tin trên Tripadvisor">
         <div id="TA_rated383" class="TA_rated"><ul id="nk7KumP" class="TA_links j2AXIy9"><li id="YSiMIh" class="HfgYawPu"><a class="st-tripadvisor__fallback" target="_blank" rel="noopener noreferrer" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html">S.T Tailor on Tripadvisor<span lang="vi">S.T Tailor trên Tripadvisor</span></a></li></ul></div>
       </div>
     </div>
     <div class="st-tripadvisor__visit">
-        <h3>Visit S.T Tailor <span lang="vi">Ghé S.T Tailor</span></h3>
-        <address>1st Floor, 258 Le Thanh Ton, Tan Dinh Ward<br>Ho Chi Minh City, Vietnam<span lang="vi">Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định<br>Thành phố Hồ Chí Minh, Việt Nam</span></address>
-        <p class="st-tripadvisor__hours">Open daily, 09:00–20:00<span lang="vi">Mở cửa mỗi ngày, 09:00–20:00</span></p>
-        <a href="/lien-he/">Showroom hours &amp; directions <span lang="vi">Giờ mở cửa và chỉ đường</span></a>
+      <h3>Visit S.T Tailor <span lang="vi">Ghé S.T Tailor</span></h3>
+      <address>1st Floor, 258 Le Thanh Ton, Tan Dinh Ward<br>Ho Chi Minh City, Vietnam<span lang="vi">Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định<br>Thành phố Hồ Chí Minh, Việt Nam</span></address>
+      <p class="st-tripadvisor__hours">Open daily, 09:00–20:00<span lang="vi">Mở cửa mỗi ngày, 09:00–20:00</span></p>
+      <a href="/lien-he/">Showroom hours &amp; directions <span lang="vi">Giờ mở cửa và chỉ đường</span></a>
+      <a href="/quy-trinh-thu-do/">What to expect at a fitting <span lang="vi">Các bước trong buổi thử đồ</span></a>
     </div>
     <!-- The official badge registers a window load callback. -->
     <script async src="https://www.jscache.com/wejs?wtype=rated&amp;uniq=383&amp;locationId=34701232&amp;lang=en_US&amp;display_version=2"></script>
@@ -1161,14 +1162,22 @@ writeFileSync(path.join(dist, "llms.txt"), `# S.T Tailor
 
 > Bespoke tailoring, clothing alterations and private fittings in Ho Chi Minh City. May đo, chỉnh sửa trang phục và tư vấn riêng tại Thành phố Hồ Chí Minh.
 
-S.T Tailor is on the 1st Floor at 258 Le Thanh Ton, Tan Dinh Ward, Ho Chi Minh City, Vietnam. Regular showroom hours are 09:00–20:00 daily (Asia/Ho_Chi_Minh). The pages below are available in English and Vietnamese on the same canonical URL.
+Showroom: 1st Floor, 258 Le Thanh Ton, Tan Dinh Ward, Ho Chi Minh City, Vietnam. Open daily, 09:00–20:00 (Asia/Ho_Chi_Minh). Walk-ins are welcome and appointments are available.
+
+Địa chỉ: Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định, Thành phố Hồ Chí Minh, Việt Nam. Mở cửa mỗi ngày từ 09:00 đến 20:00. Khách có thể ghé trực tiếp hoặc đặt lịch hẹn.
+
+Services include bespoke and made-to-measure suits, shirts, formalwear, womenswear and clothing alterations. The cloth selection includes European fabrics, such as Vitale Barberis Canonico, alongside Vietnamese silk. The canonical pages below contain both English and Vietnamese.
 
 ${llmsSections}
 
 ## Direct contact
 
-- Telephone: +84 909 556 258
-- Email: contact.sttailor@gmail.com
+- [Telephone](tel:+84909556258): +84 909 556 258
+- [Email](mailto:contact.sttailor@gmail.com): contact.sttailor@gmail.com
+- [Messenger](https://m.me/sttailor.hcm)
+- [Zalo](https://zalo.me/0909556258)
+- [Instagram](https://www.instagram.com/sttailorhcm/)
+- [WhatsApp](https://wa.me/84909556258)
 `, "utf8");
 writeFileSync(path.join(dist, "_headers"), "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n  X-Frame-Options: SAMEORIGIN\n  Strict-Transport-Security: max-age=15552000\n  Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests\n", "utf8");
 writeFileSync(path.join(dist, "build-manifest.json"), JSON.stringify({ source: "source/wordpress", sourceMedia: "source/media", revision: buildRevision, routes: routes.map(([route]) => route), routeStyles, localUploadAssets: assets.length, imageMetadata: imageCount, galleryDuplicateCheck: "passed" }, null, 2), "utf8");

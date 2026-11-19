@@ -363,7 +363,7 @@ html body .st-cloth-heritage__gallery figcaption small span[lang="vi"] { display
 /* About: Tripadvisor's official badge within the site's own typography. */
 html body .st-tripadvisor { padding: clamp(68px, 8vw, 112px) 0 !important; background: #ead5b8 !important; color: #2f1e15 !important; border-block: 1px solid #c5a17b !important; }
 html body .st-tripadvisor__inner { display: grid !important; grid-template-columns: minmax(0, 1.25fr) minmax(270px, .75fr) !important; align-items: center !important; gap: clamp(30px, 7vw, 105px) !important; }
-html body .st-tripadvisor__copy .st-lux-eyebrow { margin: 0 0 18px !important; color: #764225 !important; -webkit-text-fill-color: #764225 !important; font-size: 16px !important; letter-spacing: .11em !important; }
+html body .st-tripadvisor__copy .st-lux-eyebrow { margin: 0 0 18px !important; color: #764225 !important; -webkit-text-fill-color: #764225 !important; font-size: clamp(17px, 1.75vw, 24px) !important; letter-spacing: .11em !important; }
 html body .st-tripadvisor__copy h2 { margin: 0 !important; color: #2f1e15 !important; -webkit-text-fill-color: #2f1e15 !important; font: 500 clamp(40px, 5vw, 69px)/1 var(--st-wordmark) !important; }
 html body .st-tripadvisor__copy h2 span[lang="vi"] { display: block !important; margin-top: 12px !important; color: #75472e !important; -webkit-text-fill-color: #75472e !important; font: 500 .46em/1.18 var(--st-wordmark) !important; }
 html body .st-tripadvisor__copy > p:not(.st-lux-eyebrow) { max-width: 620px !important; margin: 25px 0 0 !important; color: #4e3527 !important; -webkit-text-fill-color: #4e3527 !important; font: 400 clamp(16px, 1.4vw, 19px)/1.65 var(--st-vietnamese) !important; }
@@ -402,10 +402,12 @@ html body .st-tripadvisor__visit address span { display: block; margin-top: 6px;
 html body .st-tripadvisor__hours { margin: 12px 0 0; color: #4e3527; font: 600 14px/1.55 var(--st-vietnamese); }
 html body .st-tripadvisor__hours span { display: block; font-weight: 400; }
 html body .st-tripadvisor__visit > a {
-  display: block; margin-top: 16px; padding: 10px 12px; border: 1px solid #815c40;
+  display: grid; align-content: center; box-sizing: border-box; min-height: 66px;
+  margin-top: 12px; padding: 10px 12px; border: 1px solid #815c40;
   color: #352116; font: 600 14px/1.4 var(--st-vietnamese); text-decoration: none;
 }
-html body .st-tripadvisor__visit > a span { display: block; font-weight: 400; }
+html body .st-tripadvisor__visit > a:first-of-type { margin-top: 20px; }
+html body .st-tripadvisor__visit > a span { display: block; color: #624330; font-weight: 400; }
 html body .st-tripadvisor__visit > a:hover { background: #ead5b8; }
 
 html body .st-fitting-film {

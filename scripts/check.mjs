@@ -488,6 +488,9 @@ for (const staticFile of ["robots.txt", "sitemap.xml", "llms.txt", "site.webmani
 }
 const llmsText = readFileSync(path.join(dist, "llms.txt"), "utf8");
 if (!/^# S\.T Tailor$/m.test(llmsText) || llmsText.length < 50) failures.push("llms.txt is missing its Markdown heading or summary.");
+for (const contact of ["tel:+84909556258", "mailto:contact.sttailor@gmail.com", "https://m.me/sttailor.hcm", "https://zalo.me/0909556258", "https://www.instagram.com/sttailorhcm/", "https://wa.me/84909556258"]) {
+  if (!llmsText.includes(`](${contact})`)) failures.push(`llms.txt is missing a direct contact channel: ${contact}`);
+}
 const llmsUrls = [...llmsText.matchAll(/\[[^\]]+\]\((https:\/\/sttailor\.com\/[^)]*)\)/g)].map((match) => match[1]);
 if (llmsUrls.length !== expectedRoutes.length || new Set(llmsUrls).size !== expectedRoutes.length || expectedRoutes.some((route) => !llmsUrls.includes(`https://sttailor.com${route}`))) {
   failures.push("llms.txt must link to every canonical page exactly once in Markdown format.");
