@@ -193,7 +193,7 @@ const servicesCss = stylesheets.get(servicesCssPath) ?? "";
 const commissionMapRule = [...servicesCss.matchAll(/\.st-service-page\s+\.st-service-commission-map\{[^}]*\}/g)]
   .map((match) => match[0])
   .find((rule) => rule.includes("margin-top:0!important"));
-expect(Boolean(navigationLinkRule), "Navigation is not forced to uppercase");
+expect(navigationLinkRule?.includes("border:0") && navigationLinkRule.includes("background:0 0"), "Primary navigation links are missing the transparent, borderless treatment");
 expect(mobileNavigationRule?.includes("flex-direction:column!important"), "Mobile navigation is not a vertical list");
 expect(css.includes(".st-site-header{") && css.includes("background:linear-gradient(110deg,#f4e2c5,#e8cfab 52%,#f6e7cf)"), "Opaque tan header treatment is missing");
 expect(Boolean(commissionMapRule), "Services spacing fix is missing");

@@ -29,7 +29,7 @@ main { display: block; width: 100%; overflow: hidden; }
 .st-breadcrumb [lang="vi"] { font-size: 13px; font-weight: 500; }
 .st-breadcrumb a:focus-visible { outline: 2px solid #663819; outline-offset: 3px; }
 .st-site-frame { width: 100%; overflow: clip; }
-.st-skip-link { position: fixed; z-index: 100; top: 10px; left: 10px; max-width: calc(100% - 20px); clip-path: inset(50%); padding: 10px 14px; background: #6c371e; color: #fffaf4; font: 700 14px/1.4 var(--st-vietnamese); text-decoration: none; }
+.st-skip-link { position: fixed; z-index: 100; top: 10px; left: 10px; max-width: calc(100% - 20px); clip-path: inset(50%); padding: 10px 14px; border: 1px solid #ead1ad; background: #6c371e; color: #fffaf4; font: 700 14px/1.4 var(--st-vietnamese); text-decoration: none; }
 .st-skip-link:focus { clip-path: none; }
 
 /* This header reproduces the quiet, light WordPress chrome while keeping only the original logo. */
@@ -38,9 +38,9 @@ main { display: block; width: 100%; overflow: hidden; }
 .st-site-brand { display: inline-flex; flex: 0 0 auto; align-items: center; max-width: min(118px, 22vw); }
 .st-site-brand img { display: block; width: min(102px, 20vw); height: auto; margin: 0; background: transparent; border: 0; filter: none; }
 .st-site-nav { display: grid; grid-template-columns: repeat(5, minmax(116px, 1fr)); gap: clamp(8px, 1.2vw, 16px); }
-.st-site-nav a { display: flex; min-height: 48px; padding: 6px 12px; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border: 1px solid #8b6549; color: #4b2b1d; font-family: var(--st-wordmark); font-size: 13px; font-weight: 600; letter-spacing: .075em; line-height: 1; text-align: center; text-decoration: none; text-transform: uppercase; transition: color .2s ease, border-color .2s ease, background-color .2s ease; }
-.st-site-nav a:hover, .st-site-nav a:focus-visible { border-color: #6c371e; background: #f8eddd; color: #6c371e; }
-.st-site-nav a[aria-current="page"] { border-color: #512a1a; background: #512a1a; color: #fffaf4; }
+.st-site-nav a { display: flex; min-height: 48px; padding: 6px 12px; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border: 0; background: transparent; color: #4b2b1d; font-family: var(--st-wordmark); font-size: 13px; font-weight: 600; letter-spacing: .075em; line-height: 1; text-align: center; text-decoration: none; text-transform: uppercase; }
+.st-site-nav a:is(:hover, :focus-visible, [aria-current="page"]) > span:first-child { text-decoration: underline; text-underline-offset: .3em; }
+.st-site-nav a[aria-current="page"] { font-weight: 750; }
 .st-site-nav a span[lang="vi"] { font: 500 13px/1.25 var(--st-vietnamese); text-transform: none; letter-spacing: 0; }
 .st-site-header :is(.st-site-brand, .st-nav-toggle, .st-site-nav a):focus-visible { outline: 2px solid #6c371e; outline-offset: 3px; }
 .st-nav-toggle { display: none; width: 44px; height: 44px; padding: 11px 10px; border: 1px solid #6c371e; border-radius: 0; background: transparent; color: #6c371e; cursor: pointer; }
@@ -106,16 +106,16 @@ html body .st-gallery-page .st-gallery-album__guide {
   min-height: 48px;
   margin-top: 20px;
   align-content: center;
-  padding: 4px 0;
+  padding: 8px 14px;
+  border: 1px solid currentColor;
   color: #603822;
   font: 600 15px/1.45 var(--st-vietnamese);
   text-align: left;
-  text-decoration: underline;
-  text-underline-offset: .22em;
+  text-decoration: none;
 }
 html body .st-gallery-page .st-gallery-album--dark .st-gallery-album__guide { color: #f9ddba; }
 html body .st-gallery-page .st-gallery-album__guide span { font-weight: 400; }
-html body .st-gallery-page .st-gallery-album__guide:hover { text-decoration-thickness: 2px; }
+html body .st-gallery-page .st-gallery-album__guide:hover { box-shadow: inset 0 0 0 1px currentColor; }
 html body .st-gallery-page .st-gallery-album__guide:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
 
 /* Gallery chapter navigator: a tactile 3x3 heritage index that jumps to each photographic album. */
@@ -572,9 +572,8 @@ html body .st-home-editorial__frame:focus-visible { outline: 3px solid #f0c17f !
   .st-site-nav { visibility: hidden; justify-content: flex-start !important; }
   .st-site-nav.is-open { max-height: min(430px, calc(100dvh - 96px)); padding: 10px 0 !important; border-bottom: 1px solid rgba(255, 250, 244, .32); opacity: 1; pointer-events: auto; transform: translateX(-50%); visibility: visible; overflow-y: auto; overscroll-behavior: contain; }
   .st-site-nav a { flex-shrink: 0; }
-  .st-site-nav a, .st-site-nav a:visited { width: calc(100% - 32px); min-height: 54px; margin: 4px 16px; padding: 10px 14px; align-items: flex-start; border-color: #bc9679; background: transparent; color: #fffaf4; font-size: 13px; text-align: left; }
-  .st-site-nav a:hover, .st-site-nav a:focus-visible, .st-site-nav a[aria-current="page"] { border-color: #f0dbc0; background: #f0dbc0; color: #452516; }
-  .st-site-header .st-site-nav a:focus-visible { outline-offset: -4px; }
+  .st-site-nav a, .st-site-nav a:visited { width: calc(100% - 32px); min-height: 54px; margin: 4px 16px; padding: 10px 14px; align-items: flex-start; color: #fffaf4; font-size: 13px; text-align: left; }
+  .st-site-header .st-site-nav a:focus-visible { outline-color: #f0dbc0; outline-offset: -4px; }
   html body .st-service-page .st-bespoke-process__steps { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 20px 0 !important; }
   html body .st-service-page .st-bespoke-process__steps::before { display: none !important; }
   html body .st-service-page .st-bespoke-process__steps > li { min-height: 0 !important; padding: 0 24px 34px !important; }
@@ -864,11 +863,41 @@ html body .st-guide-sources { display: flex !important; flex-wrap: wrap !importa
 html body .st-guide-sources p { flex-basis: 100% !important; margin: 0 !important; color: #60331f !important; font-weight: 700 !important; }
 html body .st-guide-sources a { color: #60331f !important; text-underline-offset: 4px !important; }
 html body .st-guide-sources a:focus-visible { outline: 2px solid #a87855 !important; outline-offset: 3px !important; }
-html body .st-footer-v7.st-footer-v8 .st-footer-v7__guide-links { display: flex !important; flex-direction: column !important; gap: 11px !important; margin: -5px 0 19px 10px !important; padding-left: 16px !important; border-left: 1px solid rgba(96, 51, 31, .35) !important; }
-html body .st-footer-v7.st-footer-v8 .st-footer-v7__guide-links a { display: block !important; color: #4a2618 !important; -webkit-text-fill-color: #4a2618 !important; font: 600 14px/1.35 var(--st-vietnamese) !important; text-decoration: underline !important; text-decoration-color: rgba(74, 38, 24, .7) !important; text-underline-offset: 3px !important; }
-html body .st-footer-v7.st-footer-v8 .st-footer-v7__guide-links a span[lang="vi"] { display: block !important; margin-top: 3px !important; color: #70432a !important; -webkit-text-fill-color: #70432a !important; font-weight: 500 !important; }
-html body .st-footer-v7.st-footer-v8 .st-footer-v7__guide-links a:hover,
-html body .st-footer-v7.st-footer-v8 .st-footer-v7__guide-links a:focus-visible { color: #8a4e25 !important; -webkit-text-fill-color: #8a4e25 !important; text-decoration-thickness: 2px !important; outline-offset: 3px !important; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__guide-links { display: grid; align-self: stretch; gap: 8px; margin: 0 0 8px; padding-left: 14px; border-left: 1px solid #946c4d; }
+html body .st-footer-v7.st-footer-v8 :is(.st-footer-v7__nav, .st-footer-v7__guide-links) > a {
+  display: grid !important;
+  width: 100% !important;
+  min-height: 54px;
+  align-content: center;
+  margin: 0 0 8px !important;
+  padding: 7px 10px;
+  border: 1px solid #805536;
+  color: #4a2618 !important;
+  -webkit-text-fill-color: #4a2618 !important;
+  font: 700 13px/1.4 var(--st-vietnamese) !important;
+  text-decoration: none !important;
+}
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__guide-links > a { margin: 0 !important; }
+html body .st-footer-v7.st-footer-v8 :is(.st-footer-v7__nav, .st-footer-v7__guide-links) > a [lang="vi"] {
+  display: block;
+  color: #70432a !important;
+  -webkit-text-fill-color: #70432a !important;
+  font: 500 12px/1.4 var(--st-vietnamese) !important;
+}
+html body .st-footer-v7.st-footer-v8 :is(.st-footer-v7__nav, .st-footer-v7__guide-links) > a:is(:hover, :focus-visible) { background: #f8e8d4; }
+html body .st-footer-v7.st-footer-v8 :is(.st-footer-v7__nav, .st-footer-v7__guide-links) > a:focus-visible { outline: 2px solid #70432a !important; outline-offset: 2px !important; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__visit :is(address, p) > a {
+  display: grid;
+  min-height: 44px;
+  align-content: center;
+  padding: 7px 10px;
+  border: 1px solid #805536;
+  overflow-wrap: anywhere;
+  text-decoration: none !important;
+}
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__visit :is(address, p) > a:is(:hover, :focus-visible) { background: #f8e8d4; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__visit :is(address, p) > a:focus-visible { outline: 2px solid #70432a !important; outline-offset: 2px !important; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__visit p > a + a { margin-top: 8px; }
 
 @media (max-width: 860px) {
   html body .st-guide-hero__grid { grid-template-columns: 1fr !important; }
@@ -939,9 +968,9 @@ html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal-links { min-width: 0 !
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal-label { margin: 0 0 11px !important; color: #e9bc87 !important; font: 750 11px/1.4 var(--st-vietnamese) !important; letter-spacing: .15em !important; text-align: right !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal-label span[lang="vi"] { margin-left: 6px !important; color: #d4ac84 !important; font-weight: 550 !important; letter-spacing: .03em !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav { display: grid !important; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px !important; }
-html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a { display: grid !important; align-content: center; min-width: 0 !important; min-height: 54px; box-sizing: border-box; margin: 0 !important; padding: 7px 9px !important; border: 0 !important; background: transparent !important; color: #fff5e6 !important; -webkit-text-fill-color: #fff5e6 !important; font: 650 12px/1.4 var(--st-vietnamese) !important; letter-spacing: .025em !important; text-align: center; text-decoration: none !important; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a { display: grid !important; align-content: center; min-width: 0 !important; min-height: 54px; box-sizing: border-box; margin: 0 !important; padding: 7px 9px !important; border: 1px solid #bc9773 !important; background: #39261b !important; color: #fff5e6 !important; -webkit-text-fill-color: #fff5e6 !important; font: 650 12px/1.4 var(--st-vietnamese) !important; letter-spacing: .025em !important; text-align: center; text-decoration: none !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a span[lang="vi"] { display: block !important; margin: 3px 0 0 !important; color: #eac8a2 !important; -webkit-text-fill-color: #eac8a2 !important; font: 500 12px/1.4 var(--st-vietnamese) !important; letter-spacing: 0 !important; text-transform: none !important; }
-html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:hover, html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:focus-visible { text-decoration: underline !important; text-underline-offset: .24em !important; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:hover, html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:focus-visible { border-color: #efd1ab !important; background: #4d3426 !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:focus-visible { outline: 2px solid #f0d1a9 !important; outline-offset: 5px !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:hover span[lang="vi"], html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:focus-visible span[lang="vi"] { color: #f0d1a9 !important; -webkit-text-fill-color: #f0d1a9 !important; }
 @media (max-width: 900px) { html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal .st-footer-v7__shell { grid-template-columns: 1fr !important; align-items: start !important; } html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal-label { text-align: left !important; } }
