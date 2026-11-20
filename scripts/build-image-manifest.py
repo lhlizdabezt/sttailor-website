@@ -15,7 +15,9 @@ from PIL import Image, ImageOps
 
 
 SOURCE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
-CONTENT_WIDTHS = (320, 480, 640, 768, 1200, 1600)
+# At 1.75 DPR, a 412px mobile Gallery uses roughly 325px and 665px
+# for its two-column and full-width tiles.
+CONTENT_WIDTHS = (360, 480, 672, 768, 1200, 1600)
 HOME_HERO = "2026/06/background-hero-trang-lien-he-sttailor.webp"
 GALLERY_HERO = "2026/09/st-tailor-made-to-measure-stories-gallery.jpg"
 # Keep a 240px candidate so high-DPR mobile headers do not jump from 160px

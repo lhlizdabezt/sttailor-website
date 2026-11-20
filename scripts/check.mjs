@@ -431,7 +431,7 @@ const galleryContentImages = galleryImageTags.filter((match) => !match[1].includ
 const galleryImageSources = new Set(galleryContentImages.map((image) => image[1]));
 if (galleryImageSources.size !== galleryContentImages.length) failures.push("Gallery repeats an editorial image.");
 const galleryCover = galleryContentImages.find(([tag]) => tag.includes("st-gallery-hero__story-image"))?.[0] ?? "";
-if (!/-320\.webp 320w/.test(galleryCover) || !/-736\.webp 736w/.test(galleryCover)) failures.push("Gallery cover needs compact candidates through its native width.");
+if (!/-360\.webp 360w/.test(galleryCover) || !/-736\.webp 736w/.test(galleryCover)) failures.push("Gallery cover needs compact candidates through its native width.");
 const imageManifest = JSON.parse(readFileSync(path.join(dist, "image-manifest.json"), "utf8"));
 const sourceImages = Object.keys(imageManifest);
 const exteriorPhoto = imageManifest["2026/09/st-tailor-showroom-exterior-evening.jpg"];
