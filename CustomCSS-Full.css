@@ -6296,69 +6296,48 @@ html body .st-lux-page.st-lux-about .st-about-discovery__links i {
   html body .st-lux-page.st-lux-about .st-about-discovery__head > p:last-child { font-size: 15px !important; }
 }
 
-/* S.T TAILOR V6.4.20 | A text-only hero route leads into the five atelier pages. */
+/* Keep the lead action legible over the hero photograph. */
 html body #st-home-v6.st-home-v6--mission #st-home-v6-pages {
   scroll-margin-top: 88px !important;
 }
 html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump {
-  position: relative !important;
-  display: inline-flex !important;
-  flex-wrap: wrap !important;
-  align-items: baseline !important;
-  gap: 0 !important;
-  margin-top: clamp(25px, 3vw, 38px) !important;
-  padding: 0 0 8px !important;
+  display: inline-grid !important;
+  justify-items: start !important;
+  align-content: center !important;
+  gap: 3px !important;
+  min-height: 48px !important;
+  max-width: 100% !important;
+  margin-top: clamp(22px, 3vw, 34px) !important;
+  padding: 5px 0 !important;
   border: 0 !important;
-  border-bottom: 1px solid rgba(247, 218, 181, .86) !important;
-  border-radius: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
-  color: #fff7ec !important;
-  -webkit-text-fill-color: #fff7ec !important;
-  font-family: var(--st-font-copy-local) !important;
-  font-size: clamp(12px, 1.05vw, 15px) !important;
-  font-style: normal !important;
-  font-weight: 800 !important;
-  letter-spacing: .012em !important;
-  line-height: 1.35 !important;
-  text-decoration: none !important;
-  text-transform: none !important;
-  transition: color .24s ease, border-color .24s ease, transform .24s ease !important;
+  color: #fff8ec !important;
+  -webkit-text-fill-color: #fff8ec !important;
+  font: 750 14px/1.45 var(--st-font-copy-local) !important;
+  letter-spacing: .035em !important;
+  text-align: left !important;
+  text-shadow: 0 1px 3px #1d1a18 !important;
+}
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump span {
+  color: inherit !important;
+  -webkit-text-fill-color: inherit !important;
+}
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump span:first-child {
+  text-decoration: underline !important;
+  text-underline-offset: .27em !important;
+  text-decoration-thickness: 1px !important;
 }
 html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump span[lang="vi"] {
-  display: inline !important;
-  margin: 0 0 0 .6ch !important;
-  color: #fff7ec !important;
-  -webkit-text-fill-color: #fff7ec !important;
-  font: inherit !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
 }
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump span[lang="vi"]::before {
-  content: "/" !important;
-  margin: 0 .6ch 0 0 !important;
-  color: #fff7ec !important;
-  -webkit-text-fill-color: #fff7ec !important;
+html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:hover span:first-child {
+  text-decoration-thickness: 2px !important;
 }
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:hover,
 html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible {
-  border-bottom-color: #fff7ec !important;
-  color: #fff7ec !important;
-  -webkit-text-fill-color: #fff7ec !important;
-  outline: 0 !important;
-  transform: translateX(5px) !important;
-}
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:hover span[lang="vi"],
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible span[lang="vi"] {
-  color: #fff7ec !important;
-  -webkit-text-fill-color: #fff7ec !important;
-}
-@media (max-width: 620px) {
-  html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump {
-    max-width: 100% !important;
-    margin-top: 24px !important;
-    padding-bottom: 7px !important;
-    font-size: 12px !important;
-    line-height: 1.45 !important;
-  }
+  outline: 2px solid currentColor !important;
+  outline-offset: 4px !important;
 }
 @media (max-width: 680px) {
   html body .st-service-page .st-service-hero--text .st-service-hero__grid {
@@ -11821,7 +11800,6 @@ html body .st-gallery-page--albums .st-gallery-hero--index::before {
     -248px 276px 0 -138px rgba(250, 231, 198, .42),
     -13px 296px 0 -96px rgba(113, 54, 28, .13) !important;
   transform: rotate(27deg) !important;
-  animation: st-gallery-botanical-drift 10s ease-in-out infinite alternate !important;
 }
 html body .st-gallery-page--albums .st-gallery-hero--index::after {
   right: 5.6% !important;
@@ -11832,7 +11810,6 @@ html body .st-gallery-page--albums .st-gallery-hero--index::after {
   border-radius: 78% 22% 75% 25% / 26% 74% 26% 74% !important;
   box-shadow: 82px -78px 0 -72px rgba(255, 242, 217, .45), -142px -22px 0 -104px rgba(109, 52, 27, .12) !important;
   transform: rotate(-34deg) !important;
-  animation: st-gallery-botanical-drift 12s ease-in-out infinite alternate-reverse !important;
 }
 html body .st-gallery-page--albums .st-gallery-hero--index .st-gallery-shell { position: relative !important; z-index: 1 !important; }
 html body .st-gallery-page--albums .st-gallery-hero--index .st-gallery-hero__copy {
@@ -11840,18 +11817,10 @@ html body .st-gallery-page--albums .st-gallery-hero--index .st-gallery-hero__cop
   border-left: 1px solid rgba(104, 50, 27, .48) !important;
   background: linear-gradient(90deg, rgba(255, 246, 230, .46), rgba(255, 246, 230, 0)) !important;
 }
-@keyframes st-gallery-botanical-drift {
-  from { translate: 0 0; }
-  to { translate: -12px 16px; }
-}
 @media (max-width: 680px) {
   html body .st-gallery-page--albums .st-gallery-hero--index::before { right: -245px !important; opacity: .7 !important; }
   html body .st-gallery-page--albums .st-gallery-hero--index::after { right: -108px !important; opacity: .65 !important; }
   html body .st-gallery-page--albums .st-gallery-hero--index .st-gallery-hero__copy { padding: 25px 18px !important; }
-}
-@media (prefers-reduced-motion: reduce) {
-  html body .st-gallery-page--albums .st-gallery-hero--index::before,
-  html body .st-gallery-page--albums .st-gallery-hero--index::after { animation: none !important; }
 }
 
 /* S.T TAILOR V6.4.14 | Reintroduced full-width gallery index with a light paper field and dark ink. */
@@ -12303,30 +12272,22 @@ html body .st-gallery-page--albums .st-album-grid__item.st-gallery-piece--new fi
   }
 }
 
-/* Give the About introduction its own clear, tactile appointment path. */
+/* Match the text treatment of the home and Gallery heading actions. */
 html body .st-lux-text-link {
   display: inline-flex !important;
   flex-wrap: wrap !important;
+  align-content: center !important;
   align-items: center !important;
   gap: 2px 7px !important;
   min-height: 46px !important;
   max-width: 100% !important;
-  padding: 11px 18px !important;
-  border: 1px solid #a1704d !important;
-  background: #3b2116 !important;
-  color: #fffaf5 !important;
-  text-decoration: none !important;
-  transition: background-color .25s ease, color .25s ease, border-color .25s ease !important;
+  padding: 4px 0 !important;
 }
 html body .st-lux-text-link span[lang="vi"] { margin-left: 0 !important; }
-html body .st-lux-text-link:hover {
-  border-color: #3b2116 !important;
-  background: #f8e8d0 !important;
-  color: #3b2116 !important;
-}
+html body .st-lux-text-link:hover { text-decoration-thickness: 2px !important; }
 html body .st-lux-text-link:focus-visible {
-  outline: 2px solid #3b2116 !important;
-  outline-offset: 3px !important;
+  outline: 2px solid currentColor !important;
+  outline-offset: 4px !important;
 }
 
 
@@ -12386,12 +12347,6 @@ main { display: block; width: 100%; overflow: hidden; }
 /* The WordPress hero action stays a clear outlined destination after removal of the old beta override. */
 #st-home-v6.st-home-v6--mission .st-home-v6__hero-copy h1,
 #st-home-v6.st-home-v6--mission .st-home-v6__routes-label { font-family: var(--st-wordmark) !important; font-weight: 500 !important; letter-spacing: .01em; }
-#st-home-v6.st-home-v6--mission .st-home-v6__hero-jump { display: inline-flex !important; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 58px; padding: 13px 22px; border: 1px solid #efc177 !important; background: rgba(57, 30, 19, .42) !important; box-shadow: inset 0 0 0 1px rgba(255, 248, 239, .20), 0 10px 24px rgba(37, 17, 10, .18); color: #fff9ef !important; -webkit-text-fill-color: #fff9ef !important; text-align: center; text-decoration: none; transition: background-color .22s ease, color .22s ease, transform .22s ease, box-shadow .22s ease; }
-#st-home-v6.st-home-v6--mission .st-home-v6__hero-jump span { display: block !important; color: inherit !important; -webkit-text-fill-color: inherit !important; font-family: var(--st-vietnamese) !important; font-size: 11px !important; font-weight: 700 !important; letter-spacing: .12em !important; line-height: 1.15 !important; opacity: 1 !important; }
-#st-home-v6.st-home-v6--mission .st-home-v6__hero-jump span[lang="vi"] { font-size: 10px !important; letter-spacing: .09em !important; }
-#st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:hover,
-#st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible { background: #f7dfb8 !important; box-shadow: inset 0 0 0 1px #f7dfb8, 0 12px 26px rgba(37, 17, 10, .25); color: #3b2116 !important; -webkit-text-fill-color: #3b2116 !important; transform: translateY(-2px); }
-html body .st-site-frame #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump { border-top: 1px solid #efc177 !important; border-right: 1px solid #efc177 !important; border-bottom: 1px solid #efc177 !important; border-left: 1px solid #efc177 !important; background-color: rgba(57, 30, 19, .42) !important; }
 #st-home-v6.st-home-v6--mission .st-home-v6__routes { background-color: #f4e5d0 !important; background-image: linear-gradient(90deg, rgba(116, 71, 42, .055) 1px, transparent 1px) !important; background-size: 22px 100% !important; }
 #st-home-v6.st-home-v6--mission .st-home-v6__routes-label { font-size: clamp(26px, 3vw, 42px) !important; line-height: 1.05 !important; }
 
@@ -12444,16 +12399,18 @@ html body .st-gallery-page .st-gallery-album__guide {
   display: inline-grid;
   min-height: 48px;
   margin-top: 20px;
-  padding: 10px 18px;
-  border: 1px solid currentColor;
+  align-content: center;
+  padding: 4px 0;
   color: #603822;
   font: 600 15px/1.45 var(--st-vietnamese);
-  text-align: center;
-  text-decoration: none;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: .22em;
 }
 html body .st-gallery-page .st-gallery-album--dark .st-gallery-album__guide { color: #f9ddba; }
 html body .st-gallery-page .st-gallery-album__guide span { font-weight: 400; }
-html body .st-gallery-page .st-gallery-album__guide:hover { text-decoration: underline; text-underline-offset: .2em; }
+html body .st-gallery-page .st-gallery-album__guide:hover { text-decoration-thickness: 2px; }
+html body .st-gallery-page .st-gallery-album__guide:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
 
 /* Gallery chapter navigator: a tactile 3x3 heritage index that jumps to each photographic album. */
 html body .st-gallery-numpad { position: relative !important; padding: clamp(68px, 9vw, 120px) 0 !important; overflow: hidden !important; background: #ead2b7 !important; color: #3a2116 !important; }
@@ -12566,75 +12523,6 @@ html body #st-home-v6.st-home-v6--mission .st-home-v6__routes--mission a.st-home
   box-shadow: 0 18px 38px rgba(15, 8, 5, .28) !important;
   transform: translateY(-4px) !important;
 }
-
-/* Homepage consultation action: a clear double-rule invitation, matching the site's formal CTA language. */
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump {
-  position: relative !important;
-  display: inline-grid !important;
-  min-width: min(100%, 326px) !important;
-  min-height: 68px !important;
-  padding: 16px 58px 15px 24px !important;
-  border: 1px solid #f1cf9a !important;
-  background: #f6e2c1 !important;
-  box-shadow: 0 16px 42px rgba(24, 12, 7, .28) !important;
-  color: #3d2014 !important;
-  -webkit-text-fill-color: #3d2014 !important;
-  text-align: left !important;
-}
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump::before {
-  content: "" !important;
-  position: absolute !important;
-  inset: 5px !important;
-  border: 1px solid rgba(94, 48, 27, .42) !important;
-  pointer-events: none !important;
-}
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump::after {
-  content: "→" !important;
-  position: absolute !important;
-  top: 50% !important;
-  right: 22px !important;
-  color: #7a3f22 !important;
-  font: 400 25px/1 var(--st-wordmark) !important;
-  transform: translateY(-50%) !important;
-  transition: transform .24s ease !important;
-}
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump span {
-  font-family: var(--st-vietnamese) !important;
-  font-size: 14px !important;
-  letter-spacing: .055em !important;
-  line-height: 1.45 !important;
-}
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump span[lang="vi"] { font-size: 13px !important; letter-spacing: .035em !important; color: #78452e !important; -webkit-text-fill-color: #78452e !important; }
-/* Keep the bilingual separator with the Vietnamese label; the inherited WordPress cream made it look detached. */
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump span[lang="vi"]::before { color: #78452e !important; -webkit-text-fill-color: #78452e !important; }
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:hover,
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible {
-  border-color: #f1cf9a !important;
-  background: #4a2819 !important;
-  color: #fff7ec !important;
-  -webkit-text-fill-color: #fff7ec !important;
-  transform: none !important;
-}
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:hover span[lang="vi"],
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible span[lang="vi"],
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:hover span[lang="vi"]::before,
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible span[lang="vi"]::before,
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:hover::after,
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible::after { color: #f3cf9e !important; -webkit-text-fill-color: #f3cf9e !important; }
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:hover::after,
-html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible::after { transform: translateY(-50%) !important; }
-html body .st-site-frame #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump {
-  background: #f6e2c1 !important;
-  color: #3d2014 !important;
-  -webkit-text-fill-color: #3d2014 !important;
-}
-html body .st-site-frame #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:hover,
-html body .st-site-frame #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible {
-  background: #4a2819 !important;
-  color: #fff7ec !important;
-  -webkit-text-fill-color: #fff7ec !important;
-}
-html body .st-site-frame #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump:focus-visible { outline: 2px solid #fff9ef !important; outline-offset: 4px; }
 
 /* Services: five precise stages presented as one connected tailoring journey. */
 html body .st-service-page .st-bespoke-process {
@@ -13039,7 +12927,6 @@ html body .st-home-editorial__frame:focus-visible { outline: 3px solid #f0c17f !
   .st-site-nav a { min-height: 52px !important; padding: 12px 22px !important; font-size: 12px !important; }
   html body #st-home-v6.st-home-v6--mission .st-home-v6__routes--mission { background-position: 38% center !important; }
   html body #st-home-v6.st-home-v6--mission .st-home-v6__routes--mission .st-home-v6__routes-label { padding: 14px 16px !important; }
-  html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump { min-width: 0 !important; width: 100% !important; padding-right: 52px !important; }
   html body .st-service-page .st-bespoke-process { padding: 68px 0 !important; }
   html body .st-service-page .st-bespoke-process::before { inset: 8px !important; }
   html body .st-service-page .st-bespoke-process__steps { grid-template-columns: 1fr !important; }
@@ -13346,9 +13233,9 @@ html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal-links { min-width: 0 !
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal-label { margin: 0 0 11px !important; color: #e9bc87 !important; font: 750 11px/1.4 var(--st-vietnamese) !important; letter-spacing: .15em !important; text-align: right !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal-label span[lang="vi"] { margin-left: 6px !important; color: #d4ac84 !important; font-weight: 550 !important; letter-spacing: .03em !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav { display: grid !important; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px !important; }
-html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a { display: grid !important; align-content: center; min-width: 0 !important; min-height: 54px; box-sizing: border-box; margin: 0 !important; padding: 7px 9px !important; border: 1px solid #ad8766 !important; background: #2d1d15 !important; color: #fff5e6 !important; -webkit-text-fill-color: #fff5e6 !important; font: 650 12px/1.4 var(--st-vietnamese) !important; letter-spacing: .025em !important; text-align: center; text-decoration: none !important; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a { display: grid !important; align-content: center; min-width: 0 !important; min-height: 54px; box-sizing: border-box; margin: 0 !important; padding: 7px 9px !important; border: 0 !important; background: transparent !important; color: #fff5e6 !important; -webkit-text-fill-color: #fff5e6 !important; font: 650 12px/1.4 var(--st-vietnamese) !important; letter-spacing: .025em !important; text-align: center; text-decoration: none !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a span[lang="vi"] { display: block !important; margin: 3px 0 0 !important; color: #eac8a2 !important; -webkit-text-fill-color: #eac8a2 !important; font: 500 12px/1.4 var(--st-vietnamese) !important; letter-spacing: 0 !important; text-transform: none !important; }
-html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:hover, html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:focus-visible { background: #503420 !important; color: #fff5e6 !important; -webkit-text-fill-color: #fff5e6 !important; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:hover, html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:focus-visible { text-decoration: underline !important; text-underline-offset: .24em !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:focus-visible { outline: 2px solid #f0d1a9 !important; outline-offset: 5px !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:hover span[lang="vi"], html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:focus-visible span[lang="vi"] { color: #f0d1a9 !important; -webkit-text-fill-color: #f0d1a9 !important; }
 @media (max-width: 900px) { html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal .st-footer-v7__shell { grid-template-columns: 1fr !important; align-items: start !important; } html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal-label { text-align: left !important; } }
@@ -13414,7 +13301,7 @@ html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission::after {
     linear-gradient(#f0d3a9, #f0d3a9) right bottom / 1px 54px no-repeat !important;
   pointer-events: none !important;
   z-index: 3 !important;
-  animation: st-hero-mark-in 1.1s ease-out both !important;
+  opacity: .68 !important;
 }
 html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-grid {
   width: min(1100px, calc(100% - 64px)) !important;
@@ -13432,15 +13319,6 @@ html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6
   width: 74px !important;
   height: 2px !important;
   background: #efc896 !important;
-  transform-origin: left center !important;
-  animation: st-hero-thread-in 1s .18s ease-out both !important;
-}
-@keyframes st-hero-mark-in { from { opacity: 0; transform: translateY(8px); } to { opacity: .68; transform: translateY(0); } }
-@keyframes st-hero-thread-in { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
-@media (prefers-reduced-motion: reduce) {
-  html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission::after,
-  html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-copy::before { animation: none !important; }
-  html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission::after { opacity: .68 !important; }
 }
 html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6__hero-copy h1 {
   max-width: none !important;
@@ -13502,31 +13380,6 @@ html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6
   html body #main-content .st-gallery-page .st-gallery-numpad__card > i {
     transition: none !important;
     transform: none !important;
-  }
-}
-
-/* The opening copy receives the same editorial arrival as About and Gallery.
-   Keep the initial paint visible so animation does not postpone the LCP. */
-@keyframes st-entry-arrive {
-  from { opacity: .52; transform: translate3d(0, 16px, 0); }
-  to { opacity: 1; transform: none; }
-}
-@media (prefers-reduced-motion: no-preference) {
-  html body :is(
-    .st-service-commission-map__head,
-    .st-guide-hero__copy,
-    .st-info-hero__copy,
-    .st-payment-hero > .st-payment-shell,
-    .st-contact-info,
-    #st-pricing-v5 .stpr-priceboard__head
-  ) {
-    animation: st-entry-arrive .72s cubic-bezier(.18, .74, .2, 1) both !important;
-  }
-  html body #st-home-v6 .st-home-v6__hero-copy > :is(.st-home-v6__kicker, .st-home-v6__hero-jump) {
-    animation: st-entry-arrive .68s cubic-bezier(.18, .74, .2, 1) both !important;
-  }
-  html body #st-home-v6 .st-home-v6__hero-copy > .st-home-v6__hero-jump {
-    animation-delay: .12s !important;
   }
 }
 
@@ -13791,10 +13644,6 @@ html body #main-content .st-gallery-page--albums .st-album-grid__item figcaption
   font-size: 14px !important;
   font-weight: 500 !important;
   line-height: 1.5 !important;
-}
-@media (prefers-reduced-motion: no-preference) {
-  html body .st-client-care__header,
-  html body .st-payment-page--focused .st-payment-methods > .st-payment-shell > :is(.st-page-kicker, h1, .st-payment-methods__note) { animation: st-entry-arrive .72s cubic-bezier(.18, .74, .2, 1) both !important; }
 }
 
 /* Equal social destinations keep the complete FOLLOW list calm and easy to scan. */

@@ -56,7 +56,9 @@ def build_mobile_hero(image: Image.Image, relative: Path, output_root: Path) -> 
     left = round((image.width - width) * 0.62)
     crop = image.crop((left, 0, left + width, image.height))
     name = relative.with_stem(f"{relative.stem}-portrait")
-    return build_variant(crop, name, width, output_root)
+    # The mobile frame tops out at 740 CSS pixels. Keep enough vertical
+    # detail for the full cover while reducing the first mobile transfer.
+    return build_variant(crop, name, min(width, 860), output_root)
 
 
 def main() -> int:

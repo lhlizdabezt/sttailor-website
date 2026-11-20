@@ -27,6 +27,7 @@ const homeHeroImage = "/media/2026/06/background-hero-trang-lien-he-sttailor.web
 // A viewport-width hint would upscale the 480px derivative and blur the fitting.
 const homeHeroSizes = "(max-width: 760px) 1400px, 1717px";
 const homeHeroPortraitMedia = "(max-width: 600px) and (orientation: portrait)";
+const galleryHeroSizes = "(max-width: 899px) min(calc(100vw - 32px), 760px), min(calc(50vw - 24px), 590px)";
 
 function imageSourceSet(candidates) {
   return candidates.map(({ src, width }) => `${src} ${width}w`).join(", ");
@@ -751,7 +752,7 @@ function imageMetadata(html) {
   }));
 }
 
-function enrichImageAttributes(html, { responsiveSizes } = {}) {
+function enrichImageAttributes(html, { responsiveSizes, deprioritizeLazyImages = false } = {}) {
   const localImages = html.replace(/<img\b[^>]*\bsrc="(\/media\/[^\"]+)"[^>]*>/gi, (tag, src) => {
     const asset = decodeURIComponent(src.replace(/^\/media\//, ""));
     const metadata = imageManifest[asset];
@@ -760,11 +761,14 @@ function enrichImageAttributes(html, { responsiveSizes } = {}) {
     if (!/\bwidth="\d+"/i.test(output)) output = output.replace(/<img\b/i, `<img width="${metadata.width}"`);
     if (!/\bheight="\d+"/i.test(output)) output = output.replace(/<img\b/i, `<img height="${metadata.height}"`);
     if (!/\bdecoding=/i.test(output)) output = output.replace(/<img\b/i, '<img decoding="async"');
+    if (deprioritizeLazyImages && /\bloading="lazy"/i.test(output) && !/\bfetchpriority=/i.test(output)) {
+      output = output.replace(/<img\b/i, '<img fetchpriority="low"');
+    }
     if (responsiveSizes && metadata.responsive?.length && !/\bsrcset=/i.test(output)) {
       const isHomeHero = src === homeHeroImage && /\bst-home-v6__hero-media\b/.test(output);
       const isGalleryHero = /\bst-gallery-hero__story-image\b/.test(output);
       const srcset = imageSourceSet(metadata.responsive);
-      const sizes = isHomeHero ? homeHeroSizes : isGalleryHero ? "(max-width: 899px) min(calc(100vw - 32px), 760px), min(calc(50vw - 24px), 590px)" : responsiveSizes;
+      const sizes = isHomeHero ? homeHeroSizes : isGalleryHero ? galleryHeroSizes : responsiveSizes;
       const lazyAuto = /\bloading="lazy"/i.test(output) ? "auto, " : "";
       output = output.replace(/<img\b/i, `<img srcset="${srcset}" sizes="${lazyAuto}${sizes}"`);
     }
@@ -836,7 +840,10 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     // The square guide photo covers a 560px-tall frame on desktop.
     "/cam-nang-may-do/": "(max-width: 560px) calc(100vw - 28px), (max-width: 860px) calc(100vw - 48px), 560px"
   }[route] ?? "(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 800px";
-  const body = enrichImageAttributes(transformPage(sourceFile, readSource(sourceFile)), { responsiveSizes });
+  const body = enrichImageAttributes(transformPage(sourceFile, readSource(sourceFile)), {
+    responsiveSizes,
+    deprioritizeLazyImages: sourceFile === "Home.html" || sourceFile === "Gallery.html"
+  });
   const galleryImages = route === "/gallery/" ? imageMetadata(body) : [];
   const canonical = `https://sttailor.com${route}`;
   const business = {
@@ -937,13 +944,22 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
   const imageType = /\.webp$/i.test(shareImage) ? "image/webp" : "image/jpeg";
   const shareMetadata = imageManifest[shareImage.slice("/media/".length)];
   const shareDimensions = shareMetadata ? `<meta property="og:image:width" content="${shareMetadata.width}"><meta property="og:image:height" content="${shareMetadata.height}">` : "";
-  const heroMetadata = route === "/" ? shareMetadata : null;
-  const heroPreload = heroMetadata?.portrait ?
-    `<link rel="preload" as="image" media="${homeHeroPortraitMedia}" href="${heroMetadata.portrait}" fetchpriority="high">` +
-    `<link rel="preload" as="image" media="not all and ${homeHeroPortraitMedia}" imagesrcset="${imageSourceSet(heroMetadata.responsive)}" imagesizes="${homeHeroSizes}" fetchpriority="high">` : "";
+  let heroPreload = "";
+  if (sourceFile === "Home.html" && shareMetadata?.portrait) {
+    const landscapeSizes = imageSourceSet(shareMetadata.responsive);
+    heroPreload = `<link rel="preload" as="image" media="${homeHeroPortraitMedia}" href="${shareMetadata.portrait}" fetchpriority="high">` +
+      `<link rel="preload" as="image" media="not all and ${homeHeroPortraitMedia}" imagesrcset="${landscapeSizes}" imagesizes="${homeHeroSizes}" fetchpriority="high">`;
+  }
+  if (sourceFile === "Gallery.html") {
+    const heroImage = body.match(/<img\b[^>]*class="st-gallery-hero__story-image"[^>]*>/)?.[0];
+    const responsiveSource = heroImage?.match(/\bsrcset="([^"]+)"/)?.[1];
+    if (responsiveSource) {
+      heroPreload = `<link rel="preload" as="image" imagesrcset="${responsiveSource}" imagesizes="${galleryHeroSizes}" fetchpriority="high">`;
+    }
+  }
   const siteHeader = enrichImageAttributes(header(route), { responsiveSizes: "102px" });
   const siteFooter = enrichImageAttributes(footer(), { responsiveSizes: "160px" });
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8">${googleTagManagerHead}<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${safeDescription}"><meta name="author" content="S.T Tailor"><meta name="application-name" content="S.T Tailor"><meta name="sttailor-build-revision" content="${buildRevision}"><meta name="color-scheme" content="light"><meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="google-site-verification" content="e1RyHPdDirO6wJIxuZKKSIY6EXYb37XMfktIVl3aJz8"><meta name="p:domain_verify" content="78c108c3384a3aa9201fb90b99f0b225"><link rel="canonical" href="${canonical}"><link rel="icon" href="/icons/sttailor-favicon-48.png" type="image/png" sizes="48x48"><link rel="apple-touch-icon" href="/icons/sttailor-apple-touch-180.png" sizes="180x180"><link rel="manifest" href="/site.webmanifest">${heroPreload}<meta property="og:title" content="${safeTitle}"><meta property="og:description" content="${safeDescription}"><meta property="og:type" content="website"><meta property="og:url" content="${canonical}"><meta property="og:site_name" content="S.T Tailor"><meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:image" content="${shareImageUrl}"><meta property="og:image:type" content="${imageType}"><meta property="og:image:alt" content="${safeImageAlt}">${shareDimensions}<meta name="theme-color" content="#ead1ad"><title>${safeTitle}</title>${jsonLd}${analyticsTags}<link rel="stylesheet" href="${stylesheetHref}"></head><body>${googleTagManagerNoScript}${metaPixelNoScript}<div class="st-site-frame">${siteHeader}<main id="main-content" tabindex="-1">${breadcrumbNavigation(trail)}${body}</main>${siteFooter}</div><script type="module" src="${scriptHref}"></script></body></html>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">${heroPreload}${googleTagManagerHead}<meta name="description" content="${safeDescription}"><meta name="author" content="S.T Tailor"><meta name="application-name" content="S.T Tailor"><meta name="sttailor-build-revision" content="${buildRevision}"><meta name="color-scheme" content="light"><meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="google-site-verification" content="e1RyHPdDirO6wJIxuZKKSIY6EXYb37XMfktIVl3aJz8"><meta name="p:domain_verify" content="78c108c3384a3aa9201fb90b99f0b225"><link rel="canonical" href="${canonical}"><link rel="icon" href="/icons/sttailor-favicon-48.png" type="image/png" sizes="48x48"><link rel="apple-touch-icon" href="/icons/sttailor-apple-touch-180.png" sizes="180x180"><link rel="manifest" href="/site.webmanifest"><meta property="og:title" content="${safeTitle}"><meta property="og:description" content="${safeDescription}"><meta property="og:type" content="website"><meta property="og:url" content="${canonical}"><meta property="og:site_name" content="S.T Tailor"><meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:image" content="${shareImageUrl}"><meta property="og:image:type" content="${imageType}"><meta property="og:image:alt" content="${safeImageAlt}">${shareDimensions}<meta name="theme-color" content="#ead1ad"><title>${safeTitle}</title>${jsonLd}${analyticsTags}<link rel="stylesheet" href="${stylesheetHref}"></head><body>${googleTagManagerNoScript}${metaPixelNoScript}<div class="st-site-frame">${siteHeader}<main id="main-content" tabindex="-1">${breadcrumbNavigation(trail)}${body}</main>${siteFooter}</div><script type="module" src="${scriptHref}"></script></body></html>`;
 }
 
 function collectAssetPaths() {
@@ -1099,19 +1115,28 @@ const notFoundDocument = documentFor("/", "Error.html", "Page not found | S.T Ta
 // the complete site.css remains available for the 404 and source inspection.
 const routeStyles = {};
 const routeProjectSymbols = [...new Set([...productionCss.matchAll(/[.#]((?:st-|stp-|stpr-)[A-Za-z0-9_-]+)/g)].map((match) => match[1]))];
+const guideMarkup = routes.filter(([, file]) => file.startsWith("Guide"))
+  .map(([route]) => readFileSync(path.join(dist, route.slice(1), "index.html"), "utf8")).join("\n");
+const legacyPageSymbols = ["st-home-v4", "st-home-v5", "st-refund-v1", "st-privacy-v5"];
+const guideStyles = minifyCss({
+  filename: "site.css",
+  code: Buffer.from(fullCustomCss),
+  minify: true,
+  unusedSymbols: [...legacyPageSymbols, ...unusedProjectSymbols,
+    ...routeProjectSymbols.filter((symbol) => !guideMarkup.includes(symbol) && !siteScript.includes(symbol)),
+    ...retiredThemeSymbols]
+}).code;
 for (const [route, sourceFile] of routes) {
   const pagePath = route === "/" ? path.join(dist, "index.html") : path.join(dist, route.slice(1), "index.html");
   const pageHtml = readFileSync(pagePath, "utf8");
   const pageSymbols = `${pageHtml}\n${siteScript}`;
-  // Preserve the guide grids' baseline until their auto-margin styles can
-  // be independently compared without Chromium's intermittent resolution.
-  const pageCss = sourceFile.startsWith("Guide") ? Buffer.from(productionCss) : minifyCss({
+  const pageCss = sourceFile.startsWith("Guide") ? guideStyles : minifyCss({
     filename: "site.css",
     // Start from the globally cleaned bundle. Re-reading the editable source
     // here restores legacy rules whose symbols were already removed above.
     code: Buffer.from(productionCss),
     minify: true,
-    unusedSymbols: ["st-home-v4", "st-home-v5", "st-refund-v1", "st-privacy-v5", ...routeProjectSymbols.filter((symbol) => !pageSymbols.includes(symbol)), ...retiredThemeSymbols]
+    unusedSymbols: [...legacyPageSymbols, ...routeProjectSymbols.filter((symbol) => !pageSymbols.includes(symbol)), ...retiredThemeSymbols]
   }).code;
   const cssHash = createHash("sha256").update(pageCss).digest("hex").slice(0, 12);
   const href = `/styles/page-${cssHash}.css`;
