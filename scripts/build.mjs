@@ -5,6 +5,7 @@ import { transform as minifyCss } from "lightningcss";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
+import { tripadvisorEmbedPath } from "../src/security-policy.js";
 import { clientCarePage } from "../src/client-care-pages.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -507,8 +508,8 @@ function fittingFilmPlayer(descriptionId, { lazy = false } = {}) {
 
 function transformGallery(html) {
   html = html.replace(
-    /\s*<p>Eleven albums gather tailoring[\s\S]*?<\/p>/,
-    ""
+    /<p>Eleven albums gather tailoring[\s\S]*?<\/p>/,
+    '<p>Nine albums trace the work of S.T Tailor, from cloth and construction to fittings, client portraits and the rooms where we work.<span lang="vi">Chín album giới thiệu công việc tại S.T Tailor, từ chất liệu và kỹ thuật may đến các buổi thử đồ, chân dung khách hàng và không gian nhà may.</span></p>'
   );
   const archiveRange = findElementById(html, "section", "album-archive");
   const feedbackRange = findElementById(html, "section", "album-client-feedback");
@@ -550,15 +551,15 @@ function transformGallery(html) {
       <p>Choose a chapter below to move directly to the photographs, cloth and fittings that define S.T Tailor.<span lang="vi">Chọn một chương để đi thẳng đến những hình ảnh, chất liệu và buổi thử đồ làm nên S.T Tailor.</span></p>
     </header>
     <nav class="st-gallery-numpad__grid" aria-label="Gallery chapters">
-      <a href="#album-tuxedo" class="st-gallery-numpad__card st-motion st-motion-1"><span>01</span><strong>Evening tailoring</strong><em>Lễ phục</em><i>↗</i></a>
-      <a href="#album-suits" class="st-gallery-numpad__card st-motion st-motion-2"><span>02</span><strong>Suits &amp; blazers</strong><em>Suit &amp; blazer</em><i>↗</i></a>
-      <a href="#album-womenswear" class="st-gallery-numpad__card st-motion st-motion-3"><span>03</span><strong>Womenswear</strong><em>Trang phục nữ</em><i>↗</i></a>
-      <a href="#album-shirts-trousers" class="st-gallery-numpad__card st-motion st-motion-2"><span>04</span><strong>Shirts &amp; trousers</strong><em>Sơ mi &amp; quần</em><i>↗</i></a>
-      <a href="#album-jacket-craft" class="st-gallery-numpad__card st-motion st-motion-3"><span>05</span><strong>Jacket craft</strong><em>Kỹ nghệ áo khoác</em><i>↗</i></a>
-      <a href="#album-cloth" class="st-gallery-numpad__card st-motion st-motion-4"><span>06</span><strong>The cloth library</strong><em>Thư viện chất liệu</em><i>↗</i></a>
-      <a href="#album-fitting" class="st-gallery-numpad__card st-motion st-motion-3"><span>07</span><strong>The fitting room</strong><em>Phòng thử đồ</em><i>↗</i></a>
-      <a href="#album-appointments" class="st-gallery-numpad__card st-motion st-motion-4"><span>08</span><strong>People &amp; appointments</strong><em>Con người &amp; lịch hẹn</em><i>↗</i></a>
-      <a href="#album-showroom" class="st-gallery-numpad__card st-motion st-motion-5"><span>09</span><strong>The showroom</strong><em>Không gian nhà may</em><i>↗</i></a>
+      <a href="#album-tuxedo" class="st-gallery-numpad__card st-motion st-motion-1"><span>01</span><strong>Evening tailoring</strong><em lang="vi">Lễ phục</em><i>↗</i></a>
+      <a href="#album-suits" class="st-gallery-numpad__card st-motion st-motion-2"><span>02</span><strong>Suits &amp; blazers</strong><em lang="vi">Suit &amp; blazer</em><i>↗</i></a>
+      <a href="#album-womenswear" class="st-gallery-numpad__card st-motion st-motion-3"><span>03</span><strong>Womenswear</strong><em lang="vi">Trang phục nữ</em><i>↗</i></a>
+      <a href="#album-shirts-trousers" class="st-gallery-numpad__card st-motion st-motion-2"><span>04</span><strong>Shirts &amp; trousers</strong><em lang="vi">Sơ mi &amp; quần</em><i>↗</i></a>
+      <a href="#album-jacket-craft" class="st-gallery-numpad__card st-motion st-motion-3"><span>05</span><strong>Jacket craft</strong><em lang="vi">Kỹ nghệ áo khoác</em><i>↗</i></a>
+      <a href="#album-cloth" class="st-gallery-numpad__card st-motion st-motion-4"><span>06</span><strong>The cloth library</strong><em lang="vi">Thư viện chất liệu</em><i>↗</i></a>
+      <a href="#album-fitting" class="st-gallery-numpad__card st-motion st-motion-3"><span>07</span><strong>The fitting room</strong><em lang="vi">Phòng thử đồ</em><i>↗</i></a>
+      <a href="#album-appointments" class="st-gallery-numpad__card st-motion st-motion-4"><span>08</span><strong>People &amp; appointments</strong><em lang="vi">Con người &amp; lịch hẹn</em><i>↗</i></a>
+      <a href="#album-showroom" class="st-gallery-numpad__card st-motion st-motion-5"><span>09</span><strong>The showroom</strong><em lang="vi">Không gian nhà may</em><i>↗</i></a>
     </nav>
   </div>
 </section>`;
@@ -684,9 +685,9 @@ function transformAbout(html) {
       <p class="st-lux-eyebrow">TRIPADVISOR</p>
       <h2 id="st-tripadvisor-title">Reviews from our clients<span lang="vi">Đánh giá của khách hàng</span></h2>
       <p>Read how clients chose their cloth, what changed at their fittings and how the finished garments felt. You can share your own experience on Tripadvisor after your visit.<span lang="vi">Đọc chia sẻ của khách hàng về cách chọn vải, những điều chỉnh khi thử đồ và cảm nhận khi mặc trang phục hoàn thiện. Sau khi ghé nhà may, bạn cũng có thể chia sẻ trải nghiệm trên Tripadvisor.</span></p>
-      <a class="st-tripadvisor__link" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer"><span>Read reviews on Tripadvisor</span><span lang="vi">Đọc đánh giá trên Tripadvisor</span></a>
-      <div class="st-tripadvisor__rating" role="group" aria-label="Tripadvisor listing / Trang thông tin trên Tripadvisor">
-        <div id="TA_rated383" class="TA_rated"><ul id="nk7KumP" class="TA_links j2AXIy9"><li id="YSiMIh" class="HfgYawPu"><a class="st-tripadvisor__fallback" target="_blank" rel="noopener noreferrer" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html">S.T Tailor on Tripadvisor<span lang="vi">S.T Tailor trên Tripadvisor</span></a></li></ul></div>
+      <div class="st-tripadvisor__actions">
+        <a class="st-tripadvisor__link" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer"><span>Read reviews on Tripadvisor</span><span lang="vi">Đọc đánh giá trên Tripadvisor</span></a>
+        <iframe class="st-tripadvisor__rating" src="${tripadvisorEmbedPath}" title="S.T Tailor on Tripadvisor / S.T Tailor trên Tripadvisor" loading="lazy" width="200" height="108" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
       </div>
     </div>
     <div class="st-tripadvisor__visit">
@@ -696,8 +697,6 @@ function transformAbout(html) {
       <a href="/lien-he/">Showroom hours &amp; directions <span lang="vi">Giờ mở cửa và chỉ đường</span></a>
       <a href="/quy-trinh-thu-do/">What to expect at a fitting <span lang="vi">Các bước trong buổi thử đồ</span></a>
     </div>
-    <!-- The official badge registers a window load callback. -->
-    <script async src="https://www.jscache.com/wejs?wtype=rated&amp;uniq=383&amp;locationId=34701232&amp;lang=en_US&amp;display_version=2"></script>
   </div>
 </section>`;
   html = html.replace('<section class="st-lux-business st-motion st-motion-1">', `${tripadvisor}\n<section class="st-lux-business st-motion st-motion-1">`);
@@ -791,7 +790,7 @@ const sharedContentModified = "2026-11-13";
 // Advance the relevant date when transformed copy changes, not for build fixes.
 const derivedContentModified = {
   "About.html": "2026-11-18",
-  "Gallery.html": "2026-10-18", "Payment.html": "2026-10-18",
+  "Gallery.html": "2026-11-21", "Payment.html": "2026-10-18",
   "Returns.html": "2026-10-18", "Shipping.html": "2026-10-18",
   "Terms.html": "2026-10-18", "Privacy.html": "2026-10-18"
 };
@@ -1122,6 +1121,13 @@ for (const [route, sourceFile] of routes) {
 }
 writeFileSync(path.join(dist, "404.html"), notFoundDocument, "utf8");
 writeFileSync(path.join(dist, "not-found.html"), notFoundDocument, "utf8");
+const tripadvisorScript = readFileSync(path.join(root, "src", "scripts", "tripadvisor.js"), "utf8");
+const tripadvisorScriptVersion = createHash("sha256").update(tripadvisorScript).digest("hex").slice(0, 12);
+const tripadvisorEmbedDirectory = path.join(dist, tripadvisorEmbedPath.slice(1));
+mkdirSync(tripadvisorEmbedDirectory, { recursive: true });
+writeFileSync(path.join(dist, "scripts", "tripadvisor.js"), tripadvisorScript, "utf8");
+writeFileSync(path.join(tripadvisorEmbedDirectory, "index.html"), readFileSync(path.join(root, "source", "tripadvisor-widget.html"), "utf8")
+  .replace("/scripts/tripadvisor.js", `/scripts/tripadvisor.js?v=${tripadvisorScriptVersion}`), "utf8");
 writeFileSync(path.join(dist, "robots.txt"), "User-agent: *\nAllow: /\nSitemap: https://sttailor.com/sitemap.xml\n", "utf8");
 writeFileSync(path.join(dist, indexNowKeyFile), `${indexNowKey}\n`, "utf8");
 const xmlEscape = (value) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&apos;");

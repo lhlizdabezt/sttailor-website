@@ -5,7 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { runInNewContext } from "node:vm";
 import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
-import { inlineScriptHashes } from "../src/security-policy.js";
+import { inlineScriptHashes, tripadvisorEmbedPath } from "../src/security-policy.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const sourceRoot = path.join(root, "source", "wordpress");
@@ -30,6 +30,8 @@ function visibleAndAccessibleText(html) {
 if (manifest.source !== "source/wordpress" || manifest.sourceMedia !== "source/media") failures.push("Build did not use the versioned WordPress and media source.");
 if (!manifest.revision || !/^(local|[0-9a-f]{40})$/i.test(manifest.revision)) failures.push("Build manifest does not contain a valid deployment revision.");
 if (JSON.stringify(manifest.routes) !== JSON.stringify(expectedRoutes)) failures.push("Published route set does not match the approved site map.");
+const tripadvisorEmbed = readFileSync(path.join(dist, tripadvisorEmbedPath.slice(1), "index.html"), "utf8");
+if (!tripadvisorEmbed.includes('name="robots" content="noindex, follow"') || !tripadvisorEmbed.includes('class="st-tripadvisor__fallback"') || !tripadvisorEmbed.includes('<script async src="https://www.jscache.com/wejs?wtype=rated')) failures.push("The Tripadvisor embed needs its official badge, fallback and noindex directive.");
 
 for (const route of expectedRoutes) {
   const page = route === "/" ? path.join(dist, "index.html") : path.join(dist, route.slice(1), "index.html");
@@ -121,9 +123,9 @@ for (const route of expectedRoutes) {
   if ((html.match(/href="https:\/\/www\.threads\.com\/@sttailorhcm"/g) ?? []).length !== 1 || (businessSchema?.sameAs ?? []).filter((url) => url === "https://www.threads.com/@sttailorhcm").length !== 1) failures.push(`Official Threads profile is missing or duplicated in social links/schema: ${route}`);
   const tripadvisorUrl = "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html";
   if ((businessSchema?.sameAs ?? []).filter((url) => url === tripadvisorUrl).length !== 1) failures.push(`Official Tripadvisor listing is missing or duplicated in LocalBusiness schema: ${route}`);
-  const widgetCount = (html.match(/www\.jscache\.com\/wejs\?wtype=rated/g) ?? []).length;
-  if (route === "/gioi-thieu/" ? widgetCount !== 1 || !html.includes(`href="${tripadvisorUrl}"`) : widgetCount !== 0) failures.push(`Tripadvisor badge or review link is missing, duplicated, or loaded on the wrong page: ${route}`);
-  if (route === "/gioi-thieu/" && (!html.includes('<script async src="https://www.jscache.com/wejs') || !html.includes('class="st-tripadvisor__fallback"') || !html.includes('href="/lien-he/">Showroom hours &amp; directions'))) failures.push("The Tripadvisor panel needs its page-load script, direct fallback and showroom link.");
+  const widgets = [...html.matchAll(/<iframe\b[^>]*>/g)].filter(([tag]) => tag.includes(`src="${tripadvisorEmbedPath}"`));
+  if (html.includes("www.jscache.com/wejs") || widgets.length !== Number(route === "/gioi-thieu/")) failures.push(`Tripadvisor widget placement or isolation is incorrect: ${route}`);
+  if (route === "/gioi-thieu/" && (!widgets[0]?.[0].includes('loading="lazy"') || !widgets[0][0].includes('sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"') || !html.includes(`class="st-tripadvisor__link" href="${tripadvisorUrl}"`) || !html.includes('href="/lien-he/">Showroom hours &amp; directions'))) failures.push("The Tripadvisor panel needs its sandboxed lazy badge, direct review link and showroom link.");
   if (businessSchema?.currenciesAccepted !== "VND") failures.push(`LocalBusiness currency must match the payment page: ${route}`);
   for (const marker of ['rel="manifest" href="/site.webmanifest"', 'property="og:image:alt"', 'name="google-site-verification"', 'name="p:domain_verify"']) {
     if (!html.includes(marker)) failures.push(`SEO/discovery marker is missing on ${route}: ${marker}`);

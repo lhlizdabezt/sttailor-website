@@ -4,7 +4,7 @@ import { readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
-import { contentSecurityPolicy } from "../src/security-policy.js";
+import { contentSecurityPolicy, tripadvisorEmbedPath } from "../src/security-policy.js";
 
 const origin = "https://sttailor.com";
 const expectedBuildRevision = process.env.EXPECTED_BUILD_REVISION;
@@ -104,7 +104,9 @@ for (const route of routes) {
   expect(followLinks.length === 10 && new Set(followLinks).size === 10, `${route} must publish exactly ten unique FOLLOW destinations`);
   const tripadvisorProfile = "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html";
   expect(footer.split(`href="${tripadvisorProfile}"`).length === 2 && !footer.includes("st-footer-v7__tripadvisor") && !footer.includes("socialButtonRate") && !footer.includes("Rate us on Tripadvisor"), `${route} footer has a missing or duplicated Tripadvisor link, or still contains the removed rate widget`);
-  if (route === "/gioi-thieu/") expect(pageHtml.includes('id="TA_rated383"') && pageHtml.includes("wtype=rated") && pageHtml.includes(`href="${tripadvisorProfile}"`), "About page lost its official Tripadvisor badge or profile link");
+  const reviewEmbed = [...pageHtml.matchAll(/<iframe\b[^>]*>/g)].filter(([tag]) => tag.includes(`src="${tripadvisorEmbedPath}"`));
+  expect(!pageHtml.includes("www.jscache.com/wejs") && reviewEmbed.length === Number(route === "/gioi-thieu/"), `${route} has incorrect Tripadvisor widget placement`);
+  if (route === "/gioi-thieu/") expect(reviewEmbed[0]?.[0].includes('loading="lazy"') && reviewEmbed[0][0].includes('sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"') && pageHtml.includes(`class="st-tripadvisor__link" href="${tripadvisorProfile}"`), "About page lost its lazy Tripadvisor badge or direct profile link");
   const footerLinks = new Set([...footer.matchAll(/\bhref="(\/[^"]*)"/g)].map((match) => match[1]));
   for (const publishedRoute of routes) expect(footerLinks.has(publishedRoute), `${route} footer omits ${publishedRoute}`);
   expect(footer.includes('class="st-footer-v7__bottom st-footer-v8__legal"') && footer.includes('aria-label="Client policies"'), `${route} has no client-policy bar at the footer edge`);
@@ -122,6 +124,11 @@ for (const route of routes) {
 }
 
 if (expectedBuildRevision) expect(pages.get("/").includes(`name="sttailor-build-revision" content="${expectedBuildRevision}"`), "Production did not serve the revision deployed by this workflow.");
+
+const reviewWidget = await fetchWithRetry(`${origin}${tripadvisorEmbedPath}`);
+const reviewWidgetHtml = await reviewWidget.text();
+expect(reviewWidget.status === 200 && reviewWidget.headers.get("x-robots-tag") === "noindex, follow" && reviewWidget.headers.get("content-security-policy") === contentSecurityPolicy(tripadvisorEmbedPath), "Tripadvisor embed headers are incorrect");
+expect(reviewWidgetHtml.includes('id="TA_rated383"') && reviewWidgetHtml.includes("wejs?wtype=rated") && reviewWidgetHtml.includes('class="st-tripadvisor__fallback"'), "Tripadvisor embed lost the official badge or fallback");
 
 const gatewayHealth = await fetchWithRetry(`${origin}/n31x/healthy`);
 expect(gatewayHealth.status === 200 && (await gatewayHealth.text()).trim() === "ok", "First-party Google tag gateway health check failed");

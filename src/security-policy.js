@@ -25,9 +25,11 @@ const tripadvisorSources = [
   "https://static.tacdn.com"
 ];
 
+export const tripadvisorEmbedPath = "/embed/tripadvisor/";
+
 export function contentSecurityPolicy(pathname) {
-  const scriptSources = pathname === "/gioi-thieu/"
-    ? [...measurementSources, ...tripadvisorSources]
+  const scriptSources = pathname === tripadvisorEmbedPath
+    ? ["'self'", ...tripadvisorSources]
     : measurementSources;
   return [
     "base-uri 'self'",

@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import worker from "../src/worker.js";
+import { tripadvisorEmbedPath } from "../src/security-policy.js";
 
 const env = {
   ASSETS: {
@@ -80,9 +81,17 @@ test("the Worker serves every route in the public build manifest", async () => {
     assert.match(policy, /(?:^|; )script-src 'self' 'sha256-/);
     assert.match(policy, /(?:^|; )script-src-attr 'none'/);
     assert.doesNotMatch(policy, /'unsafe-(?:inline|eval)'/);
-    assert.equal(policy.includes("https://www.tripadvisor.com"), route === "/gioi-thieu/");
+    assert.ok(!policy.includes("https://www.tripadvisor.com"), route);
     assert.equal(await response.text(), "Published page", route);
   }
+});
+
+test("the review embed has its own script policy and stays out of search results", async () => {
+  const embed = await worker.fetch(new Request(`https://sttailor.com${tripadvisorEmbedPath}`), env);
+  assert.equal(embed.status, 200);
+  assert.equal(embed.headers.get("X-Robots-Tag"), "noindex, follow");
+  assert.match(embed.headers.get("Content-Security-Policy"), /script-src 'self' https:\/\/www\.jscache\.com https:\/\/www\.tripadvisor\.com/);
+  assert.doesNotMatch(embed.headers.get("Content-Security-Policy"), /googletagmanager|clarity\.ms|facebook\.net/);
 });
 
 test("retired suit-care article redirects to its relevant guide and preserves attribution", async () => {

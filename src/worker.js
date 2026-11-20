@@ -1,5 +1,5 @@
 import { indexNowKeyFile } from "./indexnow.js";
-import { contentSecurityPolicy } from "./security-policy.js";
+import { contentSecurityPolicy, tripadvisorEmbedPath } from "./security-policy.js";
 
 const canonicalHost = "sttailor.com";
 const routes = new Set([
@@ -64,7 +64,7 @@ function securityHeaders(response, pathname = "/") {
   const isHtml = routes.has(pathname) || pathname.endsWith(".html") || pathname === "/not-found" || contentType.includes("text/html");
   if (isHtml) {
     headers.set("Content-Security-Policy", contentSecurityPolicy(pathname));
-    headers.set("X-Robots-Tag", "index, follow, max-image-preview:large");
+    headers.set("X-Robots-Tag", pathname === tripadvisorEmbedPath ? "noindex, follow" : "index, follow, max-image-preview:large");
     headers.set("Cache-Control", "public, max-age=0, must-revalidate");
   } else if (pathname.startsWith("/styles/") || pathname.startsWith("/scripts/")) {
     headers.set("Cache-Control", "public, max-age=31536000, immutable");
@@ -133,7 +133,7 @@ export default {
     if (pathname !== "/" && !pathname.endsWith("/") && routes.has(`${pathname}/`)) {
       return Response.redirect(new URL(`${pathname}/${url.search}`, url), 301);
     }
-    if (routes.has(pathname) || staticFiles.has(pathname) || staticPrefixes.some((prefix) => pathname.startsWith(prefix))) {
+    if (routes.has(pathname) || pathname === tripadvisorEmbedPath || staticFiles.has(pathname) || staticPrefixes.some((prefix) => pathname.startsWith(prefix))) {
       return securityHeaders(await env.ASSETS.fetch(request), pathname);
     }
     return notFound(request, env, url);

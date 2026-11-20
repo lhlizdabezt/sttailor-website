@@ -109,28 +109,6 @@ const pageTypes = {
 };
 const pageType = pageTypes[window.location.pathname] ?? "other";
 
-// Tripadvisor can populate its links in several asynchronous steps.
-const tripadvisorBadge = document.querySelector("#TA_rated383");
-const tripadvisorListing = tripadvisorBadge?.closest(".st-tripadvisor")?.querySelector(".st-tripadvisor__link")?.href;
-if (tripadvisorListing) {
-  const repairWidgetLinks = () => {
-    for (const link of tripadvisorBadge.querySelectorAll('a:not([href]), a[href=""], a.widFRRClickWrap')) {
-      if (link.href !== tripadvisorListing) link.href = tripadvisorListing;
-      link.target = "_blank";
-      link.rel = "nofollow noopener noreferrer";
-      if (link.classList.contains("widFRRClickWrap")) {
-        link.setAttribute("aria-label", "View S.T Tailor on Tripadvisor");
-      }
-    }
-  };
-  repairWidgetLinks();
-  new MutationObserver(repairWidgetLinks).observe(tripadvisorBadge, {
-    childList: true,
-    subtree: true,
-    attributeFilter: ["href", "class"],
-  });
-}
-
 const claritySet = (key, value) => {
   if (typeof window.clarity === "function") window.clarity("set", key, value);
 };
