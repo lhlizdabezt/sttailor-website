@@ -599,7 +599,7 @@ function transformPayment(html) {
     .replace(/<p class="st-payment-methods__note">[\s\S]*?<\/p>/, '<p class="st-payment-methods__note">Choose a convenient method; we will share the payment details for your order.<span lang="vi">Chọn phương thức thuận tiện; chúng tôi sẽ cung cấp thông tin thanh toán cho đơn của bạn.</span></p>');
   const copy = [
     ['Pay in Vietnamese dong (VND) cash at the showroom, by bank transfer or by QR using details provided directly by S.T Tailor.', 'Thanh toán tiền mặt bằng đồng Việt Nam (VND) tại showroom, chuyển khoản hoặc quét mã QR theo thông tin S.T Tailor cung cấp trực tiếp.'],
-    ['We accept international credit and debit cards: Visa, Mastercard, American Express, JCB, UnionPay, Discover and Diners Club. We will guide you to the appropriate payment channel for your card.', 'Chúng tôi chấp nhận thẻ tín dụng và ghi nợ quốc tế: Visa, Mastercard, American Express, JCB, UnionPay, Discover và Diners Club. Chúng tôi sẽ hướng dẫn kênh thanh toán phù hợp với thẻ của bạn.'],
+    ['We accept international credit and debit cards, as well as prepaid cards, including Visa, Mastercard, American Express, JCB, UnionPay, Discover and Diners Club. We will guide you to the appropriate payment channel for your card.', 'Chúng tôi chấp nhận thẻ tín dụng và ghi nợ quốc tế, cũng như thẻ trả trước, bao gồm Visa, Mastercard, American Express, JCB, UnionPay, Discover và Diners Club. Chúng tôi sẽ hướng dẫn kênh thanh toán phù hợp với thẻ của bạn.'],
     ['Pay with Apple Pay, Google Pay or Samsung Pay using a compatible NFC device and supported card. Ask us for help with contactless payment at the showroom.', 'Thanh toán chạm bằng Apple Pay, Google Pay hoặc Samsung Pay với thiết bị NFC và thẻ tương thích. Chúng tôi hỗ trợ thanh toán không tiếp xúc tại showroom.']
   ];
   let card = 0;
@@ -687,7 +687,7 @@ function transformAbout(html) {
       <p>Read how clients chose their cloth, what changed at their fittings and how the finished garments felt. You can share your own experience on Tripadvisor after your visit.<span lang="vi">Đọc chia sẻ của khách hàng về cách chọn vải, những điều chỉnh khi thử đồ và cảm nhận khi mặc trang phục hoàn thiện. Sau khi ghé nhà may, bạn cũng có thể chia sẻ trải nghiệm trên Tripadvisor.</span></p>
       <div class="st-tripadvisor__actions">
         <a class="st-tripadvisor__link" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer"><span>Read reviews on Tripadvisor</span><span lang="vi">Đọc đánh giá trên Tripadvisor</span></a>
-        <iframe class="st-tripadvisor__rating" src="${tripadvisorEmbedPath}" title="S.T Tailor on Tripadvisor / S.T Tailor trên Tripadvisor" loading="lazy" width="200" height="108" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
+        <a class="st-tripadvisor__link st-tripadvisor__link--outline" href="https://www.tripadvisor.com/UserReviewEdit-g293925-d34701232-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer"><span>Write a review</span><span lang="vi">Viết đánh giá</span></a>
       </div>
     </div>
     <div class="st-tripadvisor__visit">
@@ -696,6 +696,7 @@ function transformAbout(html) {
       <p class="st-tripadvisor__hours">Open daily, 09:00–20:00<span lang="vi">Mở cửa mỗi ngày, 09:00–20:00</span></p>
       <a href="/lien-he/">Showroom hours &amp; directions <span lang="vi">Giờ mở cửa và chỉ đường</span></a>
       <a href="/quy-trinh-thu-do/">What to expect at a fitting <span lang="vi">Các bước trong buổi thử đồ</span></a>
+      <iframe class="st-tripadvisor__rating" src="${tripadvisorEmbedPath}" title="S.T Tailor on Tripadvisor / S.T Tailor trên Tripadvisor" loading="lazy" width="200" height="108" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
     </div>
   </div>
 </section>`;
@@ -762,9 +763,8 @@ function enrichImageAttributes(html, { responsiveSizes } = {}) {
     if (responsiveSizes && metadata.responsive?.length && !/\bsrcset=/i.test(output)) {
       const isHomeHero = src === homeHeroImage && /\bst-home-v6__hero-media\b/.test(output);
       const isGalleryHero = /\bst-gallery-hero__story-image\b/.test(output);
-      const candidates = isGalleryHero ? [...metadata.responsive, { src, width: metadata.width }] : metadata.responsive;
-      const srcset = imageSourceSet(candidates);
-      const sizes = isHomeHero ? homeHeroSizes : isGalleryHero ? "(max-width: 899px) 100vw, 50vw" : responsiveSizes;
+      const srcset = imageSourceSet(metadata.responsive);
+      const sizes = isHomeHero ? homeHeroSizes : isGalleryHero ? "(max-width: 899px) min(calc(100vw - 32px), 760px), min(calc(50vw - 24px), 590px)" : responsiveSizes;
       const lazyAuto = /\bloading="lazy"/i.test(output) ? "auto, " : "";
       output = output.replace(/<img\b/i, `<img srcset="${srcset}" sizes="${lazyAuto}${sizes}"`);
     }
@@ -789,8 +789,8 @@ const buildDate = new Date().toISOString().slice(0, 10);
 const sharedContentModified = "2026-11-13";
 // Advance the relevant date when transformed copy changes, not for build fixes.
 const derivedContentModified = {
-  "About.html": "2026-11-18",
-  "Gallery.html": "2026-11-21", "Payment.html": "2026-10-18",
+  "About.html": "2026-11-21",
+  "Gallery.html": "2026-11-21", "Payment.html": "2026-11-21",
   "Returns.html": "2026-10-18", "Shipping.html": "2026-10-18",
   "Terms.html": "2026-10-18", "Privacy.html": "2026-10-18"
 };
@@ -1156,7 +1156,7 @@ writeFileSync(path.join(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF
 writeFileSync(path.join(dist, "site.webmanifest"), JSON.stringify({ name: "S.T Tailor", short_name: "S.T Tailor", description: "Bespoke tailoring and clothing alterations in Ho Chi Minh City.", start_url: "/", scope: "/", display: "standalone", background_color: "#f3e1c5", theme_color: "#ead1ad", icons: [{ src: "/icons/sttailor-app-192.png", sizes: "192x192", type: "image/png", purpose: "any" }, { src: "/icons/sttailor-app-large-512.png", sizes: "512x512", type: "image/png", purpose: "any" }] }, null, 2), "utf8");
 mkdirSync(path.join(dist, ".well-known"), { recursive: true });
 copyFileSync(path.join(root, "source", "security.txt"), path.join(dist, ".well-known", "security.txt"));
-const llmsLink = ([route, , , description]) => `- [${pageLabels.get(route)[0]}](https://sttailor.com${route}): ${description}`;
+const llmsLink = ([route, , , description]) => `- [${pageLabels.get(route).join(" / ")}](https://sttailor.com${route}): ${description}`;
 const policyRoutes = new Set(["/doi-tra-hoan-tien/", "/chinh-sach-van-chuyen/", "/dieu-khoan-dieu-kien/", "/chinh-sach-bao-mat/"]);
 const guidePaths = new Set(["/cam-nang-may-do/", ...guideRoutes.map(([route]) => route)]);
 const llmsSections = [

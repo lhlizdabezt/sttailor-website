@@ -15,8 +15,9 @@ from PIL import Image, ImageOps
 
 
 SOURCE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
-CONTENT_WIDTHS = (480, 768, 1200, 1600)
+CONTENT_WIDTHS = (320, 480, 640, 768, 1200, 1600)
 HOME_HERO = "2026/06/background-hero-trang-lien-he-sttailor.webp"
+GALLERY_HERO = "2026/09/st-tailor-made-to-measure-stories-gallery.jpg"
 # Keep a 240px candidate so high-DPR mobile headers do not jump from 160px
 # straight to a 320px logo for a roughly 70–100px rendered mark.
 ICON_WIDTHS = (96, 160, 240, 320)
@@ -81,8 +82,9 @@ def main() -> int:
                     if candidate < width:
                         variants.append({"src": build_variant(image, relative, candidate, responsive_root), "width": candidate})
                 entry = {"width": width, "height": height, "responsive": variants}
-                if relative.as_posix() == HOME_HERO:
+                if relative.as_posix() in {HOME_HERO, GALLERY_HERO}:
                     variants.append({"src": build_variant(image, relative, width, responsive_root), "width": width})
+                if relative.as_posix() == HOME_HERO:
                     entry["portrait"] = build_mobile_hero(image, relative, responsive_root)
                 metadata[relative.as_posix()] = entry
                 processed += 1

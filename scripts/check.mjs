@@ -125,7 +125,7 @@ for (const route of expectedRoutes) {
   if ((businessSchema?.sameAs ?? []).filter((url) => url === tripadvisorUrl).length !== 1) failures.push(`Official Tripadvisor listing is missing or duplicated in LocalBusiness schema: ${route}`);
   const widgets = [...html.matchAll(/<iframe\b[^>]*>/g)].filter(([tag]) => tag.includes(`src="${tripadvisorEmbedPath}"`));
   if (html.includes("www.jscache.com/wejs") || widgets.length !== Number(route === "/gioi-thieu/")) failures.push(`Tripadvisor widget placement or isolation is incorrect: ${route}`);
-  if (route === "/gioi-thieu/" && (!widgets[0]?.[0].includes('loading="lazy"') || !widgets[0][0].includes('sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"') || !html.includes(`class="st-tripadvisor__link" href="${tripadvisorUrl}"`) || !html.includes('href="/lien-he/">Showroom hours &amp; directions'))) failures.push("The Tripadvisor panel needs its sandboxed lazy badge, direct review link and showroom link.");
+  if (route === "/gioi-thieu/" && (!widgets[0]?.[0].includes('loading="lazy"') || !widgets[0][0].includes('sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"') || !html.includes(`class="st-tripadvisor__link" href="${tripadvisorUrl}"`) || !html.includes('https://www.tripadvisor.com/UserReviewEdit-g293925-d34701232-S_T_Tailor-Ho_Chi_Minh_City.html') || !html.includes('href="/lien-he/">Showroom hours &amp; directions'))) failures.push("The Tripadvisor panel needs its sandboxed lazy badge, read and write review links, and showroom link.");
   if (businessSchema?.currenciesAccepted !== "VND") failures.push(`LocalBusiness currency must match the payment page: ${route}`);
   for (const marker of ['rel="manifest" href="/site.webmanifest"', 'property="og:image:alt"', 'name="google-site-verification"', 'name="p:domain_verify"']) {
     if (!html.includes(marker)) failures.push(`SEO/discovery marker is missing on ${route}: ${marker}`);
@@ -430,6 +430,8 @@ const galleryImageTags = [...gallery.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^\"]
 const galleryContentImages = galleryImageTags.filter((match) => !match[1].includes("logo-sttailor") && !match[1].endsWith("/LinkedInLogo.png"));
 const galleryImageSources = new Set(galleryContentImages.map((image) => image[1]));
 if (galleryImageSources.size !== galleryContentImages.length) failures.push("Gallery repeats an editorial image.");
+const galleryCover = galleryContentImages.find(([tag]) => tag.includes("st-gallery-hero__story-image"))?.[0] ?? "";
+if (!/-320\.webp 320w/.test(galleryCover) || !/-736\.webp 736w/.test(galleryCover)) failures.push("Gallery cover needs compact candidates through its native width.");
 const imageManifest = JSON.parse(readFileSync(path.join(dist, "image-manifest.json"), "utf8"));
 const sourceImages = Object.keys(imageManifest);
 const exteriorPhoto = imageManifest["2026/09/st-tailor-showroom-exterior-evening.jpg"];
@@ -515,7 +517,7 @@ const mobileNavRule = [...generatedCss.matchAll(/\.st-site-nav\{[^}]*\}/g)]
   .find((rule) => rule.includes("width:100vw!important"));
 const mobileNavLinkRule = [...generatedCss.matchAll(/\.st-site-nav a[^\{]*\{[^}]*\}/g)]
   .map((match) => match[0])
-  .find((rule) => rule.includes("justify-content:flex-start!important"));
+  .find((rule) => rule.includes("align-items:flex-start") && rule.includes("text-align:left"));
 if (!mobileNavRule?.includes("left:50%!important") || !mobileNavLinkRule) failures.push("Mobile navigation is not the requested full-width, left-aligned panel.");
 
 const worker = readFileSync(path.join(root, "src", "worker.js"), "utf8");

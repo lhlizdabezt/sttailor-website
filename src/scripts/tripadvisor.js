@@ -3,11 +3,16 @@ const listing = badge.querySelector(".st-tripadvisor__fallback").href;
 
 // The vendor can populate its anchor attributes in separate asynchronous steps.
 function repairWidgetLinks() {
-  for (const link of badge.querySelectorAll('a:not([href]), a[href=""], a.widFRRClickWrap')) {
-    if (link.href !== listing) link.href = listing;
-    link.target = "_blank";
-    link.rel = "nofollow noopener noreferrer";
-    if (link.classList.contains("widFRRClickWrap")) link.setAttribute("aria-label", "View S.T Tailor on Tripadvisor");
+  for (const link of badge.querySelectorAll("a")) {
+    const href = link.getAttribute("href")?.trim();
+    if (!href || href === "#" || link.classList.contains("widFRRClickWrap")) {
+      if (link.href !== listing) link.href = listing;
+      link.target = "_blank";
+      link.rel = "nofollow noopener noreferrer";
+      if (link.classList.contains("widFRRClickWrap")) {
+        link.setAttribute("aria-label", "View S.T Tailor on Tripadvisor / Xem S.T Tailor trên Tripadvisor");
+      }
+    }
   }
 }
 
