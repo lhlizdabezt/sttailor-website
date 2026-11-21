@@ -11,7 +11,7 @@ export function clientCareFailures(html, payment = false) {
     for (const removed of ["st-payment-hero", "st-payment-intro", "st-payment-compliance", "st-payment-gallery-suite", "st-payment-security", "st-payment-terms", "st-policy-refund-link"]) {
       if (main.includes(removed)) failures.push(`Removed payment band remains: ${removed}`);
     }
-    for (const expected of ["CHOOSE THE METHOD THAT SUITS YOUR ORDER", "Vietnamese dong (VND) cash", "đồng Việt Nam (VND)", "Visa", "Mastercard", "American Express", "JCB", "UnionPay", "Discover", "Diners Club", "credit and debit", "tín dụng và ghi nợ", "NFC MOBILE PAYMENTS", "Apple Pay", "Google Pay", "Samsung Pay"]) {
+    for (const expected of ["CHOOSE THE METHOD THAT SUITS YOUR ORDER", "Vietnamese dong (VND) only", "chỉ nhận tiền mặt bằng đồng Việt Nam (VND)", "Visa", "Mastercard", "American Express", "JCB", "UnionPay", "Discover", "Diners Club", "credit and debit", "tín dụng và ghi nợ", "prepaid cards", "thẻ trả trước", "NFC MOBILE PAYMENTS", "Apple Pay", "Google Pay", "Samsung Pay"]) {
       if (!main.includes(expected)) failures.push(`Payment channel or bilingual cash information missing: ${expected}`);
     }
   } else {

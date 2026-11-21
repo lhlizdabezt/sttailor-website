@@ -12278,7 +12278,7 @@ main { display: block; width: 100%; overflow: hidden; }
 /* This header reproduces the quiet, light WordPress chrome while keeping only the original logo. */
 .st-site-header { position: sticky; top: 0; z-index: 30; width: 100%; background: linear-gradient(110deg, #f4e2c5, #e8cfab 52%, #f6e7cf); border-bottom: 1px solid rgba(125, 75, 43, .38); box-shadow: 0 8px 24px rgba(74, 39, 22, .08), inset 0 1px rgba(255, 251, 242, .72); }
 .st-site-header__bar { display: flex; width: min(1280px, calc(100% - 56px)); min-height: 78px; margin: 0 auto; align-items: center; justify-content: space-between; gap: 28px; }
-.st-site-brand { display: inline-flex; flex: 0 0 auto; align-items: center; max-width: min(118px, 22vw); }
+.st-site-brand { display: inline-flex; flex: 0 0 auto; align-items: center; max-width: min(118px, 22vw); padding: 3px; border: 1px solid #9a714e; }
 .st-site-brand img { display: block; width: min(102px, 20vw); height: auto; margin: 0; background: transparent; border: 0; filter: none; }
 .st-site-nav { display: grid; grid-template-columns: repeat(5, minmax(116px, 1fr)); gap: clamp(8px, 1.2vw, 16px); }
 .st-site-nav a { display: flex; min-height: 48px; padding: 6px 12px; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border: 0; background: transparent; color: #4b2b1d; font-family: var(--st-wordmark); font-size: 13px; font-weight: 600; letter-spacing: .075em; line-height: 1; text-align: center; text-decoration: none; text-transform: uppercase; }
@@ -12546,7 +12546,30 @@ html body .st-tripadvisor__link--outline { background: #f8ecdb !important; color
 html body .st-tripadvisor__link--outline span[lang="vi"] { color: #624330 !important; -webkit-text-fill-color: #624330 !important; }
 html body .st-tripadvisor__link--outline:hover { background: #f2e2cb !important; }
 html body .st-tripadvisor__link:focus-visible { outline: 3px solid #764225 !important; outline-offset: 4px !important; }
-html body .st-tripadvisor__rating { display: block; max-width: 100%; margin: 12px 0 0; border: 0; }
+html body .st-tripadvisor__badge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 14px;
+  max-width: 620px;
+  margin-top: 22px;
+  padding: 12px clamp(12px, 2vw, 24px);
+  border: 1px solid #b99672;
+  background: #f8ecdb;
+}
+html body .st-tripadvisor__badge p {
+  margin: 0;
+  color: #352116;
+  font: 600 16px/1.4 var(--st-vietnamese);
+}
+html body .st-tripadvisor__badge p span {
+  display: block;
+  margin-top: 4px;
+  color: #624330;
+  font-weight: 400;
+}
+html body .st-tripadvisor__rating { display: block; max-width: 100%; border: 0; }
 html body .st-tripadvisor__visit a:focus-visible { outline: 2px solid #6c371e !important; outline-offset: 3px; }
 html body .st-tripadvisor__visit { width: 100%; box-sizing: border-box; padding: clamp(22px, 3vw, 34px); border: 1px solid #b99672; background: #f8ecdb; }
 html body .st-tripadvisor__visit h3 { margin: 0 0 12px; color: #352116; font: 500 24px/1.2 var(--st-wordmark); }
@@ -12710,7 +12733,7 @@ html body .st-payment-gallery-suite__frame:hover .st-payment-gallery-suite__copy
 html body .st-payment-gallery-suite__frame:focus-visible { outline: 3px solid #f0c17f !important; outline-offset: 5px !important; }
 
 /* Footer crest uses the supplied original-colour transparent logo. */
-html body .st-footer-v7.st-footer-v8 .st-footer-v7__crest { display: inline-flex !important; width: 104px !important; margin: 0 0 22px !important; background: transparent !important; border: 0 !important; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__crest { display: inline-flex !important; width: 104px !important; margin: 0 0 22px !important; padding: 5px !important; background: transparent !important; border: 1px solid #aa8058 !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v7__crest img { display: block !important; width: 100% !important; height: auto !important; background: transparent !important; border: 0 !important; filter: none !important; mix-blend-mode: normal !important; }
 /* Give every social destination a distinct, finger-sized target on mobile. */
 html body .st-footer-v7.st-footer-v8 .st-footer-v7__social { gap: 8px !important; }
@@ -12739,70 +12762,95 @@ html body .st-footer-v7.st-footer-v8 .st-footer-v7__social a:focus-visible { out
 
 /* Home visual destinations: image-led discovery with deliberately minimal copy. */
 html body .st-home-editorial {
-  display: grid !important;
-  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-  min-height: clamp(470px, 52vw, 720px) !important;
-  background: #1f130d !important;
+  padding: clamp(42px, 6vw, 88px) clamp(16px, 3vw, 48px);
+  background: #25170f;
+  color: #fff8ed;
+  border-block: 1px solid #b98e65;
+}
+.st-home-editorial__intro {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  align-items: end;
+  gap: 18px clamp(24px, 5vw, 74px);
+  max-width: 1280px;
+  margin: 0 auto clamp(24px, 4vw, 48px);
+}
+#st-home-v6.st-home-v6--mission .st-home-editorial__intro h2 {
+  margin: 0;
+  color: #fff8ed;
+  font: 500 clamp(32px, 4.5vw, 58px)/1.08 var(--st-wordmark);
+  font-weight: 500 !important;
+}
+.st-home-editorial__intro h2 span {
+  display: block;
+  margin-top: 8px;
+  color: #f0d1a8;
+  font: 500 clamp(18px, 2vw, 25px)/1.3 var(--st-vietnamese);
+}
+.st-home-editorial__intro p {
+  max-width: 58ch;
+  margin: 0;
+  color: #fff8ed;
+  font: 400 16px/1.6 var(--st-vietnamese);
+}
+.st-home-editorial__intro p span {
+  display: block;
+  margin-top: 6px;
+  color: #e8c9aa;
+}
+.st-home-editorial__grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(12px, 1.4vw, 22px);
+  max-width: 1280px;
+  margin: 0 auto;
 }
 html body .st-home-editorial__frame {
-  position: relative !important;
-  display: block !important;
-  min-height: inherit !important;
-  overflow: hidden !important;
-  border: 1px solid #b98e65 !important;
-  background: #2a1810 !important;
-  color: #fff8ed !important;
+  display: grid !important;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+  border: 1px solid #b98e65;
+  background: #382219;
+  color: #fff8ed;
   text-decoration: none !important;
-  isolation: isolate !important;
 }
-html body .st-home-editorial__frame::after {
-  content: "" !important;
-  position: absolute !important;
-  z-index: 1 !important;
-  inset: 0 !important;
-  background: linear-gradient(180deg, rgba(28, 15, 9, .03) 42%, rgba(25, 13, 8, .82) 100%) !important;
-  pointer-events: none !important;
+.st-home-editorial__frame picture {
+  display: block;
+  overflow: hidden;
+  border-bottom: 1px solid #b98e65;
+  background: #533426;
 }
-html body .st-home-editorial__frame img {
-  width: 100% !important;
-  height: 100% !important;
-  min-height: inherit !important;
-  object-fit: cover !important;
-  filter: saturate(.82) sepia(.08) contrast(1.04) !important;
-  transform: scale(1.01) !important;
-  transition: transform .85s cubic-bezier(.2, .72, .2, 1), filter .65s ease !important;
+.st-home-editorial__photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  transition: transform .35s ease;
 }
-html body .st-home-editorial__frame > span {
-  position: absolute !important;
-  z-index: 2 !important;
-  right: clamp(22px, 3vw, 46px) !important;
-  bottom: clamp(24px, 4vw, 54px) !important;
-  left: clamp(22px, 3vw, 46px) !important;
-  color: #fff9f0 !important;
-  -webkit-text-fill-color: #fff9f0 !important;
-  font: 500 clamp(21px, 2.25vw, 38px)/.95 var(--st-wordmark) !important;
-  letter-spacing: .055em !important;
-  text-transform: uppercase !important;
-  transition: transform .35s ease !important;
+.st-home-editorial__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: clamp(16px, 1.6vw, 24px);
+  color: #fff8ed;
+  font: 400 15px/1.5 var(--st-vietnamese);
 }
-html body .st-home-editorial__frame small {
-  display: block !important;
-  margin-top: 9px !important;
-  color: #edc894 !important;
-  -webkit-text-fill-color: #edc894 !important;
-  font: 700 11px/1.2 var(--st-vietnamese) !important;
-  letter-spacing: .16em !important;
+.st-home-editorial__copy strong {
+  font: 500 clamp(22px, 1.9vw, 28px)/1.15 var(--st-wordmark);
 }
-html body .st-home-editorial__frame:hover img,
-html body .st-home-editorial__frame:focus-visible img { filter: saturate(.93) sepia(.03) contrast(1.02) !important; transform: scale(1.055) !important; }
-html body .st-home-editorial__frame:hover > span,
-html body .st-home-editorial__frame:focus-visible > span { transform: translateY(-6px) !important; }
-html body .st-home-editorial__frame:focus-visible { outline: 3px solid #f0c17f !important; outline-offset: -3px !important; }
+.st-home-editorial__copy [lang="vi"] {
+  display: block;
+  margin-top: 5px;
+  color: #edcdab;
+  font: 400 15px/1.5 var(--st-vietnamese);
+}
+.st-home-editorial__copy strong [lang="vi"] { font-weight: 600; }
+html body .st-home-editorial__frame:is(:hover, :focus-visible) { background: #4b2e20; }
+.st-home-editorial__frame:is(:hover, :focus-visible) .st-home-editorial__photo { transform: scale(1.03); }
 
 @media (max-width: 1120px) {
-  html body .st-home-editorial { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; min-height: 0 !important; }
-  html body .st-home-editorial__frame { min-height: clamp(420px, 58vw, 620px) !important; }
-  html body .st-home-editorial__frame:nth-child(5) { grid-column: 1 / -1 !important; }
+  .st-home-editorial__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 @media (max-width: 980px) {
@@ -12845,9 +12893,8 @@ html body .st-home-editorial__frame:focus-visible { outline: 3px solid #f0c17f !
 }
 
 @media (max-width: 760px) {
-  html body .st-home-editorial { grid-template-columns: 1fr !important; min-height: 0 !important; }
-  html body .st-home-editorial__frame { min-height: clamp(410px, 112vw, 590px) !important; }
-  html body .st-home-editorial__frame:nth-child(5) { grid-column: auto !important; }
+  .st-home-editorial__intro { grid-template-columns: 1fr; }
+  .st-home-editorial__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   html body .st-about-gallery-bridge__frame { grid-template-columns: 1fr !important; min-height: 0 !important; }
   html body .st-about-gallery-bridge__frame figure,
   html body .st-about-gallery-bridge__frame img { min-height: clamp(390px, 112vw, 590px) !important; }
@@ -12864,6 +12911,10 @@ html body .st-home-editorial__frame:focus-visible { outline: 3px solid #f0c17f !
   html body .st-pricing-gallery-suite__media img { min-height: 430px !important; }
   html body .st-payment-gallery-suite__frame figure,
   html body .st-payment-gallery-suite__frame img { min-height: 460px !important; }
+}
+
+@media (max-width: 440px) {
+  .st-home-editorial__grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 560px) {

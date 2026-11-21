@@ -14,6 +14,9 @@ function repairWidgetLinks() {
         link.setAttribute("aria-label", "View S.T Tailor on Tripadvisor / Xem S.T Tailor trên Tripadvisor");
       }
     }
+    if (href === "https://www.tripadvisor.com/" && !link.textContent.trim() && !link.hasAttribute("aria-label")) {
+      link.setAttribute("aria-label", "Tripadvisor homepage / Trang chủ Tripadvisor");
+    }
   }
 }
 

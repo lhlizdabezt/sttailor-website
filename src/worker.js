@@ -65,7 +65,9 @@ function securityHeaders(response, pathname = "/") {
   if (isHtml) {
     headers.set("Content-Security-Policy", contentSecurityPolicy(pathname));
     headers.set("X-Robots-Tag", pathname === tripadvisorEmbedPath ? "noindex, follow" : "index, follow, max-image-preview:large");
-    headers.set("Cache-Control", "public, max-age=0, must-revalidate");
+    headers.set("Cache-Control", pathname === tripadvisorEmbedPath
+      ? "public, max-age=0, must-revalidate, no-transform"
+      : "public, max-age=0, must-revalidate");
   } else if (pathname.startsWith("/styles/") || pathname.startsWith("/scripts/")) {
     headers.set("Cache-Control", "public, max-age=31536000, immutable");
   } else if (pathname.startsWith("/media/")) {

@@ -60,8 +60,8 @@ export function clientCarePage(sourceFile) {
       <h1 id="st-care-title">${page.title}<span lang="vi">${page.vi}</span></h1>
       <p>${page.intro}<span lang="vi">${page.introVi}</span></p>
     </header>
-    <div class="st-info-shell st-info-body">${page.sections.map(([id, enTitle, viTitle, en, vi], i) => `<section class="st-info-section" id="${id}" aria-labelledby="st-care-${id}">
-      <div class="st-info-section__heading"><p class="st-info-kicker">${String(i + 1).padStart(2, "0")}</p><h2 id="st-care-${id}">${enTitle}<span lang="vi">${viTitle}</span></h2></div>
+    <div class="st-info-shell st-info-body">${page.sections.map(([id, enTitle, viTitle, en, vi]) => `<section class="st-info-section" id="${id}" aria-labelledby="st-care-${id}">
+      <div class="st-info-section__heading"><h2 id="st-care-${id}">${enTitle}<span lang="vi">${viTitle}</span></h2></div>
       <div class="st-info-section__copy"><p lang="en">${en}</p><p lang="vi">${vi}</p></div>
     </section>`).join("\n")}</div>
   </article>`;
