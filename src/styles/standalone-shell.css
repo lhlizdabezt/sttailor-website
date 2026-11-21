@@ -989,6 +989,26 @@ html body .st-contact-page .st-contact-item img[src^="/icons/lucide-"] { filter:
 html body .st-contact-page .st-contact-item img[src^="/icons/lucide-"] { width: 38px !important; height: 38px !important; flex-basis: 38px !important; }
 @media (prefers-reduced-motion: reduce) { html body .st-lux-value img[src^="/icons/lucide-"], html body #st-home-v5 .st5-step img[src^="/icons/lucide-"], html body .st-contact-page .st-contact-item img[src^="/icons/lucide-"] { transition: none !important; } }
 
+/* Keep direct showroom links readable and actionable at narrow widths. */
+html body .st-contact-page .st-contact-item > div { min-width: 0; }
+html body .st-contact-page .st-contact-item address > span[lang="vi"] { display: block; margin-top: 4px; }
+html body .st-contact-page .st-contact-item a:not(.st-contact-action),
+html body .st-lux-page.st-lux-about .st-lux-facts dd > a {
+  display: inline-block !important;
+  box-sizing: border-box;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 9px 11px;
+  border: 1px solid #8a5537;
+  background: #fff8ee;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+html body .st-contact-page .st-contact-item a:not(.st-contact-action):hover,
+html body .st-lux-page.st-lux-about .st-lux-facts dd > a:hover { background: #f1dfca; }
+html body .st-contact-page .st-contact-item a:not(.st-contact-action):focus-visible,
+html body .st-lux-page.st-lux-about .st-lux-facts dd > a:focus-visible { outline: 2px solid #452717; outline-offset: 3px; }
+
 /* Lighthouse's mobile contrast findings: deepen only the affected Vietnamese
    supporting text while preserving the site's warm cognac palette. */
 html body .st-service-page .st-service-commission-map__catalogue article h2 span[lang="vi"] { color: #78371b !important; -webkit-text-fill-color: #78371b !important; }
