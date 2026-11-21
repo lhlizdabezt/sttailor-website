@@ -153,7 +153,11 @@ const home = pages.get("/");
 const siteScriptPath = home.match(/<script type="module" src="([^"]+)"/i)?.[1];
 const siteScript = siteScriptPath ? await (await fetchWithRetry(new URL(siteScriptPath, origin))).text() : "";
 expect(Boolean(siteScriptPath) && siteScript.includes('"contact_click"') && siteScript.includes('"consultation_intent"') && siteScript.includes('"page_type"'), "Production interaction analytics or Clarity page tags are missing");
-expect((home.match(/<a class="st-home-editorial__frame/g) || []).length === 5, "Home visual destination cards are missing");
+expect(
+  (home.match(/<article class="st-home-editorial__frame">/g) ?? []).length === 5 &&
+    (home.match(/<a class="st-home-editorial__link"[^>]*aria-describedby="/g) ?? []).length === 5,
+  "Home visual destination cards or their accessible links are missing"
+);
 for (const removedHomeRouteText of ["Five ways into the atelier", "Five ways to begin with S.T Tailor", "Năm lối để bước vào không gian atelier", "Năm lối để bắt đầu cùng S.T Tailor", "st-home-v6__routes"]) {
   expect(!home.includes(removedHomeRouteText), `Removed home route strip remains: ${removedHomeRouteText}`);
 }
