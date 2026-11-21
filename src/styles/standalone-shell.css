@@ -35,7 +35,7 @@ main { display: block; width: 100%; overflow: hidden; }
 /* This header reproduces the quiet, light WordPress chrome while keeping only the original logo. */
 .st-site-header { position: sticky; top: 0; z-index: 30; width: 100%; background: linear-gradient(110deg, #f4e2c5, #e8cfab 52%, #f6e7cf); border-bottom: 1px solid rgba(125, 75, 43, .38); box-shadow: 0 8px 24px rgba(74, 39, 22, .08), inset 0 1px rgba(255, 251, 242, .72); }
 .st-site-header__bar { display: flex; width: min(1280px, calc(100% - 56px)); min-height: 78px; margin: 0 auto; align-items: center; justify-content: space-between; gap: 28px; }
-.st-site-brand { display: inline-flex; flex: 0 0 auto; align-items: center; max-width: min(118px, 22vw); padding: 3px; border: 1px solid #9a714e; }
+.st-site-brand { display: inline-flex; flex: 0 0 auto; align-items: center; max-width: min(118px, 22vw); padding: 4px; border: 0; }
 .st-site-brand img { display: block; width: min(102px, 20vw); height: auto; margin: 0; background: transparent; border: 0; filter: none; }
 .st-site-nav { display: grid; grid-template-columns: repeat(5, minmax(116px, 1fr)); gap: clamp(8px, 1.2vw, 16px); }
 .st-site-nav a { display: flex; min-height: 48px; padding: 6px 12px; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border: 0; background: transparent; color: #4b2b1d; font-family: var(--st-wordmark); font-size: 13px; font-weight: 600; letter-spacing: .075em; line-height: 1; text-align: center; text-decoration: none; text-transform: uppercase; }
@@ -489,8 +489,9 @@ html body .st-payment-gallery-suite__frame:hover .st-payment-gallery-suite__copy
 html body .st-payment-gallery-suite__frame:hover .st-payment-gallery-suite__copy > span:last-child i { color: #f0c791 !important; -webkit-text-fill-color: #f0c791 !important; }
 html body .st-payment-gallery-suite__frame:focus-visible { outline: 3px solid #f0c17f !important; outline-offset: 5px !important; }
 
-/* Footer crest uses the supplied original-colour transparent logo. */
-html body .st-footer-v7.st-footer-v8 .st-footer-v7__crest { display: inline-flex !important; width: 104px !important; margin: 0 0 22px !important; padding: 5px !important; background: transparent !important; border: 1px solid #aa8058 !important; }
+/* The original-colour crest is a frameless home link with a keyboard focus ring. */
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__crest { display: inline-flex !important; width: 104px !important; margin: 0 0 22px !important; padding: 6px !important; background: transparent !important; border: 0 !important; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__crest:focus-visible { outline: 2px solid #6c371e; outline-offset: 3px; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v7__crest img { display: block !important; width: 100% !important; height: auto !important; background: transparent !important; border: 0 !important; filter: none !important; mix-blend-mode: normal !important; }
 /* Give every social destination a distinct, finger-sized target on mobile. */
 html body .st-footer-v7.st-footer-v8 .st-footer-v7__social { gap: 8px !important; }
