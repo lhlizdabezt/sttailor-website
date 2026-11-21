@@ -303,15 +303,15 @@ for (const removedHomeRouteText of ["Five ways into the atelier", "Five ways to 
 }
 if (!home.includes("logo-sttailor-1000x1024.png")) failures.push("Footer crest logo is missing.");
 if (/<footer[\s\S]*?<img\b(?![^>]*\bwidth="\d+")(?![^>]*\bheight="\d+")[^>]*>/i.test(home)) failures.push("Footer contains an image without explicit dimensions.");
-if ((home.match(/<a class="st-home-editorial__frame/g) ?? []).length !== 5) failures.push("Home visual destinations must contain exactly five image-led cards.");
-const homeCards = [...home.matchAll(/<a class="st-home-editorial__frame"[^>]*aria-describedby="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)];
-if (homeCards.length !== 5) failures.push("Every home card must have a linked description.");
-for (const [, descriptionId, content] of homeCards) {
+const homeCards = [...home.matchAll(/<article class="st-home-editorial__frame">([\s\S]*?)<\/article>/g)];
+if (homeCards.length !== 5) failures.push("Home visual destinations must contain exactly five image-led cards.");
+for (const [, content] of homeCards) {
+  const descriptionId = content.match(/<a class="st-home-editorial__link"[^>]*aria-describedby="([^"]+)"/)?.[1];
   const phoneCandidates = content.match(/<source media="\(max-width: 440px\)" srcset="([^"]+)"/)?.[1];
   if (!phoneCandidates || [...phoneCandidates.matchAll(/ (\d+)w/g)].some(([, width]) => Number(width) > 768)) {
     failures.push(`Home card lacks its compact phone images: ${descriptionId}`);
   }
-  if (!content.includes(`id="${descriptionId}"`) || !content.includes('lang="vi"') || !content.includes('loading="lazy"')) {
+  if (!descriptionId || !content.includes(`<p id="${descriptionId}"`) || !content.includes('lang="vi"') || !content.includes('loading="lazy"')) {
     failures.push(`Home card needs a bilingual description and a lazy image: ${descriptionId}`);
   }
 }

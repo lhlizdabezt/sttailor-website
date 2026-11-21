@@ -238,13 +238,13 @@ function transformHome(html) {
       <p>See how we select cloth, fit garments and finish each piece at our Ho Chi Minh City showroom.<span lang="vi">Tìm hiểu cách chúng tôi chọn vải, thử đồ và hoàn thiện từng trang phục tại showroom ở TP. Hồ Chí Minh.</span></p>
     </div>
     <div class="st-home-editorial__grid">
-      ${destinations.map(([href, path, alt, altVi, name, nameVi, description, descriptionVi], index) => `<a class="st-home-editorial__frame" href="${href}" aria-labelledby="st-home-destination-${index + 1}" aria-describedby="st-home-description-${index + 1}">
+      ${destinations.map(([href, path, alt, altVi, name, nameVi, description, descriptionVi], index) => `<article class="st-home-editorial__frame">
         <img class="st-home-editorial__photo" src="/media/${path}" alt="${alt} / ${altVi}" loading="lazy" decoding="async">
-        <span class="st-home-editorial__copy">
-          <strong id="st-home-destination-${index + 1}">${name}<span lang="vi">${nameVi}</span></strong>
-          <span id="st-home-description-${index + 1}">${description}<span lang="vi">${descriptionVi}</span></span>
-        </span>
-      </a>`).join("\n")}
+        <div class="st-home-editorial__copy">
+          <a class="st-home-editorial__link" href="${href}" aria-describedby="st-home-description-${index + 1}">${name} <span lang="vi">${nameVi}</span></a>
+          <p id="st-home-description-${index + 1}">${description}<span lang="vi">${descriptionVi}</span></p>
+        </div>
+      </article>`).join("\n")}
     </div>
   </section>`;
   const guideStrip = `

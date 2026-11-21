@@ -12808,7 +12808,9 @@ html body .st-home-editorial {
 html body .st-home-editorial__frame {
   display: grid !important;
   grid-template-rows: auto 1fr;
+  position: relative;
   min-width: 0;
+  margin: 0;
   border: 1px solid #b98e65;
   background: #382219;
   color: #fff8ed;
@@ -12836,8 +12838,17 @@ html body .st-home-editorial__frame {
   color: #fff8ed;
   font: 400 15px/1.5 var(--st-vietnamese);
 }
-.st-home-editorial__copy strong {
+.st-home-editorial__copy p { margin: 0; color: inherit; font: inherit; }
+html body .st-home-editorial__link {
+  display: block;
+  color: inherit;
   font: 500 clamp(22px, 1.9vw, 28px)/1.15 var(--st-wordmark);
+  text-decoration: none;
+}
+.st-home-editorial__link::after {
+  position: absolute;
+  inset: 0;
+  content: "";
 }
 .st-home-editorial__copy [lang="vi"] {
   display: block;
@@ -12845,9 +12856,10 @@ html body .st-home-editorial__frame {
   color: #edcdab;
   font: 400 15px/1.5 var(--st-vietnamese);
 }
-.st-home-editorial__copy strong [lang="vi"] { font-weight: 600; }
-html body .st-home-editorial__frame:is(:hover, :focus-visible) { background: #4b2e20; }
-.st-home-editorial__frame:is(:hover, :focus-visible) .st-home-editorial__photo { transform: scale(1.03); }
+.st-home-editorial__link [lang="vi"] { font-weight: 600; }
+html body .st-home-editorial__frame:is(:hover, :focus-within) { background: #4b2e20; }
+.st-home-editorial__link:focus-visible::after { outline: 2px solid #f0d1a8; outline-offset: -4px; }
+.st-home-editorial__frame:is(:hover, :focus-within) .st-home-editorial__photo { transform: scale(1.03); }
 
 @media (max-width: 1120px) {
   .st-home-editorial__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
