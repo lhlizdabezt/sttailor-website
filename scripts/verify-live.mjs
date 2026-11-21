@@ -80,6 +80,8 @@ for (const route of routes) {
     : { response: await fetchWithRetry(`${origin}${route}`), text: "" };
   const pageHtml = verifyingRevision ? html : await response.text();
   pages.set(route, pageHtml);
+  const stylesheet = pageHtml.match(/<link rel="stylesheet" href="([^"]+)"/i)?.[1];
+  expect(stylesheet && response.headers.get("link")?.includes(`<${stylesheet}>; rel=preload; as=style`), `${route} does not advertise its current stylesheet to Cloudflare Early Hints`);
   expect(pageHtml.includes('<noscript><img height="1" width="1" style="display:none" alt="" aria-hidden="true" src="https://www.facebook.com/tr?id=2294442874726399&amp;ev=PageView&amp;noscript=1"></noscript>') && !/\bfbq\s*\(/.test(pageHtml), `${route} must use GTM Meta Pixel with its static noscript fallback only`);
   expect(response.status === 200, `${route} returned ${response.status}`);
   expect(response.headers.get("strict-transport-security")?.includes("max-age=15552000"), `${route} has no HSTS policy`);

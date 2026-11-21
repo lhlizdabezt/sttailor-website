@@ -685,7 +685,8 @@ function transformAbout(html) {
     <div class="st-tripadvisor__copy">
       <p class="st-lux-eyebrow">TRIPADVISOR</p>
       <h2 id="st-tripadvisor-title">Reviews from our clients<span lang="vi">Đánh giá của khách hàng</span></h2>
-      <p>Read how clients chose their cloth, what changed at their fittings and how the finished garments felt. You can share your own experience on Tripadvisor after your visit.<span lang="vi">Đọc chia sẻ của khách hàng về cách chọn vải, những điều chỉnh khi thử đồ và cảm nhận khi mặc trang phục hoàn thiện. Sau khi ghé nhà may, bạn cũng có thể chia sẻ trải nghiệm trên Tripadvisor.</span></p>
+      <p>Read how clients chose their cloth, what changed at their fittings and how the finished garments felt. After your visit, you can share your experience on Tripadvisor.<span lang="vi">Đọc chia sẻ của khách hàng về cách chọn vải, những điều chỉnh khi thử đồ và cảm nhận khi mặc trang phục hoàn thiện. Sau khi ghé nhà may, bạn cũng có thể chia sẻ trải nghiệm trên Tripadvisor.</span></p>
+      <iframe class="st-tripadvisor__rating" src="${tripadvisorEmbedPath}" title="S.T Tailor on Tripadvisor / S.T Tailor trên Tripadvisor" loading="lazy" width="200" height="108" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
       <div class="st-tripadvisor__actions">
         <a class="st-tripadvisor__link" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer"><span>Read reviews on Tripadvisor</span><span lang="vi">Đọc đánh giá trên Tripadvisor</span></a>
         <a class="st-tripadvisor__link st-tripadvisor__link--outline" href="https://www.tripadvisor.com/UserReviewEdit-g293925-d34701232-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer"><span>Write a review</span><span lang="vi">Viết đánh giá</span></a>
@@ -697,7 +698,6 @@ function transformAbout(html) {
       <p class="st-tripadvisor__hours">Open daily, 09:00–20:00<span lang="vi">Mở cửa mỗi ngày, 09:00–20:00</span></p>
       <a href="/lien-he/">Showroom hours &amp; directions <span lang="vi">Giờ mở cửa và chỉ đường</span></a>
       <a href="/quy-trinh-thu-do/">What to expect at a fitting <span lang="vi">Các bước trong buổi thử đồ</span></a>
-      <iframe class="st-tripadvisor__rating" src="${tripadvisorEmbedPath}" title="S.T Tailor on Tripadvisor / S.T Tailor trên Tripadvisor" loading="lazy" width="200" height="108" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
     </div>
   </div>
 </section>`;
@@ -738,6 +738,7 @@ function transformPage(sourceFile, html) {
     "Error.html": transformError
   };
   return (transforms[sourceFile] ?? replaceVisibleAtelier)(html)
+    .replace(/\bclass="([^"]*)"/g, (_, classes) => `class="${classes.split(/\s+/).filter((name) => name && !/^st-motion(?:-\d+)?$/.test(name)).join(" ")}"`)
     .replaceAll("Confirm the work, finish and timing in writing.", "Discuss the work, finish and timing with us.")
     .replaceAll("Xác nhận hạng mục, hoàn thiện và thời gian bằng văn bản.", "Trao đổi hạng mục, hoàn thiện và thời gian cùng chúng tôi.")
     .replaceAll("written quotation", "quotation")
@@ -1210,6 +1211,10 @@ ${llmsSections}
 - [Instagram](https://www.instagram.com/sttailorhcm/)
 - [WhatsApp](https://wa.me/84909556258)
 `, "utf8");
-writeFileSync(path.join(dist, "_headers"), "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n  X-Frame-Options: SAMEORIGIN\n  Strict-Transport-Security: max-age=15552000\n  Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests\n", "utf8");
+const assetHeaders = "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n  X-Frame-Options: SAMEORIGIN\n  Strict-Transport-Security: max-age=15552000\n  Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests\n";
+// The asset binding carries these headers into the Worker response, allowing
+// Cloudflare Early Hints to discover the critical CSS for each public page.
+const stylesheetHints = Object.entries(routeStyles).map(([route, { href }]) => `${route}\n  Link: <${href}>; rel=preload; as=style`);
+writeFileSync(path.join(dist, "_headers"), [assetHeaders.trimEnd(), ...stylesheetHints].join("\n\n") + "\n", "utf8");
 writeFileSync(path.join(dist, "build-manifest.json"), JSON.stringify({ source: "source/wordpress", sourceMedia: "source/media", revision: buildRevision, routes: routes.map(([route]) => route), routeStyles, localUploadAssets: assets.length, imageMetadata: imageCount, galleryDuplicateCheck: "passed" }, null, 2), "utf8");
 console.log(`Built ${routes.length} routes from the versioned WordPress reference with ${assets.length} local upload assets and dimensions for ${imageCount} images.`);

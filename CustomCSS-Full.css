@@ -2619,21 +2619,15 @@ html body .st-footer-logo {
 }
 html body .st-footer-logo { mix-blend-mode: multiply !important; }
 
-/* Page-level motion is limited to opacity and vertical entrance; no looping motion. */
+/* The retired WordPress privacy template retains its entrance treatment. */
 @media (prefers-reduced-motion: no-preference) {
-  #st-pricing-v5 .stpr-card,
   #st-privacy-v5 .stp-card {
     animation: st-lux-rise .72s cubic-bezier(.18,.74,.2,1) both !important;
   }
-  #st-pricing-v5 .stpr-card:nth-child(2),
   #st-privacy-v5 .stp-card:nth-child(2) { animation-delay: .06s !important; }
-  #st-pricing-v5 .stpr-card:nth-child(3),
   #st-privacy-v5 .stp-card:nth-child(3) { animation-delay: .12s !important; }
-  #st-pricing-v5 .stpr-card:nth-child(4),
   #st-privacy-v5 .stp-card:nth-child(4) { animation-delay: .18s !important; }
-  #st-pricing-v5 .stpr-card:nth-child(5),
   #st-privacy-v5 .stp-card:nth-child(5) { animation-delay: .24s !important; }
-  #st-pricing-v5 .stpr-card:nth-child(6),
   #st-privacy-v5 .stp-card:nth-child(6) { animation-delay: .30s !important; }
 }
 
@@ -3039,7 +3033,7 @@ html body .st-footer-v7__visit p { margin: 0 0 16px !important; color: #593d2d !
 html body .st-footer-v7__visit a { color: #542d1a !important; font-weight: 800 !important; text-decoration: none !important; overflow-wrap: anywhere !important; }
 html body .st-footer-v7__visit a:hover,
 html body .st-footer-v7__visit a:focus-visible { color: #a25d32 !important; text-decoration: underline !important; text-underline-offset: 4px !important; outline: 0 !important; }
-html body .st-footer-v7__visit p [lang="vi"] { color: #805a43 !important; }
+html body .st-footer-v7__visit p [lang="vi"] { color: #704631 !important; }
 html body .st-footer-v7__map { display: inline-flex !important; align-items: center !important; min-height: 39px !important; margin-top: 3px !important; padding: 8px 12px !important; border: 1px solid var(--st-v7-cognac) !important; color: var(--st-v7-cognac) !important; font-size: 11px !important; font-weight: 800 !important; letter-spacing: .035em !important; text-transform: uppercase !important; }
 html body .st-footer-v7__map [lang="vi"] { margin: 0 0 0 7px !important; font-size: 10px !important; }
 html body .st-footer-v7__map:hover,
@@ -3082,9 +3076,7 @@ html body #st-pricing-v5 .stpr-cta { background: linear-gradient(135deg, #5b2e1a
 @media (prefers-reduced-motion: no-preference) {
   html body #st-error-404 .st-error-404__visual,
   html body #st-error-404 .st-error-404__copy,
-  html body #st-error-404 .st-error-404__paths,
-  html body .st-footer-v7__top,
-  html body .st-footer-v7__main {
+  html body #st-error-404 .st-error-404__paths {
     animation: st-v7-rise .58s cubic-bezier(.2,.72,.2,1) both !important;
   }
   html body #st-error-404 .st-error-404__copy { animation-delay: .08s !important; }
@@ -3237,14 +3229,13 @@ html body .st-footer-v7__map-preview > img {
   border: 0 !important;
   object-fit: cover !important;
 }
-html body .st-footer-v7__map-preview figcaption { margin: 0 !important; }
+html body .st-footer-v7__map-preview figcaption { margin: 0 !important; padding: 8px !important; }
 html body .st-footer-v7__map-preview .st-footer-v7__map {
   width: 100% !important;
-  min-height: 42px !important;
+  min-height: 44px !important;
   justify-content: center !important;
   margin: 0 !important;
-  border: 0 !important;
-  border-top: 1px solid rgba(108, 55, 30, .3) !important;
+  border: 1px solid #875238 !important;
   background: #fffaf3 !important;
 }
 html body .st-footer-v7__map-preview .st-footer-v7__map:hover,
@@ -5717,23 +5708,6 @@ html body .st-contact-page--v2 .st-contact-card a:active {
   border-color:#fffdf8 !important;
   box-shadow:3px 3px 0 #a86e34 !important;
   transform:translate(-1px,-1px) !important;
-}
-
-@media (prefers-reduced-motion:no-preference) {
-  html body .st-contact-page--v2 .st-contact-card {
-    animation:st-contact-card-arrival .48s both;
-  }
-  html body .st-contact-page--v2 .st-contact-card:nth-child(2) { animation-delay:.05s; }
-  html body .st-contact-page--v2 .st-contact-card:nth-child(3) { animation-delay:.1s; }
-  html body .st-contact-page--v2 .st-contact-card:nth-child(4) { animation-delay:.15s; }
-  html body .st-contact-page--v2 .st-contact-card:nth-child(5) { animation-delay:.2s; }
-  html body .st-contact-page--v2 .st-contact-card:nth-child(6) { animation-delay:.25s; }
-  html body .st-contact-page--v2 .st-contact-card:nth-child(7) { animation-delay:.3s; }
-  html body .st-contact-page--v2 .st-contact-card:nth-child(8) { animation-delay:.35s; }
-}
-@keyframes st-contact-card-arrival {
-  from { opacity:0; transform:translateY(12px); }
-  to { opacity:1; transform:translateY(0); }
 }
 
 @media (max-width:980px) {
@@ -10145,15 +10119,6 @@ html body .st-service-page--folio .st-service-commission-map__journey li::before
 html body .st-service-page--folio .st-service-commission-map__journey li strong { color: #3b2419 !important; font-family: var(--st-font-display-local) !important; font-size: 18px !important; font-weight: 600 !important; line-height: 1.18 !important; }
 html body .st-service-page--folio .st-service-commission-map__journey li span { color: #704631 !important; font-family: var(--st-font-copy-local) !important; font-size: 14px !important; font-weight: 500 !important; line-height: 1.42 !important; }
 html body .st-service-page--folio .st-service-commission-map__journey li:hover { background: #fff8ed !important; box-shadow: 0 13px 30px rgba(68, 37, 21, .15) !important; transform: translateY(-6px) !important; }
-@media (prefers-reduced-motion: no-preference) {
-  html body .st-service-page--folio .st-service-commission-map__journey .st-journey-step { animation: st-tailor-journey-rise .72s both; }
-  html body .st-service-page--folio .st-service-commission-map__journey .st-journey-step:nth-child(2) { animation-delay: .08s; }
-  html body .st-service-page--folio .st-service-commission-map__journey .st-journey-step:nth-child(3) { animation-delay: .16s; }
-  html body .st-service-page--folio .st-service-commission-map__journey .st-journey-step:nth-child(4) { animation-delay: .24s; }
-  html body .st-service-page--folio .st-service-commission-map__journey .st-journey-step:nth-child(5) { animation-delay: .32s; }
-  html body .st-service-page--folio .st-service-commission-map__journey .st-journey-step:nth-child(6) { animation-delay: .40s; }
-}
-@keyframes st-tailor-journey-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 899px) {
   html body .st-gallery-page--albums .st-album-index__grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
   html body .st-gallery-page--albums .st-album-index__card:nth-child(2n) { border-right: 0 !important; }
@@ -12581,7 +12546,7 @@ html body .st-tripadvisor__link--outline { background: #f8ecdb !important; color
 html body .st-tripadvisor__link--outline span[lang="vi"] { color: #624330 !important; -webkit-text-fill-color: #624330 !important; }
 html body .st-tripadvisor__link--outline:hover { background: #f2e2cb !important; }
 html body .st-tripadvisor__link:focus-visible { outline: 3px solid #764225 !important; outline-offset: 4px !important; }
-html body .st-tripadvisor__rating { display: block; max-width: 100%; margin: 16px auto 0; border: 0; }
+html body .st-tripadvisor__rating { display: block; max-width: 100%; margin: 12px 0 0; border: 0; }
 html body .st-tripadvisor__visit a:focus-visible { outline: 2px solid #6c371e !important; outline-offset: 3px; }
 html body .st-tripadvisor__visit { width: 100%; box-sizing: border-box; padding: clamp(22px, 3vw, 34px); border: 1px solid #b99672; background: #f8ecdb; }
 html body .st-tripadvisor__visit h3 { margin: 0 0 12px; color: #352116; font: 500 24px/1.2 var(--st-wordmark); }
@@ -12784,13 +12749,12 @@ html body .st-home-editorial__frame {
   display: block !important;
   min-height: inherit !important;
   overflow: hidden !important;
-  border-right: 1px solid rgba(244, 214, 174, .28) !important;
+  border: 1px solid #b98e65 !important;
   background: #2a1810 !important;
   color: #fff8ed !important;
   text-decoration: none !important;
   isolation: isolate !important;
 }
-html body .st-home-editorial__frame:last-child { border-right: 0 !important; }
 html body .st-home-editorial__frame::after {
   content: "" !important;
   position: absolute !important;
@@ -12882,9 +12846,8 @@ html body .st-home-editorial__frame:focus-visible { outline: 3px solid #f0c17f !
 
 @media (max-width: 760px) {
   html body .st-home-editorial { grid-template-columns: 1fr !important; min-height: 0 !important; }
-  html body .st-home-editorial__frame { min-height: clamp(410px, 112vw, 590px) !important; border-right: 0 !important; border-bottom: 1px solid rgba(244, 214, 174, .28) !important; }
+  html body .st-home-editorial__frame { min-height: clamp(410px, 112vw, 590px) !important; }
   html body .st-home-editorial__frame:nth-child(5) { grid-column: auto !important; }
-  html body .st-home-editorial__frame:last-child { border-bottom: 0 !important; }
   html body .st-about-gallery-bridge__frame { grid-template-columns: 1fr !important; min-height: 0 !important; }
   html body .st-about-gallery-bridge__frame figure,
   html body .st-about-gallery-bridge__frame img { min-height: clamp(390px, 112vw, 590px) !important; }
@@ -13391,20 +13354,6 @@ html body #st-home-v6.st-home-v6--mission .st-home-v6__hero--mission .st-home-v6
     font-size: clamp(39px, 10vw, 62px) !important;
   }
   html body .st-home-v6__city { white-space: nowrap; }
-}
-
-/* Only sections that begin below the first viewport receive this class.
-   The source remains readable without script and the initial hero stays paintable. */
-@media (prefers-reduced-motion: no-preference) {
-  html body .st-scroll-reveal {
-    opacity: 0 !important;
-    transform: translate3d(0, 18px, 0) !important;
-    transition: opacity .72s cubic-bezier(.18, .74, .2, 1), transform .72s cubic-bezier(.18, .74, .2, 1) !important;
-  }
-  html body .st-scroll-reveal.is-visible {
-    opacity: 1 !important;
-    transform: none !important;
-  }
 }
 
 /* The legacy card selectors outrank the global reduced-motion fallback. */

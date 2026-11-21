@@ -234,7 +234,7 @@ else {
     transitions: (generatedCss.match(/\btransition(?:-property)?\s*:/g) ?? []).length
   };
   if (generatedMotion.keyframes < sourceMotion.keyframes) failures.push("WordPress keyframes were lost.");
-  if (!generatedCss.includes(".st-scroll-reveal")) failures.push("Published scroll transitions are missing.");
+  if (generatedCss.includes(".st-scroll-reveal")) failures.push("Public text must be readable without a scroll reveal.");
   // The production stylesheet intentionally removes selectors for pages that
   // are not published. Counting all source transitions therefore overstates
   // the amount of motion that should survive in the shipped CSS.
@@ -285,13 +285,17 @@ const privacyHtml = readFileSync(path.join(dist, "chinh-sach-bao-mat", "index.ht
 for (const disclosure of ["Google Analytics 4", "Microsoft Clarity", "Meta Pixel measures", "Meta Pixel đo", "cookie identifiers", "mã cookie", "body measurements", "số đo cơ thể", "withdraw consent", "rút lại đồng ý"]) {
   if (!privacyHtml.includes(disclosure)) failures.push(`Privacy disclosure missing: ${disclosure}`);
 }
-if (builtSiteScript.includes("getBoundingClientRect(") || !builtSiteScript.includes("entry.boundingClientRect")) failures.push("Scroll motion must avoid synchronous first-load layout measurements.");
+if (builtSiteScript.includes("getBoundingClientRect(") || builtSiteScript.includes("st-scroll-reveal")) failures.push("Site startup must not measure or hide editorial sections.");
 for (const [icon, limit] of [["sttailor-favicon-48.png", 5000], ["sttailor-apple-touch-180.png", 25000], ["sttailor-app-192.png", 25000], ["sttailor-app-large-512.png", 100000]]) {
   const iconPath = path.join(dist, "icons", icon);
   if (!existsSync(iconPath) || statSync(iconPath).size > limit) failures.push(`Brand icon is missing or too large: ${icon}`);
 }
 if (!home.includes('rel="icon" href="/icons/sttailor-favicon-48.png"') || !home.includes('rel="apple-touch-icon" href="/icons/sttailor-apple-touch-180.png"')) failures.push("Browser icons do not use compact original-color logo assets.");
-if (!home.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward") || home.includes("Tầng 1, 258 Lê Thánh Tôn")) failures.push("Shared footer must display its single-language address in English.");
+if (!home.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward") || !home.includes('lang="vi">Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định')) failures.push("Shared footer must display the approved English and Vietnamese address.");
+const assetHeaders = readFileSync(path.join(dist, "_headers"), "utf8");
+for (const [route, { href }] of Object.entries(manifest.routeStyles)) {
+  if (!assetHeaders.includes(`\n${route}\n  Link: <${href}>; rel=preload; as=style\n`)) failures.push(`Stylesheet preload does not match the generated bundle: ${route}`);
+}
 if (home.includes("st-home-v6__gallery")) failures.push("The removed home gallery strip is still present.");
 if (!home.includes("ARRANGE A PRIVATE CONSULTATION") || !home.includes("ĐẶT LỊCH TƯ VẤN RIÊNG")) failures.push("Home consultation CTA is missing.");
 for (const removedHomeRouteText of ["Five ways into the atelier", "Five ways to begin with S.T Tailor", "Năm lối để bước vào không gian atelier", "Năm lối để bắt đầu cùng S.T Tailor", "st-home-v6__routes"]) {

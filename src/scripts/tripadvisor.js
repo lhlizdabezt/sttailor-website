@@ -5,11 +5,12 @@ const listing = badge.querySelector(".st-tripadvisor__fallback").href;
 function repairWidgetLinks() {
   for (const link of badge.querySelectorAll("a")) {
     const href = link.getAttribute("href")?.trim();
-    if (!href || href === "#" || link.classList.contains("widFRRClickWrap")) {
+    const isBadgeLink = link.classList.contains("widFRRClickWrap");
+    if (!href || href.startsWith("#") || /^javascript:/i.test(href) || isBadgeLink) {
       if (link.href !== listing) link.href = listing;
       link.target = "_blank";
       link.rel = "nofollow noopener noreferrer";
-      if (link.classList.contains("widFRRClickWrap")) {
+      if (isBadgeLink) {
         link.setAttribute("aria-label", "View S.T Tailor on Tripadvisor / Xem S.T Tailor trên Tripadvisor");
       }
     }
