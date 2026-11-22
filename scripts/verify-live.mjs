@@ -99,9 +99,11 @@ for (const route of routes) {
   expect(pageHtml.includes('"hasOfferCatalog":{"@type":"OfferCatalog"') && !pageHtml.includes('"makesOffer":{"@type":"OfferCatalog"'), `${route} has an invalid LocalBusiness service catalog relationship`);
   expect(pageHtml.includes('"streetAddress":"1st Floor, 258 Le Thanh Ton, Tan Dinh Ward"'), `${route} does not show the confirmed showroom floor and ward in LocalBusiness schema`);
   const footer = pageHtml.match(/<footer\b[\s\S]*?<\/footer>/i)?.[0] ?? "";
-  const directFooter = footer.replace(/<template\b[\s\S]*?<\/template>/gi, "");
-  expect(/<iframe\b[^>]*src="https:\/\/www\.google\.com\/maps\/embed\?[^>]*title="S\.T Tailor showroom map"[^>]*><\/iframe>/.test(directFooter) && !/data-map-(?:load|template|panel)/.test(footer), `${route} must embed Google Maps directly without a click-to-display control`);
+  const mapFrames = [...pageHtml.replace(/<template\b[\s\S]*?<\/template>/gi, "").matchAll(/<iframe\b[^>]*src="https:\/\/www\.google\.com\/maps\/embed\?[^>]*><\/iframe>/g)];
+  const mapInFooter = mapFrames.some(([frame]) => footer.includes(frame));
+  expect(mapFrames.length === 1 && !/data-map-(?:load|template|panel)/.test(pageHtml) && mapInFooter === (route !== "/lien-he/"), `${route} must embed one direct Google map without a click-to-display control`);
   expect(footer.includes('class="st-footer-v7__map" href="https://maps.app.goo.gl/'), `${route} has no independent Google Maps directions link`);
+  expect(/property="og:image" content="https:\/\/sttailor\.com\/media\/_responsive\/[^"]+-share-[a-f0-9]{12}\.jpg"/.test(pageHtml) && pageHtml.includes('property="og:image:type" content="image/jpeg"'), `${route} has no optimized JPEG social preview`);
   const followLinks = [...(footer.match(/<nav class="st-footer-v7__social"[\s\S]*?<\/nav>/)?.[0] ?? "").matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
   expect(followLinks.length === 10 && new Set(followLinks).size === 10, `${route} must publish exactly ten unique FOLLOW destinations`);
   const tripadvisorProfile = "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html";
@@ -270,6 +272,9 @@ await Promise.all(Array.from({ length: 6 }, async () => {
       expect(response.status === 200, `Public asset ${asset} returned ${response.status}`);
       expect(!/\b(?:noindex|none|noimageindex)\b/i.test(response.headers.get("x-robots-tag") ?? ""), `Public asset ${asset} has an indexing restriction`);
       expect(!response.headers.get("content-type")?.includes("text/html"), `Public asset ${asset} returned HTML instead of its file`);
+      if (/-share-[a-f0-9]{12}\.jpg$/.test(asset)) {
+        expect(response.headers.get("content-type")?.includes("image/jpeg") && response.headers.get("cache-control")?.includes("immutable"), `Social preview ${asset} must serve as a cacheable JPEG`);
+      }
     } catch {
       failures.push(`Public asset ${asset} could not be reached after retry`);
     }

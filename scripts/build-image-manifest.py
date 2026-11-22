@@ -1,4 +1,4 @@
-"""Create intrinsic image metadata and compact Gallery derivatives at build time.
+"""Create intrinsic dimensions, responsive images, and social previews.
 
 The WordPress reference keeps the original fashion photography. This build step
 preserves those originals as a fallback while supplying compact WebP candidates
@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import json
 import sys
+from hashlib import sha256
+from io import BytesIO
 from pathlib import Path
 
 from PIL import Image, ImageOps
@@ -69,9 +71,27 @@ def build_mobile_hero(image: Image.Image, relative: Path, output_root: Path) -> 
     return build_variant(crop, name, min(width, 860), output_root)
 
 
+def build_share_preview(image: Image.Image, relative: Path, output_root: Path) -> dict[str, object]:
+    rgb = image.convert("RGB")
+    for edge in (1200, 1000, 800):
+        preview = rgb.copy()
+        preview.thumbnail((edge, edge), Image.Resampling.LANCZOS)
+        buffer = BytesIO()
+        preview.save(buffer, "JPEG", quality=83, optimize=True, progressive=True)
+        data = buffer.getvalue()
+        if len(data) <= 256 * 1024:
+            break
+    version = sha256(data).hexdigest()[:12]
+    target_relative = relative.with_name(f"{relative.stem}-share-{version}.jpg")
+    target = output_root / target_relative
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(data)
+    return {"src": public_path(target_relative), "width": preview.width, "height": preview.height}
+
+
 def main() -> int:
-    if len(sys.argv) != 3:
-        raise SystemExit("Usage: build-image-manifest.py SOURCE_MEDIA OUTPUT_MANIFEST")
+    if len(sys.argv) < 3:
+        raise SystemExit("Usage: build-image-manifest.py SOURCE_MEDIA OUTPUT_MANIFEST [SHARE_IMAGES...]")
 
     source_root = Path(sys.argv[1])
     output_manifest = Path(sys.argv[2])
@@ -102,6 +122,13 @@ def main() -> int:
                 processed += 1
         except (OSError, ValueError) as error:
             raise RuntimeError(f"Could not inspect {relative}: {error}") from error
+
+    for asset in sorted(set(sys.argv[3:])):
+        relative = Path(asset)
+        with Image.open(output_manifest.parent / "media" / relative) as opened:
+            image = ImageOps.exif_transpose(opened)
+            entry = metadata.setdefault(asset, {"width": image.width, "height": image.height, "responsive": []})
+            entry["share"] = build_share_preview(image, relative, responsive_root)
 
     # Keep the owner's original logo colors. A warm brand-color square makes
     # the dark mark legible in light and dark browser UI; the footer logo stays

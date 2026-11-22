@@ -1,8 +1,10 @@
 const badge = document.querySelector("#TA_rated383");
-const listing = badge.querySelector(".st-tripadvisor__fallback").href;
+const widget = document.querySelector(".st-tripadvisor__widget");
+const fallback = widget.querySelector(".st-tripadvisor__fallback");
+const listing = fallback.href;
 
 // The vendor can populate its anchor attributes in separate asynchronous steps.
-function repairWidgetLinks() {
+function updateWidget() {
   for (const link of badge.querySelectorAll("a")) {
     const href = link.getAttribute("href")?.trim();
     const isBadgeLink = link.classList.contains("widFRRClickWrap");
@@ -18,11 +20,18 @@ function repairWidgetLinks() {
       link.setAttribute("aria-label", "Tripadvisor homepage / Trang chủ Tripadvisor");
     }
   }
+  // Keep the independent link available until the badge can take over without moving focus.
+  const logo = badge.querySelector("#CDSWIDFRR img");
+  const ready = logo?.complete && logo.naturalWidth && badge.querySelector(".widFRRClickWrap[href]");
+  widget.toggleAttribute("data-ready", Boolean(ready && document.activeElement !== fallback));
 }
 
-repairWidgetLinks();
-new MutationObserver(repairWidgetLinks).observe(badge, {
+fallback.addEventListener("blur", updateWidget);
+badge.addEventListener("load", updateWidget, true);
+badge.addEventListener("error", updateWidget, true);
+new MutationObserver(updateWidget).observe(badge, {
   childList: true,
   subtree: true,
-  attributeFilter: ["href", "class"],
+  attributeFilter: ["href", "class", "src"],
 });
+updateWidget();

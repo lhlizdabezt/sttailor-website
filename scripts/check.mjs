@@ -128,10 +128,16 @@ for (const route of expectedRoutes) {
   if ((businessSchema?.sameAs ?? []).filter((url) => url === tripadvisorUrl).length !== 1) failures.push(`Official Tripadvisor listing is missing or duplicated in LocalBusiness schema: ${route}`);
   const widgets = [...html.matchAll(/<iframe\b[^>]*>/g)].filter(([tag]) => tag.includes(`src="${tripadvisorEmbedPath}"`));
   if (html.includes("www.jscache.com/wejs") || widgets.length !== Number(route === "/gioi-thieu/")) failures.push(`Tripadvisor widget placement or isolation is incorrect: ${route}`);
-  if (route === "/gioi-thieu/" && (!widgets[0]?.[0].includes('loading="lazy"') || !widgets[0][0].includes('sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"') || !html.includes(`class="st-tripadvisor__link" href="${tripadvisorUrl}"`) || !html.includes('https://www.tripadvisor.com/UserReviewEdit-g293925-d34701232-S_T_Tailor-Ho_Chi_Minh_City.html') || !html.includes('href="/lien-he/">Showroom hours &amp; directions'))) failures.push("The Tripadvisor panel needs its sandboxed lazy badge, read and write review links, and showroom link.");
+  if (route === "/gioi-thieu/" && (!widgets[0]?.[0].includes('loading="lazy"') || !widgets[0][0].includes('sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"') || !html.includes(`class="st-tripadvisor__link" href="${tripadvisorUrl}"`) || !html.includes('https://www.tripadvisor.com/UserReviewEdit-g293925-d34701232-S_T_Tailor-Ho_Chi_Minh_City.html') || !html.includes('href="/lien-he/"><span>Hours &amp; directions</span>'))) failures.push("The Tripadvisor panel needs its sandboxed lazy badge, read and write review links, and showroom link.");
   if (businessSchema?.currenciesAccepted !== "VND") failures.push(`LocalBusiness currency must match the payment page: ${route}`);
   for (const marker of ['rel="manifest" href="/site.webmanifest"', 'property="og:image:alt"', 'name="google-site-verification"', 'name="p:domain_verify"']) {
     if (!html.includes(marker)) failures.push(`SEO/discovery marker is missing on ${route}: ${marker}`);
+  }
+  const sharePath = html.match(/property="og:image" content="https:\/\/sttailor\.com(\/media\/_responsive\/[^"]+-share-[a-f0-9]{12}\.jpg)"/)?.[1];
+  const shareFile = sharePath && path.join(dist, sharePath.slice(1));
+  const shareDimensions = [...html.matchAll(/property="og:image:(?:width|height)" content="(\d+)"/g)].map((match) => Number(match[1]));
+  if (!shareFile || !existsSync(shareFile) || statSync(shareFile).size > 256 * 1024 || shareDimensions.length !== 2 || shareDimensions.some((size) => size < 1 || size > 1200)) {
+    failures.push(`Missing or oversized social preview: ${route}`);
   }
   if (/<meta name="keywords"/i.test(html)) failures.push(`Obsolete keyword meta tag must not be used: ${route}`);
   if (html.includes("beta.sttailor.com")) failures.push(`Beta hostname remains in production HTML: ${route}`);
@@ -351,9 +357,10 @@ if (!home.includes("S.T Tailor showroom map")) failures.push("Shared footer is m
 for (const route of expectedRoutes) {
   const html = readFileSync(path.join(dist, route.slice(1), "index.html"), "utf8");
   const sharedFooter = html.match(/<footer\b[\s\S]*?<\/footer>/)?.[0] ?? "";
-  const directFooter = sharedFooter.replace(/<template\b[\s\S]*?<\/template>/gi, "");
-  if (!/<iframe\b[^>]*src="https:\/\/www\.google\.com\/maps\/embed\?[^>]*title="S\.T Tailor showroom map"[^>]*><\/iframe>/.test(directFooter) || /data-map-(?:load|template|panel)/.test(sharedFooter)) {
-    failures.push(`Google Maps must be embedded directly without a click-to-display control: ${route}`);
+  const mapFrames = [...html.replace(/<template\b[\s\S]*?<\/template>/gi, "").matchAll(/<iframe\b[^>]*src="https:\/\/www\.google\.com\/maps\/embed\?[^>]*><\/iframe>/g)];
+  const mapInFooter = mapFrames.some(([frame]) => sharedFooter.includes(frame));
+  if (mapFrames.length !== 1 || /data-map-(?:load|template|panel)/.test(html) || mapInFooter !== (route !== "/lien-he/")) {
+    failures.push(`Exactly one direct map is required, in the Contact page or shared footer: ${route}`);
   }
   if (!sharedFooter.includes('class="st-footer-v7__map" href="https://maps.app.goo.gl/')) failures.push(`Independent directions link missing: ${route}`);
 }
@@ -393,7 +400,7 @@ for (const retiredServiceGalleryFeature of ["st-service-gallery-suite", "st-tail
 }
 if (!services.includes("st-tailor-client-fabric-consultation.jpg")) failures.push("Services social thumbnail must use the approved fabric-consultation image.");
 if (services.includes("st-tailor-client-shoulder-fitting.jpg")) failures.push("Services still exposes the retired shoulder-fitting thumbnail.");
-if (!services.includes('og:image" content="https://sttailor.com/media/2026/09/st-tailor-client-fabric-consultation.jpg"')) failures.push("Services social thumbnail does not use the approved fabric-consultation image.");
+if (!services.includes('og:image" content="https://sttailor.com/media/_responsive/2026/09/st-tailor-client-fabric-consultation-share-')) failures.push("Services social thumbnail does not use the approved fabric-consultation image.");
 
 const pricing = readFileSync(path.join(dist, "bang-gia", "index.html"), "utf8");
 for (const removedPricingHero of ["stpr-hero", "BESPOKE PRICING", "BẢNG GIÁ MAY ĐO", "Clear starting prices", "Giá khởi điểm rõ ràng"]) {
@@ -458,7 +465,9 @@ const galleryExempt = new Set([
   "2026/06/chu-ky-thinh.webp",
   "2026/09/LinkedInLogo.png",
   "2026/09/logo-sttailor.png",
-  "2026/09/logo-sttailor-1000x1024.png"
+  "2026/09/logo-sttailor-1000x1024.png",
+  // The fitting film uses this frame as a video poster.
+  "2026/09/st-tailor-womenswear-fitting-poster.webp"
 ]);
 for (const asset of sourceImages) {
   if (!galleryExempt.has(asset) && !galleryImageSources.has(`/media/${asset}`)) failures.push(`Source editorial image is absent from Gallery: ${asset}`);

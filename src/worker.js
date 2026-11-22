@@ -68,7 +68,8 @@ function securityHeaders(response, pathname = "/") {
     headers.set("Cache-Control", pathname === tripadvisorEmbedPath
       ? "public, max-age=0, must-revalidate, no-transform"
       : "public, max-age=0, must-revalidate");
-  } else if (pathname.startsWith("/styles/") || pathname.startsWith("/scripts/")) {
+  } else if (pathname.startsWith("/styles/") || pathname.startsWith("/scripts/") ||
+      /^\/media\/_responsive\/.+-share-[a-f0-9]{12}\.jpg$/.test(pathname)) {
     headers.set("Cache-Control", "public, max-age=31536000, immutable");
   } else if (pathname.startsWith("/media/")) {
     headers.set("Cache-Control", "public, max-age=604800");
