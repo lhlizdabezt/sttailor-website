@@ -376,6 +376,7 @@ for (const excluded of ["linkedin", "facebook", "pinterest", "youtube", "tiktok"
 }
 if (contact.includes("st-contact-hero") || contact.includes("Tell us what you are dressing for") || contact.includes("Hãy chia sẻ dịp sử dụng")) failures.push("Contact hero band still remains after the requested removal.");
 if ((contact.match(/<h1\b/g) ?? []).length !== 1 || !contact.includes("CONTACT DETAILS")) failures.push("Contact page must retain one semantic H1 after its introduction band is removed.");
+if (!/<p class="st-contact-summary">[^<]+<span lang="vi">[^<]+<\/span><\/p>/.test(contact)) failures.push("Contact consultation guidance must be visible in both languages.");
 
 const services = readFileSync(path.join(dist, "dich-vu", "index.html"), "utf8");
 for (const removedBlock of ["st-service-hero", "st-service-offerings", "st-service-brief", "st-service-process", "st-service-house-standard", "st-service-notes", "st-service-gallery-redirect", "st-service-commission-map__journey"]) {

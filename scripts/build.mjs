@@ -333,9 +333,7 @@ function transformPricing(html) {
 
 function transformContact(html) {
   html = removeElementByClass(html, "section", "st-contact-hero")
-    .replace(/\s*<p>Tell us what you are dressing for\.[\s\S]*?<\/p>/, "")
     .replace(/\s*<section class="st-contact-gallery-redirect"[\s\S]*?<\/section>/, "")
-    .replace(/\s*<p class="st-contact-summary">[\s\S]*?<\/p>/, "")
     .replace(/\s*<div class="st-contact-line small"><\/div>/, "")
     .replace(
       '<h2>CONTACT DETAILS<br><span lang="vi">THÔNG TIN LIÊN HỆ</span></h2>',

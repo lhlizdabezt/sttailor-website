@@ -3,12 +3,13 @@ const nav = document.querySelector("[data-site-nav]");
 
 if (toggle && nav) {
   const links = [...nav.querySelectorAll("a")];
-  const mobile = () => window.matchMedia("(max-width: 980px)").matches;
+  const mobile = window.matchMedia("(max-width: 980px)");
   const editable = (target) => target instanceof Element && Boolean(target.closest("input, textarea, select, [contenteditable='true']"));
   const isOpen = () => nav.classList.contains("is-open");
 
   const setOpen = (open, returnFocus = false) => {
     nav.classList.toggle("is-open", open);
+    nav.inert = mobile.matches && !open;
     toggle.setAttribute("aria-expanded", String(open));
     toggle.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
     document.body.classList.toggle("nav-is-open", open);
@@ -23,11 +24,11 @@ if (toggle && nav) {
   });
 
   document.addEventListener("focusin", (event) => {
-    if (mobile() && isOpen() && !nav.contains(event.target) && !toggle.contains(event.target)) setOpen(false);
+    if (mobile.matches && isOpen() && !nav.contains(event.target) && !toggle.contains(event.target)) setOpen(false);
   });
 
   document.addEventListener("keydown", (event) => {
-    if (event.altKey && event.key.toLowerCase() === "m" && mobile() && !editable(event.target)) {
+    if (event.altKey && event.key.toLowerCase() === "m" && mobile.matches && !editable(event.target)) {
       event.preventDefault();
       const opening = !isOpen();
       setOpen(opening);
@@ -51,9 +52,8 @@ if (toggle && nav) {
     links[next]?.focus();
   });
 
-  window.addEventListener("resize", () => {
-    if (!mobile() && isOpen()) setOpen(false);
-  }, { passive: true });
+  mobile.addEventListener("change", () => setOpen(false));
+  setOpen(false);
 }
 
 // Measurement is deliberately limited to public interaction context. Never send
