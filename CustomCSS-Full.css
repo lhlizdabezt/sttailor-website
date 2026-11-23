@@ -13414,6 +13414,23 @@ html body .st-tailoring-detail .st-guide-next a {
 }
 html body .st-tailoring-detail .st-guide-next a:is(:hover, :focus-visible) { color: #fff8ed !important; }
 @media (max-width: 760px) { html body .st-tailoring-detail .st-guide-next { grid-template-columns: minmax(0, 1fr); } }
+
+/* Skip initial layout below the fold. A Gallery fragment needs the measured
+   heights of the preceding albums so native jumps land at the right heading. */
+@media screen {
+  .st-gallery-page--albums:not(:has(:target)) .st-gallery-album {
+    content-visibility: auto;
+    contain-intrinsic-block-size: auto 1100px;
+  }
+  .st-footer-v7.st-footer-v8 {
+    content-visibility: auto;
+    contain-intrinsic-block-size: auto 710px;
+  }
+}
+@media screen and (max-width: 680px) {
+  .st-gallery-page--albums:not(:has(:target)) .st-gallery-album { contain-intrinsic-block-size: auto 2700px; }
+  .st-footer-v7.st-footer-v8 { contain-intrinsic-block-size: auto 1560px; }
+}
 @media (max-width: 860px) { html body .st-info-hero__grid, html body .st-info-section { grid-template-columns: 1fr !important; } html body .st-info-hero__image { min-height: min(115vw, 620px) !important; } html body .st-info-section { gap: 22px !important; } html body .st-info-next .st-info-shell { align-items: stretch !important; flex-direction: column !important; } }
 @media (max-width: 560px) { html body .st-info-shell { width: calc(100% - 32px) !important; } html body .st-info-hero { padding: 58px 0 !important; } html body .st-info-hero::before { inset: 8px !important; } html body .st-info-hero__image { min-height: 112vw !important; box-shadow: 8px 8px 0 rgba(87, 45, 26, .18) !important; } html body .st-info-hero__link, html body .st-info-next a { width: 100% !important; } }
 @media (prefers-reduced-motion: reduce) { html body .st-info-page a { transition: none !important; } }
