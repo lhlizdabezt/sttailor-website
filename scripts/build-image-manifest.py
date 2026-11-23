@@ -8,7 +8,7 @@ for the Gallery grid, where columns are much smaller than camera files.
 from __future__ import annotations
 
 import json
-import sys
+from argparse import ArgumentParser
 from hashlib import sha256
 from io import BytesIO
 from pathlib import Path
@@ -37,19 +37,23 @@ def public_path(path: Path) -> str:
     return "/media/_responsive/" + path.as_posix()
 
 
-def build_variant(image: Image.Image, source_relative: Path, width: int, output_root: Path) -> str:
+def build_variant(image: Image.Image, source_relative: Path, width: int, output_root: Path, *, avif_quality: int | None = None) -> str:
     height = round(image.height * width / image.width)
     stem = source_relative.stem.lower()
     compact = width <= 672 and stem in GALLERY_COMPACT_THUMBNAILS
     # Keep the compact encodes at their own URLs for existing browser caches.
     suffix = f"{width}-q68" if compact else str(width)
-    target_relative = source_relative.with_name(f"{source_relative.stem}-{suffix}.webp")
+    extension = "webp" if avif_quality is None else "avif"
+    target_relative = source_relative.with_name(f"{source_relative.stem}-{suffix}.{extension}")
     target = output_root / target_relative
     target.parent.mkdir(parents=True, exist_ok=True)
     variant = image.copy()
     variant.thumbnail((width, height), Image.Resampling.LANCZOS)
     if variant.mode not in {"RGB", "RGBA"}:
         variant = variant.convert("RGBA" if "A" in variant.getbands() else "RGB")
+    if avif_quality is not None:
+        variant.save(target, "AVIF", quality=avif_quality, speed=5)
+        return public_path(target_relative)
     # Preserve the original uploads as the visual fallback while making the
     # above-the-fold hero materially smaller. The q78 content setting keeps
     # fabric texture and tailoring detail legible; the logo gets a little more
@@ -59,7 +63,7 @@ def build_variant(image: Image.Image, source_relative: Path, width: int, output_
     return public_path(target_relative)
 
 
-def build_mobile_hero(image: Image.Image, relative: Path, output_root: Path) -> str:
+def build_mobile_hero(image: Image.Image, relative: Path, output_root: Path) -> dict[str, str]:
     # Match the mobile hero's 62% object position. Removing the unseen sides
     # preserves native vertical detail and the existing framing on phones.
     width = min(image.width, round(image.height * 1.05))
@@ -68,7 +72,11 @@ def build_mobile_hero(image: Image.Image, relative: Path, output_root: Path) -> 
     name = relative.with_stem(f"{relative.stem}-portrait")
     # The mobile frame tops out at 740 CSS pixels. Keep enough vertical
     # detail for the full cover while reducing the first mobile transfer.
-    return build_variant(crop, name, min(width, 860), output_root)
+    width = min(width, 860)
+    return {
+        "portrait": build_variant(crop, name, width, output_root),
+        "portrait_avif": build_variant(crop, name, width, output_root, avif_quality=55),
+    }
 
 
 def build_share_preview(image: Image.Image, relative: Path, output_root: Path) -> dict[str, object]:
@@ -90,11 +98,15 @@ def build_share_preview(image: Image.Image, relative: Path, output_root: Path) -
 
 
 def main() -> int:
-    if len(sys.argv) < 3:
-        raise SystemExit("Usage: build-image-manifest.py SOURCE_MEDIA OUTPUT_MANIFEST [SHARE_IMAGES...]")
-
-    source_root = Path(sys.argv[1])
-    output_manifest = Path(sys.argv[2])
+    parser = ArgumentParser(description=__doc__)
+    parser.add_argument("source_media", type=Path)
+    parser.add_argument("output_manifest", type=Path)
+    parser.add_argument("share_images", nargs="*")
+    parser.add_argument("--home-card", action="append", default=[])
+    args = parser.parse_args()
+    source_root = args.source_media
+    output_manifest = args.output_manifest
+    home_cards = set(args.home_card)
     responsive_root = output_manifest.parent / "media" / "_responsive"
     brand_icon_root = output_manifest.parent / "icons"
     metadata: dict[str, dict[str, object]] = {}
@@ -117,13 +129,18 @@ def main() -> int:
                 if relative.as_posix() in {HOME_HERO, GALLERY_HERO}:
                     variants.append({"src": build_variant(image, relative, width, responsive_root), "width": width})
                 if relative.as_posix() == HOME_HERO:
-                    entry["portrait"] = build_mobile_hero(image, relative, responsive_root)
+                    entry.update(build_mobile_hero(image, relative, responsive_root))
+                if relative.as_posix() in home_cards:
+                    entry["mobile_avif"] = [
+                        {"src": build_variant(image, relative, candidate, responsive_root, avif_quality=58), "width": candidate}
+                        for candidate in CONTENT_WIDTHS if candidate <= 768 and candidate < width
+                    ]
                 metadata[relative.as_posix()] = entry
                 processed += 1
         except (OSError, ValueError) as error:
             raise RuntimeError(f"Could not inspect {relative}: {error}") from error
 
-    for asset in sorted(set(sys.argv[3:])):
+    for asset in sorted(set(args.share_images)):
         relative = Path(asset)
         with Image.open(output_manifest.parent / "media" / relative) as opened:
             image = ImageOps.exif_transpose(opened)

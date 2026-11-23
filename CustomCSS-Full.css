@@ -13405,6 +13405,7 @@ html body .st-footer .st-footer-directory__groups li > a {
 html body .st-tailoring-detail .st-guide-hero h1 { line-height: 1.02 !important; }
 html body .st-tailoring-detail .st-guide-kicker span[lang="vi"] { line-height: 1.5; }
 html body .st-tailoring-detail .st-guide-next { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+html body .st-tailoring-detail .st-guide-next--cloth { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 html body .st-tailoring-detail .st-guide-next a {
   display: grid !important;
   place-content: center;

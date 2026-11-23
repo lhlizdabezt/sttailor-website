@@ -17,6 +17,8 @@ This is a static-first rebuild of S.T Tailor from the owner-approved, read-only 
 - [Made-to-measure womenswear](https://sttailor.com/dich-vu/trang-phuc-nu/)
 - [Plan fittings during a visit](https://sttailor.com/cam-nang-may-do/thu-do-khi-du-lich/)
 - [Gallery of cloth, garments and fittings](https://sttailor.com/gallery/)
+- [Italian suiting wool and Vitale Barberis Canonico](https://sttailor.com/chon-vai-may-do/vai-len-y/)
+- [Vietnamese silk for custom garments](https://sttailor.com/chon-vai-may-do/lua-viet-nam/)
 
 ## URL behaviour
 

@@ -127,6 +127,8 @@ function breadcrumbTrail(route) {
   if (serviceRoutes.some((page) => page.route === route)) trail.push("/dich-vu/");
   if (guideRoutes.some(([guideRoute]) => guideRoute === route)) trail.push("/cam-nang-may-do/");
   if (route === fittingFilmRoute) trail.push("/gallery/");
+  const parent = route.replace(/[^/]+\/$/, "");
+  if (pageLabels.has(parent) && !trail.includes(parent)) trail.push(parent);
   trail.push(route);
   return trail.map((href) => {
     const [english, vietnamese] = pageLabels.get(href);
@@ -791,13 +793,18 @@ function enrichImageAttributes(html, { responsiveSizes, deprioritizeLazyImages =
       output = output.replace(/<img\b/i, `<img srcset="${srcset}" sizes="${lazyAuto}${sizes}"`);
     }
     if (src === homeHeroImage && metadata.portrait && /\bst-home-v6__hero-media\b/.test(output)) {
-      return `<picture><source media="${homeHeroPortraitMedia}" srcset="${metadata.portrait}">${output}</picture>`;
+      return `<picture><source type="image/avif" media="${homeHeroPortraitMedia}" srcset="${metadata.portrait_avif}"><source media="${homeHeroPortraitMedia}" srcset="${metadata.portrait}">${output}</picture>`;
     }
     if (/\bst-home-editorial__photo\b/.test(output) && metadata.responsive?.length) {
       // Cap the full-width secondary photos at about 2× on phone screens.
       const phoneSources = metadata.responsive.filter(({ width }) => width <= 768);
       if (phoneSources.length) {
-        return `<picture><source media="(max-width: 440px)" srcset="${imageSourceSet(phoneSources)}" sizes="auto, calc(100vw - 34px)">${output}</picture>`;
+        const media = `(max-width: 440px)`;
+        const sizes = `auto, calc(100vw - 34px)`;
+        const avif = metadata.mobile_avif?.length
+          ? `<source type="image/avif" media="${media}" srcset="${imageSourceSet(metadata.mobile_avif)}" sizes="${sizes}">`
+          : "";
+        return `<picture>${avif}<source media="${media}" srcset="${imageSourceSet(phoneSources)}" sizes="${sizes}">${output}</picture>`;
       }
     }
     return output;
@@ -993,7 +1000,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
   let heroPreload = "";
   if (sourceFile === "Home.html" && shareMetadata?.portrait) {
     const landscapeSizes = imageSourceSet(shareMetadata.responsive);
-    heroPreload = `<link rel="preload" as="image" media="${homeHeroPortraitMedia}" href="${shareMetadata.portrait}" fetchpriority="high">` +
+    heroPreload = `<link rel="preload" as="image" type="image/avif" media="${homeHeroPortraitMedia}" href="${shareMetadata.portrait_avif}" fetchpriority="high">` +
       `<link rel="preload" as="image" media="not all and ${homeHeroPortraitMedia}" imagesrcset="${landscapeSizes}" imagesizes="${homeHeroSizes}" fetchpriority="high">`;
   }
   if (sourceFile === "Gallery.html") {
@@ -1055,7 +1062,9 @@ function copyIcons() {
 
 function buildImageManifest() {
   const shareImages = [...new Set(routes.map(([, , , , image]) => image.slice("/media/".length)))];
-  const result = spawnSync("python", [path.join(root, "scripts", "build-image-manifest.py"), sourceMedia, path.join(dist, "image-manifest.json"), ...shareImages], { encoding: "utf8" });
+  const homeCards = [...transformHome(readSource("Home.html")).matchAll(/class="st-home-editorial__photo" src="\/media\/([^"]+)"/g)]
+    .flatMap(([, asset]) => ["--home-card", asset]);
+  const result = spawnSync("python", [path.join(root, "scripts", "build-image-manifest.py"), sourceMedia, path.join(dist, "image-manifest.json"), ...shareImages, ...homeCards], { encoding: "utf8" });
   if (result.status !== 0) throw new Error(`Image manifest generation failed:\n${result.stderr || result.stdout}`);
   imageManifest = JSON.parse(readFileSync(path.join(dist, "image-manifest.json"), "utf8"));
   return Object.keys(imageManifest).length;

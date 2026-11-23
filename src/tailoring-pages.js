@@ -34,5 +34,23 @@ export const tailoringPages = [
     description: "Visiting Ho Chi Minh City? Use S.T Tailor’s bilingual checklist to plan consultation dates, fittings, garment collection and possible shipping before you travel.",
     image: "/media/2026/09/st-tailor-client-measurement-session.jpg",
     imageAlt: "Tailor taking a client’s measurements at S.T Tailor | Thợ may lấy số đo cho khách tại S.T Tailor"
+  },
+  {
+    route: "/chon-vai-may-do/vai-len-y/",
+    source: "GuideItalianWool.html",
+    labels: ["Italian suiting wool", "Vải len Ý may suit"],
+    title: "Italian Wool & Vitale Barberis Canonico | S.T Tailor",
+    description: "Compare the weave, drape and finish of Italian suiting wool, including Vitale Barberis Canonico cloth books at S.T Tailor in Ho Chi Minh City.",
+    image: "/media/2026/09/st-tailor-gallery-canonico-cloth-books.jpg",
+    imageAlt: "Vitale Barberis Canonico cloth books at S.T Tailor | Sổ vải Vitale Barberis Canonico tại S.T Tailor"
+  },
+  {
+    route: "/chon-vai-may-do/lua-viet-nam/",
+    source: "GuideVietnameseSilk.html",
+    labels: ["Vietnamese silk", "Lụa tơ tằm Việt Nam"],
+    title: "Vietnamese Silk for Custom Tailoring | S.T Tailor",
+    description: "Visit S.T Tailor in Ho Chi Minh City to compare Vietnamese silk for áo dài, dresses and separates. Consider drape, lining, colour and care before cutting.",
+    image: "/media/2026/09/st-tailor-gallery-blush-silk-floral-dress.jpg",
+    imageAlt: "Detail of a blush floral silk dress at S.T Tailor | Chi tiết váy lụa hồng phấn họa tiết hoa tại S.T Tailor"
   }
 ];

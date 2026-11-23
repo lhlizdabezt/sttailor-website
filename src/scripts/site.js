@@ -73,6 +73,8 @@ const pageTypes = {
   "/cam-nang-may-do/": "guide_hub",
   "/cam-nang-may-do/thu-do-khi-du-lich/": "guide_travel_fittings",
   "/chon-vai-may-do/": "guide_cloth",
+  "/chon-vai-may-do/vai-len-y/": "guide_italian_wool",
+  "/chon-vai-may-do/lua-viet-nam/": "guide_vietnamese_silk",
   "/quy-trinh-thu-do/": "guide_fitting",
   "/chinh-sua-trang-phuc/": "guide_alterations",
   "/bao-quan-giat-la/": "guide_care",
