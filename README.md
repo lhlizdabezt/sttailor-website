@@ -4,11 +4,19 @@ This is a static-first rebuild of S.T Tailor from the owner-approved, read-only 
 
 ## What is migrated
 
-- Public routes: homepage, About, Services, Gallery, Pricing, Payment Methods and Contact.
+- Public routes include the homepage, service catalogue, gallery, tailoring guides and Client Care. The footer's site directory lists all canonical page paths.
 - Shared responsive header, mobile navigation and footer.
 - Versioned page fragments and the complete approved WordPress CSS in `source/wordpress`.
 - Versioned approved website uploads in `source/media` and first-party interface icons in `source/icons`. The repository contains no database export, WordPress core, plugins, SSL certificates, API tokens or private keys.
 - A Worker health check at `/healthz`, legacy URL mappings, true 404 responses and security response headers.
+
+## Visit S.T Tailor
+
+- [Bespoke suits in Ho Chi Minh City](https://sttailor.com/dich-vu/suit-may-do/)
+- [Wedding and formalwear tailoring](https://sttailor.com/dich-vu/le-phuc-cuoi/)
+- [Made-to-measure womenswear](https://sttailor.com/dich-vu/trang-phuc-nu/)
+- [Plan fittings during a visit](https://sttailor.com/cam-nang-may-do/thu-do-khi-du-lich/)
+- [Gallery of cloth, garments and fittings](https://sttailor.com/gallery/)
 
 ## URL behaviour
 
@@ -31,6 +39,8 @@ npm run dev
 `npm run build` produces `dist/`. The generated [full Custom CSS](CustomCSS-Full.css) is a single replacement file for select-all/copy/paste use. It contains the complete approved `source/wordpress/CustomCSS.css`, with local media URLs, followed by the small standalone shell needed outside Flatsome.
 
 Page CSS is derived from the globally cleaned production bundle, so route-specific builds cannot restore retired rules from the editable source. `npm run check` verifies this for every published route. Guide pages retain their existing common CSS baseline.
+
+Vietnamese text uses a self-hosted Latin and Vietnamese Noto Sans subset from Google Fonts revision `8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5`. The variable subset keeps weights 400–800 at normal width. The [SIL Open Font License](source/fonts/OFL-Noto-Sans.txt) accompanies the font.
 
 ## Automated production deployment
 

@@ -5,6 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
 import { contentSecurityPolicy, tripadvisorEmbedPath } from "../src/security-policy.js";
+import { tailoringPages } from "../src/tailoring-pages.js";
 
 const origin = "https://sttailor.com";
 const expectedBuildRevision = process.env.EXPECTED_BUILD_REVISION;
@@ -26,7 +27,8 @@ const routes = [
   "/doi-tra-hoan-tien/",
   "/chinh-sach-van-chuyen/",
   "/dieu-khoan-dieu-kien/",
-  "/chinh-sach-bao-mat/"
+  "/chinh-sach-bao-mat/",
+  ...tailoringPages.map(({ route }) => route)
 ];
 
 const failures = [];
@@ -256,11 +258,11 @@ expect(robots.status === 200 && robotsText.includes(`Sitemap: ${origin}/sitemap.
 expect(/^User-agent:\s*\*\s*$/mi.test(robotsText) && /^Allow:\s*\/\s*$/mi.test(robotsText) && !/^Disallow:\s*\/\s*$/mi.test(robotsText), "robots.txt must allow public pages to be crawled");
 expect(!/^Disallow:\s*\S+/mi.test(robotsText), "robots.txt must not block a published public resource");
 
-// Inspect every shipped image derivative, icon, stylesheet and script, rather
+// Inspect every shipped image derivative, icon, font, stylesheet and script, rather
 // than inferring accessibility from a few sampled gallery images.
 const dist = fileURLToPath(new URL("../dist/", import.meta.url));
 const publicAssets = readdirSync(dist, { recursive: true })
-  .filter((file) => /^(media|icons|styles|scripts)[\\/]/.test(file) && statSync(path.join(dist, file)).isFile())
+  .filter((file) => /^(media|icons|fonts|styles|scripts)[\\/]/.test(file) && statSync(path.join(dist, file)).isFile())
   .map((file) => `/${file.replaceAll("\\", "/")}`);
 publicAssets.push("/build-manifest.json", "/image-manifest.json", "/n31x/");
 let assetCursor = 0;
@@ -274,6 +276,9 @@ await Promise.all(Array.from({ length: 6 }, async () => {
       expect(!response.headers.get("content-type")?.includes("text/html"), `Public asset ${asset} returned HTML instead of its file`);
       if (/-share-[a-f0-9]{12}\.jpg$/.test(asset)) {
         expect(response.headers.get("content-type")?.includes("image/jpeg") && response.headers.get("cache-control")?.includes("immutable"), `Social preview ${asset} must serve as a cacheable JPEG`);
+      }
+      if (asset.endsWith(".woff2")) {
+        expect(response.headers.get("content-type") === "font/woff2" && response.headers.get("cache-control")?.includes("immutable"), `Vietnamese font ${asset} must serve as a cacheable WOFF2`);
       }
     } catch {
       failures.push(`Public asset ${asset} could not be reached after retry`);
@@ -291,8 +296,9 @@ for (const [agent, route] of [["Googlebot", "/"], ["bingbot", "/"], ["OAI-Search
 }
 
 const llms = await fetchWithRetry(`${origin}/llms.txt`);
-const llmsText = await llms.text();
+const llmsText = new TextDecoder("utf-8", { fatal: true }).decode(await llms.arrayBuffer());
 expect(llms.status === 200 && /^# S\.T Tailor$/m.test(llmsText), "llms.txt is missing its Markdown heading");
+expect(llms.headers.get("content-type")?.toLowerCase() === "text/plain; charset=utf-8" && llmsText === llmsText.normalize("NFC") && llmsText.includes("Địa chỉ: Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định") && !/\uFFFD|á[º»]|Ã[\u0080-\u00BF]/.test(llmsText), "llms.txt does not serve clean, explicitly declared UTF-8 Vietnamese text");
 const llmsUrls = [...llmsText.matchAll(/\[[^\]]+\]\((https:\/\/sttailor\.com\/[^)]*)\)/g)].map((match) => match[1]);
 expect(llmsUrls.length === routes.length && new Set(llmsUrls).size === routes.length && routes.every((route) => llmsUrls.includes(`${origin}${route}`)), "llms.txt does not link to all canonical routes");
 

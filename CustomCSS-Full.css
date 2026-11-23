@@ -12241,6 +12241,21 @@ html body .st-lux-text-link:focus-visible {
 
 
 /* Cloudflare Worker standalone shell. WordPress page CSS above remains the visual source of truth. */
+@font-face {
+  font-family: "S.T Vietnamese";
+  src: url("/fonts/noto-sans-vi-8b0a1d0.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+}
+
+/* Keep the local Vietnamese face ahead of the preserved WordPress serif rules. */
+@layer st-language {
+  :lang(vi) {
+    font-family: "S.T Vietnamese", var(--st-vietnamese) !important;
+  }
+}
+
 :root {
   --st-vietnamese: "Segoe UI Variable Text", "Segoe UI Variable", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Noto Sans", Arial, sans-serif;
   --st-wordmark: "Palatino Linotype", "Book Antiqua", "Iowan Old Style", Georgia, serif;
@@ -12383,6 +12398,7 @@ html body .st-gallery-numpad__heading h2 { margin: 0 !important; color: #321b12 
 html body .st-gallery-numpad__heading h2 span[lang="vi"] { display: block !important; margin-top: 12px !important; color: #754629 !important; -webkit-text-fill-color: #754629 !important; font-size: .43em !important; line-height: 1.15 !important; letter-spacing: .01em !important; }
 html body .st-gallery-numpad__heading > p:last-child { max-width: 640px !important; margin: 18px auto 0 !important; color: #62402f !important; -webkit-text-fill-color: #62402f !important; font: 400 16px/1.65 var(--st-vietnamese) !important; }
 html body .st-gallery-numpad__heading > p:last-child span[lang="vi"] { display: block !important; margin-top: 7px !important; color: #7b533d !important; -webkit-text-fill-color: #7b533d !important; }
+html body .st-gallery-hero--index .st-gallery-hero__copy > p:last-child span[lang="vi"] { font-size: inherit !important; line-height: 1.65 !important; }
 html body .st-gallery-numpad__grid { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 14px !important; max-width: 1120px !important; margin: 0 auto !important; }
 html body .st-gallery-numpad__card { position: relative !important; display: grid !important; min-height: 166px !important; grid-template-columns: 38px minmax(0, 1fr) 22px !important; grid-template-rows: auto auto !important; column-gap: 12px !important; align-content: center !important; padding: 24px 22px !important; border: 1px solid rgba(102, 57, 34, .46) !important; background: rgba(255, 250, 242, .91) !important; box-shadow: 5px 5px 0 rgba(117, 71, 43, .18) !important; color: #382017 !important; -webkit-text-fill-color: #382017 !important; text-decoration: none !important; transition: transform .28s cubic-bezier(.2,.7,.2,1), background-color .28s ease, box-shadow .28s ease, border-color .28s ease !important; }
 html body .st-gallery-numpad__card > span { grid-row: 1 / span 2 !important; align-self: center !important; color: #915632 !important; -webkit-text-fill-color: #915632 !important; font: 700 13px/1 var(--st-vietnamese) !important; letter-spacing: .1em !important; }
@@ -13147,6 +13163,7 @@ html body .st-guide-section-head { max-width: 800px !important; margin: 0 auto 4
 html body .st-guide-section-head h2 { margin: 0 !important; color: var(--guide-ink) !important; font: 500 clamp(38px, 5vw, 66px)/.98 var(--st-wordmark) !important; }
 html body .st-guide-section-head h2 span[lang="vi"] { display: block !important; margin-top: 12px !important; color: #75452c !important; font-size: .46em !important; line-height: 1.15 !important; }
 html body .st-guide-index__grid { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 14px !important; }
+.st-guide-index__visit { grid-column: 1 / -1; }
 html body .st-guide-index__grid > a { position: relative !important; display: grid !important; min-height: 270px !important; padding: 32px !important; grid-template-rows: auto auto 1fr auto !important; border: 1px solid #9b6d50 !important; background: #fffdf8 !important; color: var(--guide-ink) !important; text-decoration: none !important; transition: background-color .22s ease, color .22s ease, transform .22s ease !important; }
 html body .st-guide-index__grid > a > span { color: #8a4d2e !important; font: 750 11px/1 var(--st-vietnamese) !important; letter-spacing: .13em !important; }
 html body .st-guide-index__grid strong { margin-top: 36px !important; font: 500 clamp(28px, 2.8vw, 39px)/1 var(--st-wordmark) !important; }
@@ -13300,6 +13317,103 @@ html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:focus-visible { 
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:hover span[lang="vi"], html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:focus-visible span[lang="vi"] { color: #f0d1a9 !important; -webkit-text-fill-color: #f0d1a9 !important; }
 @media (max-width: 900px) { html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal .st-footer-v7__shell { grid-template-columns: 1fr !important; align-items: start !important; } html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal-label { text-align: left !important; } }
 @media (max-width: 600px) { html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+html body .st-footer-v7.st-footer-v8 .st-footer-directory { padding-block: 0 32px; }
+.st-footer-directory summary,
+.st-footer-directory__groups a {
+  box-sizing: border-box;
+  border: 1px solid #9e7658;
+  background: #fff9ee;
+  color: #452b20;
+  text-decoration: none;
+}
+.st-footer-directory summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 18px;
+  cursor: pointer;
+  list-style: none;
+  font: 600 16px/1.4 var(--st-vietnamese);
+}
+.st-footer-directory summary::-webkit-details-marker { display: none; }
+.st-footer-directory summary::after {
+  content: "";
+  flex: 0 0 8px;
+  height: 8px;
+  margin: -4px 3px 0;
+  border: solid currentColor;
+  border-width: 0 1.5px 1.5px 0;
+  transform: rotate(45deg);
+}
+.st-footer-directory details[open] summary::after { margin-top: 4px; transform: rotate(225deg); }
+.st-footer-directory :is(summary, a):hover { background: #f3e3cf; }
+.st-footer-directory :is(summary, a):focus-visible { outline: 2px solid #613a24; outline-offset: 3px; }
+.st-footer-directory__groups {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  padding: 20px 0 0;
+}
+html body .st-footer .st-footer-directory__groups h3 {
+  margin: 0 0 11px !important;
+  color: #452b20 !important;
+  font: 500 21px/1.2 var(--st-wordmark) !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+.st-footer-directory summary span[lang="vi"],
+html body .st-footer .st-footer-directory__groups h3 span[lang="vi"] {
+  display: block;
+  margin-top: 3px !important;
+  color: #6d4935 !important;
+  font: 500 14px/1.45 var(--st-vietnamese) !important;
+}
+.st-footer-directory__groups ul {
+  display: grid;
+  grid-auto-rows: 1fr;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+html body .st-footer .st-footer-directory__groups li { min-width: 0; margin: 0 !important; }
+html body .st-footer .st-footer-directory__groups li > a {
+  display: grid !important;
+  align-content: center;
+  gap: 3px;
+  width: 100% !important;
+  min-height: 84px;
+  height: 100%;
+  padding: 9px 12px;
+  color: #452b20 !important;
+  font: 600 14px/1.4 var(--st-vietnamese) !important;
+  text-decoration: none !important;
+}
+.st-footer-directory__groups a[aria-current="page"] { border-color: #60331f; background: #ecd7bd; }
+.st-footer-directory__groups a span[lang="vi"] { color: #684631; font-weight: 500; }
+.st-footer-directory__groups code {
+  color: #694731;
+  font: 400 12px/1.45 ui-monospace, Consolas, monospace;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 1100px) { .st-footer-directory__groups { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .st-footer-directory__groups { grid-template-columns: minmax(0, 1fr); } }
+
+html body .st-tailoring-detail .st-guide-hero h1 { line-height: 1.02 !important; }
+html body .st-tailoring-detail .st-guide-kicker span[lang="vi"] { line-height: 1.5; }
+html body .st-tailoring-detail .st-guide-next { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+html body .st-tailoring-detail .st-guide-next a {
+  display: grid !important;
+  place-content: center;
+  gap: 4px !important;
+  border-color: #9e7658 !important;
+  color: #452b20 !important;
+}
+html body .st-tailoring-detail .st-guide-next a:is(:hover, :focus-visible) { color: #fff8ed !important; }
+@media (max-width: 760px) { html body .st-tailoring-detail .st-guide-next { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 860px) { html body .st-info-hero__grid, html body .st-info-section { grid-template-columns: 1fr !important; } html body .st-info-hero__image { min-height: min(115vw, 620px) !important; } html body .st-info-section { gap: 22px !important; } html body .st-info-next .st-info-shell { align-items: stretch !important; flex-direction: column !important; } }
 @media (max-width: 560px) { html body .st-info-shell { width: calc(100% - 32px) !important; } html body .st-info-hero { padding: 58px 0 !important; } html body .st-info-hero::before { inset: 8px !important; } html body .st-info-hero__image { min-height: 112vw !important; box-shadow: 8px 8px 0 rgba(87, 45, 26, .18) !important; } html body .st-info-hero__link, html body .st-info-next a { width: 100% !important; } }
 @media (prefers-reduced-motion: reduce) { html body .st-info-page a { transition: none !important; } }

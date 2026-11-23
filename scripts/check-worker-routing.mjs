@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import worker from "../src/worker.js";
 import { tripadvisorEmbedPath } from "../src/security-policy.js";
+import { tailoringPages } from "../src/tailoring-pages.js";
 
 const env = {
   ASSETS: {
@@ -28,6 +29,27 @@ test("campaign parameters remain on published pages and legacy redirects", async
   const legacy = await worker.fetch(new Request("https://sttailor.com/contact/?utm_source=instagram"), env);
   assert.equal(legacy.status, 301);
   assert.equal(legacy.headers.get("Location"), "https://sttailor.com/lien-he/?utm_source=instagram");
+});
+
+test("nested canonical redirects retain query parameters and unknown child paths return 404", async () => {
+  for (const { route } of tailoringPages) {
+    const response = await worker.fetch(new Request(`https://sttailor.com${route.slice(0, -1)}?utm_source=profile`), env);
+    assert.equal(response.status, 301);
+    assert.equal(response.headers.get("Location"), `https://sttailor.com${route}?utm_source=profile`);
+  }
+  const missing = await worker.fetch(new Request("https://sttailor.com/dich-vu/not-a-service/"), env);
+  assert.equal(missing.status, 404);
+  assert.equal(missing.headers.get("Location"), null);
+});
+
+test("llms.txt advertises UTF-8 for GET and HEAD even if the asset omits its charset", async () => {
+  const copy = "Địa chỉ: Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định";
+  const textEnv = { ASSETS: { fetch: async (request) => new Response(request.method === "HEAD" ? null : copy, { headers: { "Content-Type": "text/plain" } }) } };
+  for (const method of ["GET", "HEAD"]) {
+    const response = await worker.fetch(new Request("https://sttailor.com/llms.txt", { method }), textEnv);
+    assert.equal(response.headers.get("Content-Type"), "text/plain; charset=utf-8");
+    assert.equal(await response.text(), method === "GET" ? copy : "");
+  }
 });
 
 test("unmatched retired products retain a true 404 instead of a homepage redirect", async () => {

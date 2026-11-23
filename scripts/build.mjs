@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
 import { tripadvisorEmbedPath } from "../src/security-policy.js";
 import { clientCarePage } from "../src/client-care-pages.js";
+import { tailoringPages } from "../src/tailoring-pages.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 // The approved WordPress layout remains the baseline; current page refinements
@@ -14,6 +15,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const sourceRoot = path.join(root, "source", "wordpress");
 const sourceMedia = path.join(root, "source", "media");
 const sourceIcons = path.join(root, "source", "icons");
+const sourceFonts = path.join(root, "source", "fonts");
 const iconPaths = JSON.parse(readFileSync(path.join(sourceIcons, "manifest.json"), "utf8"));
 const dist = path.join(root, "dist");
 let stylesheetHref = "/styles/site.css";
@@ -83,7 +85,8 @@ const routes = [
   ["/doi-tra-hoan-tien/", "Returns.html", "Returns & Refunds for Tailored Garments | S.T Tailor", "Read S.T Tailor's bilingual returns and refunds policy for made-to-measure garments, alterations, order concerns, cancellations and refunds.", "/media/2026/09/fabric-focus-cloth-books.jpg", "Tailoring cloth books used when confirming a S.T Tailor order"],
   ["/chinh-sach-van-chuyen/", "Shipping.html", "Shipping & Delivery for Tailored Garments | S.T Tailor", "Explore S.T Tailor's bilingual delivery options for showroom collection, Ho Chi Minh City couriers, Vietnam shipping and international dispatch.", "/media/2026/06/store-sttailor-2.webp", "S.T Tailor showroom for garment collection and handover"],
   ["/dieu-khoan-dieu-kien/", "Terms.html", "Terms & Conditions for Tailoring Orders | S.T Tailor", "Review S.T Tailor's bilingual order terms covering quotations, bespoke fittings, payments, delivery, changes and consumer rights in Vietnam.", "/media/2026/09/fabric-focus-cloth-books.jpg", "S.T Tailor fabric library for bespoke orders"],
-  ["/chinh-sach-bao-mat/", "Privacy.html", "Privacy Policy & Client Data | S.T Tailor", "Learn how S.T Tailor handles enquiries, measurements, order details and website analytics, with bilingual privacy information and contact options.", "/media/2026/06/store-sttailor-1.webp", "S.T Tailor showroom in Ho Chi Minh City"]
+  ["/chinh-sach-bao-mat/", "Privacy.html", "Privacy Policy & Client Data | S.T Tailor", "Learn how S.T Tailor handles enquiries, measurements, order details and website analytics, with bilingual privacy information and contact options.", "/media/2026/06/store-sttailor-1.webp", "S.T Tailor showroom in Ho Chi Minh City"],
+  ...tailoringPages.map(({ route, source, title, description, image, imageAlt }) => [route, source, title, description, image, imageAlt])
 ];
 
 const primaryNavigation = [
@@ -98,13 +101,17 @@ const guideRoutes = [
   ["/chon-vai-may-do/", "Choosing cloth", "Chọn vải may đo"],
   ["/quy-trinh-thu-do/", "The fitting process", "Quy trình thử đồ"],
   ["/chinh-sua-trang-phuc/", "Clothing alterations", "Chỉnh sửa trang phục"],
-  ["/bao-quan-giat-la/", "Garment care and cleaning", "Bảo quản và giặt là"]
+  ["/bao-quan-giat-la/", "Garment care and cleaning", "Bảo quản và giặt là"],
+  ...tailoringPages.filter(({ source }) => source.startsWith("Guide")).map(({ route, labels }) => [route, ...labels])
 ];
+const serviceRoutes = tailoringPages.filter(({ source }) => source.startsWith("Service"));
+const policyRoutes = ["/phuong-thuc-thanh-toan/", "/doi-tra-hoan-tien/", "/chinh-sach-van-chuyen/", "/dieu-khoan-dieu-kien/", "/chinh-sach-bao-mat/"];
 
 const pageLabels = new Map([
   ["/", ["Home", "Trang chủ"]],
   ...primaryNavigation.map(([route, ...labels]) => [route, labels]),
   ...guideRoutes.map(([route, ...labels]) => [route, labels]),
+  ...serviceRoutes.map(({ route, labels }) => [route, labels]),
   [fittingFilmRoute, ["A fitting in motion", "Thử phom qua chuyển động"]],
   ["/phuong-thuc-thanh-toan/", ["Payment methods", "Phương thức thanh toán"]],
   ["/cam-nang-may-do/", ["Tailoring guide", "Cẩm nang may đo"]],
@@ -117,6 +124,7 @@ const pageLabels = new Map([
 function breadcrumbTrail(route) {
   if (route === "/") return [];
   const trail = ["/"];
+  if (serviceRoutes.some((page) => page.route === route)) trail.push("/dich-vu/");
   if (guideRoutes.some(([guideRoute]) => guideRoute === route)) trail.push("/cam-nang-may-do/");
   if (route === fittingFilmRoute) trail.push("/gallery/");
   trail.push(route);
@@ -257,7 +265,6 @@ function transformHome(html) {
 
 function transformFooter(html, route) {
   html = removeElementByClass(html, "div", "st-footer-v7__top")
-    .replace('<div class="st-footer-v7__guide-links"', '<div role="navigation" class="st-footer-v7__guide-links"')
     .replace('loading="eager"', 'loading="lazy"')
     .replaceAll('alt="" aria-hidden="true">', 'alt="" aria-hidden="true" width="20" height="20">')
     .replace(
@@ -808,7 +815,7 @@ function enrichImageAttributes(html, { responsiveSizes, deprioritizeLazyImages =
 const buildDate = new Date().toISOString().slice(0, 10);
 // Shared navigation gained substantial page links on this date. Advance this
 // only for a meaningful shared-content change, never for CSS, JS or copyright.
-const sharedContentModified = "2026-11-13";
+const sharedContentModified = "2026-11-23";
 // Advance the relevant date when transformed copy changes, not for build fixes.
 const derivedContentModified = {
   "Home.html": "2026-11-22",
@@ -849,7 +856,21 @@ function header(activePath) {
 }
 
 function footer(route) {
-  return transformFooter(readSource("Footer.html"), route);
+  const groups = [
+    ["Showroom", "Nhà may", ["/", "/gioi-thieu/", "/gallery/", fittingFilmRoute, "/lien-he/"]],
+    ["Tailoring services", "Dịch vụ may đo", ["/dich-vu/", ...serviceRoutes.map((page) => page.route), "/bang-gia/"]],
+    ["Tailoring guide", "Cẩm nang may đo", ["/cam-nang-may-do/", ...guideRoutes.map(([href]) => href)]],
+    ["Client Care", "Chăm sóc khách hàng", policyRoutes]
+  ];
+  const directory = groups.map(([english, vietnamese, paths]) => `
+    <section aria-label="${english} | ${vietnamese}">
+      <h3>${english}<span lang="vi">${vietnamese}</span></h3>
+      <ul>${paths.map((href) => {
+        const [title, translation] = pageLabels.get(href);
+        return `<li><a href="${href}"${href === route ? ' aria-current="page"' : ''}><span>${title}</span><span lang="vi">${translation}</span><code>${href.replaceAll("/", "/<wbr>")}</code></a></li>`;
+      }).join("")}</ul>
+    </section>`).join("");
+  return transformFooter(readSource("Footer.html"), route).replace("<!-- SITE_DIRECTORY -->", directory);
 }
 
 function documentFor(route, sourceFile, title, description, shareImage, shareImageAlt, lastModified) {
@@ -946,6 +967,12 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
   if (guideRoutes.some(([guideRoute]) => guideRoute === route)) {
     graph.push({ "@type": "Article", "@id": `${canonical}#article`, headline: title.split(" | ")[0], description, image: `https://sttailor.com${shareImage}`, author: { "@id": "https://sttailor.com/#business" }, publisher: { "@id": "https://sttailor.com/#business" }, mainEntityOfPage: { "@id": `${canonical}#webpage` }, dateModified: lastModified, inLanguage: ["en", "vi"] });
     webPage.mainEntity = { "@id": `${canonical}#article` };
+  }
+  const service = serviceRoutes.find((page) => page.route === route);
+  if (service) {
+    const serviceId = `${canonical}#service`;
+    graph.push({ "@type": "Service", "@id": serviceId, name: service.labels[0], alternateName: service.labels[1], description, url: canonical, image: `https://sttailor.com${shareImage}`, provider: { "@id": "https://sttailor.com/#business" }, areaServed: { "@type": "City", name: "Ho Chi Minh City" } });
+    webPage.mainEntity = { "@id": serviceId };
   }
   const trail = breadcrumbTrail(route);
   if (trail.length) {
@@ -1051,6 +1078,10 @@ assertGalleryHasNoDuplicates();
 const assets = copyAssets();
 copyGalleryFilm();
 copyIcons();
+mkdirSync(path.join(dist, "fonts"), { recursive: true });
+for (const file of ["noto-sans-vi-8b0a1d0.woff2", "OFL-Noto-Sans.txt"]) {
+  copyFileSync(path.join(sourceFonts, file), path.join(dist, "fonts", file));
+}
 const imageCount = buildImageManifest();
 mkdirSync(path.join(dist, "styles"), { recursive: true });
 mkdirSync(path.join(dist, "scripts"), { recursive: true });
@@ -1135,7 +1166,8 @@ const notFoundDocument = documentFor("/", "Error.html", "Page not found | S.T Ta
 // the complete site.css remains available for the 404 and source inspection.
 const routeStyles = {};
 const routeProjectSymbols = [...new Set([...productionCss.matchAll(/[.#]((?:st-|stp-|stpr-)[A-Za-z0-9_-]+)/g)].map((match) => match[1]))];
-const guideMarkup = routes.filter(([, file]) => file.startsWith("Guide"))
+const usesGuideLayout = (file) => file.startsWith("Guide") || serviceRoutes.some(({ source }) => source === file);
+const guideMarkup = routes.filter(([, file]) => usesGuideLayout(file))
   .map(([route]) => readFileSync(path.join(dist, route.slice(1), "index.html"), "utf8")).join("\n");
 const legacyPageSymbols = ["st-home-v4", "st-home-v5", "st-refund-v1", "st-privacy-v5"];
 const guideStyles = minifyCss({
@@ -1150,7 +1182,7 @@ for (const [route, sourceFile] of routes) {
   const pagePath = route === "/" ? path.join(dist, "index.html") : path.join(dist, route.slice(1), "index.html");
   const pageHtml = readFileSync(pagePath, "utf8");
   const pageSymbols = `${pageHtml}\n${siteScript}`;
-  const pageCss = sourceFile.startsWith("Guide") ? guideStyles : minifyCss({
+  const pageCss = usesGuideLayout(sourceFile) ? guideStyles : minifyCss({
     filename: "site.css",
     // Start from the globally cleaned bundle. Re-reading the editable source
     // here restores legacy rules whose symbols were already removed above.
@@ -1202,12 +1234,11 @@ writeFileSync(path.join(dist, "site.webmanifest"), JSON.stringify({ name: "S.T T
 mkdirSync(path.join(dist, ".well-known"), { recursive: true });
 copyFileSync(path.join(root, "source", "security.txt"), path.join(dist, ".well-known", "security.txt"));
 const llmsLink = ([route, , , description]) => `- [${pageLabels.get(route).join(" / ")}](https://sttailor.com${route}): ${description}`;
-const policyRoutes = new Set(["/phuong-thuc-thanh-toan/", "/doi-tra-hoan-tien/", "/chinh-sach-van-chuyen/", "/dieu-khoan-dieu-kien/", "/chinh-sach-bao-mat/"]);
 const guidePaths = new Set(["/cam-nang-may-do/", ...guideRoutes.map(([route]) => route)]);
 const llmsSections = [
-  ["Showroom and services / Showroom và dịch vụ", routes.filter(([route]) => !policyRoutes.has(route) && !guidePaths.has(route))],
+  ["Showroom and services / Nhà may và dịch vụ", routes.filter(([route]) => !policyRoutes.includes(route) && !guidePaths.has(route))],
   ["Tailoring guide / Cẩm nang may đo", routes.filter(([route]) => guidePaths.has(route))],
-  ["Client Care / Chăm sóc khách hàng", routes.filter(([route]) => policyRoutes.has(route))]
+  ["Client Care / Chăm sóc khách hàng", routes.filter(([route]) => policyRoutes.includes(route))]
 ].map(([heading, entries]) => `## ${heading}\n\n${entries.map(llmsLink).join("\n")}`).join("\n\n");
 writeFileSync(path.join(dist, "llms.txt"), `# S.T Tailor
 
@@ -1231,7 +1262,7 @@ ${llmsSections}
 - [Zalo](https://zalo.me/0909556258)
 - [Instagram](https://www.instagram.com/sttailorhcm/)
 - [WhatsApp](https://wa.me/84909556258)
-`, "utf8");
+`.normalize("NFC"), "utf8");
 const assetHeaders = "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n  X-Frame-Options: SAMEORIGIN\n  Strict-Transport-Security: max-age=15552000\n  Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests\n";
 // The asset binding carries these headers into the Worker response, allowing
 // Cloudflare Early Hints to discover the critical CSS for each public page.

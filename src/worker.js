@@ -1,5 +1,6 @@
 import { indexNowKeyFile } from "./indexnow.js";
 import { contentSecurityPolicy, tripadvisorEmbedPath } from "./security-policy.js";
+import { tailoringPages } from "./tailoring-pages.js";
 
 const canonicalHost = "sttailor.com";
 const routes = new Set([
@@ -19,7 +20,8 @@ const routes = new Set([
   "/doi-tra-hoan-tien/",
   "/chinh-sach-van-chuyen/",
   "/dieu-khoan-dieu-kien/",
-  "/chinh-sach-bao-mat/"
+  "/chinh-sach-bao-mat/",
+  ...tailoringPages.map(({ route }) => route)
 ]);
 // Retired WordPress paths have an intentional, permanent destination. Any
 // path outside this table and the published routes remains a true 404.
@@ -50,7 +52,7 @@ const legacyRoutes = new Map([
   ["/refund_returns/", "/doi-tra-hoan-tien/"],
   ["/bao-hanh-sua-chua/", "/dich-vu/"]
 ]);
-const staticPrefixes = ["/media/", "/icons/", "/styles/", "/scripts/"];
+const staticPrefixes = ["/media/", "/icons/", "/styles/", "/scripts/", "/fonts/"];
 const staticFiles = new Set(["/robots.txt", "/sitemap.xml", "/llms.txt", "/.well-known/security.txt", "/site.webmanifest", `/${indexNowKeyFile}`, "/404.html", "/not-found.html", "/_headers", "/build-manifest.json", "/image-manifest.json"]);
 
 function securityHeaders(response, pathname = "/") {
@@ -60,6 +62,9 @@ function securityHeaders(response, pathname = "/") {
   headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
   headers.set("X-Frame-Options", "SAMEORIGIN");
   headers.set("Strict-Transport-Security", "max-age=15552000");
+  if (pathname === "/llms.txt" && response.ok) {
+    headers.set("Content-Type", "text/plain; charset=utf-8");
+  }
   const contentType = headers.get("Content-Type") || "";
   const isHtml = routes.has(pathname) || pathname.endsWith(".html") || pathname === "/not-found" || contentType.includes("text/html");
   if (isHtml) {
@@ -69,6 +74,7 @@ function securityHeaders(response, pathname = "/") {
       ? "public, max-age=0, must-revalidate, no-transform"
       : "public, max-age=0, must-revalidate");
   } else if (pathname.startsWith("/styles/") || pathname.startsWith("/scripts/") ||
+      /^\/fonts\/[^/]+-[a-f0-9]{7}\.woff2$/.test(pathname) ||
       /^\/media\/_responsive\/.+-share-[a-f0-9]{12}\.jpg$/.test(pathname)) {
     headers.set("Cache-Control", "public, max-age=31536000, immutable");
   } else if (pathname.startsWith("/media/")) {

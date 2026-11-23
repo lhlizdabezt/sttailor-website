@@ -6,13 +6,15 @@ import { fileURLToPath } from "node:url";
 import { runInNewContext } from "node:vm";
 import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
 import { inlineScriptHashes, tripadvisorEmbedPath } from "../src/security-policy.js";
+import { tailoringPages } from "../src/tailoring-pages.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const sourceRoot = path.join(root, "source", "wordpress");
 const dist = path.join(root, "dist");
 const manifest = JSON.parse(readFileSync(path.join(dist, "build-manifest.json"), "utf8"));
 const failures = [];
-const expectedRoutes = ["/", "/gioi-thieu/", "/dich-vu/", "/gallery/", "/phim-thu-do/", "/bang-gia/", "/phuong-thuc-thanh-toan/", "/lien-he/", "/cam-nang-may-do/", "/chon-vai-may-do/", "/quy-trinh-thu-do/", "/chinh-sua-trang-phuc/", "/bao-quan-giat-la/", "/doi-tra-hoan-tien/", "/chinh-sach-van-chuyen/", "/dieu-khoan-dieu-kien/", "/chinh-sach-bao-mat/"];
+const expectedRoutes = ["/", "/gioi-thieu/", "/dich-vu/", "/gallery/", "/phim-thu-do/", "/bang-gia/", "/phuong-thuc-thanh-toan/", "/lien-he/", "/cam-nang-may-do/", "/chon-vai-may-do/", "/quy-trinh-thu-do/", "/chinh-sua-trang-phuc/", "/bao-quan-giat-la/", "/doi-tra-hoan-tien/", "/chinh-sach-van-chuyen/", "/dieu-khoan-dieu-kien/", "/chinh-sach-bao-mat/", ...tailoringPages.map(({ route }) => route)];
+const utf8 = new TextDecoder("utf-8", { fatal: true });
 const pageTitles = new Set();
 const pageDescriptions = new Set();
 const anchorIds = new Map();
@@ -39,7 +41,7 @@ for (const route of expectedRoutes) {
     failures.push(`Missing page: ${route}`);
     continue;
   }
-  const html = readFileSync(page, "utf8");
+  const html = utf8.decode(readFileSync(page));
   for (const [, attributes, body] of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
     if (!body.trim() || /\btype="application\/ld\+json"/i.test(attributes)) continue;
     const hash = createHash("sha256").update(body.replace(/\r\n?/g, "\n")).digest("base64");
@@ -118,6 +120,15 @@ for (const route of expectedRoutes) {
     if (!breadcrumbHtml?.includes('aria-current="page"') || JSON.stringify(schemaTrail) !== JSON.stringify(trail.map((href) => `https://sttailor.com${href}`))) {
       failures.push(`The visible breadcrumb and structured data differ: ${route}`);
     }
+    if (tailoringPages.some((page) => page.route === route)) {
+      const parent = `/${route.split("/")[1]}/`;
+      const parentHtml = readFileSync(path.join(dist, parent.slice(1), "index.html"), "utf8").split("</main>")[0];
+      const pageEntity = schemaGraph.find((entity) => entity["@id"]?.endsWith("#webpage"))?.mainEntity?.["@id"];
+      const schemaType = parent === "/dich-vu/" ? "Service" : "Article";
+      if (trail.at(-2) !== parent || !parentHtml.includes(`href="${route}"`) || !schemaGraph.some((entity) => entity["@id"] === pageEntity && entity["@type"] === schemaType)) {
+        failures.push(`Nested page lacks a parent link, matching breadcrumb or ${schemaType} schema: ${route}`);
+      }
+    }
   }
   const businessSchema = schemaGraph.find((item) => Array.isArray(item["@type"]) && item["@type"].includes("LocalBusiness"));
   if (businessSchema?.address?.streetAddress !== "1st Floor, 258 Le Thanh Ton, Tan Dinh Ward") failures.push(`Showroom floor or ward differs from the confirmed address: ${route}`);
@@ -148,8 +159,9 @@ for (const route of expectedRoutes) {
   const primaryNav = html.match(/<nav id="primary-navigation"[\s\S]*?<\/nav>/)?.[0] ?? "";
   const primaryLinks = [...primaryNav.matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
   if (JSON.stringify(primaryLinks) !== JSON.stringify(["/gioi-thieu/", "/dich-vu/", "/gallery/", "/bang-gia/", "/lien-he/"])) failures.push(`Header must keep its five main destinations: ${route}`);
-  if (footer.includes('st-footer-sections') || /Browse sections|Xem các mục/i.test(footer) || /href="[^"]*#/.test(footer)) failures.push(`Footer must contain page links without a section directory or anchor shortcuts: ${route}`);
+  if (footer.includes('st-footer-sections') || /Browse sections|Xem các mục/i.test(footer) || /href="[^"]*#/.test(footer)) failures.push(`Footer must contain canonical page links without anchor shortcuts: ${route}`);
   if (html.includes("\uFFFD") || !html.includes('<meta charset="utf-8">')) failures.push(`Page has invalid Unicode or lacks UTF-8: ${route}`);
+  if (route === "/gallery/" && !mainContent.includes('<span lang="vi">Chín album giới thiệu công việc tại S.T Tailor, từ chất liệu và kỹ thuật may đến các buổi thử đồ, chân dung khách hàng và không gian nhà may.</span>')) failures.push("Gallery is missing its UTF-8 Vietnamese album description.");
   if ((footer.match(/href="https:\/\/www\.tripadvisor\.com\/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City\.html"/g) ?? []).length !== 1 || footer.includes("st-footer-v7__tripadvisor") || footer.includes("socialButtonRate") || footer.includes("Rate us on Tripadvisor")) failures.push(`Footer Tripadvisor link is missing, duplicated, or still includes the removed rate widget: ${route}`);
   const footerLinks = new Set([...footer.matchAll(/\bhref="(\/[^"]*)"/g)].map((match) => match[1]));
   for (const [, href] of html.matchAll(/<a\b[^>]*\bhref="([^"]+)"/gi)) {
@@ -169,6 +181,11 @@ for (const route of expectedRoutes) {
   }
   for (const publishedRoute of expectedRoutes) {
     if (!footerLinks.has(publishedRoute)) failures.push(`Footer on ${route} omits published page ${publishedRoute}`);
+  }
+  const directory = footer.match(/<nav class="st-footer-directory__groups"[\s\S]*?<\/nav>/)?.[0] ?? "";
+  const directoryLinks = [...directory.matchAll(/href="([^"]+)"[^>]*>[\s\S]*?<code>([^<]*(?:<wbr>[^<]*)*)<\/code>/g)];
+  if (directoryLinks.length !== expectedRoutes.length || new Set(directoryLinks.map(([, href]) => href)).size !== expectedRoutes.length || directoryLinks.some(([, href, pathText]) => !expectedRoutes.includes(href) || pathText.replaceAll("<wbr>", "") !== href)) {
+    failures.push(`The footer directory must show every complete canonical path on ${route}`);
   }
   if (!/<nav class="st-footer-v7__nav"[\s\S]*?<a href="\/">Home <span lang="vi">Trang chủ<\/span><\/a>/i.test(footer)) failures.push(`Footer on ${route} lacks a visible Home navigation link.`);
   if (html.includes("https://sttailor.com/wp-content/uploads/")) failures.push(`Remote WordPress upload remains: ${route}`);
@@ -515,8 +532,9 @@ if (!productionHeaders.includes("Strict-Transport-Security: max-age=15552000")) 
 for (const staticFile of ["robots.txt", "sitemap.xml", "llms.txt", "site.webmanifest", indexNowKeyFile]) {
   if (!existsSync(path.join(dist, staticFile))) failures.push(`Missing production discovery file: ${staticFile}`);
 }
-const llmsText = readFileSync(path.join(dist, "llms.txt"), "utf8");
+const llmsText = utf8.decode(readFileSync(path.join(dist, "llms.txt")));
 if (!/^# S\.T Tailor$/m.test(llmsText) || llmsText.length < 50) failures.push("llms.txt is missing its Markdown heading or summary.");
+if (llmsText !== llmsText.normalize("NFC") || /\uFFFD|á[º»]|Ã[\u0080-\u00BF]/.test(llmsText) || !llmsText.includes("Địa chỉ: Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định")) failures.push("llms.txt must preserve normalized Vietnamese text.");
 for (const contact of ["tel:+84909556258", "mailto:contact.sttailor@gmail.com", "https://m.me/sttailor.hcm", "https://zalo.me/0909556258", "https://www.instagram.com/sttailorhcm/", "https://wa.me/84909556258"]) {
   if (!llmsText.includes(`](${contact})`)) failures.push(`llms.txt is missing a direct contact channel: ${contact}`);
 }
