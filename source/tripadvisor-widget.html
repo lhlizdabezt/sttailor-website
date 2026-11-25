@@ -7,13 +7,13 @@
   <title>S.T Tailor on Tripadvisor</title>
   <style>
     body { margin: 0; color: #352116; }
-    .st-tripadvisor__widget { min-height: 120px; display: grid; place-items: center; }
+    .st-tripadvisor__widget { box-sizing: border-box; min-height: 128px; display: grid; place-items: center; padding: 4px; }
     #TA_rated383, .st-tripadvisor__fallback { grid-area: 1 / 1; }
     #TA_rated383 { visibility: hidden; }
     [data-ready] #TA_rated383 { visibility: visible; }
     [data-ready] .st-tripadvisor__fallback { display: none; }
     #TA_rated383 #CDSWIDFRR { outline: 1px solid #815c40; outline-offset: 2px; }
-    .st-tripadvisor__fallback { box-sizing: border-box; display: grid; align-content: center; gap: 4px; width: calc(100% - 12px); max-width: 188px; min-height: 64px; padding: 8px; border: 1px solid #815c40; color: #352116; background: #fff7eb; text-align: center; text-decoration: none; font: 600 15px/1.4 system-ui, sans-serif; }
+    .st-tripadvisor__fallback { box-sizing: border-box; display: grid; align-content: center; gap: 4px; width: 100%; max-width: 200px; min-height: 70px; padding: 10px; border: 1px solid #815c40; color: #352116; background: #fff7eb; text-align: center; text-decoration: none; font: 600 15px/1.4 system-ui, sans-serif; }
     .st-tripadvisor__fallback span { font-weight: 400; }
     .st-tripadvisor__fallback:hover { background: #eed9bd; }
     .st-tripadvisor__widget a:focus-visible { outline: 2px solid #6c371e !important; outline-offset: 2px !important; }
@@ -23,7 +23,7 @@
 <body>
   <main class="st-tripadvisor__widget">
     <div id="TA_rated383" class="TA_rated"></div>
-    <a class="st-tripadvisor__fallback" target="_blank" rel="noopener noreferrer" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html">Open S.T Tailor’s listing<span lang="vi">Mở trang S.T Tailor trên Tripadvisor</span></a>
+    <a class="st-tripadvisor__fallback" target="_blank" rel="noopener noreferrer" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html">Open the Tripadvisor listing<span lang="vi">Mở trang S.T Tailor trên Tripadvisor</span></a>
   </main>
   <!-- The official script binds to the load event of this document. -->
   <script async src="https://www.jscache.com/wejs?wtype=rated&amp;uniq=383&amp;locationId=34701232&amp;lang=en_US&amp;display_version=2"></script>

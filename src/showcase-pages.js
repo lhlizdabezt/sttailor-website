@@ -1,3 +1,5 @@
+import { photoStoryPages } from "./photo-stories.js";
+
 export const showcaseHubs = [
   {
     route: "/san-pham/",
@@ -18,9 +20,14 @@ export const showcaseHubs = [
     source: "ShowcaseProjects.html",
     labels: ["Projects and collaborations", "Dự án và hợp tác"],
     title: "Tailoring Projects and Collaborations | S.T Tailor",
-    description: "See S.T Tailor’s collaboration with singer Niña Campos, a red patterned waistcoat in wear and a dark suit with gold lining at its fitting.",
+    description: "Explore S.T Tailor’s client fittings, finished commissions and collaboration with singer Niña Campos in Ho Chi Minh City.",
     image: "/media/2026/09/st-tailor-gallery-singer-feedback-one.jpg",
-    imageAlt: "A light tailored suit and dark top in a photograph from the S.T Tailor collaboration archive | Suit sáng màu phối áo tối trong ảnh lưu niệm của S.T Tailor"
+    imageAlt: "A light tailored suit and dark top in a photograph from the S.T Tailor collaboration archive | Suit sáng màu phối áo tối trong ảnh lưu niệm của S.T Tailor",
+    sections: [
+      { id: "collaborations", labels: ["Collaborations", "Hợp tác"] },
+      { id: "client-work", labels: ["Client commissions", "Trang phục của khách"] },
+      { id: "fittings", labels: ["Fitting studies", "Ghi chép thử đồ"] }
+    ]
   }
 ];
 
@@ -159,6 +166,7 @@ export const showcaseEntries = [
   },
   {
     route: "/du-an/nina-campos/",
+    section: "collaborations",
     source: "ShowcaseNinaCampos.html",
     labels: ["Niña Campos collaboration", "Hợp tác cùng Niña Campos"],
     heading: "Niña Campos",
@@ -170,6 +178,7 @@ export const showcaseEntries = [
   },
   {
     route: "/du-an/ao-ghi-le-do/",
+    section: "client-work",
     source: "ShowcaseRedWaistcoat.html",
     labels: ["Red waistcoat in wear", "Áo ghi-lê đỏ khi mặc"],
     title: "Red Patterned Waistcoat in Wear | S.T Tailor Project",
@@ -180,6 +189,7 @@ export const showcaseEntries = [
   },
   {
     route: "/du-an/buoi-thu-suit-lot-vang/",
+    section: "fittings",
     source: "ShowcaseGoldLiningFitting.html",
     labels: ["Fitting a suit with gold lining", "Buổi thử suit lót vàng"],
     title: "Fitting a Dark Suit With Gold Lining | S.T Tailor Project",
@@ -187,7 +197,8 @@ export const showcaseEntries = [
     summary: ["Photographs from a fitting show how a gold shirt, pocket square and lining change the appearance of a dark suit as the jacket opens.", "Ảnh buổi thử cho thấy sơ mi, khăn túi ngực và lớp lót vàng hiện lên thế nào trên bộ suit tối màu khi mở áo khoác."],
     image: "/media/2026/09/st-tailor-archive-gold-jacket-fitting.jpg",
     imageAlt: "Client in a dark suit with a gold shirt and pocket square during a fitting at S.T Tailor | Khách thử suit tối màu phối sơ mi và khăn túi ngực màu vàng tại S.T Tailor"
-  }
+  },
+  ...photoStoryPages
 ];
 
 export const showcasePages = [...showcaseHubs, ...showcaseEntries];

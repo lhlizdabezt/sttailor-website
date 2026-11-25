@@ -44,7 +44,7 @@ The Contact page has six direct channels: telephone, email, Messenger, Zalo, Ins
 - Describe European cloth, including Vitale Barberis Canonico, and Vietnamese silk without claiming unverified supplier partnerships.
 - Payment keeps its single approved method band: VND cash, bank transfer / QR, credit and debit cards, and Apple Pay / Google Pay / Samsung Pay through supported NFC cards and terminals. Do not reintroduce PayPal, Wise or international transfer-wallet services.
 - Client Care remains concise and bilingual; preserve the approved policy essentials without a references section or mandatory written-confirmation wording.
-- Website media inventory consists of 118 unique editorial Gallery images and five approved decorative or brand assets. This includes the six client-supplied red waistcoat photographs added on 15 October 2026, together in the evening-tailoring album. Do not duplicate editorial gallery photographs to fill layout gaps.
+- The Gallery includes 167 unique editorial images, including the six red-waistcoat photographs and the 12 photo series added in November 2026. Photos also used on garment and project pages retain a single appearance in the Gallery. The logo, signatures, platform icon and film poster have separate roles.
 
 ## Synchronization and verification
 

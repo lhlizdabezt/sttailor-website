@@ -9,6 +9,7 @@ import { tripadvisorEmbedPath } from "../src/security-policy.js";
 import { clientCareHubRoute, clientCarePage } from "../src/client-care-pages.js";
 import { tailoringPages } from "../src/tailoring-pages.js";
 import { showcaseEntries, showcaseHubs, showcaseItemsFor, showcasePages } from "../src/showcase-pages.js";
+import { photoCollections, photoSource } from "../src/photo-stories.js";
 import { fittingFilm as galleryFilm, fittingFilmRoute } from "../src/fitting-film.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -162,6 +163,33 @@ function showcaseHubLinks() {
   </nav>`;
 }
 
+function editorialPhoto([file, english, vietnamese]) {
+  return `<figure>
+    <img src="${photoSource(file)}" alt="${english} | ${vietnamese}" loading="lazy" decoding="async">
+    <figcaption aria-hidden="true">${english}<span lang="vi">${vietnamese}</span></figcaption>
+  </figure>`;
+}
+
+function photoStoryBody(page) {
+  const sections = page.details.map(([title, titleVi, copy, copyVi]) => `<section class="st-showcase__section">
+    <h2>${title}<span lang="vi">${titleVi}</span></h2>
+    <p>${copy}<span lang="vi">${copyVi}</span></p>
+  </section>`);
+  const collections = page.collections.map(({ id, labels, photos }) => {
+    const smallerViews = photos.filter(([file]) => photoSource(file) !== page.image);
+    return `<section class="st-showcase__shell st-showcase__story" aria-labelledby="${id}-title">
+      <h2 id="${id}-title">${page.collections.length > 1 ? labels[0] : "Other views"}<span lang="vi">${page.collections.length > 1 ? labels[1] : "Các góc nhìn khác"}</span></h2>
+      <div class="st-showcase__photo-grid">${smallerViews.map(editorialPhoto).join("\n")}</div>
+    </section>`;
+  });
+  const related = [[`/gallery/#${page.collections[0].id}`, ["View this series in the Gallery", "Xem bộ ảnh trong thư viện"]], ...page.related.map((href) => [href, pageLabels.get(href)])];
+  return `<div class="st-showcase__shell st-showcase__details">${sections.join("\n")}</div>
+    ${collections.join("\n")}
+    <nav class="st-showcase__shell st-showcase__links" aria-label="Related work and guidance | Trang phục và cẩm nang liên quan">
+      ${related.map(([href, [english, vietnamese]]) => `<a class="st-showcase__action" href="${href}">${english}<span lang="vi">${vietnamese}</span></a>`).join("\n")}
+    </nav>`;
+}
+
 function transformShowcase(page, html) {
   const { route, labels: [english, vietnamese], heading = english, image, imageAlt, summary, sections } = page;
   if (!summary) {
@@ -179,7 +207,7 @@ function transformShowcase(page, html) {
     }));
     const grid = (items) => `<div class="st-showcase__index">${items.map(({ markup }) => markup).join("\n")}</div>`;
     const index = !sections ? grid(cards) : `
-      <nav class="st-showcase__sections" aria-label="Garment collections | Nhóm trang phục">
+      <nav class="st-showcase__sections" aria-label="Explore collections | Xem các bộ sưu tập">
         ${sections.map(({ id, labels: [en, vi] }) => `<a class="st-showcase__action" href="#${id}">${en}<span lang="vi">${vi}</span></a>`).join("\n")}
       </nav>
       ${sections.map(({ id, labels: [en, vi] }) => `<section class="st-showcase__group" aria-labelledby="${id}">
@@ -188,6 +216,7 @@ function transformShowcase(page, html) {
       </section>`).join("\n")}`;
     return html.replace("<!-- SHOWCASE_INDEX -->", `<div class="st-showcase__shell">${index}</div>`);
   }
+  if (page.collections) html = html.replace("<!-- SHOWCASE_STORY -->", photoStoryBody(page));
   return html.replace("<!-- SHOWCASE_HERO -->", `<header class="st-showcase__hero">
     <div class="st-showcase__shell st-showcase__hero-grid">
       <div class="st-showcase__lead">
@@ -565,6 +594,28 @@ function appendToGalleryAlbum(html, id, figure) {
   return `${html.slice(0, at)}${figure}${html.slice(at)}`;
 }
 
+function appendGalleryCollections(html) {
+  for (const album of new Set(photoCollections.map(({ album }) => album))) {
+    const series = photoCollections.filter((collection) => collection.album === album);
+    const section = findElementById(html, "section", `album-${album}`);
+    const grid = section && findElementByClass(html.slice(section.start, section.end), "div", "st-album-grid");
+    if (!grid) throw new Error(`Gallery chapter is missing: ${album}`);
+    const content = series.map(({ id, route, labels, summary, photos }) => `<section class="st-gallery-series" id="${id}" aria-labelledby="${id}-title" tabindex="-1">
+      <header class="st-gallery-series__head">
+        <div>
+          <h3 id="${id}-title">${labels[0]}<span lang="vi">${labels[1]}</span></h3>
+          <p>${summary[0]}<span lang="vi">${summary[1]}</span></p>
+        </div>
+        <a class="st-gallery-series__link" href="${route}">View story<span lang="vi">Xem bài và ảnh</span></a>
+      </header>
+      <div class="st-gallery-series__grid">${photos.filter(([file]) => !file.startsWith("/")).map(editorialPhoto).join("\n")}</div>
+    </section>`).join("\n");
+    const at = section.start + grid.start;
+    html = `${html.slice(0, at)}${content}${html.slice(at)}`;
+  }
+  return html;
+}
+
 function fittingFilmPlayer(descriptionId, { lazy = false } = {}) {
   return `<video controls playsinline preload="none"${lazy ? ' loading="lazy"' : ""} width="720" height="1280" poster="${galleryFilm.poster}" aria-describedby="${descriptionId}">
       <source src="${galleryFilm.src}" type="video/mp4">
@@ -653,7 +704,7 @@ function transformGallery(html) {
 </section>`;
   const filmInsertAt = womenswear.start + womenswearGrid.end;
   html = `${html.slice(0, filmInsertAt)}${filmMarkup}${html.slice(filmInsertAt)}`;
-  return replaceVisibleAtelier(applyGalleryAltText(html));
+  return replaceVisibleAtelier(appendGalleryCollections(applyGalleryAltText(html)));
 }
 
 function transformPayment(html) {
@@ -664,8 +715,8 @@ function transformPayment(html) {
     .replace('</h2>', '</h1>')
     .replace(/<p class="st-payment-methods__note">[\s\S]*?<\/p>/, '<p class="st-payment-methods__note">Choose a convenient method; we will share the payment details for your order.<span lang="vi">Chọn phương thức thuận tiện; chúng tôi sẽ cung cấp thông tin thanh toán cho đơn của bạn.</span></p>');
   const copy = [
-    ['For cash payments, please use Vietnamese dong (VND) only. You can also pay by bank transfer or QR using the details we share for your order.', 'Nhà may chỉ nhận tiền mặt bằng đồng Việt Nam (VND). Bạn cũng có thể chuyển khoản hoặc quét mã QR theo thông tin thanh toán của đơn hàng.'],
-    ['We accept international credit and debit cards, as well as prepaid cards, including Visa, Mastercard, American Express, JCB, UnionPay, Discover and Diners Club. We will guide you to the appropriate payment channel for your card.', 'Chúng tôi chấp nhận thẻ tín dụng và ghi nợ quốc tế, cũng như thẻ trả trước, bao gồm Visa, Mastercard, American Express, JCB, UnionPay, Discover và Diners Club. Chúng tôi sẽ hướng dẫn kênh thanh toán phù hợp với thẻ của bạn.'],
+    ['For cash payments, please use Vietnamese dong (VND) only. You can also pay by bank transfer or QR using the details for your order.', 'Nhà may chỉ nhận tiền mặt bằng đồng Việt Nam (VND). Bạn cũng có thể chuyển khoản hoặc quét mã QR theo thông tin của đơn hàng.'],
+    ['We accept all credit and debit card types and prepaid cards, including Visa, Mastercard, Maestro, American Express, JCB, UnionPay, Discover, Diners Club and RuPay. Local NAPAS cards are accepted. We can help you choose the payment channel for your card.', 'Chúng tôi chấp nhận mọi loại thẻ tín dụng và ghi nợ, cùng thẻ trả trước, gồm Visa, Mastercard, Maestro, American Express, JCB, UnionPay, Discover, Diners Club và RuPay. Có thể thanh toán bằng thẻ nội địa NAPAS. Chúng tôi sẽ hỗ trợ chọn kênh phù hợp với thẻ của bạn.'],
     ['Pay with Apple Pay, Google Pay or Samsung Pay using a compatible NFC device and supported card. Ask us for help with contactless payment at the showroom.', 'Thanh toán chạm bằng Apple Pay, Google Pay hoặc Samsung Pay với thiết bị NFC và thẻ tương thích. Chúng tôi hỗ trợ thanh toán không tiếp xúc tại showroom.']
   ];
   let card = 0;
@@ -757,7 +808,7 @@ function transformAbout(html) {
     <div class="st-tripadvisor__card">
       <div class="st-tripadvisor__review">
         <h3>S.T Tailor on Tripadvisor<span lang="vi">S.T Tailor trên Tripadvisor</span></h3>
-        <iframe class="st-tripadvisor__rating" src="${tripadvisorEmbedPath}" title="Tripadvisor badge for S.T Tailor / Huy hiệu Tripadvisor của S.T Tailor" loading="lazy" width="200" height="120" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
+        <iframe class="st-tripadvisor__rating" src="${tripadvisorEmbedPath}" title="Tripadvisor badge for S.T Tailor / Huy hiệu Tripadvisor của S.T Tailor" loading="lazy" width="220" height="128" referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
       </div>
       <div class="st-tripadvisor__actions">
         <a class="st-tripadvisor__link" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer"><span>Read reviews</span><span lang="vi">Đọc đánh giá</span></a>
@@ -888,13 +939,13 @@ function enrichImageAttributes(html, { responsiveSizes, deprioritizeLazyImages =
 const buildDate = new Date().toISOString().slice(0, 10);
 // Shared navigation gained substantial page links on this date. Advance this
 // only for a meaningful shared-content change, never for CSS, JS or copyright.
-const sharedContentModified = "2026-11-25";
+const sharedContentModified = "2026-11-26";
 // Advance the relevant date when transformed copy changes, not for build fixes.
 const derivedContentModified = {
   "Home.html": "2026-11-22",
   "About.html": "2026-11-26",
-  "Gallery.html": "2026-11-25", "Payment.html": "2026-11-22",
-  "Returns.html": "2026-10-18", "Shipping.html": "2026-10-18",
+  "Gallery.html": "2026-11-26", "Payment.html": "2026-11-26",
+  "Returns.html": "2026-11-26", "Shipping.html": "2026-10-18",
   "Terms.html": "2026-10-18", "Privacy.html": "2026-10-18"
 };
 
@@ -902,7 +953,7 @@ function lastModifiedFor(sourceFile) {
   // Derived copy and Gallery additions can change without touching the baseline.
   if (derivedContentModified[sourceFile]) {
     const inputs = [path.join("source", "wordpress", sourceFile)];
-    if (sourceFile === "Gallery.html") inputs.push("source/media");
+    if (sourceFile === "Gallery.html") inputs.push("source/media", "src/photo-stories.js");
     if (["Returns.html", "Shipping.html", "Terms.html", "Privacy.html"].includes(sourceFile)) inputs.push("src/client-care-pages.js");
     const changed = spawnSync("git", ["status", "--porcelain", "--", ...inputs], { cwd: root, encoding: "utf8" });
     if (changed.status !== 0 || changed.stdout.trim()) return buildDate;
@@ -929,12 +980,19 @@ function header(activePath) {
 }
 
 function footer(route) {
+  const workGroups = showcaseHubs.flatMap(({ route: hubRoute, labels, sections }) => {
+    const entries = showcaseItemsFor(hubRoute);
+    return [
+      [...labels, [hubRoute]],
+      ...sections.map(({ id, labels: sectionLabels }) => [...sectionLabels, entries.filter((page) => page.section === id).map((page) => page.route)])
+    ];
+  });
   const groups = [
-    ["Showroom", "Nhà may", ["/", "/gioi-thieu/", "/gallery/", fittingFilmRoute, "/lien-he/"]],
+    ["Showroom and Gallery", "Nhà may và thư viện ảnh", ["/", "/gioi-thieu/", "/gallery/", fittingFilmRoute, "/lien-he/"]],
     ["Tailoring services", "Dịch vụ may đo", ["/dich-vu/", ...serviceRoutes.map((page) => page.route), "/bang-gia/"]],
-    ...showcaseHubs.map(({ route: hubRoute, labels }) => [...labels, [hubRoute, ...showcaseItemsFor(hubRoute).map(({ route }) => route)]]),
     ["Tailoring guide", "Cẩm nang may đo", ["/cam-nang-may-do/", ...guideRoutes.map(([href]) => href)]],
-    ["Client Care", "Chăm sóc khách hàng", [clientCareHubRoute, ...policyRoutes]]
+    ["Client Care", "Chăm sóc khách hàng", [clientCareHubRoute, ...policyRoutes]],
+    ...workGroups
   ];
   const directory = groups.map(([english, vietnamese, paths]) => `
     <section aria-label="${english} | ${vietnamese}">
@@ -948,7 +1006,7 @@ function footer(route) {
 }
 
 function documentFor(route, sourceFile, title, description, shareImage, shareImageAlt, lastModified) {
-  const showcasePage = showcasePages.find(({ source }) => source === sourceFile);
+  const showcasePage = showcasePages.find((page) => page.route === route);
   const showcaseHub = showcaseHubs.find(({ route: href }) => href === route);
   const responsiveSizes = {
     "/gallery/": "(max-width: 760px) 100vw, (max-width: 1080px) 50vw, 33vw",
@@ -986,7 +1044,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     contactPoint: { "@type": "ContactPoint", telephone: "+84 909 556 258", email: "contact.sttailor@gmail.com", contactType: "customer service", areaServed: "VN", availableLanguage: ["Vietnamese", "English"] },
     priceRange: "$$$",
     currenciesAccepted: "VND",
-    paymentAccepted: "Cash (VND only), Bank Transfer, QR, Credit Card, Debit Card, Prepaid Card, Visa, Mastercard, American Express, JCB, UnionPay, Discover, Diners Club, Apple Pay, Google Pay, Samsung Pay (NFC)",
+    paymentAccepted: "Cash (VND only), Bank Transfer, QR, Credit Card, Debit Card, Prepaid Card, Visa, Mastercard, Maestro, American Express, JCB, UnionPay, Discover, Diners Club, RuPay, NAPAS, Apple Pay, Google Pay, Samsung Pay (NFC)",
     hasMap: "https://maps.app.goo.gl/j8N26uiQUC4J95vT6",
     knowsAbout: ["Bespoke tailoring", "Clothing alterations", "European suiting cloth", "Vietnamese silk", "Fittings and pattern cutting"],
     sameAs: ["https://facebook.com/sttailor.hcm/", "https://www.instagram.com/sttailorhcm/", "https://www.threads.com/@sttailorhcm", "https://wa.me/84909556258", "https://zalo.me/0909556258", "https://www.linkedin.com/company/sttailorhcm/", "https://youtube.com/@S.Ttailor", "https://www.tiktok.com/@sttailorhcm", "https://pinterest.com/sttailorhcm/", "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html"]
@@ -1126,12 +1184,15 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
 }
 
 function collectAssetPaths() {
-  const sourceFiles = [...routes.map(([, file]) => file), "Error.html", "Footer.html"];
-  const content = [...sourceFiles.map((file) => readFileSync(path.join(sourceRoot, file), "utf8")), readFileSync(path.join(sourceRoot, "CustomCSS.css"), "utf8")].join("\n");
+  const sourceFiles = new Set([...routes.map(([, file]) => file), "Error.html", "Footer.html"]);
+  const content = [...Array.from(sourceFiles, (file) => readFileSync(path.join(sourceRoot, file), "utf8")), readFileSync(path.join(sourceRoot, "CustomCSS.css"), "utf8")].join("\n");
   const matcher = /https?:\/\/sttailor\.com\/wp-content\/uploads\/([^\"' )]+)/g;
   const found = new Set(["2026/09/logo-sttailor.png", "2026/09/logo-sttailor-1000x1024.png"]);
   for (const match of content.matchAll(matcher)) found.add(match[1]);
   for (const [file] of franceClientPhotos) found.add(`2026/10/${file}`);
+  for (const { photos } of photoCollections) {
+    for (const [file] of photos) found.add(photoSource(file).slice("/media/".length));
+  }
   return [...found].filter((asset) => !asset.includes(".."));
 }
 

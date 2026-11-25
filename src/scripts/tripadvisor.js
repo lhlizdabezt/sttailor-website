@@ -10,8 +10,8 @@ function updateWidget() {
     const isBadgeLink = link.classList.contains("widFRRClickWrap");
     if (!href || href.startsWith("#") || /^javascript:/i.test(href) || isBadgeLink) {
       if (link.href !== listing) link.href = listing;
-      link.target = "_blank";
-      link.rel = "nofollow noopener noreferrer";
+      if (link.target !== "_blank") link.target = "_blank";
+      if (link.rel !== "nofollow noopener noreferrer") link.rel = "nofollow noopener noreferrer";
       if (isBadgeLink) {
         link.setAttribute("aria-label", "View S.T Tailor on Tripadvisor / Xem S.T Tailor trên Tripadvisor");
       }
@@ -22,7 +22,8 @@ function updateWidget() {
   }
   // Keep the independent link available until the badge can take over without moving focus.
   const logo = badge.querySelector("#CDSWIDFRR img");
-  const ready = logo?.complete && logo.naturalWidth && badge.querySelector(".widFRRClickWrap[href]");
+  const action = badge.querySelector(".widFRRClickWrap[href]");
+  const ready = logo?.complete && logo.naturalWidth && action?.href === listing;
   widget.toggleAttribute("data-ready", Boolean(ready && document.activeElement !== fallback));
 }
 

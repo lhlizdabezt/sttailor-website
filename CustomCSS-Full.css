@@ -12261,7 +12261,7 @@ html body .st-lux-text-link:focus-visible {
   --st-wordmark: "Palatino Linotype", "Book Antiqua", "Iowan Old Style", Georgia, serif;
   --st-heritage: "Cormorant Garamond", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
   --st-editorial-serif: "Cormorant Garamond", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
-  --st-eyebrow-size: clamp(16px, 1.25vw, 18px);
+  --st-eyebrow-size: clamp(17px, 1.35vw, 20px);
   --st-control-duration: 200ms;
   --st-control-easing: cubic-bezier(.22, .68, .24, 1);
 }
@@ -12585,7 +12585,7 @@ html body .st-tripadvisor__card {
 }
 html body .st-tripadvisor__card h3 { margin: 0; color: #352116; font: 500 25px/1.2 var(--st-wordmark); }
 html body #main-content .st-tripadvisor__card h3 > span[lang="vi"] { display: block; margin-top: 4px; color: #624330; -webkit-text-fill-color: #624330; font: 500 16px/1.4 var(--st-vietnamese) !important; }
-html body .st-tripadvisor__review { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 200px); align-items: start; gap: 10px; }
+html body .st-tripadvisor__review { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 220px); align-items: center; gap: 12px; }
 html body .st-tripadvisor__rating { display: block; align-self: center; max-width: 100%; border: 0; }
 html body .st-tripadvisor__actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 10px; padding-top: 14px; border-top: 1px solid #b99672; }
 html body .st-tripadvisor__link { display: grid !important; box-sizing: border-box; min-height: 70px !important; padding: 10px !important; place-content: center !important; gap: 3px !important; border: 1px solid #513320 !important; background: #352116 !important; color: #fff7e9 !important; -webkit-text-fill-color: #fff7e9 !important; font: 650 15px/1.35 var(--st-vietnamese) !important; text-align: center; text-decoration: none !important; transition: background-color .2s ease !important; }
@@ -12882,9 +12882,13 @@ html body .st-home-editorial__frame {
 }
 .st-home-editorial__copy p { margin: 0; color: inherit; font: inherit; }
 html body .st-home-editorial__link {
-  display: block;
+  display: grid;
+  align-content: center;
+  min-height: 84px;
+  padding: 10px;
+  border: 1px solid #b98e65;
   color: inherit;
-  font: 500 clamp(22px, 1.9vw, 28px)/1.15 var(--st-wordmark);
+  font: 500 clamp(22px, 1.8vw, 27px)/1.15 var(--st-wordmark);
   text-decoration: none;
 }
 .st-home-editorial__link::after {
@@ -14110,6 +14114,10 @@ html body #main-content .st-gallery-page--albums .st-album-grid__item figcaption
 .st-showcase__photo-grid { grid-column: 1 / -1; }
 .st-showcase__detail-photo { width: min(100%, 440px); grid-column: 1 / -1; justify-self: center; }
 .st-showcase :is(.st-showcase__detail-photo, .st-showcase__photo-grid) figcaption { padding: 12px 16px; }
+.st-showcase__story { padding-block: clamp(28px, 4.5vw, 52px) 0; }
+.st-showcase__story > h2 { padding-block-start: 20px; border-top: 1px solid var(--showcase-rule); }
+.st-showcase__story .st-showcase__photo-grid { margin-block-start: 20px; }
+.st-showcase__story .st-showcase__photo-grid img { object-fit: contain; background: var(--showcase-mat); }
 .st-showcase__links {
   margin-top: clamp(24px, 4vw, 54px);
   display: grid;
@@ -14162,6 +14170,91 @@ html body #main-content a.st-showcase__action:focus-visible { outline: 2px solid
   .st-showcase__links, .st-showcase__photo-grid { grid-template-columns: minmax(0, 1fr); }
   .st-showcase__links--discovery { margin-block: 18px; }
   html body #main-content a.st-showcase__action--primary { display: grid; }
+}
+
+.st-gallery-series {
+  margin: 0 0 clamp(20px, 3vw, 36px);
+  padding: clamp(15px, 2.4vw, 29px);
+  border: 1px solid #967355;
+  background: #fff9f0;
+  color: #38261b;
+  scroll-margin-block-start: 128px;
+}
+.st-gallery-series:focus-visible { outline: 2px solid #75472e; outline-offset: 4px; }
+.st-gallery-series__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 16px;
+  margin-block-end: 18px;
+}
+html body .st-gallery-series__head h3 {
+  margin: 0;
+  color: #38261b;
+  font: 500 clamp(24px, 3vw, 38px)/1.15 var(--st-wordmark);
+  text-wrap: balance;
+}
+html body .st-gallery-series__head h3 [lang="vi"] {
+  display: block;
+  margin-top: 6px;
+  color: #63432f;
+  font: 500 clamp(16px, 1.5vw, 20px)/1.4 var(--st-vietnamese);
+}
+html body .st-gallery-series__head p {
+  max-width: 69ch;
+  color: #38261b;
+  margin: 12px 0 0;
+  font: 400 16px/1.55 var(--st-vietnamese);
+}
+.st-gallery-series :is(p, figcaption, a) > [lang="vi"] { display: block; margin-top: 4px; }
+.st-gallery-series__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(9px, 1.8vw, 18px);
+}
+.st-gallery-series__grid figure {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  margin: 0;
+  min-width: 0;
+  border: 1px solid #b69374;
+  background: #fffdf9;
+}
+.st-gallery-series__grid img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: contain; background: #eee1d1; }
+html body .st-gallery-series__grid figcaption {
+  padding: clamp(9px, 1.45vw, 16px);
+  background-color: #fffdf9;
+  color: #473024;
+  -webkit-text-fill-color: #473024;
+  font: 400 14px/1.55 var(--st-vietnamese);
+  overflow-wrap: anywhere;
+}
+html body #main-content a.st-gallery-series__link {
+  display: grid;
+  place-content: center;
+  min-height: 52px;
+  padding: 9px 16px;
+  border: 1px solid #63432f;
+  background: #573423;
+  color: #fff8eb;
+  font: 600 14px/1.4 var(--st-vietnamese);
+  text-align: center;
+  text-decoration: none;
+}
+html body #main-content a.st-gallery-series__link:hover,
+html body #main-content a.st-gallery-series__link:focus-visible { background: #382319; color: #fff8eb; }
+html body #main-content a.st-gallery-series__link:focus-visible { outline: 2px solid #63432f; outline-offset: 3px; }
+@media (max-width: 860px) {
+  .st-gallery-series__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .st-gallery-series__head { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 360px) {
+  .st-gallery-series__grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html body #main-content a.st-gallery-series__link { transition: background-color .2s ease; }
 }
 @media (prefers-reduced-motion: reduce) {
   html body #main-content a.st-showcase__action,
