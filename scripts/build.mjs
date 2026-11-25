@@ -35,6 +35,7 @@ const homeHeroSizes = "(max-width: 760px) 1400px, 1717px";
 const homeHeroPortraitMedia = "(max-width: 600px) and (orientation: portrait)";
 const homeEditorialSizes = "(max-width: 440px) calc(100vw - 34px), (max-width: 760px) calc(50vw - 24px), (max-width: 1120px) calc(33vw - 30px), min(calc(20vw - 30px), 240px)";
 const galleryHeroSizes = "(max-width: 899px) min(calc(100vw - 32px), 760px), min(calc(50vw - 24px), 590px)";
+const showcaseHeroSizes = "(max-width: 760px) min(calc(100vw - 34px), 520px), min(calc(45vw - 36px), 490px)";
 
 function imageSourceSet(candidates) {
   return candidates.map(({ src, width }) => `${src} ${width}w`).join(", ");
@@ -439,10 +440,10 @@ const galleryAltText = {
   "st-tailor-magenta-floral-wrap-dress-and-navy-suit.jpg": "Magenta floral wrap dress beside a navy suit on showroom mannequins | Trang phục nữ hoa hồng tím bên cạnh suit xanh navy trên mannequin tại showroom",
   "st-tailor-magenta-floral-wrap-dress-full-length.jpg": "Full-length magenta floral wrap dress with tied waist | Trang phục nữ hoa hồng tím toàn thân với đai buộc eo",
   "st-tailor-magenta-floral-wrap-dress-detail.jpg": "Magenta and violet floral pattern and wrap-front dress detail | Họa tiết hoa hồng tím và chi tiết thân trước kiểu quấn",
-  "st-tailor-floral-dinner-jacket-showroom.png": "Magenta and violet floral dinner jacket in the S.T Tailor showroom | Áo khoác dự tiệc floral tông hồng tím tại showroom S.T Tailor",
-  "st-tailor-floral-dinner-jacket-lapel.png": "Floral dinner jacket lapel and cloth detail | Chi tiết ve áo và chất liệu của áo khoác dự tiệc floral",
-  "st-tailor-floral-dinner-jacket-front.png": "Floral dinner jacket front and pocket detail | Chi tiết thân trước và túi của áo khoác dự tiệc floral",
-  "st-tailor-floral-dinner-jacket-texture.jpg": "Magenta and violet floral dinner jacket jacquard texture and pocket seam | Chất liệu jacquard và đường may túi của áo khoác dự tiệc floral tông hồng tím",
+  "st-tailor-floral-dinner-jacket-showroom.png": "Magenta and violet floral evening jacket in the S.T Tailor showroom | Áo khoác dự tiệc họa tiết hoa hồng tím tại showroom S.T Tailor",
+  "st-tailor-floral-dinner-jacket-lapel.png": "Floral evening jacket lapel and cloth detail | Chi tiết ve áo và chất vải của áo khoác dự tiệc họa tiết hoa",
+  "st-tailor-floral-dinner-jacket-front.png": "Floral evening jacket front and pocket detail | Chi tiết thân trước và túi áo khoác dự tiệc họa tiết hoa",
+  "st-tailor-floral-dinner-jacket-texture.jpg": "Magenta and violet floral jacquard and pocket detail on an evening jacket | Chi tiết vải jacquard hoa hồng tím và túi áo khoác dự tiệc",
   "st-tailor-gallery-shirt-label-detail.jpg": "S.T Tailor shirt label sewn inside a white shirt | Nhãn S.T Tailor may bên trong sơ mi trắng",
   "st-tailor-gallery-patterned-shirt.jpg": "Blue patterned tailored shirt on a mannequin | Sơ mi xanh hoa văn may đo trên mannequin",
   "tailored-trouser-check.jpg": "Grey checked tailored trousers folded on wood | Quần may đo caro xám gấp trên nền gỗ",
@@ -718,7 +719,7 @@ function transformAbout(html) {
 <section class="st-about-gallery-bridge" aria-labelledby="st-about-gallery-bridge-title">
   <div class="st-lux-shell">
     <a class="st-about-gallery-bridge__frame st-motion st-motion-2" href="/gallery/" aria-describedby="st-about-gallery-bridge-description">
-      <figure><img src="/media/2026/09/st-tailor-floral-dinner-jacket-showroom.png" alt="Magenta and violet floral dinner jacket in the S.T Tailor showroom | Áo khoác dự tiệc floral tông hồng tím tại showroom S.T Tailor" width="1086" height="1448" loading="lazy" decoding="async"></figure>
+      <figure><img src="/media/2026/09/st-tailor-floral-dinner-jacket-showroom.png" alt="Magenta and violet floral evening jacket in the S.T Tailor showroom | Áo khoác dự tiệc họa tiết hoa hồng tím tại showroom S.T Tailor" width="1086" height="1448" loading="lazy" decoding="async"></figure>
       <span class="st-about-gallery-bridge__copy">
         <span class="st-lux-eyebrow">THE S.T TAILOR GALLERY <span lang="vi">/ THƯ VIỆN HÌNH ẢNH S.T TAILOR</span></span>
         <strong id="st-about-gallery-bridge-title">See the work in full.<span lang="vi">Khám phá tác phẩm trọn vẹn.</span></strong>
@@ -827,7 +828,7 @@ function enrichImageAttributes(html, { responsiveSizes, deprioritizeLazyImages =
       const isGalleryHero = /\bst-gallery-hero__story-image\b/.test(output);
       const srcset = imageSourceSet(metadata.responsive);
       const sizes = isHomeHero ? homeHeroSizes : isGalleryHero ? galleryHeroSizes
-        : /\bst-showcase__hero-image\b/.test(output) ? "(max-width: 760px) min(calc(100vw - 34px), 520px), min(calc(45vw - 36px), 490px)"
+        : /\bst-showcase__hero-image\b/.test(output) ? showcaseHeroSizes
         : responsiveSizes;
       const lazyAuto = /\bloading="lazy"/i.test(output) ? "auto, " : "";
       output = output.replace(/<img\b/i, `<img srcset="${srcset}" sizes="${lazyAuto}${sizes}"`);
@@ -870,8 +871,8 @@ const sharedContentModified = "2026-11-25";
 // Advance the relevant date when transformed copy changes, not for build fixes.
 const derivedContentModified = {
   "Home.html": "2026-11-22",
-  "About.html": "2026-11-22",
-  "Gallery.html": "2026-11-21", "Payment.html": "2026-11-22",
+  "About.html": "2026-11-25",
+  "Gallery.html": "2026-11-25", "Payment.html": "2026-11-22",
   "Returns.html": "2026-10-18", "Shipping.html": "2026-10-18",
   "Terms.html": "2026-10-18", "Privacy.html": "2026-10-18"
 };
@@ -1080,6 +1081,9 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     if (candidates?.length) {
       heroPreload = `<link rel="preload" as="image" type="image/avif" imagesrcset="${imageSourceSet(candidates)}" imagesizes="${galleryHeroSizes}" fetchpriority="high">`;
     }
+  }
+  if (showcasePage?.summary && shareMetadata?.responsive_avif?.length) {
+    heroPreload = `<link rel="preload" as="image" type="image/avif" imagesrcset="${imageSourceSet(shareMetadata.responsive_avif)}" imagesizes="${showcaseHeroSizes}" fetchpriority="high">`;
   }
   const isWatchPage = route === fittingFilmRoute;
   if (isWatchPage) {

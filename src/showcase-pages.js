@@ -4,7 +4,7 @@ export const showcaseHubs = [
     source: "ShowcaseGarments.html",
     labels: ["Finished garments", "Trang phục hoàn thiện"],
     title: "Finished Bespoke Garments in Ho Chi Minh City | S.T Tailor",
-    description: "Explore finished S.T Tailor garments in Ho Chi Minh City, from tailored suits, tuxedos and checked trousers to a white women’s suit and a floral silk dress.",
+    description: "Explore finished S.T Tailor garments in Ho Chi Minh City, including bespoke suits, tuxedos, checked trousers and floral occasionwear.",
     image: "/media/2026/09/st-tailor-gallery-beige-double-breasted-suit.png",
     imageAlt: "Beige double-breasted blazer and trousers on a tailoring form | Blazer be hai hàng khuy và quần đồng bộ trên ma-nơ-canh"
   },
@@ -79,6 +79,26 @@ export const showcaseEntries = [
     summary: ["A white jacket with notch lapels and matching trousers, photographed on a tailoring form.", "Áo khoác trắng ve chữ K và quần đồng bộ, chụp trên ma-nơ-canh."],
     image: "/media/2026/09/st-tailor-womens-white-suit.jpg",
     imageAlt: "White women’s suit with a notch-lapel jacket and matching trousers on a tailoring form | Suit nữ màu trắng gồm áo ve chữ K và quần đồng bộ trên ma-nơ-canh"
+  },
+  {
+    route: "/san-pham/dam-quan-hoa-hong-tim/",
+    source: "ShowcaseFloralWrapDress.html",
+    labels: ["Magenta floral wrap dress", "Đầm quấn hoa tông hồng tím"],
+    title: "Magenta Floral Wrap Dress | S.T Tailor",
+    description: "See a finished S.T Tailor wrap dress with a V-neck, long sleeves and a side tie. Read what to check at a made-to-measure dress fitting.",
+    summary: ["The overlapping front forms a V-neck and ties at the waist. Violet flowers run across the deep magenta cloth.", "Hai vạt đầm bắt chéo tạo cổ chữ V và buộc ở eo. Họa tiết hoa tím trải trên nền vải hồng đậm."],
+    image: "/media/2026/09/st-tailor-magenta-floral-wrap-dress-full-length.jpg",
+    imageAlt: "Long magenta floral wrap dress with a side tie, displayed beside a navy suit | Đầm quấn dài họa tiết hoa tông hồng tím, buộc nơ bên eo, trưng bày cạnh suit xanh navy"
+  },
+  {
+    route: "/san-pham/ao-khoac-jacquard-hoa/",
+    source: "ShowcaseFloralJacquardJacket.html",
+    labels: ["Floral jacquard evening jacket", "Áo khoác dự tiệc jacquard hoa"],
+    title: "Floral Jacquard Evening Jacket | S.T Tailor",
+    description: "Explore a finished S.T Tailor jacket in magenta and violet floral jacquard. See the shawl lapel, fabric-covered button and flap pockets.",
+    summary: ["Violet flowers are woven into the magenta ground. A shawl lapel and one fabric-covered button leave much of the pattern visible.", "Hoa tím được dệt trên nền hồng đậm. Ve sam và một khuy bọc vải để lộ phần lớn họa tiết trên thân áo."],
+    image: "/media/2026/09/st-tailor-floral-dinner-jacket-showroom.png",
+    imageAlt: "Magenta and violet floral jacquard jacket with a shawl lapel and flap pockets on a dress form | Áo khoác jacquard hoa hồng tím với ve sam và túi có nắp trên ma-nơ-canh"
   },
   {
     route: "/san-pham/so-mi-trang-vien-ca-ro/",

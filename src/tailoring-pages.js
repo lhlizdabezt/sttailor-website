@@ -36,6 +36,15 @@ export const tailoringPages = [
     imageAlt: "Tailor taking a client’s measurements at S.T Tailor | Thợ may lấy số đo cho khách tại S.T Tailor"
   },
   {
+    route: "/cam-nang-may-do/kiem-tra-phom-suit/",
+    source: "GuideSuitFit.html",
+    labels: ["Suit fitting checklist", "Các điểm cần kiểm tra khi thử suit"],
+    title: "How a Bespoke Suit Should Fit | S.T Tailor",
+    description: "Use S.T Tailor’s bilingual suit fitting checklist to check the jacket collar, sleeves, waistband, trouser hem and optional waistcoat while standing and moving.",
+    image: "/media/2026/09/st-tailor-client-navy-suit-fitting.jpg",
+    imageAlt: "Client wearing a dark suit over a yellow shirt during an S.T Tailor fitting | Khách mặc suit tối màu phối sơ mi vàng trong buổi thử đồ tại S.T Tailor"
+  },
+  {
     route: "/chon-vai-may-do/vai-len-y/",
     source: "GuideItalianWool.html",
     labels: ["Italian suiting wool", "Vải len Ý may suit"],

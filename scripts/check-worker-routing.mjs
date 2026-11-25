@@ -171,6 +171,6 @@ test("retired body-fit article redirects to fitting guidance without losing camp
   for (const method of ["GET", "HEAD"]) {
     const response = await worker.fetch(new Request("https://sttailor.com/how-to-choose-the-right-mens-suit-for-your-body-type/?utm_source=google&gclid=example", { method }), env);
     assert.equal(response.status, 301, method);
-    assert.equal(response.headers.get("Location"), "https://sttailor.com/quy-trinh-thu-do/?utm_source=google&gclid=example", method);
+    assert.equal(response.headers.get("Location"), "https://sttailor.com/cam-nang-may-do/kiem-tra-phom-suit/?utm_source=google&gclid=example", method);
   }
 });

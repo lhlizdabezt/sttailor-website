@@ -948,7 +948,6 @@ html body .st-guide-section-head { max-width: 800px !important; margin: 0 auto 4
 html body .st-guide-section-head h2 { margin: 0 !important; color: var(--guide-ink) !important; font: 500 clamp(38px, 5vw, 66px)/.98 var(--st-wordmark) !important; }
 html body .st-guide-section-head h2 span[lang="vi"] { display: block !important; margin-top: 12px !important; color: #75452c !important; font-size: .46em !important; line-height: 1.15 !important; }
 html body .st-guide-index__grid { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 14px !important; }
-.st-guide-index__visit { grid-column: 1 / -1; }
 html body .st-guide-index__grid > a { position: relative !important; display: grid !important; min-height: 270px !important; padding: 32px !important; grid-template-rows: auto auto 1fr auto !important; border: 1px solid #9b6d50 !important; background: #fffdf8 !important; color: var(--guide-ink) !important; text-decoration: none !important; transition: background-color .22s ease, color .22s ease, transform .22s ease !important; }
 html body .st-guide-index__grid > a > span { color: #8a4d2e !important; font: 750 11px/1 var(--st-vietnamese) !important; letter-spacing: .13em !important; }
 html body .st-guide-index__grid strong { margin-top: 36px !important; font: 500 clamp(28px, 2.8vw, 39px)/1 var(--st-wordmark) !important; }
@@ -980,6 +979,8 @@ html body .st-guide-cta a { display: inline-flex !important; min-height: 50px !i
 html body .st-label-separator { display: inline-block !important; margin-inline: 2px !important; }
 html body .st-guide-next a:hover,
 html body .st-guide-next a:focus-visible { background: var(--guide-brown) !important; color: #fff8ed !important; outline: 2px solid #a87855 !important; outline-offset: 3px !important; }
+html body .st-guide-next.st-guide-next--checklists { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+html body .st-guide-next--checklists > a { display: grid !important; align-content: center; border-color: #9e7658 !important; }
 html body .st-guide-cta { padding: clamp(42px, 6vw, 76px) 0 !important; background: var(--guide-brown) !important; color: #fff8ed !important; }
 html body .st-guide-cta .st-guide-shell { display: flex !important; align-items: center !important; justify-content: space-between !important; gap: 30px !important; }
 html body .st-guide-cta :is(p, a, a span) { color: #fff8ed !important; -webkit-text-fill-color: #fff8ed !important; }
@@ -1034,6 +1035,7 @@ html body .st-footer-v7.st-footer-v8 .st-footer-v7__visit p > a + a { margin-top
   html body .st-guide-article__body > section { grid-template-columns: 1fr !important; gap: 18px !important; }
   html body .st-guide-next,
   html body .st-guide-cta .st-guide-shell { align-items: stretch !important; flex-direction: column !important; }
+  html body .st-guide-next.st-guide-next--checklists { grid-template-columns: minmax(0, 1fr); }
 }
 
 @media (max-width: 560px) {
