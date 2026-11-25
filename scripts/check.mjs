@@ -203,8 +203,8 @@ for (const route of expectedRoutes) {
     if (!footerLinks.has(publishedRoute)) failures.push(`Footer on ${route} omits published page ${publishedRoute}`);
   }
   const directory = footer.match(/<nav class="st-footer-directory__groups"[\s\S]*?<\/nav>/)?.[0] ?? "";
-  const directoryLinks = [...directory.matchAll(/href="([^"]+)"[^>]*>[\s\S]*?<code>([^<]*(?:<wbr>[^<]*)*)<\/code>/g)];
-  if (directoryLinks.length !== expectedRoutes.length || new Set(directoryLinks.map(([, href]) => href)).size !== expectedRoutes.length || directoryLinks.some(([, href, pathText]) => !expectedRoutes.includes(href) || pathText.replaceAll("<wbr>", "") !== href)) {
+  const directoryLinks = [...directory.matchAll(/href="([^"]+)"[^>]*>[\s\S]*?<code>([^<]*)<\/code>/g)];
+  if (directoryLinks.length !== expectedRoutes.length || new Set(directoryLinks.map(([, href]) => href)).size !== expectedRoutes.length || directoryLinks.some(([, href, pathText]) => !expectedRoutes.includes(href) || pathText !== href)) {
     failures.push(`The footer directory must show every complete canonical path on ${route}`);
   }
   if (!/<nav class="st-footer-v7__nav"[\s\S]*?<a href="\/">Home <span lang="vi">Trang chủ<\/span><\/a>/i.test(footer)) failures.push(`Footer on ${route} lacks a visible Home navigation link.`);
@@ -413,7 +413,7 @@ if (!home.includes('class="st-footer-v7__bottom st-footer-v8__legal"') || !home.
 const contact = readFileSync(path.join(dist, "lien-he", "index.html"), "utf8");
 if (!contact.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward") || contact.includes("Tầng 1, 258 Lê Thánh Tôn")) failures.push("Contact's single-language address must be entirely in English.");
 const shippingPolicy = readFileSync(path.join(dist, "chinh-sach-van-chuyen", "index.html"), "utf8");
-if (!shippingPolicy.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward, Ho Chi Minh City, Vietnam") || !shippingPolicy.includes("Tầng 1, 258 Lê Thánh Tôn, Phường Tân Định, TP. Hồ Chí Minh, Việt Nam")) failures.push("Shipping collection address must stay synchronized in both languages.");
+if (!shippingPolicy.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward, Ho Chi Minh City, Vietnam") || !shippingPolicy.includes("Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định, Thành phố Hồ Chí Minh, Việt Nam")) failures.push("Shipping collection address must stay synchronized in both languages.");
 const contactCards = contact.match(/st-contact-card--[a-z]+/g) ?? [];
 for (const channel of ["hotline", "whatsapp", "zalo", "email", "instagram", "messenger"]) {
   if (!contactCards.includes(`st-contact-card--${channel}`)) failures.push(`Contact channel missing: ${channel}`);
@@ -483,6 +483,12 @@ for (const aboutGalleryFeature of ["st-about-gallery-bridge", 'href="/gallery/"'
 }
 
 const gallery = readFileSync(path.join(dist, "gallery", "index.html"), "utf8");
+for (const { route, collections } of showcasePages.filter((page) => page.collections)) {
+  const story = readFileSync(path.join(dist, route.slice(1), "index.html"), "utf8");
+  for (const { id } of collections) {
+    if (!story.includes(`href="/gallery/#${id}"`) || !gallery.includes(`id="${id}"`)) failures.push(`${route} must link to its Gallery series #${id}.`);
+  }
+}
 if (gallery.includes("st-tailor-client-red-dinner-jacket.jpg")) failures.push("Retired red dinner jacket image remains in Gallery.");
 for (const removedBlock of ["album-archive", "album-client-feedback", "st-gallery-closing"]) {
   if (gallery.includes(removedBlock)) failures.push(`Removed Gallery block remains: ${removedBlock}`);

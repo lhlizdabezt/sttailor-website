@@ -67,6 +67,9 @@ for (const route of routes) {
   expect(stylesheet && response.headers.get("link")?.includes(`<${stylesheet}>; rel=preload; as=style`), `${route} does not advertise its current stylesheet to Cloudflare Early Hints`);
   expect(pageHtml.includes('<noscript><img height="1" width="1" style="display:none" alt="" aria-hidden="true" src="https://www.facebook.com/tr?id=2294442874726399&amp;ev=PageView&amp;noscript=1"></noscript>') && !/\bfbq\s*\(/.test(pageHtml), `${route} must use GTM Meta Pixel with its static noscript fallback only`);
   expect(response.status === 200, `${route} returned ${response.status}`);
+  if (expectedBuildRevision) {
+    expect(pageHtml.includes(`name="sttailor-build-revision" content="${expectedBuildRevision}"`), `${route} did not serve the deployed revision ${expectedBuildRevision}`);
+  }
   expect(response.headers.get("strict-transport-security")?.includes("max-age=15552000"), `${route} has no HSTS policy`);
   const policy = response.headers.get("content-security-policy") ?? "";
   expect(policy === contentSecurityPolicy(route), `${route} does not enforce the expected CSP`);
@@ -109,8 +112,6 @@ for (const route of routes) {
   expect(!/https?:\/\/(?:[a-z0-9-]+\.)*(?:x|twitter)\.com(?:[\/:?"\s]|$)|name=["']twitter:/i.test(pageHtml), `${route} still contains a retired social integration`);
   expect((pageHtml.match(/href="https:\/\/www\.threads\.com\/@sttailorhcm"/g) || []).length === 1 && pageHtml.includes('"https://www.threads.com/@sttailorhcm"'), `${route} has no single official Threads profile in social links/schema`);
 }
-
-if (expectedBuildRevision) expect(pages.get("/").includes(`name="sttailor-build-revision" content="${expectedBuildRevision}"`), "Production did not serve the revision deployed by this workflow.");
 
 const reviewWidget = await fetchWithRetry(`${origin}${tripadvisorEmbedPath}`);
 const reviewWidgetHtml = await reviewWidget.text();
@@ -196,7 +197,7 @@ for (const policyRoute of ["/doi-tra-hoan-tien/", "/chinh-sach-bao-mat/", "/dieu
   for (const issue of clientCareFailures(pages.get(policyRoute))) expect(false, `${policyRoute}: ${issue}`);
 }
 for (const issue of clientCareFailures(pages.get("/phuong-thuc-thanh-toan/"), true)) expect(false, `Payment: ${issue}`);
-expect(pages.get("/chinh-sach-van-chuyen/").includes("Tầng 1, 258 Lê Thánh Tôn, Phường Tân Định"), "Shipping collection address is missing its Vietnamese version");
+expect(pages.get("/chinh-sach-van-chuyen/").includes("Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định"), "Shipping collection address is missing its approved Vietnamese wording");
 expect(pages.get("/gioi-thieu/").includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward"), "About page does not display the confirmed showroom floor");
 expect(home.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward"), "Shared footer does not display the confirmed showroom floor and ward");
 expect(!contact.includes("Tell us what you are dressing for"), "Removed contact introduction is still present");
@@ -216,12 +217,24 @@ const filmTag = galleryHtml.match(/<video\b[^>]*>[\s\S]*?<\/video>/i)?.[0] ?? ""
 expect((galleryHtml.match(/<video\b/gi) || []).length === 1 && /\bcontrols\b/.test(filmTag) && /\bpreload="none"/.test(filmTag) && !/\bautoplay\b/.test(filmTag) && filmTag.includes(`poster="${posterPath}"`) && filmTag.includes(`src="${filmPath}"`), "Gallery fitting film is missing or loads without user intent");
 const watchHtml = pages.get("/phim-thu-do/");
 expect(galleryHtml.includes('href="/phim-thu-do/"') && !galleryHtml.includes('"@type":"VideoObject"') && watchHtml.includes('"@type":"VideoObject"') && watchHtml.includes(`"contentUrl":"${origin}${filmPath}"`) && watchHtml.includes(`src="${filmPath}"`), "Fitting watch page, VideoObject or Gallery link is missing");
-const galleryImages = [...galleryHtml.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^\"]+)"[^>]*>/gi)]
-  .filter((match) => !/(?:logo-sttailor|LinkedInLogo)/i.test(match[1]));
-expect(galleryImages.length === 118 && new Set(galleryImages.map((match) => match[1])).size === galleryImages.length, "Gallery is missing images or repeats an image");
+function galleryImagePaths(html) {
+  return [...html.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^"]+)"[^>]*>/gi)]
+    .map((match) => match[1])
+    .filter((src) => !/(?:logo-sttailor|LinkedInLogo)/i.test(src));
+}
+
+// The build check compares this document against the approved source images.
+// Compare the deployed document with the checked build for this release.
+const builtGalleryImages = new Set(galleryImagePaths(readFileSync(path.join(dist, "gallery", "index.html"), "utf8")));
+const galleryImages = galleryImagePaths(galleryHtml);
+const liveGalleryImages = new Set(galleryImages);
+expect(builtGalleryImages.size > 0, "The built Gallery has no editorial images");
+expect(liveGalleryImages.size === galleryImages.length, "The live Gallery repeats an editorial image");
+for (const src of builtGalleryImages) expect(liveGalleryImages.has(src), `The live Gallery is missing ${src}`);
+for (const src of liveGalleryImages) expect(builtGalleryImages.has(src), `The live Gallery contains an unexpected image: ${src}`);
 for (const asset of ["st-tailor-made-to-measure-stories-gallery.jpg", "st-tailor-magenta-floral-wrap-dress-and-navy-suit.jpg", "st-tailor-magenta-floral-wrap-dress-full-length.jpg", "st-tailor-magenta-floral-wrap-dress-detail.jpg", "st-tailor-showroom-exterior-evening.jpg"]) {
   const path = `/media/2026/09/${asset}`;
-  expect(galleryImages.filter((match) => match[1] === path).length === 1, `Gallery must show ${asset} exactly once`);
+  expect(liveGalleryImages.has(path), `Gallery must show ${asset}`);
   const image = await fetchWithRetry(`${origin}${path}`);
   expect(image.status === 200 && image.headers.get("content-type")?.includes("image/jpeg"), `Gallery image is unavailable: ${asset}`);
 }
@@ -296,7 +309,7 @@ expect(sitemapText.includes("xmlns:image="), "Image sitemap namespace is missing
 expect(sitemapText.includes("<image:image>"), "Image sitemap entries are missing");
 const gallerySitemap = sitemapText.match(/<url><loc>https:\/\/sttailor\.com\/gallery\/[\s\S]*?<\/url>/)?.[0] ?? "";
 const gallerySitemapImages = [...gallerySitemap.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)].map((match) => match[1]);
-expect(gallerySitemapImages.length === galleryImages.length && galleryImages.every((match) => gallerySitemapImages.includes(`${origin}${match[1]}`)), "Gallery sitemap omits one or more editorial images");
+expect(gallerySitemapImages.length === builtGalleryImages.size && [...builtGalleryImages].every((src) => gallerySitemapImages.includes(`${origin}${src}`)), "Gallery sitemap must contain every editorial image in the build exactly once");
 const watchSitemap = sitemapText.match(/<url><loc>https:\/\/sttailor\.com\/phim-thu-do\/[\s\S]*?<\/url>/)?.[0] ?? "";
 expect(sitemapText.includes('xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"') && (sitemapText.match(/<video:video>/g) || []).length === 1 && watchSitemap.includes(`<video:content_loc>${origin}${filmPath}</video:content_loc>`) && watchSitemap.includes(`<video:thumbnail_loc>${origin}${posterPath}</video:thumbnail_loc>`), "Video sitemap omits or duplicates the fitting watch page");
 

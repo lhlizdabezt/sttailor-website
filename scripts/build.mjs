@@ -182,7 +182,13 @@ function photoStoryBody(page) {
       <div class="st-showcase__photo-grid">${smallerViews.map(editorialPhoto).join("\n")}</div>
     </section>`;
   });
-  const related = [[`/gallery/#${page.collections[0].id}`, ["View this series in the Gallery", "Xem bộ ảnh trong thư viện"]], ...page.related.map((href) => [href, pageLabels.get(href)])];
+  const galleryLinks = page.collections.map(({ id, labels: [english, vietnamese] }) => [
+    `/gallery/#${id}`,
+    page.collections.length === 1
+      ? ["View this series in the Gallery", "Xem bộ ảnh trong thư viện"]
+      : [`Gallery · ${english}`, `Thư viện ảnh · ${vietnamese}`]
+  ]);
+  const related = [...galleryLinks, ...page.related.map((href) => [href, pageLabels.get(href)])];
   return `<div class="st-showcase__shell st-showcase__details">${sections.join("\n")}</div>
     ${collections.join("\n")}
     <nav class="st-showcase__shell st-showcase__links" aria-label="Related work and guidance | Trang phục và cẩm nang liên quan">
@@ -999,7 +1005,7 @@ function footer(route) {
       <h3>${english}<span lang="vi">${vietnamese}</span></h3>
       <ul>${paths.map((href) => {
         const [title, translation] = pageLabels.get(href);
-        return `<li><a href="${href}"${href === route ? ' aria-current="page"' : ''}><span>${title}</span><span lang="vi">${translation}</span><code>${href.replaceAll("/", "/<wbr>")}</code></a></li>`;
+        return `<li><a href="${href}"${href === route ? ' aria-current="page"' : ''}><span>${title}</span><span lang="vi">${translation}</span><code>${href}</code></a></li>`;
       }).join("")}</ul>
     </section>`).join("");
   return transformFooter(readSource("Footer.html"), route).replace("<!-- SITE_DIRECTORY -->", directory);
