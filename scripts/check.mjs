@@ -136,9 +136,11 @@ for (const route of expectedRoutes) {
     if (showcaseHub) {
       const webPage = schemaGraph.find((entity) => entity["@id"]?.endsWith("#webpage"));
       const list = schemaGraph.find((entity) => entity["@id"] === webPage?.mainEntity?.["@id"] && entity["@type"] === "ItemList");
-      const expectedWork = showcasePages.filter((page) => page.route !== route && page.route.startsWith(route));
-      if (webPage?.["@type"] !== "CollectionPage" || JSON.stringify(list?.itemListElement.map(({ url }) => url)) !==
-          JSON.stringify(expectedWork.map(({ route: child }) => `https://sttailor.com${child}`))) {
+      const expectedWork = showcasePages.filter((page) => page.route !== route && page.route.startsWith(route)).map(({ route: child }) => child);
+      const cardLinks = [...mainContent.matchAll(/href="([^"]+)" aria-describedby="st-showcase-item-\d+"/g)].map(([, href]) => href);
+      if (webPage?.["@type"] !== "CollectionPage" ||
+          JSON.stringify(cardLinks.toSorted()) !== JSON.stringify(expectedWork.toSorted()) ||
+          JSON.stringify(list?.itemListElement.map(({ url }) => url)) !== JSON.stringify(cardLinks.map((href) => `https://sttailor.com${href}`))) {
         failures.push(`Showcase index does not describe each visible entry: ${route}`);
       }
     }
@@ -156,7 +158,8 @@ for (const route of expectedRoutes) {
   if ((businessSchema?.sameAs ?? []).filter((url) => url === tripadvisorUrl).length !== 1) failures.push(`Official Tripadvisor listing is missing or duplicated in LocalBusiness schema: ${route}`);
   const widgets = [...html.matchAll(/<iframe\b[^>]*>/g)].filter(([tag]) => tag.includes(`src="${tripadvisorEmbedPath}"`));
   if (html.includes("www.jscache.com/wejs") || widgets.length !== Number(route === "/gioi-thieu/")) failures.push(`Tripadvisor widget placement or isolation is incorrect: ${route}`);
-  if (route === "/gioi-thieu/" && (!widgets[0]?.[0].includes('loading="lazy"') || !widgets[0][0].includes('sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"') || !html.includes(`class="st-tripadvisor__link" href="${tripadvisorUrl}"`) || !html.includes('https://www.tripadvisor.com/UserReviewEdit-g293925-d34701232-S_T_Tailor-Ho_Chi_Minh_City.html') || !html.includes('href="/lien-he/"><span>Hours &amp; directions</span>'))) failures.push("The Tripadvisor panel needs its sandboxed lazy badge, read and write review links, and showroom link.");
+  if (route === "/gioi-thieu/" && (!widgets[0]?.[0].includes('loading="lazy"') || !widgets[0][0].includes('sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"') || !html.includes(`class="st-tripadvisor__link" href="${tripadvisorUrl}"`) || !html.includes('https://www.tripadvisor.com/UserReviewEdit-g293925-d34701232-S_T_Tailor-Ho_Chi_Minh_City.html') || !mainContent.includes('href="/lien-he/#st-showroom-map"'))) failures.push("The Tripadvisor panel needs its sandboxed lazy badge, read and write review links, and showroom map link.");
+  if (route === "/lien-he/" && (!mainContent.includes('id="st-showroom-map"') || !mainContent.includes('href="/gioi-thieu/#st-tripadvisor"'))) failures.push("Contact needs a map anchor and a link to the Tripadvisor panel.");
   if (businessSchema?.currenciesAccepted !== "VND") failures.push(`LocalBusiness currency must match the payment page: ${route}`);
   for (const marker of ['rel="manifest" href="/site.webmanifest"', 'property="og:image:alt"', 'name="google-site-verification"', 'name="p:domain_verify"']) {
     if (!html.includes(marker)) failures.push(`SEO/discovery marker is missing on ${route}: ${marker}`);

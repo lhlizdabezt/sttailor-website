@@ -8,7 +8,7 @@ import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
 import { tripadvisorEmbedPath } from "../src/security-policy.js";
 import { clientCareHubRoute, clientCarePage } from "../src/client-care-pages.js";
 import { tailoringPages } from "../src/tailoring-pages.js";
-import { showcaseEntries, showcaseHubs, showcasePages } from "../src/showcase-pages.js";
+import { showcaseEntries, showcaseHubs, showcaseItemsFor, showcasePages } from "../src/showcase-pages.js";
 import { fittingFilm as galleryFilm, fittingFilmRoute } from "../src/fitting-film.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -36,8 +36,11 @@ const homeHeroPortraitMedia = "(max-width: 600px) and (orientation: portrait)";
 const homeEditorialSizes = "(max-width: 440px) calc(100vw - 34px), (max-width: 760px) calc(50vw - 24px), (max-width: 1120px) calc(33vw - 30px), min(calc(20vw - 30px), 240px)";
 const galleryHeroSizes = "(max-width: 899px) min(calc(100vw - 32px), 760px), min(calc(50vw - 24px), 590px)";
 const showcaseHeroSizes = "(max-width: 760px) min(calc(100vw - 34px), 520px), min(calc(45vw - 36px), 490px)";
+const showcaseCardSizes = "(max-width: 600px) calc(100vw - 34px), (max-width: 1080px) calc(50vw - 30px), min(calc(33.33vw - 32px), 371px)";
 const suitFitGuide = tailoringPages.find(({ source }) => source === "GuideSuitFit.html");
 const suitFitHeroSizes = "(max-width: 560px) min(calc(100vw - 28px), 420px), (max-width: 860px) 420px, min(calc(44vw - 40px), 440px)";
+const liningGuide = tailoringPages.find(({ source }) => source === "GuideJacketLining.html");
+const liningHeroSizes = "(max-width: 860px) min(calc(100vw - 48px), 480px), min(calc(45vw - 46px), 480px)";
 
 function imageSourceSet(candidates) {
   return candidates.map(({ src, width }) => `${src} ${width}w`).join(", ");
@@ -153,10 +156,6 @@ function breadcrumbNavigation(trail) {
   return `<nav class="st-breadcrumb" aria-label="Breadcrumb | Đường dẫn trang"><ol>${items.join("")}</ol></nav>`;
 }
 
-function showcaseItemsFor(hubRoute) {
-  return showcaseEntries.filter(({ route }) => route.startsWith(hubRoute));
-}
-
 function showcaseHubLinks() {
   return `<nav class="st-showcase__shell st-showcase__links st-showcase__links--discovery" aria-label="Finished work | Trang phục và dự án">
     ${showcaseHubs.map(({ route, labels: [english, vietnamese] }) => `<a class="st-showcase__action" href="${route}">${english}<span lang="vi">${vietnamese}</span></a>`).join("\n    ")}
@@ -164,17 +163,30 @@ function showcaseHubLinks() {
 }
 
 function transformShowcase(page, html) {
-  const { route, labels: [english, vietnamese], heading = english, image, imageAlt, summary } = page;
+  const { route, labels: [english, vietnamese], heading = english, image, imageAlt, summary, sections } = page;
   if (!summary) {
-    const cards = showcaseItemsFor(route).map(({ route: href, labels: [title, translation], summary: [copy, copyVi], image: src, imageAlt: alt }, index) => `<article class="st-showcase-card">
+    const cardHeading = sections ? "h3" : "h2";
+    const cards = showcaseItemsFor(route).map(({ route: href, labels: [title, translation], summary: [copy, copyVi], image: src, imageAlt: alt, section }, index) => ({
+      section,
+      markup: `<article class="st-showcase-card">
       <img class="st-showcase-card__photo" src="${src}" alt="${alt}" ${index === 0 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'}>
       <div class="st-showcase-card__copy">
-        <h2 id="st-showcase-item-${index + 1}">${title}<span lang="vi">${translation}</span></h2>
+        <${cardHeading} id="st-showcase-item-${index + 1}">${title}<span lang="vi">${translation}</span></${cardHeading}>
         <p>${copy}<span lang="vi">${copyVi}</span></p>
         <a class="st-showcase__action" href="${href}" aria-describedby="st-showcase-item-${index + 1}">View details <span lang="vi">Xem chi tiết</span></a>
       </div>
-    </article>`);
-    return html.replace("<!-- SHOWCASE_INDEX -->", `<div class="st-showcase__shell st-showcase__index">${cards.join("\n")}</div>`);
+    </article>`
+    }));
+    const grid = (items) => `<div class="st-showcase__index">${items.map(({ markup }) => markup).join("\n")}</div>`;
+    const index = !sections ? grid(cards) : `
+      <nav class="st-showcase__sections" aria-label="Garment collections | Nhóm trang phục">
+        ${sections.map(({ id, labels: [en, vi] }) => `<a class="st-showcase__action" href="#${id}">${en}<span lang="vi">${vi}</span></a>`).join("\n")}
+      </nav>
+      ${sections.map(({ id, labels: [en, vi] }) => `<section class="st-showcase__group" aria-labelledby="${id}">
+        <h2 id="${id}" tabindex="-1">${en}<span lang="vi">${vi}</span></h2>
+        ${grid(cards.filter(({ section }) => section === id))}
+      </section>`).join("\n")}`;
+    return html.replace("<!-- SHOWCASE_INDEX -->", `<div class="st-showcase__shell">${index}</div>`);
   }
   return html.replace("<!-- SHOWCASE_HERO -->", `<header class="st-showcase__hero">
     <div class="st-showcase__shell st-showcase__hero-grid">
@@ -733,30 +745,34 @@ function transformAbout(html) {
 </section>`;
   html = `${html.slice(0, provenanceRange.end)}${clothHeritage}${consultationGuide}${galleryBridge}${html.slice(provenanceRange.end)}`;
   const tripadvisor = `
-<section class="st-tripadvisor" aria-labelledby="st-tripadvisor-title">
+<section class="st-tripadvisor" id="st-tripadvisor" aria-labelledby="st-tripadvisor-title">
   <div class="st-lux-shell st-tripadvisor__inner">
     <header class="st-tripadvisor__copy">
-      <p class="st-lux-eyebrow">TRIPADVISOR</p>
-      <h2 id="st-tripadvisor-title">Reviews from our clients<span lang="vi">Đánh giá của khách hàng</span></h2>
+      <div>
+        <p class="st-lux-eyebrow">TRIPADVISOR</p>
+        <h2 id="st-tripadvisor-title">Reviews from our clients<span lang="vi">Đánh giá của khách hàng</span></h2>
+      </div>
       <p>Read how clients chose their cloth, what changed at their fittings and how the finished garments felt. After your visit, you can share your experience on Tripadvisor.<span lang="vi">Đọc chia sẻ của khách hàng về cách chọn vải, những điều chỉnh khi thử đồ và cảm nhận khi mặc trang phục hoàn thiện. Sau khi ghé nhà may, bạn cũng có thể chia sẻ trải nghiệm trên Tripadvisor.</span></p>
     </header>
     <div class="st-tripadvisor__card">
-      <h3>Tripadvisor listing<span lang="vi">Trang Tripadvisor</span></h3>
-      <iframe class="st-tripadvisor__rating" src="${tripadvisorEmbedPath}" title="S.T Tailor on Tripadvisor / S.T Tailor trên Tripadvisor" loading="lazy" width="200" height="120" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
+      <div class="st-tripadvisor__review">
+        <h3>S.T Tailor on Tripadvisor<span lang="vi">S.T Tailor trên Tripadvisor</span></h3>
+        <iframe class="st-tripadvisor__rating" src="${tripadvisorEmbedPath}" title="Tripadvisor badge for S.T Tailor / Huy hiệu Tripadvisor của S.T Tailor" loading="lazy" width="200" height="120" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
+      </div>
       <div class="st-tripadvisor__actions">
         <a class="st-tripadvisor__link" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer"><span>Read reviews</span><span lang="vi">Đọc đánh giá</span></a>
         <a class="st-tripadvisor__link st-tripadvisor__link--outline" href="https://www.tripadvisor.com/UserReviewEdit-g293925-d34701232-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer"><span>Write a review</span><span lang="vi">Viết đánh giá</span></a>
       </div>
     </div>
     <div class="st-tripadvisor__card">
-      <h3>Visit S.T Tailor <span lang="vi">Ghé S.T Tailor</span></h3>
       <div class="st-tripadvisor__visit">
+        <h3>Visit S.T Tailor<span lang="vi">Ghé S.T Tailor</span></h3>
         <address>1st Floor, 258 Le Thanh Ton, Tan Dinh Ward<br>Ho Chi Minh City, Vietnam<span lang="vi">Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định<br>Thành phố Hồ Chí Minh, Việt Nam</span></address>
         <p class="st-tripadvisor__hours">Open daily, 09:00–20:00<span lang="vi">Mở cửa mỗi ngày, 09:00–20:00</span></p>
       </div>
       <div class="st-tripadvisor__actions">
-        <a class="st-tripadvisor__link st-tripadvisor__link--outline" href="/lien-he/"><span>Hours &amp; directions</span><span lang="vi">Giờ mở cửa và chỉ đường</span></a>
-        <a class="st-tripadvisor__link st-tripadvisor__link--outline" href="/quy-trinh-thu-do/"><span>Our fitting process</span><span lang="vi">Các bước trong buổi thử đồ</span></a>
+        <a class="st-tripadvisor__link st-tripadvisor__link--outline" href="/lien-he/#st-showroom-map"><span>Directions</span><span lang="vi">Đường đến nhà may</span></a>
+        <a class="st-tripadvisor__link st-tripadvisor__link--outline" href="/quy-trinh-thu-do/"><span>Fitting process</span><span lang="vi">Quy trình thử đồ</span></a>
       </div>
     </div>
   </div>
@@ -829,6 +845,7 @@ function enrichImageAttributes(html, { responsiveSizes, deprioritizeLazyImages =
       const isHomeHero = src === homeHeroImage && /\bst-home-v6__hero-media\b/.test(output);
       const isGalleryHero = /\bst-gallery-hero__story-image\b/.test(output);
       const isSuitFitHero = /\bst-suit-fit__hero-image\b/.test(output);
+      const isLiningHero = /\bst-guide-lining-image\b/.test(output);
       const srcset = imageSourceSet(metadata.responsive);
       const sizes = isHomeHero ? homeHeroSizes : isGalleryHero ? galleryHeroSizes
         : isSuitFitHero ? suitFitHeroSizes
@@ -836,7 +853,7 @@ function enrichImageAttributes(html, { responsiveSizes, deprioritizeLazyImages =
         : responsiveSizes;
       const lazyAuto = /\bloading="lazy"/i.test(output) ? "auto, " : "";
       output = output.replace(/<img\b/i, `<img srcset="${srcset}" sizes="${lazyAuto}${sizes}"`);
-      if (metadata.responsive_avif?.length && (isGalleryHero || isSuitFitHero || /\bst-showcase(?:__hero-image|-card__photo)\b/.test(output))) {
+      if (metadata.responsive_avif?.length && (isGalleryHero || isSuitFitHero || isLiningHero || /\bst-showcase(?:__hero-image|-card__photo)\b/.test(output))) {
         return `<picture><source type="image/avif" srcset="${imageSourceSet(metadata.responsive_avif)}" sizes="${lazyAuto}${sizes}">${output}</picture>`;
       }
     }
@@ -875,7 +892,7 @@ const sharedContentModified = "2026-11-25";
 // Advance the relevant date when transformed copy changes, not for build fixes.
 const derivedContentModified = {
   "Home.html": "2026-11-22",
-  "About.html": "2026-11-25",
+  "About.html": "2026-11-26",
   "Gallery.html": "2026-11-25", "Payment.html": "2026-11-22",
   "Returns.html": "2026-10-18", "Shipping.html": "2026-10-18",
   "Terms.html": "2026-10-18", "Privacy.html": "2026-10-18"
@@ -938,12 +955,13 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     "/": homeEditorialSizes,
     // The square guide photo covers a 560px-tall frame on desktop.
     "/cam-nang-may-do/": "(max-width: 560px) calc(100vw - 28px), (max-width: 860px) calc(100vw - 48px), 560px",
-    "/san-pham/": "(max-width: 600px) calc(100vw - 34px), (max-width: 1080px) calc(50vw - 30px), min(calc(33.33vw - 32px), 371px)",
-    "/du-an/": "(max-width: 600px) calc(100vw - 34px), min(calc(50vw - 30px), 470px)"
+    [liningGuide.route]: liningHeroSizes,
+    "/san-pham/": showcaseCardSizes,
+    "/du-an/": showcaseCardSizes
   }[route] ?? "(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 800px";
   const body = enrichImageAttributes(transformPage(sourceFile, readSource(sourceFile), showcasePage), {
     responsiveSizes,
-    deprioritizeLazyImages: sourceFile === "Home.html" || sourceFile === "Gallery.html"
+    deprioritizeLazyImages: Boolean(showcaseHub) || sourceFile === "Home.html" || sourceFile === "Gallery.html"
   });
   const galleryImages = route === "/gallery/" ? imageMetadata(body) : [];
   const canonical = `https://sttailor.com${route}`;
@@ -1086,9 +1104,13 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
       heroPreload = `<link rel="preload" as="image" type="image/avif" imagesrcset="${imageSourceSet(candidates)}" imagesizes="${galleryHeroSizes}" fetchpriority="high">`;
     }
   }
-  if ((sourceFile === suitFitGuide.source || showcasePage?.summary) && shareMetadata?.responsive_avif?.length) {
-    const sizes = sourceFile === suitFitGuide.source ? suitFitHeroSizes : showcaseHeroSizes;
-    heroPreload = `<link rel="preload" as="image" type="image/avif" imagesrcset="${imageSourceSet(shareMetadata.responsive_avif)}" imagesizes="${sizes}" fetchpriority="high">`;
+  if (sourceFile === suitFitGuide.source || sourceFile === liningGuide.source || showcasePage) {
+    const leadImage = showcaseHub ? showcaseItemsFor(route)[0]?.image : shareImage;
+    const candidates = imageManifest[leadImage?.slice("/media/".length)]?.responsive_avif;
+    if (candidates?.length) {
+      const sizes = sourceFile === suitFitGuide.source ? suitFitHeroSizes : showcasePage?.summary ? showcaseHeroSizes : responsiveSizes;
+      heroPreload = `<link rel="preload" as="image" type="image/avif" imagesrcset="${imageSourceSet(candidates)}" imagesizes="${sizes}" fetchpriority="high">`;
+    }
   }
   const isWatchPage = route === fittingFilmRoute;
   if (isWatchPage) {
@@ -1152,7 +1174,7 @@ function buildImageManifest() {
   const shareImages = [...new Set(routes.map(([, , , , image]) => image.slice("/media/".length)))];
   const homeCards = [...transformHome(readSource("Home.html")).matchAll(/class="st-home-editorial__photo" src="\/media\/([^"]+)"/g)]
     .flatMap(([, asset]) => ["--home-card", asset]);
-  const featureImages = [galleryHeroImage, suitFitGuide.image, ...showcaseEntries.map(({ image }) => image)]
+  const featureImages = [galleryHeroImage, suitFitGuide.image, liningGuide.image, ...showcaseEntries.map(({ image }) => image)]
     .flatMap((asset) => ["--feature-image", asset.slice("/media/".length)]);
   const result = spawnSync("python", [path.join(root, "scripts", "build-image-manifest.py"), sourceMedia, path.join(dist, "image-manifest.json"), ...shareImages, ...homeCards, ...featureImages], { encoding: "utf8" });
   if (result.status !== 0) throw new Error(`Image manifest generation failed:\n${result.stderr || result.stdout}`);

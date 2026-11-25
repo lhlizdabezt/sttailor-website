@@ -45,6 +45,15 @@ export const tailoringPages = [
     imageAlt: "Client wearing a charcoal suit jacket and dark trousers at S.T Tailor | Khách mặc áo khoác suit xám than và quần tối màu tại S.T Tailor"
   },
   {
+    route: "/cam-nang-may-do/chon-lot-ao-khoac/",
+    source: "GuideJacketLining.html",
+    labels: ["Choosing a jacket lining", "Chọn lớp lót áo khoác"],
+    title: "How to Choose a Suit Jacket Lining | S.T Tailor",
+    description: "Compare full, partial and unlined jacket construction, see how colour looks beneath pale cloth, and check sleeve and back ease at your fitting.",
+    image: "/media/2026/09/st-tailor-gallery-jacket-lining-mannequin.jpg",
+    imageAlt: "Dark jacket opened over a white shirt to show its lining and inside pockets | Áo khoác tối màu mở trên sơ mi trắng để lộ lớp lót và túi trong"
+  },
+  {
     route: "/chon-vai-may-do/vai-len-y/",
     source: "GuideItalianWool.html",
     labels: ["Italian suiting wool", "Vải len Ý may suit"],

@@ -318,23 +318,32 @@ html body .st-cloth-heritage__gallery figcaption small span[lang="vi"] { display
 /* About: Tripadvisor's official badge within the site's own typography. */
 html body .st-tripadvisor { padding: clamp(48px, 6vw, 88px) 0 !important; background: #f4e5ce !important; color: #2f1e15 !important; border-block: 1px solid #c5a17b !important; }
 html body .st-tripadvisor__inner { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 3vw, 36px); }
-html body .st-tripadvisor__copy { grid-column: 1 / -1; }
+html body .st-tripadvisor__copy {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: end;
+  gap: clamp(16px, 3vw, 48px);
+}
+html body :is(#st-tripadvisor, #st-showroom-map) { scroll-margin-block-start: 128px; }
+html body #st-tripadvisor-title { scroll-margin-block-start: 164px; }
 html body .st-tripadvisor__copy .st-lux-eyebrow { margin: 0 0 14px !important; color: #764225 !important; -webkit-text-fill-color: #764225 !important; font-size: clamp(17px, 1.75vw, 24px) !important; letter-spacing: .11em !important; }
 html body .st-tripadvisor__copy h2 { margin: 0 !important; color: #2f1e15 !important; -webkit-text-fill-color: #2f1e15 !important; font: 500 clamp(36px, 4.2vw, 60px)/1.05 var(--st-wordmark) !important; }
-html body .st-tripadvisor__copy h2 span[lang="vi"] { display: block !important; margin-top: 12px !important; color: #75472e !important; -webkit-text-fill-color: #75472e !important; font: 500 .46em/1.18 var(--st-wordmark) !important; }
-html body .st-tripadvisor__copy > p:not(.st-lux-eyebrow) { max-width: 70ch !important; margin: 18px 0 0 !important; color: #4e3527 !important; -webkit-text-fill-color: #4e3527 !important; font: 400 clamp(16px, 1.4vw, 19px)/1.6 var(--st-vietnamese) !important; }
+html body .st-tripadvisor__copy h2 span[lang="vi"] { display: block !important; margin-top: 12px !important; color: #75472e !important; -webkit-text-fill-color: #75472e !important; font: 500 max(20px, .46em)/1.3 var(--st-vietnamese) !important; }
+html body .st-tripadvisor__copy > p { max-width: 64ch !important; margin: 0 !important; color: #4e3527 !important; -webkit-text-fill-color: #4e3527 !important; font: 400 clamp(16px, 1.4vw, 18px)/1.6 var(--st-vietnamese) !important; }
 html body .st-tripadvisor__copy > p span[lang="vi"] { display: block !important; margin-top: 8px !important; color: #624330 !important; -webkit-text-fill-color: #624330 !important; }
 html body .st-tripadvisor__card {
   display: grid;
-  grid-template-rows: auto 1fr auto;
-  gap: 12px;
+  grid-template-rows: 1fr auto;
+  gap: clamp(12px, 2vw, 20px);
   padding: clamp(16px, 2.5vw, 30px);
   border: 1px solid #b99672;
   background: #fff7eb;
 }
 html body .st-tripadvisor__card h3 { margin: 0; color: #352116; font: 500 25px/1.2 var(--st-wordmark); }
 html body #main-content .st-tripadvisor__card h3 > span[lang="vi"] { display: block; margin-top: 4px; color: #624330; -webkit-text-fill-color: #624330; font: 500 16px/1.4 var(--st-vietnamese) !important; }
-html body .st-tripadvisor__rating { display: block; place-self: center; max-width: 100%; border: 0; }
+html body .st-tripadvisor__review { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 200px); align-items: start; gap: 10px; }
+html body .st-tripadvisor__rating { display: block; align-self: center; max-width: 100%; border: 0; }
 html body .st-tripadvisor__actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 10px; padding-top: 14px; border-top: 1px solid #b99672; }
 html body .st-tripadvisor__link { display: grid !important; box-sizing: border-box; min-height: 70px !important; padding: 10px !important; place-content: center !important; gap: 3px !important; border: 1px solid #513320 !important; background: #352116 !important; color: #fff7e9 !important; -webkit-text-fill-color: #fff7e9 !important; font: 650 15px/1.35 var(--st-vietnamese) !important; text-align: center; text-decoration: none !important; transition: background-color .2s ease !important; }
 html body .st-tripadvisor__link span[lang="vi"] { color: #edd0aa !important; -webkit-text-fill-color: #edd0aa !important; }
@@ -343,8 +352,7 @@ html body .st-tripadvisor__link--outline { background: #f8ecdb !important; color
 html body .st-tripadvisor__link--outline span[lang="vi"] { color: #624330 !important; -webkit-text-fill-color: #624330 !important; }
 html body .st-tripadvisor__link--outline:hover { background: #f2e2cb !important; }
 html body .st-tripadvisor__link:focus-visible { outline: 3px solid #764225 !important; outline-offset: 4px !important; }
-html body .st-tripadvisor__visit { align-self: center; }
-html body .st-tripadvisor__visit address { color: #4e3527; font: 400 15px/1.55 var(--st-vietnamese); }
+html body .st-tripadvisor__visit address { margin: 10px 0 0; color: #4e3527; font: 400 15px/1.55 var(--st-vietnamese); }
 html body .st-tripadvisor__visit address span { display: block; margin-top: 6px; }
 html body .st-tripadvisor__hours { margin: 12px 0 0; color: #4e3527; font: 600 14px/1.55 var(--st-vietnamese); }
 html body .st-tripadvisor__hours span { display: block; font-weight: 400; }
@@ -948,9 +956,8 @@ html body .st-guide-section-head { max-width: 800px !important; margin: 0 auto 4
 html body .st-guide-section-head h2 { margin: 0 !important; color: var(--guide-ink) !important; font: 500 clamp(38px, 5vw, 66px)/.98 var(--st-wordmark) !important; }
 html body .st-guide-section-head h2 span[lang="vi"] { display: block !important; margin-top: 12px !important; color: #75452c !important; font-size: .46em !important; line-height: 1.15 !important; }
 html body .st-guide-index__grid { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 14px !important; }
-html body .st-guide-index__grid > a { position: relative !important; display: grid !important; min-height: 270px !important; padding: 32px !important; grid-template-rows: auto auto 1fr auto !important; border: 1px solid #9b6d50 !important; background: #fffdf8 !important; color: var(--guide-ink) !important; text-decoration: none !important; transition: background-color .22s ease, color .22s ease, transform .22s ease !important; }
-html body .st-guide-index__grid > a > span { color: #8a4d2e !important; font: 750 11px/1 var(--st-vietnamese) !important; letter-spacing: .13em !important; }
-html body .st-guide-index__grid strong { margin-top: 36px !important; font: 500 clamp(28px, 2.8vw, 39px)/1 var(--st-wordmark) !important; }
+html body .st-guide-index__grid > a { position: relative !important; display: grid !important; min-height: 220px !important; padding: 32px !important; grid-template-rows: auto 1fr auto !important; border: 1px solid #9b6d50 !important; background: #fffdf8 !important; color: var(--guide-ink) !important; text-decoration: none !important; transition: background-color .22s ease, color .22s ease, transform .22s ease !important; }
+html body .st-guide-index__grid strong { font: 500 clamp(28px, 2.8vw, 39px)/1.1 var(--st-wordmark) !important; }
 html body .st-guide-index__grid small { display: block !important; margin-top: 8px !important; color: #7f4b30 !important; font: 650 16px/1.3 var(--st-vietnamese) !important; }
 html body .st-guide-index__grid p { margin: 20px 0 !important; font: 400 16px/1.55 var(--st-vietnamese) !important; }
 html body .st-guide-index__grid p span[lang="vi"] { display: block !important; margin-top: 7px !important; }
@@ -1031,11 +1038,27 @@ html body .st-footer-v7.st-footer-v8 .st-footer-v7__visit p > a + a { margin-top
   html body .st-guide-hero__grid { grid-template-columns: 1fr !important; }
   html body .st-guide-hero__media { min-height: min(118vw, 620px) !important; }
   html body .st-guide-index__grid { grid-template-columns: 1fr !important; }
-  html body .st-guide-index__grid > a { min-height: 230px !important; }
+  html body .st-guide-index__grid > a { min-height: 0 !important; }
   html body .st-guide-article__body > section { grid-template-columns: 1fr !important; gap: 18px !important; }
   html body .st-guide-next,
   html body .st-guide-cta .st-guide-shell { align-items: stretch !important; flex-direction: column !important; }
   html body .st-guide-next.st-guide-next--checklists { grid-template-columns: minmax(0, 1fr); }
+}
+
+html body .st-guide--lining .st-guide-hero__media { background: #f4e8d8 !important; }
+html body .st-guide--lining .st-guide-hero__media img { object-fit: contain !important; }
+@media (max-width: 860px) {
+  html body .st-guide--lining .st-guide-hero { padding-block: 30px !important; }
+  html body .st-guide--lining .st-guide-hero__grid { grid-template-areas: "heading" "lining" "intro"; gap: 20px !important; }
+  html body .st-guide--lining .st-guide-hero__copy { display: contents; }
+  html body .st-guide--lining .st-guide-hero h1 { grid-area: heading; font-size: clamp(38px, 7vw, 62px) !important; line-height: 1 !important; }
+  html body .st-guide--lining .st-guide-hero__copy > p { grid-area: intro; margin-top: 0 !important; }
+  html body .st-guide--lining .st-guide-hero__media {
+    grid-area: lining;
+    width: min(100%, 480px);
+    min-height: 0 !important;
+    aspect-ratio: 4 / 5;
+  }
 }
 
 @media (max-width: 560px) {
@@ -1601,11 +1624,11 @@ html body .st-gallery-page--albums .st-gallery-film__media figcaption span[lang=
   }
 }
 
-@media (max-width: 760px) {
-  html body .st-tripadvisor__inner { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 761px) and (max-width: 1040px), (max-width: 480px) {
+  html body .st-tripadvisor__review { grid-template-columns: minmax(0, 1fr); }
 }
-@media (max-width: 360px) {
-  html body .st-tripadvisor__actions { grid-template-columns: 1fr; }
+@media (max-width: 760px) {
+  html body :is(.st-tripadvisor__inner, .st-tripadvisor__copy) { grid-template-columns: minmax(0, 1fr); }
 }
 /* Focused payment band and compact, bilingual client-care pages. */
 html body .st-payment-page--focused .st-payment-methods { padding-top: clamp(48px, 6vw, 80px) !important; }
@@ -1797,7 +1820,7 @@ html body #main-content .st-gallery-page--albums .st-album-grid__item figcaption
   letter-spacing: -.018em;
   overflow-wrap: anywhere;
 }
-.st-showcase :is(h1, h2, p, figcaption) > [lang="vi"] {
+.st-showcase :is(h1, h2, h3, p, figcaption) > [lang="vi"] {
   display: block;
   color: var(--showcase-muted);
   margin-top: 8px;
@@ -1816,7 +1839,7 @@ html body #main-content .st-gallery-page--albums .st-album-grid__item figcaption
   object-fit: contain;
   background: var(--showcase-mat);
 }
-.st-showcase__collection { padding-block: clamp(28px, 4vw, 58px) clamp(22px, 3vw, 38px); }
+.st-showcase__collection { padding-block: clamp(22px, 3vw, 44px) clamp(18px, 2.4vw, 30px); }
 @media (min-width: 901px) {
   .st-showcase__collection > p { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 38px; max-width: 100%; }
   .st-showcase__collection > p > [lang="vi"] { margin-top: 0; }
@@ -1826,13 +1849,16 @@ html body #main-content .st-gallery-page--albums .st-album-grid__item figcaption
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(16px, 3vw, 38px);
 }
-.st-showcase:is(.st-showcase--garments, .st-showcase--client-care) .st-showcase__index { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 1.7vw, 24px); }
-.st-showcase--projects .st-showcase-card__photo { aspect-ratio: 4 / 3; }
+.st-showcase:is(.st-showcase--garments, .st-showcase--projects, .st-showcase--client-care) .st-showcase__index { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 1.7vw, 24px); }
 .st-showcase-card { display: flex; flex-direction: column; min-width: 0; border: 1px solid var(--showcase-rule); }
 .st-showcase-card__copy { display: flex; flex: 1; flex-direction: column; padding: clamp(15px, 2vw, 26px); }
-.st-showcase h2 { color: var(--showcase-ink); margin: 0; font: 500 clamp(26px, 3.1vw, 42px)/1.12 var(--st-wordmark); }
-.st-showcase-card h2 { font-size: clamp(22px, 2.2vw, 32px); }
-.st-showcase h2 > [lang="vi"] { font-size: max(16px, .52em); line-height: 1.35; }
+.st-showcase :is(h2, h3) { color: var(--showcase-ink); margin: 0; font: 500 clamp(26px, 3.1vw, 42px)/1.12 var(--st-wordmark); }
+.st-showcase-card :is(h2, h3) { font-size: clamp(22px, 2.2vw, 32px); }
+.st-showcase :is(h2, h3) > [lang="vi"] { font-size: max(16px, .52em); line-height: 1.35; }
+.st-showcase__sections { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(6px, 1.4vw, 16px); }
+.st-showcase__group { margin-top: clamp(20px, 3vw, 38px); }
+.st-showcase__group > h2 { margin-bottom: clamp(14px, 2vw, 24px); padding-top: 16px; border-top: 1px solid var(--showcase-rule); scroll-margin-block-start: 128px; }
+.st-showcase__group > h2:focus-visible { outline: 2px solid #633a26; outline-offset: 4px; }
 .st-showcase-card p { margin: 12px 0 18px; }
 .st-showcase-card .st-showcase__action { margin-top: auto; }
 .st-showcase__details { padding-block: clamp(26px, 5vw, 65px) 0; }
@@ -1868,13 +1894,14 @@ html body #main-content a.st-showcase__action > [lang="vi"] {
   color: inherit !important;
   font: 500 14px/1.4 var(--st-vietnamese);
 }
+html body #main-content .st-showcase__sections > a.st-showcase__action { padding-inline: 5px; font-size: 14px; }
 html body #main-content a.st-showcase__action--primary { display: inline-grid; }
 html body #main-content a.st-showcase__action:is(.st-showcase__action--primary, :hover, :focus-visible) { background: #573423; color: #fff8eb !important; }
 html body #main-content a.st-showcase__action--primary:is(:hover, :focus-visible) { background: #382319; }
 html body #main-content a.st-showcase__action:focus-visible { outline: 2px solid #633a26 !important; outline-offset: 4px; }
 @media (max-width: 1080px) {
   .st-showcase__hero-grid { grid-template-columns: minmax(0, 1fr) minmax(0, .9fr); }
-  .st-showcase:is(.st-showcase--garments, .st-showcase--client-care) .st-showcase__index { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .st-showcase:is(.st-showcase--garments, .st-showcase--projects, .st-showcase--client-care) .st-showcase__index { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 760px) {
   .st-showcase__shell { width: calc(100% - 34px); }
@@ -1887,13 +1914,17 @@ html body #main-content a.st-showcase__action:focus-visible { outline: 2px solid
   .st-showcase__portrait { grid-area: portrait; width: min(100%, 520px); }
 }
 @media (max-width: 600px) {
+  .st-showcase__collection > h1 { font-size: clamp(33px, 9vw, 45px); }
   .st-showcase:is(.st-showcase--garments, .st-showcase--client-care, .st-showcase--projects) .st-showcase__index,
   .st-showcase__links, .st-showcase__photo-grid { grid-template-columns: minmax(0, 1fr); }
   .st-showcase__links--discovery { margin-block: 18px; }
   html body #main-content a.st-showcase__action--primary { display: grid; }
 }
 @media (prefers-reduced-motion: reduce) {
-  html body #main-content a.st-showcase__action { transition: none; }
+  html body #main-content a.st-showcase__action,
+  html body .st-tripadvisor__link,
+  html body .st-guide-index__grid > a { transition: none !important; }
+  html body .st-guide-index__grid > a:is(:hover, :focus-visible) { transform: none !important; }
 }
 
 /* Equal social destinations keep the complete FOLLOW list calm and easy to scan. */

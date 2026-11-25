@@ -4,16 +4,21 @@ export const showcaseHubs = [
     source: "ShowcaseGarments.html",
     labels: ["Finished garments", "Trang phục hoàn thiện"],
     title: "Finished Bespoke Garments in Ho Chi Minh City | S.T Tailor",
-    description: "Explore finished S.T Tailor garments in Ho Chi Minh City, including bespoke suits, tuxedos, checked trousers and floral occasionwear.",
+    description: "Explore finished S.T Tailor garments by collection, from bespoke suits and dinner jackets to tailored womenswear, shirts and trousers.",
     image: "/media/2026/09/st-tailor-gallery-beige-double-breasted-suit.png",
-    imageAlt: "Beige double-breasted blazer and trousers on a tailoring form | Blazer be hai hàng khuy và quần đồng bộ trên ma-nơ-canh"
+    imageAlt: "Beige double-breasted blazer and trousers on a tailoring form | Blazer be hai hàng khuy và quần đồng bộ trên ma-nơ-canh",
+    sections: [
+      { id: "suits-and-jackets", labels: ["Suits and jackets", "Suit và áo khoác"] },
+      { id: "womenswear", labels: ["Women’s wear", "Trang phục nữ"] },
+      { id: "shirts-and-trousers", labels: ["Shirts and trousers", "Sơ mi và quần tây"] }
+    ]
   },
   {
     route: "/du-an/",
     source: "ShowcaseProjects.html",
     labels: ["Projects and collaborations", "Dự án và hợp tác"],
     title: "Tailoring Projects and Collaborations | S.T Tailor",
-    description: "Read about S.T Tailor’s collaboration with singer Niña Campos and see a red patterned waistcoat from the house archive in wear.",
+    description: "See S.T Tailor’s collaboration with singer Niña Campos, a red patterned waistcoat in wear and a dark suit with gold lining at its fitting.",
     image: "/media/2026/09/st-tailor-gallery-singer-feedback-one.jpg",
     imageAlt: "A light tailored suit and dark top in a photograph from the S.T Tailor collaboration archive | Suit sáng màu phối áo tối trong ảnh lưu niệm của S.T Tailor"
   }
@@ -22,6 +27,7 @@ export const showcaseHubs = [
 export const showcaseEntries = [
   {
     route: "/san-pham/blazer-mau-be/",
+    section: "suits-and-jackets",
     source: "ShowcaseBeigeBlazer.html",
     labels: ["Beige double-breasted blazer", "Blazer be hai hàng khuy"],
     title: "Beige Double-Breasted Blazer by S.T Tailor",
@@ -32,6 +38,7 @@ export const showcaseEntries = [
   },
   {
     route: "/san-pham/suit-navy-hai-hang-khuy/",
+    section: "suits-and-jackets",
     source: "ShowcaseNavySuit.html",
     labels: ["Navy double-breasted suit", "Suit xanh navy hai hàng khuy"],
     title: "Navy Double-Breasted Suit by S.T Tailor",
@@ -42,6 +49,7 @@ export const showcaseEntries = [
   },
   {
     route: "/san-pham/ao-khoac-du-tiec-det-van/",
+    section: "suits-and-jackets",
     source: "ShowcaseDinnerJacket.html",
     labels: ["Textured dinner jacket", "Áo khoác dự tiệc dệt vân"],
     title: "Textured Bespoke Dinner Jacket by S.T Tailor",
@@ -52,6 +60,7 @@ export const showcaseEntries = [
   },
   {
     route: "/san-pham/tuxedo-den-ve-sam/",
+    section: "suits-and-jackets",
     source: "ShowcaseBlackTuxedo.html",
     labels: ["Black shawl-lapel tuxedo", "Tuxedo đen ve sam"],
     title: "Black Shawl-Lapel Tuxedo by S.T Tailor",
@@ -62,6 +71,7 @@ export const showcaseEntries = [
   },
   {
     route: "/san-pham/dam-lua-hong-phan-theu-hoa/",
+    section: "womenswear",
     source: "ShowcaseSilkDress.html",
     labels: ["Blush floral silk dress", "Đầm lụa hồng phấn thêu hoa"],
     title: "Blush Floral Silk Dress by S.T Tailor",
@@ -72,6 +82,7 @@ export const showcaseEntries = [
   },
   {
     route: "/san-pham/suit-nu-trang/",
+    section: "womenswear",
     source: "ShowcaseWhiteWomensSuit.html",
     labels: ["White women’s suit", "Suit nữ màu trắng"],
     title: "White Tailored Women’s Suit by S.T Tailor",
@@ -82,6 +93,7 @@ export const showcaseEntries = [
   },
   {
     route: "/san-pham/dam-quan-hoa-hong-tim/",
+    section: "womenswear",
     source: "ShowcaseFloralWrapDress.html",
     labels: ["Magenta floral wrap dress", "Đầm quấn hoa tông hồng tím"],
     title: "Magenta Floral Wrap Dress | S.T Tailor",
@@ -92,6 +104,7 @@ export const showcaseEntries = [
   },
   {
     route: "/san-pham/ao-khoac-jacquard-hoa/",
+    section: "suits-and-jackets",
     source: "ShowcaseFloralJacquardJacket.html",
     labels: ["Floral jacquard evening jacket", "Áo khoác dự tiệc jacquard hoa"],
     title: "Floral Jacquard Evening Jacket | S.T Tailor",
@@ -101,7 +114,19 @@ export const showcaseEntries = [
     imageAlt: "Magenta and violet floral jacquard jacket with a shawl lapel and flap pockets on a dress form | Áo khoác jacquard hoa hồng tím với ve sam và túi có nắp trên ma-nơ-canh"
   },
   {
+    route: "/san-pham/ao-khoac-trang-nga-ve-den/",
+    section: "suits-and-jackets",
+    source: "ShowcaseIvoryJacket.html",
+    labels: ["Ivory jacket with black lapels", "Áo khoác trắng ngà ve đen"],
+    title: "Ivory Tailored Jacket With Black Lapels | S.T Tailor",
+    description: "See S.T Tailor’s ivory jacket with black contrast lapels, worn with a dark shirt and tailored trousers. Consider cloth, contrast and fit for your own commission.",
+    summary: ["An ivory jacket with black lapels, worn open with a dark shirt and charcoal trousers.", "Áo khoác trắng ngà ve đen, mặc mở cùng sơ mi tối màu và quần xám than."],
+    image: "/media/2026/09/st-tailor-gallery-client-white-jacket.jpg",
+    imageAlt: "Ivory jacket with black lapels, dark shirt and charcoal trousers worn outside S.T Tailor | Áo khoác trắng ngà ve đen, sơ mi tối và quần xám than trước S.T Tailor"
+  },
+  {
     route: "/san-pham/so-mi-trang-vien-ca-ro/",
+    section: "shirts-and-trousers",
     source: "ShowcaseCheckedTrimShirt.html",
     labels: ["White shirt with checked trim", "Sơ mi trắng phối viền ca rô"],
     title: "White Tailored Shirt With Checked Trim | S.T Tailor",
@@ -111,7 +136,19 @@ export const showcaseEntries = [
     imageAlt: "White tailored shirt folded on navy cloth | Sơ mi trắng may đo gấp trên nền vải xanh navy"
   },
   {
+    route: "/san-pham/so-mi-xanh-hoa-van/",
+    section: "shirts-and-trousers",
+    source: "ShowcaseBluePatternedShirt.html",
+    labels: ["Blue floral shirt", "Sơ mi xanh họa tiết hoa"],
+    title: "Blue Floral Tailored Shirt | S.T Tailor",
+    description: "See a finished blue floral shirt by S.T Tailor, with warm-toned flowers and pale buttons. Learn what to check at a tailored shirt fitting.",
+    summary: ["Copper-toned flowers on a blue shirt with pale buttons and a pointed collar.", "Hoa tông đồng nổi trên nền sơ mi xanh, phối khuy sáng màu và cổ nhọn."],
+    image: "/media/2026/09/st-tailor-gallery-patterned-shirt.jpg",
+    imageAlt: "Blue long-sleeved shirt with copper-toned floral motifs and pale buttons on a dress form | Sơ mi xanh dài tay họa tiết hoa tông đồng và khuy sáng màu trên ma-nơ-canh"
+  },
+  {
     route: "/san-pham/quan-tay-ca-ro-xam/",
+    section: "shirts-and-trousers",
     source: "ShowcaseGreyCheckedTrousers.html",
     labels: ["Grey checked trousers", "Quần tây ca rô xám"],
     title: "Grey Checked Tailored Trousers by S.T Tailor",
@@ -140,7 +177,23 @@ export const showcaseEntries = [
     summary: ["A red patterned waistcoat worn with cool-toned trousers, photographed from the side and back.", "Áo ghi-lê đỏ họa tiết phối quần tông lạnh, ghi lại qua các góc nghiêng và sau lưng."],
     image: "/media/2026/10/st-tailor-red-waistcoat-turning-view.jpg",
     imageAlt: "Client turning in a red patterned waistcoat with an adjustable back strap | Khách xoay người, để lộ đai điều chỉnh sau lưng áo ghi-lê đỏ họa tiết"
+  },
+  {
+    route: "/du-an/buoi-thu-suit-lot-vang/",
+    source: "ShowcaseGoldLiningFitting.html",
+    labels: ["Fitting a suit with gold lining", "Buổi thử suit lót vàng"],
+    title: "Fitting a Dark Suit With Gold Lining | S.T Tailor Project",
+    description: "See the front of a client’s dark suit and the gold lining revealed when the jacket is opened during a fitting at S.T Tailor in Ho Chi Minh City.",
+    summary: ["Photographs from a fitting show how a gold shirt, pocket square and lining change the appearance of a dark suit as the jacket opens.", "Ảnh buổi thử cho thấy sơ mi, khăn túi ngực và lớp lót vàng hiện lên thế nào trên bộ suit tối màu khi mở áo khoác."],
+    image: "/media/2026/09/st-tailor-archive-gold-jacket-fitting.jpg",
+    imageAlt: "Client in a dark suit with a gold shirt and pocket square during a fitting at S.T Tailor | Khách thử suit tối màu phối sơ mi và khăn túi ngực màu vàng tại S.T Tailor"
   }
 ];
 
 export const showcasePages = [...showcaseHubs, ...showcaseEntries];
+
+export function showcaseItemsFor(hubRoute) {
+  const entries = showcaseEntries.filter(({ route }) => route.startsWith(hubRoute));
+  const sections = showcaseHubs.find(({ route }) => route === hubRoute)?.sections;
+  return sections ? sections.flatMap(({ id }) => entries.filter(({ section }) => section === id)) : entries;
+}
