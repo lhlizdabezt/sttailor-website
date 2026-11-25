@@ -1,35 +1,16 @@
 import { clientCareFailures } from "./client-care-contract.mjs";
 import { createHash } from "node:crypto";
-import { readdirSync, statSync } from "node:fs";
+import { readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
 import { contentSecurityPolicy, tripadvisorEmbedPath } from "../src/security-policy.js";
-import { tailoringPages } from "../src/tailoring-pages.js";
 
 const origin = "https://sttailor.com";
 const expectedBuildRevision = process.env.EXPECTED_BUILD_REVISION;
 if (expectedBuildRevision && !/^[0-9a-f]{40}$/i.test(expectedBuildRevision)) throw new Error("EXPECTED_BUILD_REVISION must be a full Git commit SHA.");
-const routes = [
-  "/",
-  "/gioi-thieu/",
-  "/dich-vu/",
-  "/gallery/",
-  "/phim-thu-do/",
-  "/bang-gia/",
-  "/phuong-thuc-thanh-toan/",
-  "/lien-he/",
-  "/cam-nang-may-do/",
-  "/chon-vai-may-do/",
-  "/quy-trinh-thu-do/",
-  "/chinh-sua-trang-phuc/",
-  "/bao-quan-giat-la/",
-  "/doi-tra-hoan-tien/",
-  "/chinh-sach-van-chuyen/",
-  "/dieu-khoan-dieu-kien/",
-  "/chinh-sach-bao-mat/",
-  ...tailoringPages.map(({ route }) => route)
-];
+const dist = fileURLToPath(new URL("../dist/", import.meta.url));
+const { routes } = JSON.parse(readFileSync(path.join(dist, "build-manifest.json"), "utf8"));
 
 const failures = [];
 const expect = (condition, message) => {
@@ -260,7 +241,6 @@ expect(!/^Disallow:\s*\S+/mi.test(robotsText), "robots.txt must not block a publ
 
 // Inspect every shipped image derivative, icon, font, stylesheet and script, rather
 // than inferring accessibility from a few sampled gallery images.
-const dist = fileURLToPath(new URL("../dist/", import.meta.url));
 const publicAssets = readdirSync(dist, { recursive: true })
   .filter((file) => /^(media|icons|fonts|styles|scripts)[\\/]/.test(file) && statSync(path.join(dist, file)).isFile())
   .map((file) => `/${file.replaceAll("\\", "/")}`);
@@ -376,4 +356,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log("PASS: production routes, mobile navigation, header styling, removals, schema, sitemap, redirects and true 404 verified.");
+console.log(`PASS: ${routes.length} production routes, mobile navigation, header styling, removals, schema, sitemap, redirects and true 404 verified.`);
