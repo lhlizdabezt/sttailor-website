@@ -36,6 +36,8 @@ const homeHeroPortraitMedia = "(max-width: 600px) and (orientation: portrait)";
 const homeEditorialSizes = "(max-width: 440px) calc(100vw - 34px), (max-width: 760px) calc(50vw - 24px), (max-width: 1120px) calc(33vw - 30px), min(calc(20vw - 30px), 240px)";
 const galleryHeroSizes = "(max-width: 899px) min(calc(100vw - 32px), 760px), min(calc(50vw - 24px), 590px)";
 const showcaseHeroSizes = "(max-width: 760px) min(calc(100vw - 34px), 520px), min(calc(45vw - 36px), 490px)";
+const suitFitGuide = tailoringPages.find(({ source }) => source === "GuideSuitFit.html");
+const suitFitHeroSizes = "(max-width: 560px) min(calc(100vw - 28px), 420px), (max-width: 860px) 420px, min(calc(44vw - 40px), 440px)";
 
 function imageSourceSet(candidates) {
   return candidates.map(({ src, width }) => `${src} ${width}w`).join(", ");
@@ -826,13 +828,15 @@ function enrichImageAttributes(html, { responsiveSizes, deprioritizeLazyImages =
     if (responsiveSizes && metadata.responsive?.length && !/\bsrcset=/i.test(output)) {
       const isHomeHero = src === homeHeroImage && /\bst-home-v6__hero-media\b/.test(output);
       const isGalleryHero = /\bst-gallery-hero__story-image\b/.test(output);
+      const isSuitFitHero = /\bst-suit-fit__hero-image\b/.test(output);
       const srcset = imageSourceSet(metadata.responsive);
       const sizes = isHomeHero ? homeHeroSizes : isGalleryHero ? galleryHeroSizes
+        : isSuitFitHero ? suitFitHeroSizes
         : /\bst-showcase__hero-image\b/.test(output) ? showcaseHeroSizes
         : responsiveSizes;
       const lazyAuto = /\bloading="lazy"/i.test(output) ? "auto, " : "";
       output = output.replace(/<img\b/i, `<img srcset="${srcset}" sizes="${lazyAuto}${sizes}"`);
-      if (metadata.responsive_avif?.length && (isGalleryHero || /\bst-showcase(?:__hero-image|-card__photo)\b/.test(output))) {
+      if (metadata.responsive_avif?.length && (isGalleryHero || isSuitFitHero || /\bst-showcase(?:__hero-image|-card__photo)\b/.test(output))) {
         return `<picture><source type="image/avif" srcset="${imageSourceSet(metadata.responsive_avif)}" sizes="${lazyAuto}${sizes}">${output}</picture>`;
       }
     }
@@ -1082,8 +1086,9 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
       heroPreload = `<link rel="preload" as="image" type="image/avif" imagesrcset="${imageSourceSet(candidates)}" imagesizes="${galleryHeroSizes}" fetchpriority="high">`;
     }
   }
-  if (showcasePage?.summary && shareMetadata?.responsive_avif?.length) {
-    heroPreload = `<link rel="preload" as="image" type="image/avif" imagesrcset="${imageSourceSet(shareMetadata.responsive_avif)}" imagesizes="${showcaseHeroSizes}" fetchpriority="high">`;
+  if ((sourceFile === suitFitGuide.source || showcasePage?.summary) && shareMetadata?.responsive_avif?.length) {
+    const sizes = sourceFile === suitFitGuide.source ? suitFitHeroSizes : showcaseHeroSizes;
+    heroPreload = `<link rel="preload" as="image" type="image/avif" imagesrcset="${imageSourceSet(shareMetadata.responsive_avif)}" imagesizes="${sizes}" fetchpriority="high">`;
   }
   const isWatchPage = route === fittingFilmRoute;
   if (isWatchPage) {
@@ -1147,7 +1152,7 @@ function buildImageManifest() {
   const shareImages = [...new Set(routes.map(([, , , , image]) => image.slice("/media/".length)))];
   const homeCards = [...transformHome(readSource("Home.html")).matchAll(/class="st-home-editorial__photo" src="\/media\/([^"]+)"/g)]
     .flatMap(([, asset]) => ["--home-card", asset]);
-  const featureImages = [galleryHeroImage, ...showcaseEntries.map(({ image }) => image)]
+  const featureImages = [galleryHeroImage, suitFitGuide.image, ...showcaseEntries.map(({ image }) => image)]
     .flatMap((asset) => ["--feature-image", asset.slice("/media/".length)]);
   const result = spawnSync("python", [path.join(root, "scripts", "build-image-manifest.py"), sourceMedia, path.join(dist, "image-manifest.json"), ...shareImages, ...homeCards, ...featureImages], { encoding: "utf8" });
   if (result.status !== 0) throw new Error(`Image manifest generation failed:\n${result.stderr || result.stdout}`);

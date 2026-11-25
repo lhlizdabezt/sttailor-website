@@ -38,11 +38,11 @@ export const tailoringPages = [
   {
     route: "/cam-nang-may-do/kiem-tra-phom-suit/",
     source: "GuideSuitFit.html",
-    labels: ["Suit fitting checklist", "Các điểm cần kiểm tra khi thử suit"],
+    labels: ["Suit fitting checklist", "Kiểm tra phom suit"],
     title: "How a Bespoke Suit Should Fit | S.T Tailor",
-    description: "Use S.T Tailor’s bilingual suit fitting checklist to check the jacket collar, sleeves, waistband, trouser hem and optional waistcoat while standing and moving.",
-    image: "/media/2026/09/st-tailor-client-navy-suit-fitting.jpg",
-    imageAlt: "Client wearing a dark suit over a yellow shirt during an S.T Tailor fitting | Khách mặc suit tối màu phối sơ mi vàng trong buổi thử đồ tại S.T Tailor"
+    description: "Check the collar, shoulders, sleeves, trousers and waistcoat with S.T Tailor’s bilingual suit fitting guide. Bring your shirt and shoes and try all four checks.",
+    image: "/media/2026/09/st-tailor-gallery-client-charcoal-suit.jpg",
+    imageAlt: "Client wearing a charcoal suit jacket and dark trousers at S.T Tailor | Khách mặc áo khoác suit xám than và quần tối màu tại S.T Tailor"
   },
   {
     route: "/chon-vai-may-do/vai-len-y/",
