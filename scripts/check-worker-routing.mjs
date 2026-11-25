@@ -5,6 +5,7 @@ import worker from "../src/worker.js";
 import { tripadvisorEmbedPath } from "../src/security-policy.js";
 import { tailoringPages } from "../src/tailoring-pages.js";
 import { showcasePages } from "../src/showcase-pages.js";
+import { fittingFilm } from "../src/fitting-film.js";
 
 const env = {
   ASSETS: {
@@ -12,6 +13,45 @@ const env = {
       ? "Page not found" : "Published page", { headers: { "Content-Type": "text/html" } })
   }
 };
+
+test("the fitting film supports media seeking on Workers Static Assets", async () => {
+  const file = new Uint8Array([0, 1, 2, 3, 4, 5]);
+  const filmEnv = {
+    ASSETS: {
+      fetch: async (request) => new Response(request.method === "HEAD" ? null : file, {
+        headers: { "Content-Type": "video/mp4", "Content-Length": String(file.length), ETag: '"film-revision"' }
+      })
+    }
+  };
+  const fetchFilm = (headers, method = "GET") =>
+    worker.fetch(new Request(`https://sttailor.com${fittingFilm.src}`, { headers, method }), filmEnv);
+
+  const head = await fetchFilm({}, "HEAD");
+  assert.equal(head.status, 200);
+  assert.equal(head.headers.get("Accept-Ranges"), "bytes");
+  assert.equal(head.headers.get("Content-Length"), "6");
+  assert.equal(head.body, null);
+
+  for (const [range, start, end] of [["bytes=0-1", 0, 1], ["bytes=4-", 4, 5], ["bytes=-2", 4, 5], ["bytes=1-99", 1, 5]]) {
+    const partial = await fetchFilm({ Range: range, "If-Range": '"film-revision"' });
+    assert.equal(partial.status, 206, range);
+    assert.equal(partial.headers.get("Content-Type"), "video/mp4", range);
+    assert.equal(partial.headers.get("Content-Range"), `bytes ${start}-${end}/6`, range);
+    assert.equal(partial.headers.get("Content-Length"), String(end - start + 1), range);
+    assert.deepEqual(new Uint8Array(await partial.arrayBuffer()), file.subarray(start, end + 1), range);
+  }
+
+  const stale = await fetchFilm({ Range: "bytes=0-1", "If-Range": '"previous-revision"' });
+  assert.equal(stale.status, 200);
+  assert.deepEqual(new Uint8Array(await stale.arrayBuffer()), file);
+
+  for (const range of ["bytes=6-", "bytes=3-2", "bytes=-0"]) {
+    const unsatisfiable = await fetchFilm({ Range: range });
+    assert.equal(unsatisfiable.status, 416, range);
+    assert.equal(unsatisfiable.headers.get("Content-Range"), "bytes */6", range);
+    assert.equal(unsatisfiable.body, null, range);
+  }
+});
 
 test("retired query endpoints return a non-indexable 404 without redirecting", async () => {
   for (const query of ["attachment_id=3263", "wc-ajax=%25%25endpoint%25%25", "wc-ajax=get_refreshed_fragments"]) {

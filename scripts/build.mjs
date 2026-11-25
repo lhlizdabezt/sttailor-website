@@ -9,6 +9,7 @@ import { tripadvisorEmbedPath } from "../src/security-policy.js";
 import { clientCareHubRoute, clientCarePage } from "../src/client-care-pages.js";
 import { tailoringPages } from "../src/tailoring-pages.js";
 import { showcaseEntries, showcaseHubs, showcasePages } from "../src/showcase-pages.js";
+import { fittingFilm as galleryFilm, fittingFilmRoute } from "../src/fitting-film.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 // The approved WordPress layout remains the baseline; current page refinements
@@ -17,6 +18,7 @@ const sourceRoot = path.join(root, "source", "wordpress");
 const sourceMedia = path.join(root, "source", "media");
 const sourceIcons = path.join(root, "source", "icons");
 const sourceFonts = path.join(root, "source", "fonts");
+const vietnameseFont = "noto-sans-vi-8b0a1d0.woff2";
 const iconPaths = JSON.parse(readFileSync(path.join(sourceIcons, "manifest.json"), "utf8"));
 const dist = path.join(root, "dist");
 let stylesheetHref = "/styles/site.css";
@@ -37,21 +39,16 @@ const galleryHeroSizes = "(max-width: 899px) min(calc(100vw - 32px), 760px), min
 function imageSourceSet(candidates) {
   return candidates.map(({ src, width }) => `${src} ${width}w`).join(", ");
 }
-const fittingFilmRoute = "/phim-thu-do/";
-const galleryFilm = {
-  src: "/media/2026/09/st-tailor-womenswear-fitting-film.mp4",
-  poster: "/media/2026/09/st-tailor-womenswear-fitting-poster.webp",
-  name: "A fitting in motion | Thử phom qua chuyển động",
-  description: "A client reviews the line and movement of a long black skirt during a fitting at S.T Tailor in Ho Chi Minh City.",
-  duration: 34,
-  publishedAt: "2026-09-27T13:51:00+07:00"
-};
 const googleTagManagerHead = `<!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var started=false;function load(){if(started)return;started=true;var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-}function schedule(){if(w.requestIdleCallback)w.requestIdleCallback(load,{timeout:1200});else w.setTimeout(load,1200)}
+}function schedule(){
+  w.setTimeout(load,1200);
+  if(d.visibilityState==='visible'&&w.requestIdleCallback)
+    w.requestAnimationFrame(()=>w.requestAnimationFrame(()=>w.requestIdleCallback(load,{timeout:1200})));
+}
 if(d.readyState==='complete')schedule();else w.addEventListener('load',schedule,{once:true});
 w.addEventListener('pointerdown',load,{once:true,passive:true});w.addEventListener('keydown',load,{once:true});
 })(window,document,'script','dataLayer','GTM-TQSDB6XT');</script>
@@ -68,7 +65,7 @@ const metaPixelNoScript = `<noscript><img height="1" width="1" style="display:no
 // Clarity tag; only the existing first-party Google tag is downloaded here,
 // after the first paint when Cloudflare has not already injected its gateway.
 // Loading Clarity here as well records sessions twice.
-const analyticsTags = `<link rel="preconnect" href="https://www.clarity.ms"><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-BQDKE20XR0");(function(c,l,a){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)}})(window,document,"clarity");(()=>{const load=()=>{if(window.__stAnalyticsLoaded)return;window.__stAnalyticsLoaded=true;if([...document.scripts].some(s=>s.src.split("?")[0]===location.origin+"/n31x/"))return;const g=document.createElement("script");g.async=true;g.src="/n31x/";document.head.appendChild(g);};const idle=window.requestIdleCallback||((cb)=>setTimeout(cb,1200));if(document.readyState==="complete")idle(load);else window.addEventListener("load",()=>idle(load),{once:true})})();</script>`;
+const analyticsTags = `<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-BQDKE20XR0");(function(c,l,a){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)}})(window,document,"clarity");(()=>{const load=()=>{if(window.__stAnalyticsLoaded)return;window.__stAnalyticsLoaded=true;if([...document.scripts].some(s=>s.src.split("?")[0]===location.origin+"/n31x/"))return;const g=document.createElement("script");g.async=true;g.src="/n31x/";document.head.appendChild(g);};const idle=window.requestIdleCallback||((cb)=>setTimeout(cb,1200));if(document.readyState==="complete")idle(load);else window.addEventListener("load",()=>idle(load),{once:true})})();</script>`;
 
 const routes = [
   ["/", "Home.html", "S.T Tailor | Bespoke Tailoring in Ho Chi Minh City", "Bespoke suits, shirts, formalwear and alterations at 1st Floor, 258 Le Thanh Ton, Tan Dinh Ward, Ho Chi Minh City. Private consultations available.", "/media/2026/06/background-hero-trang-lien-he-sttailor.webp", "Private fitting at S.T Tailor in Ho Chi Minh City"],
@@ -1084,9 +1081,17 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
       heroPreload = `<link rel="preload" as="image" type="image/avif" imagesrcset="${imageSourceSet(candidates)}" imagesizes="${galleryHeroSizes}" fetchpriority="high">`;
     }
   }
+  const isWatchPage = route === fittingFilmRoute;
+  if (isWatchPage) {
+    heroPreload = `<link rel="preload" as="image" href="${galleryFilm.poster}" fetchpriority="high">`;
+  }
+  const fontPreload = `<link rel="preload" href="/fonts/${vietnameseFont}" as="font" type="font/woff2" crossorigin>`;
+  const openGraphVideo = isWatchPage
+    ? `<meta property="og:video" content="https://sttailor.com${galleryFilm.src}"><meta property="og:video:type" content="video/mp4">`
+    : "";
   const siteHeader = enrichImageAttributes(header(route), { responsiveSizes: "102px" });
   const siteFooter = enrichImageAttributes(footer(sourceFile === "Error.html" ? null : route), { responsiveSizes: "160px" });
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">${heroPreload}${googleTagManagerHead}${analyticsTags}<link rel="stylesheet" href="${stylesheetHref}"><meta name="description" content="${safeDescription}"><meta name="author" content="S.T Tailor"><meta name="application-name" content="S.T Tailor"><meta name="sttailor-build-revision" content="${buildRevision}"><meta name="color-scheme" content="light"><meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="google-site-verification" content="e1RyHPdDirO6wJIxuZKKSIY6EXYb37XMfktIVl3aJz8"><meta name="p:domain_verify" content="78c108c3384a3aa9201fb90b99f0b225"><link rel="canonical" href="${canonical}"><link rel="icon" href="/icons/sttailor-favicon-48.png" type="image/png" sizes="48x48"><link rel="apple-touch-icon" href="/icons/sttailor-apple-touch-180.png" sizes="180x180"><link rel="manifest" href="/site.webmanifest"><meta property="og:title" content="${safeTitle}"><meta property="og:description" content="${safeDescription}"><meta property="og:type" content="website"><meta property="og:url" content="${canonical}"><meta property="og:site_name" content="S.T Tailor"><meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:image" content="${shareImageUrl}"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:alt" content="${safeImageAlt}">${shareDimensions}<meta name="theme-color" content="#ead1ad"><title>${safeTitle}</title></head><body>${googleTagManagerNoScript}${metaPixelNoScript}<div class="st-site-frame">${siteHeader}<main id="main-content" tabindex="-1">${breadcrumbNavigation(trail)}${body}</main>${siteFooter}</div><script type="module" src="${scriptHref}"></script>${jsonLd}</body></html>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">${heroPreload}<link rel="stylesheet" href="${stylesheetHref}">${fontPreload}${googleTagManagerHead}${analyticsTags}<meta name="description" content="${safeDescription}"><meta name="author" content="S.T Tailor"><meta name="application-name" content="S.T Tailor"><meta name="sttailor-build-revision" content="${buildRevision}"><meta name="color-scheme" content="light"><meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="google-site-verification" content="e1RyHPdDirO6wJIxuZKKSIY6EXYb37XMfktIVl3aJz8"><meta name="p:domain_verify" content="78c108c3384a3aa9201fb90b99f0b225"><link rel="canonical" href="${canonical}"><link rel="icon" href="/icons/sttailor-favicon-48.png" type="image/png" sizes="48x48"><link rel="apple-touch-icon" href="/icons/sttailor-apple-touch-180.png" sizes="180x180"><link rel="manifest" href="/site.webmanifest"><meta property="og:title" content="${safeTitle}"><meta property="og:description" content="${safeDescription}"><meta property="og:type" content="${isWatchPage ? "video.other" : "website"}">${openGraphVideo}<meta property="og:url" content="${canonical}"><meta property="og:site_name" content="S.T Tailor"><meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:image" content="${shareImageUrl}"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:alt" content="${safeImageAlt}">${shareDimensions}<meta name="theme-color" content="#ead1ad"><title>${safeTitle}</title></head><body>${googleTagManagerNoScript}${metaPixelNoScript}<div class="st-site-frame">${siteHeader}<main id="main-content" tabindex="-1">${breadcrumbNavigation(trail)}${body}</main>${siteFooter}</div><script type="module" src="${scriptHref}"></script>${jsonLd}</body></html>`;
 }
 
 function collectAssetPaths() {
@@ -1164,7 +1169,7 @@ const assets = copyAssets();
 copyGalleryFilm();
 copyIcons();
 mkdirSync(path.join(dist, "fonts"), { recursive: true });
-for (const file of ["noto-sans-vi-8b0a1d0.woff2", "OFL-Noto-Sans.txt"]) {
+for (const file of [vietnameseFont, "OFL-Noto-Sans.txt"]) {
   copyFileSync(path.join(sourceFonts, file), path.join(dist, "fonts", file));
 }
 const imageCount = buildImageManifest();

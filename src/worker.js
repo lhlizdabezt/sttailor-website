@@ -3,6 +3,7 @@ import { contentSecurityPolicy, tripadvisorEmbedPath } from "./security-policy.j
 import { tailoringPages } from "./tailoring-pages.js";
 import { showcasePages } from "./showcase-pages.js";
 import { clientCareHubRoute } from "./client-care-pages.js";
+import { fetchFittingFilm, fittingFilm, fittingFilmRoute } from "./fitting-film.js";
 
 const canonicalHost = "sttailor.com";
 const routes = new Set([
@@ -10,7 +11,7 @@ const routes = new Set([
   "/gioi-thieu/",
   "/dich-vu/",
   "/gallery/",
-  "/phim-thu-do/",
+  fittingFilmRoute,
   "/bang-gia/",
   "/phuong-thuc-thanh-toan/",
   "/lien-he/",
@@ -80,7 +81,7 @@ function securityHeaders(response, pathname = "/") {
       /^\/media\/_responsive\/.+-share-[a-f0-9]{12}\.jpg$/.test(pathname)) {
     headers.set("Cache-Control", "public, max-age=31536000, immutable");
   } else if (pathname.startsWith("/media/")) {
-    headers.set("Cache-Control", "public, max-age=604800");
+    headers.set("Cache-Control", response.status === 416 ? "no-store" : "public, max-age=604800");
   } else if (pathname.startsWith("/icons/")) {
     headers.set("Cache-Control", "public, max-age=604800");
   } else if (["/robots.txt", "/sitemap.xml", "/llms.txt", "/.well-known/security.txt", "/site.webmanifest", `/${indexNowKeyFile}`].includes(pathname)) {
@@ -143,6 +144,9 @@ export default {
     }
     if (pathname !== "/" && !pathname.endsWith("/") && routes.has(`${pathname}/`)) {
       return Response.redirect(new URL(`${pathname}/${url.search}`, url), 301);
+    }
+    if (pathname === fittingFilm.src) {
+      return securityHeaders(await fetchFittingFilm(request, env.ASSETS), pathname);
     }
     if (routes.has(pathname) || pathname === tripadvisorEmbedPath || staticFiles.has(pathname) || staticPrefixes.some((prefix) => pathname.startsWith(prefix))) {
       return securityHeaders(await env.ASSETS.fetch(request), pathname);

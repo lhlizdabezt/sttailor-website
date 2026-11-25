@@ -4,7 +4,7 @@ export const showcaseHubs = [
     source: "ShowcaseGarments.html",
     labels: ["Finished garments", "Trang phục hoàn thiện"],
     title: "Finished Bespoke Garments in Ho Chi Minh City | S.T Tailor",
-    description: "Explore finished S.T Tailor pieces in Ho Chi Minh City, including a beige blazer, navy suit, textured dinner jacket and floral silk dress.",
+    description: "Explore finished S.T Tailor garments in Ho Chi Minh City, from tailored suits, tuxedos and checked trousers to a white women’s suit and a floral silk dress.",
     image: "/media/2026/09/st-tailor-gallery-beige-double-breasted-suit.png",
     imageAlt: "Beige double-breasted blazer and trousers on a tailoring form | Blazer be hai hàng khuy và quần đồng bộ trên ma-nơ-canh"
   },
@@ -71,6 +71,16 @@ export const showcaseEntries = [
     imageAlt: "Blush silk dress with coral and gold floral embroidery and short sleeves | Đầm lụa hồng phấn tay ngắn, thêu hoa tông cam san hô và vàng"
   },
   {
+    route: "/san-pham/suit-nu-trang/",
+    source: "ShowcaseWhiteWomensSuit.html",
+    labels: ["White women’s suit", "Suit nữ màu trắng"],
+    title: "White Tailored Women’s Suit by S.T Tailor",
+    description: "See a finished white women’s suit by S.T Tailor with a notch-lapel jacket and matching trousers. Consider layering, opacity and hem length at your fitting.",
+    summary: ["A white jacket with notch lapels and matching trousers, photographed on a tailoring form.", "Áo khoác trắng ve chữ K và quần đồng bộ, chụp trên ma-nơ-canh."],
+    image: "/media/2026/09/st-tailor-womens-white-suit.jpg",
+    imageAlt: "White women’s suit with a notch-lapel jacket and matching trousers on a tailoring form | Suit nữ màu trắng gồm áo ve chữ K và quần đồng bộ trên ma-nơ-canh"
+  },
+  {
     route: "/san-pham/so-mi-trang-vien-ca-ro/",
     source: "ShowcaseCheckedTrimShirt.html",
     labels: ["White shirt with checked trim", "Sơ mi trắng phối viền ca rô"],
@@ -79,6 +89,16 @@ export const showcaseEntries = [
     summary: ["A white shirt with a discreet checked detail inside the collar and cuff.", "Sơ mi trắng điểm họa tiết ca rô ở mặt trong cổ áo và cổ tay."],
     image: "/media/2026/09/st-tailor-gallery-duk-9905.jpg",
     imageAlt: "White tailored shirt folded on navy cloth | Sơ mi trắng may đo gấp trên nền vải xanh navy"
+  },
+  {
+    route: "/san-pham/quan-tay-ca-ro-xam/",
+    source: "ShowcaseGreyCheckedTrousers.html",
+    labels: ["Grey checked trousers", "Quần tây ca rô xám"],
+    title: "Grey Checked Tailored Trousers by S.T Tailor",
+    description: "See the subtle check, waistband and pocket on a pair of grey tailored trousers by S.T Tailor. Read how to assess the waist, leg line and hem at a fitting.",
+    summary: ["A fine check in grey, visible across the folded leg and near the waistband.", "Họa tiết ca rô nhỏ trên nền xám, thấy rõ ở phần ống gấp và gần cạp quần."],
+    image: "/media/2026/09/tailored-trouser-check.jpg",
+    imageAlt: "Grey checked tailored trousers with the waistband and side pocket visible, folded on wood | Quần tây ca rô xám gấp trên mặt gỗ, thấy rõ cạp và túi bên"
   },
   {
     route: "/du-an/nina-campos/",

@@ -23,6 +23,8 @@ This is a static-first rebuild of S.T Tailor from the owner-approved, read-only 
 - [Bespoke beige double-breasted blazer](https://sttailor.com/san-pham/blazer-mau-be/)
 - [Black shawl-lapel tuxedo](https://sttailor.com/san-pham/tuxedo-den-ve-sam/)
 - [White tailored shirt with checked trim](https://sttailor.com/san-pham/so-mi-trang-vien-ca-ro/)
+- [White tailored women’s suit](https://sttailor.com/san-pham/suit-nu-trang/)
+- [Grey checked tailored trousers](https://sttailor.com/san-pham/quan-tay-ca-ro-xam/)
 - [Blush floral silk dress](https://sttailor.com/san-pham/dam-lua-hong-phan-theu-hoa/)
 - [Tailoring projects and collaborations](https://sttailor.com/du-an/)
 - [Niña Campos collaboration](https://sttailor.com/du-an/nina-campos/)

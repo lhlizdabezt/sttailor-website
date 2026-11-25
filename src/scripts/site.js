@@ -78,12 +78,19 @@ const pageTypes = {
   "/quy-trinh-thu-do/": "guide_fitting",
   "/chinh-sua-trang-phuc/": "guide_alterations",
   "/bao-quan-giat-la/": "guide_care",
+  "/cham-soc-khach-hang/": "client_care",
+  "/san-pham/": "showcase_garments",
+  "/du-an/": "showcase_projects",
   "/doi-tra-hoan-tien/": "returns",
   "/chinh-sach-van-chuyen/": "shipping",
   "/dieu-khoan-dieu-kien/": "terms",
   "/chinh-sach-bao-mat/": "privacy"
 };
-const pageType = pageTypes[window.location.pathname] ?? "other";
+const pathname = window.location.pathname;
+const pageType = pageTypes[pathname] ?? (
+  pathname.startsWith("/san-pham/") ? "showcase_garment" :
+  pathname.startsWith("/du-an/") ? "showcase_project" : "other"
+);
 
 const claritySet = (key, value) => {
   if (typeof window.clarity === "function") window.clarity("set", key, value);

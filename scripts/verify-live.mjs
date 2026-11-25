@@ -226,7 +226,10 @@ for (const asset of ["st-tailor-made-to-measure-stories-gallery.jpg", "st-tailor
   expect(image.status === 200 && image.headers.get("content-type")?.includes("image/jpeg"), `Gallery image is unavailable: ${asset}`);
 }
 const film = await fetchWithRetry(`${origin}${filmPath}`, { method: "HEAD" });
-expect(film.status === 200 && film.headers.get("content-type")?.includes("video/mp4"), "Gallery fitting film is unavailable");
+expect(film.status === 200 && film.headers.get("content-type")?.includes("video/mp4") && film.headers.get("accept-ranges") === "bytes", "Gallery fitting film is unavailable or does not advertise byte ranges");
+const filmSample = await fetchWithRetry(`${origin}${filmPath}`, { headers: { Range: "bytes=0-1" } });
+expect(filmSample.status === 206 && /^bytes 0-1\/\d+$/.test(filmSample.headers.get("content-range") ?? "") &&
+  (await filmSample.arrayBuffer()).byteLength === 2, "Gallery fitting film does not serve partial requests for seeking and Safari playback");
 const poster = await fetchWithRetry(`${origin}${posterPath}`, { method: "HEAD" });
 expect(poster.status === 200 && poster.headers.get("content-type")?.includes("image/webp"), "Gallery fitting poster is unavailable");
 
