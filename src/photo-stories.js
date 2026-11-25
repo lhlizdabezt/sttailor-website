@@ -1,3 +1,5 @@
+import { portfolioCollections, portfolioStories } from "./portfolio-stories.js";
+
 const blazer = "/san-pham/blazer-xanh-hai-hang-khuy/";
 const navyBlazer = "/du-an/phoi-blazer-xanh-navy/";
 const navySuit = "/san-pham/suit-navy-mot-hang-khuy/";
@@ -145,7 +147,8 @@ export const photoCollections = [
       ["black-jacket-lining-reveal", "Hand opens the dark jacket to show the crimson lining beside a pale shirt.", "Tay mở áo khoác tối màu, để lộ lớp lót đỏ thẫm cạnh sơ mi sáng."],
       ["black-jacket-inside-pocket-and-label", "Close-up of a welted inside pocket, S.T Tailor label and red bird-and-flower pattern.", "Cận túi trong viền, nhãn S.T Tailor và họa tiết chim hoa đỏ."]
     ]
-  }
+  },
+  ...portfolioCollections
 ];
 
 const stories = [
@@ -215,22 +218,23 @@ const stories = [
   },
   {
     route: paleGrey, section: "fittings",
-    heading: "Checking a pale grey suit in motion",
+    labels: ["Checking a pale grey suit in motion", "Thử phom suit xám nhạt qua chuyển động"],
     description: "Two photo studies document a pale grey suit fitting at S.T Tailor. See the chalked lapel, open armhole, jacket hem and fit as the client turns and reaches.",
     details: [
       ["Chalk marks and the shoulder line", "Dấu phấn và đường vai", "The fitting jacket has open armholes, so the shoulder and depth of the opening are visible. In the first sequence, blue chalk at the lapel records the area being reviewed. The side view shows the hem with the client standing naturally.", "Vì áo thử chưa tra tay, có thể thấy rõ đường vai và độ sâu vòng nách. Trong loạt đầu, vết phấn xanh trên ve đánh dấu khu vực đang kiểm tra. Góc nghiêng cho thấy vị trí lai áo khi khách đứng tự nhiên."],
       ["Reach, turn and settle", "Đưa tay, xoay người và thả lỏng", "Compare the jacket at rest with the views of the client reaching forward, lifting one hand and turning. The changes at the front edge and hem show why these movements belong in a fitting.", "So sánh áo lúc đứng yên với khi khách đưa tay ra trước, nâng một tay và xoay người. Thay đổi ở mép vạt và lai áo cho thấy lý do nên thử những chuyển động này."]
     ],
-    related: [threePiece, "/cam-nang-may-do/kiem-tra-phom-suit/"]
+    related: [threePiece, "/du-an/thu-ao-ghi-le-xam-bac/", "/cam-nang-may-do/kiem-tra-phom-suit/"]
   },
   {
     route: threePiece, section: "client-work",
     description: "See a finished silver-grey three-piece suit worn with a light blue shirt at S.T Tailor. Photographs show the jacket from behind and the drape of the trousers.",
     details: [
       ["The finished three-piece", "Bộ suit ba mảnh khi hoàn thiện", "A light blue open-neck shirt sits inside the matching waistcoat and jacket. The full view shows the balance between the layered upper half and the matching trousers.", "Sơ mi xanh nhạt mở cổ nằm bên trong ghi-lê và áo khoác đồng bộ. Góc nhìn toàn thân cho thấy tỷ lệ giữa các lớp áo phía trên và quần cùng màu."],
-      ["The back and trouser drape", "Thân sau và độ rủ quần", "With the client’s arm bent, the rear view shows the back seam, shoulder and sleeve folds. A closer view shows a long pressed trouser crease and subtle cloth texture.", "Khi khách gập tay, góc sau cho thấy đường ráp lưng, vai và nếp tay áo. Ảnh cận làm rõ đường ly quần kéo dài và bề mặt vải nhẹ."]
+      ["The back and trouser drape", "Thân sau và độ rủ quần", "With the client’s arm bent, the rear view shows the back seam, shoulder and sleeve folds. A closer view shows a long pressed trouser crease and subtle cloth texture.", "Khi khách gập tay, góc sau cho thấy đường ráp lưng, vai và nếp tay áo. Ảnh cận làm rõ đường ly quần kéo dài và bề mặt vải nhẹ."],
+      ["Checking the jacket on the client", "Kiểm tra áo khoác trên người khách", "The tailor checks the shoulder while the client wears the jacket over the waistcoat. The rear view gives a second look at the centre back and hem. The sleeve close-up records the spacing of the dark cuff buttons beside the pocket.", "Thợ may kiểm tra đường vai khi khách mặc áo khoác ngoài ghi-lê. Góc sau giúp quan sát thêm đường giữa lưng và lai áo. Ảnh cận tay áo ghi lại khoảng cách giữa các khuy tối cạnh túi."]
     ],
-    related: [paleGrey, "/dich-vu/suit-may-do/"]
+    related: [paleGrey, "/du-an/thu-ao-ghi-le-xam-bac/", "/du-an/chi-tiet-ao-khoac-xam-bac/", "/dich-vu/suit-may-do/"]
   },
   {
     route: dress, section: "womenswear",
@@ -250,7 +254,8 @@ const stories = [
       ["An inside pocket in use", "Vị trí và công dụng túi trong", "The pocket and label show how the pattern meets the internal construction. When choosing lining, check how it feels against your shirt and whether the inside pocket is placed for easy use.", "Túi và nhãn cho thấy vị trí họa tiết tiếp giáp phần kết cấu bên trong. Khi chọn lót, hãy thử cảm giác khi mặc cùng sơ mi và kiểm tra túi trong có thuận tay không."]
     ],
     related: ["/cam-nang-may-do/chon-lot-ao-khoac/", "/du-an/buoi-thu-suit-lot-vang/"]
-  }
+  },
+  ...portfolioStories
 ];
 
 export function photoSource(file) {
@@ -259,9 +264,11 @@ export function photoSource(file) {
 
 export const photoStoryPages = stories.map((story) => {
   const collections = photoCollections.filter(({ route }) => route === story.route);
-  const [{ labels, summary, photos }] = collections;
+  const { labels, summary, photos } = story.coverCollection
+    ? collections.find(({ id }) => id === story.coverCollection)
+    : collections[0];
   const [file, en, vi] = photos[story.cover ?? 0];
-  const pageLabels = story.heading ? [story.heading, "Thử phom suit xám nhạt qua chuyển động"] : labels;
+  const pageLabels = story.labels ?? labels;
   return {
     ...story,
     collections,
@@ -270,6 +277,6 @@ export const photoStoryPages = stories.map((story) => {
     title: story.title ?? pageLabels[0] + " | S.T Tailor",
     image: photoSource(file),
     imageAlt: en + " | " + vi,
-    summary
+    summary: story.summary ?? summary
   };
 });

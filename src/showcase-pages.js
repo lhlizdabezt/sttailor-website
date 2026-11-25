@@ -26,7 +26,8 @@ export const showcaseHubs = [
     sections: [
       { id: "collaborations", labels: ["Collaborations", "Hợp tác"] },
       { id: "client-work", labels: ["Client commissions", "Trang phục của khách"] },
-      { id: "fittings", labels: ["Fitting studies", "Ghi chép thử đồ"] }
+      { id: "fittings", labels: ["Fitting studies", "Ghi chép thử đồ"] },
+      { id: "craft-and-style", labels: ["Cloth, craft and styling", "Vải, kỹ thuật may và phối đồ"] }
     ]
   }
 ];

@@ -356,6 +356,8 @@ html body .st-tripadvisor__visit address { margin: 10px 0 0; color: #4e3527; fon
 html body .st-tripadvisor__visit address span { display: block; margin-top: 6px; }
 html body .st-tripadvisor__hours { margin: 12px 0 0; color: #4e3527; font: 600 14px/1.55 var(--st-vietnamese); }
 html body .st-tripadvisor__hours span { display: block; font-weight: 400; }
+html body .st-tripadvisor__arrival { margin: 12px 0 0; color: #4e3527; font: 400 14px/1.55 var(--st-vietnamese); }
+html body .st-tripadvisor__arrival span { display: block; margin-top: 4px; }
 
 html body .st-fitting-film {
   display: grid;
@@ -1859,22 +1861,44 @@ html body #main-content .st-gallery-page--albums .st-album-grid__item figcaption
 .st-showcase :is(h2, h3) { color: var(--showcase-ink); margin: 0; font: 500 clamp(26px, 3.1vw, 42px)/1.12 var(--st-wordmark); }
 .st-showcase-card :is(h2, h3) { font-size: clamp(22px, 2.2vw, 32px); }
 .st-showcase :is(h2, h3) > [lang="vi"] { font-size: max(16px, .52em); line-height: 1.35; }
-.st-showcase__sections { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(6px, 1.4vw, 16px); }
+.st-showcase__sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 154px), 1fr)); gap: clamp(6px, 1.4vw, 16px); }
 .st-showcase__group { margin-top: clamp(20px, 3vw, 38px); }
 .st-showcase__group > h2 { margin-bottom: clamp(14px, 2vw, 24px); padding-top: 16px; border-top: 1px solid var(--showcase-rule); scroll-margin-block-start: 128px; }
 .st-showcase__group > h2:focus-visible { outline: 2px solid #633a26; outline-offset: 4px; }
 .st-showcase-card p { margin: 12px 0 18px; }
 .st-showcase-card .st-showcase__action { margin-top: auto; }
+@media (min-width: 761px) {
+  .st-showcase--projects [aria-labelledby="collaborations"] .st-showcase__index:has(> .st-showcase-card:only-child) {
+    grid-template-columns: 1fr;
+  }
+  .st-showcase--projects [aria-labelledby="collaborations"] .st-showcase-card:only-child {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .st-showcase--projects [aria-labelledby="collaborations"] .st-showcase-card:only-child .st-showcase-card__photo {
+    aspect-ratio: 4 / 3;
+  }
+  .st-showcase--projects [aria-labelledby="collaborations"] .st-showcase-card:only-child .st-showcase-card__copy {
+    justify-content: center;
+    padding: clamp(24px, 4vw, 64px);
+  }
+  .st-showcase--projects [aria-labelledby="collaborations"] .st-showcase-card:only-child .st-showcase__action {
+    align-self: start;
+    margin-top: 0;
+  }
+}
 .st-showcase__details { padding-block: clamp(26px, 5vw, 65px) 0; }
 .st-showcase__section { padding-block: 20px 12px; border-top: 1px solid var(--showcase-rule); }
 .st-showcase__section p { max-width: 66ch; margin: 14px 0 0; }
 .st-showcase__photo-grid { grid-column: 1 / -1; }
 .st-showcase__detail-photo { width: min(100%, 440px); grid-column: 1 / -1; justify-self: center; }
 .st-showcase :is(.st-showcase__detail-photo, .st-showcase__photo-grid) figcaption { padding: 12px 16px; }
-.st-showcase__story { padding-block: clamp(28px, 4.5vw, 52px) 0; }
+.st-showcase__story { padding-block: clamp(28px, 4.5vw, 52px) 0; scroll-margin-block-start: 106px; }
 .st-showcase__story > h2 { padding-block-start: 20px; border-top: 1px solid var(--showcase-rule); }
+.st-showcase__story-intro { margin: 12px 0 0; max-width: 70ch; }
 .st-showcase__story .st-showcase__photo-grid { margin-block-start: 20px; }
 .st-showcase__story .st-showcase__photo-grid img { object-fit: contain; background: var(--showcase-mat); }
+.st-showcase--visit .st-showcase__photo-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .st-showcase__links {
   margin-top: clamp(24px, 4vw, 54px);
   display: grid;
@@ -1924,7 +1948,7 @@ html body #main-content a.st-showcase__action:focus-visible { outline: 2px solid
 @media (max-width: 600px) {
   .st-showcase__collection > h1 { font-size: clamp(33px, 9vw, 45px); }
   .st-showcase:is(.st-showcase--garments, .st-showcase--client-care, .st-showcase--projects) .st-showcase__index,
-  .st-showcase__links, .st-showcase__photo-grid { grid-template-columns: minmax(0, 1fr); }
+  .st-showcase__links, .st-showcase__photo-grid, .st-showcase--visit .st-showcase__photo-grid { grid-template-columns: minmax(0, 1fr); }
   .st-showcase__links--discovery { margin-block: 18px; }
   html body #main-content a.st-showcase__action--primary { display: grid; }
 }

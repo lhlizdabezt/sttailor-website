@@ -10,6 +10,7 @@ import { clientCareHubRoute, clientCarePage } from "../src/client-care-pages.js"
 import { tailoringPages } from "../src/tailoring-pages.js";
 import { showcaseEntries, showcaseHubs, showcaseItemsFor, showcasePages } from "../src/showcase-pages.js";
 import { photoCollections, photoSource } from "../src/photo-stories.js";
+import { showroomEntrance } from "../src/portfolio-stories.js";
 import { fittingFilm as galleryFilm, fittingFilmRoute } from "../src/fitting-film.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -170,18 +171,24 @@ function editorialPhoto([file, english, vietnamese]) {
   </figure>`;
 }
 
+function photoCollectionSection({ id, labels, photos }, { heading = labels, heroImage, intro } = {}) {
+  const views = photos.filter(([file]) => photoSource(file) !== heroImage);
+  return `<section class="st-showcase__shell st-showcase__story" id="${id}" aria-labelledby="${id}-title">
+    <h2 id="${id}-title">${heading[0]}<span lang="vi">${heading[1]}</span></h2>
+    ${intro ? `<p class="st-showcase__story-intro">${intro[0]}<span lang="vi">${intro[1]}</span></p>` : ""}
+    <div class="st-showcase__photo-grid">${views.map(editorialPhoto).join("\n")}</div>
+  </section>`;
+}
+
 function photoStoryBody(page) {
   const sections = page.details.map(([title, titleVi, copy, copyVi]) => `<section class="st-showcase__section">
     <h2>${title}<span lang="vi">${titleVi}</span></h2>
     <p>${copy}<span lang="vi">${copyVi}</span></p>
   </section>`);
-  const collections = page.collections.map(({ id, labels, photos }) => {
-    const smallerViews = photos.filter(([file]) => photoSource(file) !== page.image);
-    return `<section class="st-showcase__shell st-showcase__story" aria-labelledby="${id}-title">
-      <h2 id="${id}-title">${page.collections.length > 1 ? labels[0] : "Other views"}<span lang="vi">${page.collections.length > 1 ? labels[1] : "Các góc nhìn khác"}</span></h2>
-      <div class="st-showcase__photo-grid">${smallerViews.map(editorialPhoto).join("\n")}</div>
-    </section>`;
-  });
+  const collections = page.collections.map((collection) => photoCollectionSection(collection, {
+    heroImage: page.image,
+    heading: page.collections.length === 1 ? ["Other views", "Các góc nhìn khác"] : collection.labels
+  }));
   const galleryLinks = page.collections.map(({ id, labels: [english, vietnamese] }) => [
     `/gallery/#${id}`,
     page.collections.length === 1
@@ -440,7 +447,10 @@ function transformContact(html) {
       '<h2>CONTACT DETAILS<br><span lang="vi">THÔNG TIN LIÊN HỆ</span></h2>',
       '<h1>CONTACT DETAILS<br><span lang="vi">THÔNG TIN LIÊN HỆ</span></h1>'
     );
-  return replaceVisibleAtelier(html);
+  const entrance = `<div class="st-showcase st-showcase--visit">
+    ${photoCollectionSection(showroomEntrance, { intro: showroomEntrance.summary })}
+  </div>`;
+  return replaceVisibleAtelier(html.replace("<!-- CONTACT_ENTRANCE -->", entrance));
 }
 
 const franceClientPhotos = [
@@ -612,7 +622,9 @@ function appendGalleryCollections(html) {
           <h3 id="${id}-title">${labels[0]}<span lang="vi">${labels[1]}</span></h3>
           <p>${summary[0]}<span lang="vi">${summary[1]}</span></p>
         </div>
-        <a class="st-gallery-series__link" href="${route}">View story<span lang="vi">Xem bài và ảnh</span></a>
+        ${id === showroomEntrance.id
+          ? `<a class="st-gallery-series__link" href="${route}#${id}">Find the showroom<span lang="vi">Xem lối vào nhà may</span></a>`
+          : `<a class="st-gallery-series__link" href="${route}">View story<span lang="vi">Xem bài và ảnh</span></a>`}
       </header>
       <div class="st-gallery-series__grid">${photos.filter(([file]) => !file.startsWith("/")).map(editorialPhoto).join("\n")}</div>
     </section>`).join("\n");
@@ -826,10 +838,11 @@ function transformAbout(html) {
         <h3>Visit S.T Tailor<span lang="vi">Ghé S.T Tailor</span></h3>
         <address>1st Floor, 258 Le Thanh Ton, Tan Dinh Ward<br>Ho Chi Minh City, Vietnam<span lang="vi">Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định<br>Thành phố Hồ Chí Minh, Việt Nam</span></address>
         <p class="st-tripadvisor__hours">Open daily, 09:00–20:00<span lang="vi">Mở cửa mỗi ngày, 09:00–20:00</span></p>
+        <p class="st-tripadvisor__arrival">Look for the number 258 and the illuminated tailoring sign at street level.<span lang="vi">Tìm số nhà 258 và biển hiệu nhà may có đèn ở mặt đường.</span></p>
       </div>
       <div class="st-tripadvisor__actions">
         <a class="st-tripadvisor__link st-tripadvisor__link--outline" href="/lien-he/#st-showroom-map"><span>Directions</span><span lang="vi">Đường đến nhà may</span></a>
-        <a class="st-tripadvisor__link st-tripadvisor__link--outline" href="/quy-trinh-thu-do/"><span>Fitting process</span><span lang="vi">Quy trình thử đồ</span></a>
+        <a class="st-tripadvisor__link st-tripadvisor__link--outline" href="/lien-he/#loi-vao-nha-may"><span>Entrance photos</span><span lang="vi">Ảnh lối vào nhà may</span></a>
       </div>
     </div>
   </div>
@@ -959,7 +972,7 @@ function lastModifiedFor(sourceFile) {
   // Derived copy and Gallery additions can change without touching the baseline.
   if (derivedContentModified[sourceFile]) {
     const inputs = [path.join("source", "wordpress", sourceFile)];
-    if (sourceFile === "Gallery.html") inputs.push("source/media", "src/photo-stories.js");
+    if (sourceFile === "Gallery.html") inputs.push("source/media", "src/photo-stories.js", "src/portfolio-stories.js");
     if (["Returns.html", "Shipping.html", "Terms.html", "Privacy.html"].includes(sourceFile)) inputs.push("src/client-care-pages.js");
     const changed = spawnSync("git", ["status", "--porcelain", "--", ...inputs], { cwd: root, encoding: "utf8" });
     if (changed.status !== 0 || changed.stdout.trim()) return buildDate;
@@ -968,9 +981,10 @@ function lastModifiedFor(sourceFile) {
     return [date, derivedContentModified[sourceFile], sharedContentModified].filter((value) => /^\d{4}-\d{2}-\d{2}$/.test(value)).sort().at(-1);
   }
   const contentFile = path.join("source", "wordpress", sourceFile);
-  const dirty = spawnSync("git", ["status", "--porcelain", "--", contentFile], { cwd: root, encoding: "utf8" });
+  const inputs = sourceFile === "ShowcasePhotoStory.html" ? [contentFile, "src/photo-stories.js", "src/portfolio-stories.js"] : [contentFile];
+  const dirty = spawnSync("git", ["status", "--porcelain", "--", ...inputs], { cwd: root, encoding: "utf8" });
   if (dirty.status !== 0 || dirty.stdout.trim()) return buildDate;
-  const history = spawnSync("git", ["log", "-1", "--format=%cs", "--", contentFile], { cwd: root, encoding: "utf8" });
+  const history = spawnSync("git", ["log", "-1", "--format=%cs", "--", ...inputs], { cwd: root, encoding: "utf8" });
   const date = history.status === 0 ? history.stdout.trim() : "";
   return /^\d{4}-\d{2}-\d{2}$/.test(date) ? (date > sharedContentModified ? date : sharedContentModified) : buildDate;
 }

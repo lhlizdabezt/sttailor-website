@@ -483,6 +483,11 @@ for (const aboutGalleryFeature of ["st-about-gallery-bridge", 'href="/gallery/"'
 }
 
 const gallery = readFileSync(path.join(dist, "gallery", "index.html"), "utf8");
+const entranceRoute = "/lien-he/#loi-vao-nha-may";
+if (!gallery.includes(`href="${entranceRoute}"`) || !about.includes(`href="${entranceRoute}"`) ||
+    !contact.includes('id="loi-vao-nha-may"') || !contact.includes('href="/gallery/#loi-vao-nha-may"')) {
+  failures.push("Showroom entrance photographs must be reachable from Contact, the Gallery and the Tripadvisor panel.");
+}
 for (const { route, collections } of showcasePages.filter((page) => page.collections)) {
   const story = readFileSync(path.join(dist, route.slice(1), "index.html"), "utf8");
   for (const { id } of collections) {
