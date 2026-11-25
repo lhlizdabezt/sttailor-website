@@ -21,9 +21,12 @@ This is a static-first rebuild of S.T Tailor from the owner-approved, read-only 
 - [Vietnamese silk for custom garments](https://sttailor.com/chon-vai-may-do/lua-viet-nam/)
 - [Finished garments and tailoring details](https://sttailor.com/san-pham/)
 - [Bespoke beige double-breasted blazer](https://sttailor.com/san-pham/blazer-mau-be/)
+- [Black shawl-lapel tuxedo](https://sttailor.com/san-pham/tuxedo-den-ve-sam/)
+- [White tailored shirt with checked trim](https://sttailor.com/san-pham/so-mi-trang-vien-ca-ro/)
 - [Blush floral silk dress](https://sttailor.com/san-pham/dam-lua-hong-phan-theu-hoa/)
 - [Tailoring projects and collaborations](https://sttailor.com/du-an/)
 - [Niña Campos collaboration](https://sttailor.com/du-an/nina-campos/)
+- [Client Care for tailored orders](https://sttailor.com/cham-soc-khach-hang/)
 
 ## URL behaviour
 

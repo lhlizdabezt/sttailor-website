@@ -1,5 +1,7 @@
 // Current client-care copy; the imported WordPress reference stays unchanged.
 // English and Vietnamese are kept together so each policy is easy to compare.
+export const clientCareHubRoute = "/cham-soc-khach-hang/";
+
 const contact = '<a href="/lien-he/">contact S.T Tailor</a>';
 const contactVi = '<a href="/lien-he/">liên hệ S.T Tailor</a>';
 const pages = {

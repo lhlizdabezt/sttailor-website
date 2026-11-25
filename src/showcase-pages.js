@@ -51,6 +51,16 @@ export const showcaseEntries = [
     imageAlt: "Dark patterned S.T Tailor dinner jacket with patch pockets and a round button | Áo khoác dự tiệc tối màu dệt hoa văn, có túi đắp và khuy tròn của S.T Tailor"
   },
   {
+    route: "/san-pham/tuxedo-den-ve-sam/",
+    source: "ShowcaseBlackTuxedo.html",
+    labels: ["Black shawl-lapel tuxedo", "Tuxedo đen ve sam"],
+    title: "Black Shawl-Lapel Tuxedo by S.T Tailor",
+    description: "See a finished black tuxedo by S.T Tailor, with satin shawl lapels and a single-button front, photographed from the front and side in Ho Chi Minh City.",
+    summary: ["A black evening jacket with a continuous satin shawl lapel, shown over a white dress shirt.", "Áo tuxedo đen với ve sam satin liền nét, phối cùng sơ mi trắng dùng cho lễ phục."],
+    image: "/media/2026/09/st-tailor-gallery-duk-0010.jpg",
+    imageAlt: "Black one-button tuxedo jacket with satin shawl lapels and white dress shirt on a tailoring form | Áo tuxedo đen một khuy, ve sam satin và sơ mi trắng trên ma-nơ-canh"
+  },
+  {
     route: "/san-pham/dam-lua-hong-phan-theu-hoa/",
     source: "ShowcaseSilkDress.html",
     labels: ["Blush floral silk dress", "Đầm lụa hồng phấn thêu hoa"],
@@ -59,6 +69,16 @@ export const showcaseEntries = [
     summary: ["Blush silk with warm floral embroidery, a round neckline and short sleeves.", "Lụa hồng phấn thêu hoa sắc ấm, phối cổ tròn và tay ngắn."],
     image: "/media/2026/09/st-tailor-gallery-blush-silk-floral-dress.jpg",
     imageAlt: "Blush silk dress with coral and gold floral embroidery and short sleeves | Đầm lụa hồng phấn tay ngắn, thêu hoa tông cam san hô và vàng"
+  },
+  {
+    route: "/san-pham/so-mi-trang-vien-ca-ro/",
+    source: "ShowcaseCheckedTrimShirt.html",
+    labels: ["White shirt with checked trim", "Sơ mi trắng phối viền ca rô"],
+    title: "White Tailored Shirt With Checked Trim | S.T Tailor",
+    description: "Explore a white shirt finished by S.T Tailor, with checked trim at the inner collar and cuff. See the details and what to consider at a shirt fitting.",
+    summary: ["A white shirt with a discreet checked detail inside the collar and cuff.", "Sơ mi trắng điểm họa tiết ca rô ở mặt trong cổ áo và cổ tay."],
+    image: "/media/2026/09/st-tailor-gallery-duk-9905.jpg",
+    imageAlt: "White tailored shirt folded on navy cloth | Sơ mi trắng may đo gấp trên nền vải xanh navy"
   },
   {
     route: "/du-an/nina-campos/",

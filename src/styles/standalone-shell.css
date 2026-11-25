@@ -1518,7 +1518,8 @@ html body .st-contact-page--v2 .st-contact-item h2,
 html body .st-contact-page--v2 .st-contact-card h3,
 html body .st-contact-page--v2 :is(h2, h3),
 html body .st-contact-page--v2 :is(h2, h3) [lang="vi"] { font-weight: 500 !important; }
-html body .st-lux-page.st-lux-about :is(.st-lux-provenance__materials, .st-lux-provenance__cloth) h3 { font-weight: 600 !important; }
+html body #main-content .st-lux-about h3,
+html body #main-content .st-lux-about h3 [lang="vi"] { font-weight: 500 !important; }
 html body .st-site-frame :is(a, button):focus-visible { outline: 2px solid currentColor !important; outline-offset: 4px !important; }
 /* Reserve header clearance when tabbing backwards through page and footer links. */
 html body .st-site-frame :is(main, footer) :is(a, button) { scroll-margin-block: 120px 28px; }
@@ -1666,9 +1667,9 @@ html body #main-content .st-gallery-page--albums .st-album-grid__item figcaption
 .st-showcase h1 > [lang="vi"] { margin-top: 12px; font-size: max(21px, .42em); line-height: 1.3; letter-spacing: 0; }
 .st-showcase__lead > p, .st-showcase__collection > p { max-width: 65ch; margin: 20px 0 0; }
 .st-showcase__lead > .st-showcase__action { margin-top: 24px; }
-.st-showcase :is(.st-showcase__portrait, .st-showcase__photo-grid figure) { margin: 0; background: var(--showcase-mat); border: 1px solid var(--showcase-rule); }
+.st-showcase :is(.st-showcase__portrait, .st-showcase__detail-photo, .st-showcase__photo-grid figure) { margin: 0; background: var(--showcase-mat); border: 1px solid var(--showcase-rule); }
 .st-showcase__portrait { padding: clamp(5px, 1.2vw, 16px); }
-.st-showcase :is(.st-showcase__hero-image, .st-showcase-card__photo, .st-showcase__photo-grid img) {
+.st-showcase :is(.st-showcase__hero-image, .st-showcase-card__photo, .st-showcase__detail-photo img, .st-showcase__photo-grid img) {
   display: block;
   width: 100%;
   height: auto;
@@ -1686,7 +1687,7 @@ html body #main-content .st-gallery-page--albums .st-album-grid__item figcaption
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(16px, 3vw, 38px);
 }
-.st-showcase--garments .st-showcase__index { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(14px, 1.7vw, 24px); }
+.st-showcase:is(.st-showcase--garments, .st-showcase--client-care) .st-showcase__index { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 1.7vw, 24px); }
 .st-showcase--projects .st-showcase-card__photo { aspect-ratio: 4 / 3; }
 .st-showcase-card { display: flex; flex-direction: column; min-width: 0; border: 1px solid var(--showcase-rule); }
 .st-showcase-card__copy { display: flex; flex: 1; flex-direction: column; padding: clamp(15px, 2vw, 26px); }
@@ -1699,7 +1700,8 @@ html body #main-content .st-gallery-page--albums .st-album-grid__item figcaption
 .st-showcase__section { padding-block: 20px 12px; border-top: 1px solid var(--showcase-rule); }
 .st-showcase__section p { max-width: 66ch; margin: 14px 0 0; }
 .st-showcase__photo-grid { grid-column: 1 / -1; }
-.st-showcase__photo-grid figcaption { padding: 12px 16px; }
+.st-showcase__detail-photo { width: min(100%, 440px); grid-column: 1 / -1; justify-self: center; }
+.st-showcase :is(.st-showcase__detail-photo, .st-showcase__photo-grid) figcaption { padding: 12px 16px; }
 .st-showcase__links {
   margin-top: clamp(24px, 4vw, 54px);
   display: grid;
@@ -1733,15 +1735,21 @@ html body #main-content a.st-showcase__action--primary:is(:hover, :focus-visible
 html body #main-content a.st-showcase__action:focus-visible { outline: 2px solid #633a26 !important; outline-offset: 4px; }
 @media (max-width: 1080px) {
   .st-showcase__hero-grid { grid-template-columns: minmax(0, 1fr) minmax(0, .9fr); }
-  .st-showcase--garments .st-showcase__index { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .st-showcase:is(.st-showcase--garments, .st-showcase--client-care) .st-showcase__index { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 760px) {
   .st-showcase__shell { width: calc(100% - 34px); }
   .st-showcase__hero-grid, .st-showcase__details { grid-template-columns: minmax(0, 1fr); }
-  .st-showcase__portrait { width: min(100%, 520px); }
+  .st-showcase__hero-grid { gap: 18px; grid-template-areas: "title" "consultation" "portrait" "summary"; }
+  .st-showcase__lead { display: contents; }
+  .st-showcase__lead > h1 { grid-area: title; }
+  .st-showcase__lead > p { grid-area: summary; margin: 0; }
+  .st-showcase__lead > .st-showcase__action { grid-area: consultation; margin: 0; }
+  .st-showcase__portrait { grid-area: portrait; width: min(100%, 520px); }
 }
 @media (max-width: 600px) {
-  .st-showcase .st-showcase__index, .st-showcase__links, .st-showcase__photo-grid { grid-template-columns: minmax(0, 1fr); }
+  .st-showcase:is(.st-showcase--garments, .st-showcase--client-care, .st-showcase--projects) .st-showcase__index,
+  .st-showcase__links, .st-showcase__photo-grid { grid-template-columns: minmax(0, 1fr); }
   .st-showcase__links--discovery { margin-block: 18px; }
   html body #main-content a.st-showcase__action--primary { display: grid; }
 }

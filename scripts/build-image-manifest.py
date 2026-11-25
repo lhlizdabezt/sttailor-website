@@ -37,6 +37,20 @@ def public_path(path: Path) -> str:
     return "/media/_responsive/" + path.as_posix()
 
 
+def check_public_metadata(image: Image.Image, relative: Path) -> None:
+    exif = image.getexif()
+    gps = exif.get_ifd(34853) if 34853 in exif else {}
+    details = exif.get_ifd(34665) if 34665 in exif else {}
+    camera_fields = (42032, 42033, 42037)  # Owner, camera body serial and lens serial.
+    xmp = image.info.get("xmp") or b""
+    xmp = xmp.encode() if isinstance(xmp, str) else xmp
+    private_xmp = (b":GPSLatitude", b":GPSLongitude", b":CameraOwnerName", b":SerialNumber", b":LensSerialNumber")
+    has_coordinates = any(gps.get(tag) for tag in (2, 4, 6))
+    has_camera_id = any(details.get(tag) or exif.get(tag) for tag in camera_fields)
+    if has_coordinates or has_camera_id or any(field in xmp for field in private_xmp):
+        raise ValueError(f"Remove location or camera identity metadata before publishing {relative}")
+
+
 def build_variant(image: Image.Image, source_relative: Path, width: int, output_root: Path, *, avif_quality: int | None = None) -> str:
     height = round(image.height * width / image.width)
     stem = source_relative.stem.lower()
@@ -103,10 +117,12 @@ def main() -> int:
     parser.add_argument("output_manifest", type=Path)
     parser.add_argument("share_images", nargs="*")
     parser.add_argument("--home-card", action="append", default=[])
+    parser.add_argument("--feature-image", action="append", default=[])
     args = parser.parse_args()
     source_root = args.source_media
     output_manifest = args.output_manifest
     home_cards = set(args.home_card)
+    feature_images = set(args.feature_image)
     responsive_root = output_manifest.parent / "media" / "_responsive"
     brand_icon_root = output_manifest.parent / "icons"
     metadata: dict[str, dict[str, object]] = {}
@@ -118,6 +134,7 @@ def main() -> int:
         relative = source.relative_to(source_root)
         try:
             with Image.open(source) as opened:
+                check_public_metadata(opened, relative)
                 image = ImageOps.exif_transpose(opened)
                 width, height = image.size
                 variants = []
@@ -134,6 +151,11 @@ def main() -> int:
                     entry["mobile_avif"] = [
                         {"src": build_variant(image, relative, candidate, responsive_root, avif_quality=58), "width": candidate}
                         for candidate in CONTENT_WIDTHS if candidate <= 768 and candidate < width
+                    ]
+                if relative.as_posix() in feature_images:
+                    entry["responsive_avif"] = [
+                        {"src": build_variant(image, relative, variant["width"], responsive_root, avif_quality=58), "width": variant["width"]}
+                        for variant in variants if variant["width"] <= 1200
                     ]
                 metadata[relative.as_posix()] = entry
                 processed += 1

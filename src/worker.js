@@ -2,6 +2,7 @@ import { indexNowKeyFile } from "./indexnow.js";
 import { contentSecurityPolicy, tripadvisorEmbedPath } from "./security-policy.js";
 import { tailoringPages } from "./tailoring-pages.js";
 import { showcasePages } from "./showcase-pages.js";
+import { clientCareHubRoute } from "./client-care-pages.js";
 
 const canonicalHost = "sttailor.com";
 const routes = new Set([
@@ -22,6 +23,7 @@ const routes = new Set([
   "/chinh-sach-van-chuyen/",
   "/dieu-khoan-dieu-kien/",
   "/chinh-sach-bao-mat/",
+  clientCareHubRoute,
   ...[...tailoringPages, ...showcasePages].map(({ route }) => route)
 ]);
 // Retired WordPress paths have an intentional, permanent destination. Any

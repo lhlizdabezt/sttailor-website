@@ -6,7 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
 import { tripadvisorEmbedPath } from "../src/security-policy.js";
-import { clientCarePage } from "../src/client-care-pages.js";
+import { clientCareHubRoute, clientCarePage } from "../src/client-care-pages.js";
 import { tailoringPages } from "../src/tailoring-pages.js";
 import { showcaseEntries, showcaseHubs, showcasePages } from "../src/showcase-pages.js";
 
@@ -26,6 +26,7 @@ const buildRevision = /^[0-9a-f]{40}$/i.test(process.env.STTAILOR_BUILD_REVISION
 let scriptHref = "/scripts/site.js";
 let imageManifest = {};
 const homeHeroImage = "/media/2026/06/background-hero-trang-lien-he-sttailor.webp";
+const galleryHeroImage = "/media/2026/09/st-tailor-made-to-measure-stories-gallery.jpg";
 // The portrait cover is up to 740px tall: 740 * 1717 / 916 needs ~1387 source pixels.
 // A viewport-width hint would upscale the 480px derivative and blur the fitting.
 const homeHeroSizes = "(max-width: 760px) 1400px, 1717px";
@@ -83,6 +84,7 @@ const routes = [
   ["/quy-trinh-thu-do/", "GuideFitting.html", "Bespoke Fitting Process in HCMC | S.T Tailor", "Understand consultation, measurement, fittings, refinement and handover for a bespoke garment at S.T Tailor in central Ho Chi Minh City.", "/media/2026/09/st-tailor-client-measurement-session.jpg", "Tailor measuring a client during a fitting at S.T Tailor"],
   ["/chinh-sua-trang-phuc/", "GuideAlterations.html", "Clothing Alterations in HCMC | S.T Tailor Guide", "Learn what S.T Tailor assesses before altering trouser hems, waists, jacket sleeves and garment repairs in central Ho Chi Minh City.", "/media/2026/09/st-tailor-gallery-trouser-interior-detail.jpg", "Tailored trouser interior and seam finishing at S.T Tailor"],
   ["/bao-quan-giat-la/", "GuideCare.html", "Suit Care & Garment Cleaning Guide | S.T Tailor", "Follow a practical bilingual guide to airing, brushing, storing, spot care, washing, ironing and professional cleaning for tailored garments.", "/media/2026/09/st-tailor-gallery-jacket-lining-mannequin.jpg", "Tailored jacket lining and construction at S.T Tailor"],
+  [clientCareHubRoute, "ClientCare.html", "Client Care for Bespoke Orders | S.T Tailor", "Find out how to pay for, collect, care for or raise a concern about a tailored garment from S.T Tailor in Ho Chi Minh City.", "/media/2026/06/store-sttailor-2.webp", "S.T Tailor showroom for garment collection and aftercare | Showroom S.T Tailor, nơi nhận và chăm sóc trang phục"],
   ["/doi-tra-hoan-tien/", "Returns.html", "Returns & Refunds for Tailored Garments | S.T Tailor", "Read S.T Tailor's bilingual returns and refunds policy for made-to-measure garments, alterations, order concerns, cancellations and refunds.", "/media/2026/09/fabric-focus-cloth-books.jpg", "Tailoring cloth books used when confirming a S.T Tailor order"],
   ["/chinh-sach-van-chuyen/", "Shipping.html", "Shipping & Delivery for Tailored Garments | S.T Tailor", "Explore S.T Tailor's bilingual delivery options for showroom collection, Ho Chi Minh City couriers, Vietnam shipping and international dispatch.", "/media/2026/06/store-sttailor-2.webp", "S.T Tailor showroom for garment collection and handover"],
   ["/dieu-khoan-dieu-kien/", "Terms.html", "Terms & Conditions for Tailoring Orders | S.T Tailor", "Review S.T Tailor's bilingual order terms covering quotations, bespoke fittings, payments, delivery, changes and consumer rights in Vietnam.", "/media/2026/09/fabric-focus-cloth-books.jpg", "S.T Tailor fabric library for bespoke orders"],
@@ -116,6 +118,7 @@ const pageLabels = new Map([
   ...showcasePages.map(({ route, labels }) => [route, labels]),
   [fittingFilmRoute, ["A fitting in motion", "Thử phom qua chuyển động"]],
   ["/phuong-thuc-thanh-toan/", ["Payment methods", "Phương thức thanh toán"]],
+  [clientCareHubRoute, ["Client Care overview", "Thông tin chăm sóc khách hàng"]],
   ["/cam-nang-may-do/", ["Tailoring guide", "Cẩm nang may đo"]],
   ["/doi-tra-hoan-tien/", ["Returns and refunds", "Đổi trả và hoàn tiền"]],
   ["/chinh-sach-van-chuyen/", ["Shipping and delivery", "Vận chuyển và giao nhận"]],
@@ -128,6 +131,7 @@ function breadcrumbTrail(route) {
   const trail = ["/"];
   if (serviceRoutes.some((page) => page.route === route)) trail.push("/dich-vu/");
   if (guideRoutes.some(([guideRoute]) => guideRoute === route)) trail.push("/cam-nang-may-do/");
+  if (policyRoutes.includes(route)) trail.push(clientCareHubRoute);
   if (route === fittingFilmRoute) trail.push("/gallery/");
   const parent = route.replace(/[^/]+\/$/, "");
   if (pageLabels.has(parent) && !trail.includes(parent)) trail.push(parent);
@@ -830,6 +834,9 @@ function enrichImageAttributes(html, { responsiveSizes, deprioritizeLazyImages =
         : responsiveSizes;
       const lazyAuto = /\bloading="lazy"/i.test(output) ? "auto, " : "";
       output = output.replace(/<img\b/i, `<img srcset="${srcset}" sizes="${lazyAuto}${sizes}"`);
+      if (metadata.responsive_avif?.length && (isGalleryHero || /\bst-showcase(?:__hero-image|-card__photo)\b/.test(output))) {
+        return `<picture><source type="image/avif" srcset="${imageSourceSet(metadata.responsive_avif)}" sizes="${lazyAuto}${sizes}">${output}</picture>`;
+      }
     }
     if (src === homeHeroImage && metadata.portrait && /\bst-home-v6__hero-media\b/.test(output)) {
       return `<picture><source type="image/avif" media="${homeHeroPortraitMedia}" srcset="${metadata.portrait_avif}"><source media="${homeHeroPortraitMedia}" srcset="${metadata.portrait}">${output}</picture>`;
@@ -850,6 +857,7 @@ function enrichImageAttributes(html, { responsiveSizes, deprioritizeLazyImages =
   });
   return localImages.replace(/<img\b[^>]*\bsrc="\/icons\/[^\"]+"[^>]*>/gi, (tag) => {
     let output = tag;
+    if (/\balt=""/.test(output) && !/\baria-hidden=/.test(output)) output = output.replace(/<img\b/i, '<img aria-hidden="true"');
     if (!/\bwidth="\d+"/i.test(output)) output = output.replace(/<img\b/i, '<img width="24"');
     if (!/\bheight="\d+"/i.test(output)) output = output.replace(/<img\b/i, '<img height="24"');
     if (!/\bloading=/i.test(output)) output = output.replace(/<img\b/i, '<img loading="lazy"');
@@ -907,7 +915,7 @@ function footer(route) {
     ["Tailoring services", "Dịch vụ may đo", ["/dich-vu/", ...serviceRoutes.map((page) => page.route), "/bang-gia/"]],
     ...showcaseHubs.map(({ route: hubRoute, labels }) => [...labels, [hubRoute, ...showcaseItemsFor(hubRoute).map(({ route }) => route)]]),
     ["Tailoring guide", "Cẩm nang may đo", ["/cam-nang-may-do/", ...guideRoutes.map(([href]) => href)]],
-    ["Client Care", "Chăm sóc khách hàng", policyRoutes]
+    ["Client Care", "Chăm sóc khách hàng", [clientCareHubRoute, ...policyRoutes]]
   ];
   const directory = groups.map(([english, vietnamese, paths]) => `
     <section aria-label="${english} | ${vietnamese}">
@@ -928,7 +936,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     "/": homeEditorialSizes,
     // The square guide photo covers a 560px-tall frame on desktop.
     "/cam-nang-may-do/": "(max-width: 560px) calc(100vw - 28px), (max-width: 860px) calc(100vw - 48px), 560px",
-    "/san-pham/": "(max-width: 600px) calc(100vw - 34px), (max-width: 1080px) calc(50vw - 30px), min(calc(25vw - 26px), 270px)",
+    "/san-pham/": "(max-width: 600px) calc(100vw - 34px), (max-width: 1080px) calc(50vw - 30px), min(calc(33.33vw - 32px), 371px)",
     "/du-an/": "(max-width: 600px) calc(100vw - 34px), min(calc(50vw - 30px), 470px)"
   }[route] ?? "(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 800px";
   const body = enrichImageAttributes(transformPage(sourceFile, readSource(sourceFile), showcasePage), {
@@ -968,7 +976,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     name: "S.T Tailor services",
     itemListElement: ["Bespoke suits and vests", "Blazers and separates", "Shirts and trousers", "Formalwear", "Womenswear", "Wedding and traditional clothing", "Clothing alterations", "Cloth consultation"].map((name) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name, provider: { "@id": "https://sttailor.com/#business" } } }))
   };
-  const isCollection = showcaseHub || ["/gallery/", "/cam-nang-may-do/"].includes(route);
+  const isCollection = showcaseHub || ["/gallery/", "/cam-nang-may-do/", clientCareHubRoute].includes(route);
   const pageType = route === "/gioi-thieu/" ? "AboutPage" : route === "/lien-he/" ? "ContactPage" : isCollection ? "CollectionPage" : "WebPage";
   const webPage = { "@type": pageType, "@id": `${canonical}#webpage`, url: canonical, name: title, description, isPartOf: { "@id": "https://sttailor.com/#website" }, about: { "@id": "https://sttailor.com/#business" }, primaryImageOfPage: { "@type": "ImageObject", url: `https://sttailor.com${shareImage}`, caption: shareImageAlt }, inLanguage: ["en", "vi"], dateModified: lastModified };
   const graph = [
@@ -1071,10 +1079,9 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
       `<link rel="preload" as="image" media="not all and ${homeHeroPortraitMedia}" imagesrcset="${landscapeSizes}" imagesizes="${homeHeroSizes}" fetchpriority="high">`;
   }
   if (sourceFile === "Gallery.html") {
-    const heroImage = body.match(/<img\b[^>]*class="st-gallery-hero__story-image"[^>]*>/)?.[0];
-    const responsiveSource = heroImage?.match(/\bsrcset="([^"]+)"/)?.[1];
-    if (responsiveSource) {
-      heroPreload = `<link rel="preload" as="image" imagesrcset="${responsiveSource}" imagesizes="${galleryHeroSizes}" fetchpriority="high">`;
+    const candidates = imageManifest[galleryHeroImage.slice("/media/".length)].responsive_avif;
+    if (candidates?.length) {
+      heroPreload = `<link rel="preload" as="image" type="image/avif" imagesrcset="${imageSourceSet(candidates)}" imagesizes="${galleryHeroSizes}" fetchpriority="high">`;
     }
   }
   const siteHeader = enrichImageAttributes(header(route), { responsiveSizes: "102px" });
@@ -1131,7 +1138,9 @@ function buildImageManifest() {
   const shareImages = [...new Set(routes.map(([, , , , image]) => image.slice("/media/".length)))];
   const homeCards = [...transformHome(readSource("Home.html")).matchAll(/class="st-home-editorial__photo" src="\/media\/([^"]+)"/g)]
     .flatMap(([, asset]) => ["--home-card", asset]);
-  const result = spawnSync("python", [path.join(root, "scripts", "build-image-manifest.py"), sourceMedia, path.join(dist, "image-manifest.json"), ...shareImages, ...homeCards], { encoding: "utf8" });
+  const featureImages = [galleryHeroImage, ...showcaseEntries.map(({ image }) => image)]
+    .flatMap((asset) => ["--feature-image", asset.slice("/media/".length)]);
+  const result = spawnSync("python", [path.join(root, "scripts", "build-image-manifest.py"), sourceMedia, path.join(dist, "image-manifest.json"), ...shareImages, ...homeCards, ...featureImages], { encoding: "utf8" });
   if (result.status !== 0) throw new Error(`Image manifest generation failed:\n${result.stderr || result.stdout}`);
   imageManifest = JSON.parse(readFileSync(path.join(dist, "image-manifest.json"), "utf8"));
   return Object.keys(imageManifest).length;
@@ -1309,14 +1318,16 @@ writeFileSync(path.join(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF
 writeFileSync(path.join(dist, "site.webmanifest"), JSON.stringify({ name: "S.T Tailor", short_name: "S.T Tailor", description: "Bespoke tailoring and clothing alterations in Ho Chi Minh City.", start_url: "/", scope: "/", display: "standalone", background_color: "#f3e1c5", theme_color: "#ead1ad", icons: [{ src: "/icons/sttailor-app-192.png", sizes: "192x192", type: "image/png", purpose: "any" }, { src: "/icons/sttailor-app-large-512.png", sizes: "512x512", type: "image/png", purpose: "any" }] }, null, 2), "utf8");
 mkdirSync(path.join(dist, ".well-known"), { recursive: true });
 copyFileSync(path.join(root, "source", "security.txt"), path.join(dist, ".well-known", "security.txt"));
-const llmsLink = ([route, , , description]) => `- [${pageLabels.get(route).join(" / ")}](https://sttailor.com${route}): ${description}`;
+const showcaseSummaries = new Map(showcaseEntries.map(({ route, summary }) => [route, summary]));
+const llmsLink = ([route, , , description]) => `- [${pageLabels.get(route).join(" / ")}](https://sttailor.com${route}): ${showcaseSummaries.get(route)?.join(" / ") ?? description}`;
 const guidePaths = new Set(["/cam-nang-may-do/", ...guideRoutes.map(([route]) => route)]);
 const showcasePaths = new Set(showcasePages.map(({ route }) => route));
+const clientCarePaths = new Set([clientCareHubRoute, ...policyRoutes]);
 const llmsSections = [
-  ["Showroom and services / Nhà may và dịch vụ", routes.filter(([route]) => !policyRoutes.includes(route) && !guidePaths.has(route) && !showcasePaths.has(route))],
+  ["Showroom and services / Nhà may và dịch vụ", routes.filter(([route]) => !clientCarePaths.has(route) && !guidePaths.has(route) && !showcasePaths.has(route))],
   ...showcaseHubs.map(({ route: hubRoute, labels }) => [labels.join(" / "), routes.filter(([route]) => route.startsWith(hubRoute))]),
   ["Tailoring guide / Cẩm nang may đo", routes.filter(([route]) => guidePaths.has(route))],
-  ["Client Care / Chăm sóc khách hàng", routes.filter(([route]) => policyRoutes.includes(route))]
+  ["Client Care / Chăm sóc khách hàng", routes.filter(([route]) => clientCarePaths.has(route))]
 ].map(([heading, entries]) => `## ${heading}\n\n${entries.map(llmsLink).join("\n")}`).join("\n\n");
 writeFileSync(path.join(dist, "llms.txt"), `# S.T Tailor
 
