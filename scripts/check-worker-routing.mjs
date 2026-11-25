@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import worker from "../src/worker.js";
 import { tripadvisorEmbedPath } from "../src/security-policy.js";
 import { tailoringPages } from "../src/tailoring-pages.js";
+import { showcasePages } from "../src/showcase-pages.js";
 
 const env = {
   ASSETS: {
@@ -32,14 +33,16 @@ test("campaign parameters remain on published pages and legacy redirects", async
 });
 
 test("nested canonical redirects retain query parameters and unknown child paths return 404", async () => {
-  for (const { route } of tailoringPages) {
+  for (const { route } of [...tailoringPages, ...showcasePages]) {
     const response = await worker.fetch(new Request(`https://sttailor.com${route.slice(0, -1)}?utm_source=profile`), env);
     assert.equal(response.status, 301);
     assert.equal(response.headers.get("Location"), `https://sttailor.com${route}?utm_source=profile`);
   }
-  const missing = await worker.fetch(new Request("https://sttailor.com/dich-vu/not-a-service/"), env);
-  assert.equal(missing.status, 404);
-  assert.equal(missing.headers.get("Location"), null);
+  for (const route of ["/dich-vu/not-a-service/", "/san-pham/not-a-garment/", "/du-an/not-a-project/"]) {
+    const missing = await worker.fetch(new Request(new URL(route, "https://sttailor.com")), env);
+    assert.equal(missing.status, 404);
+    assert.equal(missing.headers.get("Location"), null);
+  }
 });
 
 test("llms.txt advertises UTF-8 for GET and HEAD even if the asset omits its charset", async () => {
@@ -72,12 +75,11 @@ test("security disclosure is a public text resource while unknown well-known pat
 
 test("retired tailoring pages redirect to related content and preserve campaign parameters", async () => {
   const redirects = [
-    ["/product-category/blazer/", "/gallery/#album-suits"],
+    ["/product-category/blazer/", "/san-pham/"],
     ["/product-category/trouser/trouser-women/", "/gallery/#album-womenswear"],
-    ["/san-pham/blazer-mau-be/", "/gallery/#album-suits"],
-    ["/product/mens-formal-blazer-jacket/", "/gallery/#album-suits"],
-    ["/mens-suits-a-timeless-wardrobe-essential-for-the-modern-gentleman/", "/dich-vu/"],
-    ["/office-suits-a-professional-appearance-that-leads-to-success/", "/dich-vu/"],
+    ["/product/mens-formal-blazer-jacket/", "/san-pham/"],
+    ["/mens-suits-a-timeless-wardrobe-essential-for-the-modern-gentleman/", "/dich-vu/suit-may-do/"],
+    ["/office-suits-a-professional-appearance-that-leads-to-success/", "/dich-vu/suit-may-do/"],
   ];
   for (const [oldPath, newPath] of redirects) {
     const destination = new URL(newPath, "https://sttailor.com");

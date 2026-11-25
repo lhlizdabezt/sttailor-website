@@ -7,13 +7,14 @@ import { runInNewContext } from "node:vm";
 import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
 import { inlineScriptHashes, tripadvisorEmbedPath } from "../src/security-policy.js";
 import { tailoringPages } from "../src/tailoring-pages.js";
+import { showcaseHubs, showcasePages } from "../src/showcase-pages.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const sourceRoot = path.join(root, "source", "wordpress");
 const dist = path.join(root, "dist");
 const manifest = JSON.parse(readFileSync(path.join(dist, "build-manifest.json"), "utf8"));
 const failures = [];
-const expectedRoutes = ["/", "/gioi-thieu/", "/dich-vu/", "/gallery/", "/phim-thu-do/", "/bang-gia/", "/phuong-thuc-thanh-toan/", "/lien-he/", "/cam-nang-may-do/", "/chon-vai-may-do/", "/quy-trinh-thu-do/", "/chinh-sua-trang-phuc/", "/bao-quan-giat-la/", "/doi-tra-hoan-tien/", "/chinh-sach-van-chuyen/", "/dieu-khoan-dieu-kien/", "/chinh-sach-bao-mat/", ...tailoringPages.map(({ route }) => route)];
+const expectedRoutes = ["/", "/gioi-thieu/", "/dich-vu/", "/gallery/", "/phim-thu-do/", "/bang-gia/", "/phuong-thuc-thanh-toan/", "/lien-he/", "/cam-nang-may-do/", "/chon-vai-may-do/", "/quy-trinh-thu-do/", "/chinh-sua-trang-phuc/", "/bao-quan-giat-la/", "/doi-tra-hoan-tien/", "/chinh-sach-van-chuyen/", "/dieu-khoan-dieu-kien/", "/chinh-sach-bao-mat/", ...[...tailoringPages, ...showcasePages].map(({ route }) => route)];
 const utf8 = new TextDecoder("utf-8", { fatal: true });
 const pageTitles = new Set();
 const pageDescriptions = new Set();
@@ -120,7 +121,9 @@ for (const route of expectedRoutes) {
     if (!breadcrumbHtml?.includes('aria-current="page"') || JSON.stringify(schemaTrail) !== JSON.stringify(trail.map((href) => `https://sttailor.com${href}`))) {
       failures.push(`The visible breadcrumb and structured data differ: ${route}`);
     }
-    if (tailoringPages.some((page) => page.route === route)) {
+    const showcasePage = showcasePages.find((page) => page.route === route);
+    const showcaseHub = showcaseHubs.find((page) => page.route === route);
+    if (tailoringPages.some((page) => page.route === route) || (showcasePage && !showcaseHub)) {
       const parent = `/${route.split("/")[1]}/`;
       const parentHtml = readFileSync(path.join(dist, parent.slice(1), "index.html"), "utf8").split("</main>")[0];
       const pageEntity = schemaGraph.find((entity) => entity["@id"]?.endsWith("#webpage"))?.mainEntity?.["@id"];
@@ -128,6 +131,19 @@ for (const route of expectedRoutes) {
       if (trail.at(-2) !== parent || !parentHtml.includes(`href="${route}"`) || !schemaGraph.some((entity) => entity["@id"] === pageEntity && entity["@type"] === schemaType)) {
         failures.push(`Nested page lacks a parent link, matching breadcrumb or ${schemaType} schema: ${route}`);
       }
+    }
+    if (showcaseHub) {
+      const webPage = schemaGraph.find((entity) => entity["@id"]?.endsWith("#webpage"));
+      const list = schemaGraph.find((entity) => entity["@id"] === webPage?.mainEntity?.["@id"] && entity["@type"] === "ItemList");
+      const expectedWork = showcasePages.filter((page) => page.route !== route && page.route.startsWith(route));
+      if (webPage?.["@type"] !== "CollectionPage" || JSON.stringify(list?.itemListElement.map(({ url }) => url)) !==
+          JSON.stringify(expectedWork.map(({ route: child }) => `https://sttailor.com${child}`))) {
+        failures.push(`Showcase index does not describe each visible entry: ${route}`);
+      }
+    }
+    if (showcasePage && (!mainContent.includes(`src="${showcasePage.image}"`) || !mainContent.includes(showcasePage.labels[1]) ||
+        /<!-- SHOWCASE_/.test(mainContent) || mainContent !== mainContent.normalize("NFC"))) {
+      failures.push(`Showcase is missing its archive photograph, normalized Vietnamese copy or completed markup: ${route}`);
     }
   }
   const businessSchema = schemaGraph.find((item) => Array.isArray(item["@type"]) && item["@type"].includes("LocalBusiness"));

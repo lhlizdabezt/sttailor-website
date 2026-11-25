@@ -1,6 +1,7 @@
 import { indexNowKeyFile } from "./indexnow.js";
 import { contentSecurityPolicy, tripadvisorEmbedPath } from "./security-policy.js";
 import { tailoringPages } from "./tailoring-pages.js";
+import { showcasePages } from "./showcase-pages.js";
 
 const canonicalHost = "sttailor.com";
 const routes = new Set([
@@ -21,7 +22,7 @@ const routes = new Set([
   "/chinh-sach-van-chuyen/",
   "/dieu-khoan-dieu-kien/",
   "/chinh-sach-bao-mat/",
-  ...tailoringPages.map(({ route }) => route)
+  ...[...tailoringPages, ...showcasePages].map(({ route }) => route)
 ]);
 // Retired WordPress paths have an intentional, permanent destination. Any
 // path outside this table and the published routes remains a true 404.
@@ -31,17 +32,16 @@ const legacyRoutes = new Map([
   ["/about/", "/gioi-thieu/"],
   ["/services/", "/dich-vu/"],
   ["/gallery-page/", "/gallery/"],
-  ["/product-category/blazer/", "/gallery/#album-suits"],
+  ["/product-category/blazer/", "/san-pham/"],
   ["/product-category/trouser/trouser-women/", "/gallery/#album-womenswear"],
-  ["/san-pham/blazer-mau-be/", "/gallery/#album-suits"],
-  ["/product/mens-formal-blazer-jacket/", "/gallery/#album-suits"],
+  ["/product/mens-formal-blazer-jacket/", "/san-pham/"],
   ["/pricing/", "/bang-gia/"],
   ["/payment/", "/phuong-thuc-thanh-toan/"],
   ["/payment-methods/", "/phuong-thuc-thanh-toan/"],
   ["/contact/", "/lien-he/"],
   ["/tailoring-guide/", "/cam-nang-may-do/"],
-  ["/mens-suits-a-timeless-wardrobe-essential-for-the-modern-gentleman/", "/dich-vu/"],
-  ["/office-suits-a-professional-appearance-that-leads-to-success/", "/dich-vu/"],
+  ["/mens-suits-a-timeless-wardrobe-essential-for-the-modern-gentleman/", "/dich-vu/suit-may-do/"],
+  ["/office-suits-a-professional-appearance-that-leads-to-success/", "/dich-vu/suit-may-do/"],
   ["/fabric-guide/", "/chon-vai-may-do/"],
   ["/suit-fabrics-the-key-element-that-defines-true-elegance/", "/chon-vai-may-do/"],
   ["/fitting-process/", "/quy-trinh-thu-do/"],

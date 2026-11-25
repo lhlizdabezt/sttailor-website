@@ -19,6 +19,11 @@ This is a static-first rebuild of S.T Tailor from the owner-approved, read-only 
 - [Gallery of cloth, garments and fittings](https://sttailor.com/gallery/)
 - [Italian suiting wool and Vitale Barberis Canonico](https://sttailor.com/chon-vai-may-do/vai-len-y/)
 - [Vietnamese silk for custom garments](https://sttailor.com/chon-vai-may-do/lua-viet-nam/)
+- [Finished garments and tailoring details](https://sttailor.com/san-pham/)
+- [Bespoke beige double-breasted blazer](https://sttailor.com/san-pham/blazer-mau-be/)
+- [Blush floral silk dress](https://sttailor.com/san-pham/dam-lua-hong-phan-theu-hoa/)
+- [Tailoring projects and collaborations](https://sttailor.com/du-an/)
+- [Niña Campos collaboration](https://sttailor.com/du-an/nina-campos/)
 
 ## URL behaviour
 

@@ -8,6 +8,7 @@ import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
 import { tripadvisorEmbedPath } from "../src/security-policy.js";
 import { clientCarePage } from "../src/client-care-pages.js";
 import { tailoringPages } from "../src/tailoring-pages.js";
+import { showcaseEntries, showcaseHubs, showcasePages } from "../src/showcase-pages.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 // The approved WordPress layout remains the baseline; current page refinements
@@ -86,7 +87,7 @@ const routes = [
   ["/chinh-sach-van-chuyen/", "Shipping.html", "Shipping & Delivery for Tailored Garments | S.T Tailor", "Explore S.T Tailor's bilingual delivery options for showroom collection, Ho Chi Minh City couriers, Vietnam shipping and international dispatch.", "/media/2026/06/store-sttailor-2.webp", "S.T Tailor showroom for garment collection and handover"],
   ["/dieu-khoan-dieu-kien/", "Terms.html", "Terms & Conditions for Tailoring Orders | S.T Tailor", "Review S.T Tailor's bilingual order terms covering quotations, bespoke fittings, payments, delivery, changes and consumer rights in Vietnam.", "/media/2026/09/fabric-focus-cloth-books.jpg", "S.T Tailor fabric library for bespoke orders"],
   ["/chinh-sach-bao-mat/", "Privacy.html", "Privacy Policy & Client Data | S.T Tailor", "Learn how S.T Tailor handles enquiries, measurements, order details and website analytics, with bilingual privacy information and contact options.", "/media/2026/06/store-sttailor-1.webp", "S.T Tailor showroom in Ho Chi Minh City"],
-  ...tailoringPages.map(({ route, source, title, description, image, imageAlt }) => [route, source, title, description, image, imageAlt])
+  ...[...tailoringPages, ...showcasePages].map(({ route, source, title, description, image, imageAlt }) => [route, source, title, description, image, imageAlt])
 ];
 
 const primaryNavigation = [
@@ -112,6 +113,7 @@ const pageLabels = new Map([
   ...primaryNavigation.map(([route, ...labels]) => [route, labels]),
   ...guideRoutes.map(([route, ...labels]) => [route, labels]),
   ...serviceRoutes.map(({ route, labels }) => [route, labels]),
+  ...showcasePages.map(({ route, labels }) => [route, labels]),
   [fittingFilmRoute, ["A fitting in motion", "Thử phom qua chuyển động"]],
   ["/phuong-thuc-thanh-toan/", ["Payment methods", "Phương thức thanh toán"]],
   ["/cam-nang-may-do/", ["Tailoring guide", "Cẩm nang may đo"]],
@@ -145,6 +147,41 @@ function breadcrumbNavigation(trail) {
       : `<li><a href="${href}">${label}</a></li>`;
   });
   return `<nav class="st-breadcrumb" aria-label="Breadcrumb | Đường dẫn trang"><ol>${items.join("")}</ol></nav>`;
+}
+
+function showcaseItemsFor(hubRoute) {
+  return showcaseEntries.filter(({ route }) => route.startsWith(hubRoute));
+}
+
+function showcaseHubLinks() {
+  return `<nav class="st-showcase__shell st-showcase__links st-showcase__links--discovery" aria-label="Finished work | Trang phục và dự án">
+    ${showcaseHubs.map(({ route, labels: [english, vietnamese] }) => `<a class="st-showcase__action" href="${route}">${english}<span lang="vi">${vietnamese}</span></a>`).join("\n    ")}
+  </nav>`;
+}
+
+function transformShowcase(page, html) {
+  const { route, labels: [english, vietnamese], heading = english, image, imageAlt, summary } = page;
+  if (!summary) {
+    const cards = showcaseItemsFor(route).map(({ route: href, labels: [title, translation], summary: [copy, copyVi], image: src, imageAlt: alt }, index) => `<article class="st-showcase-card">
+      <img class="st-showcase-card__photo" src="${src}" alt="${alt}" ${index === 0 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'}>
+      <div class="st-showcase-card__copy">
+        <h2 id="st-showcase-item-${index + 1}">${title}<span lang="vi">${translation}</span></h2>
+        <p>${copy}<span lang="vi">${copyVi}</span></p>
+        <a class="st-showcase__action" href="${href}" aria-describedby="st-showcase-item-${index + 1}">View details <span lang="vi">Xem chi tiết</span></a>
+      </div>
+    </article>`);
+    return html.replace("<!-- SHOWCASE_INDEX -->", `<div class="st-showcase__shell st-showcase__index">${cards.join("\n")}</div>`);
+  }
+  return html.replace("<!-- SHOWCASE_HERO -->", `<header class="st-showcase__hero">
+    <div class="st-showcase__shell st-showcase__hero-grid">
+      <div class="st-showcase__lead">
+        <h1 id="st-showcase-title">${heading}<span lang="vi">${vietnamese}</span></h1>
+        <p>${summary[0]}<span lang="vi">${summary[1]}</span></p>
+        <a class="st-showcase__action st-showcase__action--primary" href="/lien-he/">Arrange a consultation<span lang="vi">Đặt lịch tư vấn</span></a>
+      </div>
+      <figure class="st-showcase__portrait"><img class="st-showcase__hero-image" src="${image}" alt="${imageAlt}" loading="eager" fetchpriority="high"></figure>
+    </div>
+  </header>`);
 }
 
 function readSource(file) {
@@ -262,7 +299,7 @@ function transformHome(html) {
     <strong>Cloth · fitting · alterations <small lang="vi">Chất liệu · thử đồ · chỉnh sửa</small></strong>
     <span>OPEN THE GUIDE <small lang="vi">XEM CẨM NANG</small><i aria-hidden="true">→</i></span>
   </a>`;
-  return html.replace(/\s*<\/section>\s*$/, `${editorial}${guideStrip}\n</section>`);
+  return html.replace(/\s*<\/section>\s*$/, `${editorial}${showcaseHubLinks()}${guideStrip}\n</section>`);
 }
 
 function transformFooter(html, route) {
@@ -311,7 +348,7 @@ function transformServices(html) {
       <div class="st-bespoke-process__actions"><a href="/lien-he/">ARRANGE A CONSULTATION <span aria-hidden="true">/</span> <span lang="vi">ĐẶT LỊCH TƯ VẤN</span></a><a href="/bang-gia/">VIEW STARTING PRICES <span aria-hidden="true">/</span> <span lang="vi">XEM BẢNG GIÁ</span></a><a href="/cam-nang-may-do/">READ THE TAILORING GUIDE <span aria-hidden="true">/</span> <span lang="vi">XEM CẨM NANG MAY ĐO</span></a></div>
     </div>
   </section>`;
-  html = html.replace('  <aside class="st-service-booking"', `${bespokeProcess}\n\n  <aside class="st-service-booking"`);
+  html = html.replace('  <aside class="st-service-booking"', `${bespokeProcess}\n${showcaseHubLinks()}\n  <aside class="st-service-booking"`);
   return replaceVisibleAtelier(html);
 }
 
@@ -575,7 +612,7 @@ function transformGallery(html) {
       <a href="#album-showroom" class="st-gallery-numpad__card st-motion st-motion-5"><span>09</span><strong>The showroom</strong><em lang="vi">Không gian nhà may</em><i>↗</i></a>
     </nav>
   </div>
-</section>`;
+</section>${showcaseHubLinks()}`;
   html = html.replace(/<section\s+aria-labelledby="album-tuxedo-title"/, `${galleryIndex}\n<section aria-labelledby="album-tuxedo-title"`);
   html = removeElementByClass(html, "section", "st-gallery-closing")
     .replace("<span>08</span> PEOPLE &amp; APPOINTMENTS", "<span>08</span> PEOPLE, APPOINTMENTS &amp; CLIENT FEEDBACK")
@@ -720,7 +757,7 @@ function transformAbout(html) {
     </div>
   </div>
 </section>`;
-  html = html.replace('<section class="st-lux-business st-motion st-motion-1">', `${tripadvisor}\n<section class="st-lux-business st-motion st-motion-1">`);
+  html = html.replace('<section class="st-lux-business st-motion st-motion-1">', `${showcaseHubLinks()}\n${tripadvisor}\n<section class="st-lux-business st-motion st-motion-1">`);
   return replaceVisibleAtelier(html);
 }
 
@@ -740,7 +777,7 @@ function transformError(html) {
     );
 }
 
-function transformPage(sourceFile, html) {
+function transformPage(sourceFile, html, showcasePage) {
   const transforms = {
     "Home.html": transformHome,
     "Services.html": transformServices,
@@ -756,7 +793,7 @@ function transformPage(sourceFile, html) {
     "About.html": transformAbout,
     "Error.html": transformError
   };
-  return (transforms[sourceFile] ?? replaceVisibleAtelier)(html)
+  return (showcasePage ? transformShowcase(showcasePage, html) : (transforms[sourceFile] ?? replaceVisibleAtelier)(html))
     .replace(/\bclass="([^"]*)"/g, (_, classes) => `class="${classes.split(/\s+/).filter((name) => name && !/^st-motion(?:-\d+)?$/.test(name)).join(" ")}"`)
     .replaceAll("Confirm the work, finish and timing in writing.", "Discuss the work, finish and timing with us.")
     .replaceAll("Xác nhận hạng mục, hoàn thiện và thời gian bằng văn bản.", "Trao đổi hạng mục, hoàn thiện và thời gian cùng chúng tôi.")
@@ -788,7 +825,9 @@ function enrichImageAttributes(html, { responsiveSizes, deprioritizeLazyImages =
       const isHomeHero = src === homeHeroImage && /\bst-home-v6__hero-media\b/.test(output);
       const isGalleryHero = /\bst-gallery-hero__story-image\b/.test(output);
       const srcset = imageSourceSet(metadata.responsive);
-      const sizes = isHomeHero ? homeHeroSizes : isGalleryHero ? galleryHeroSizes : responsiveSizes;
+      const sizes = isHomeHero ? homeHeroSizes : isGalleryHero ? galleryHeroSizes
+        : /\bst-showcase__hero-image\b/.test(output) ? "(max-width: 760px) min(calc(100vw - 34px), 520px), min(calc(45vw - 36px), 490px)"
+        : responsiveSizes;
       const lazyAuto = /\bloading="lazy"/i.test(output) ? "auto, " : "";
       output = output.replace(/<img\b/i, `<img srcset="${srcset}" sizes="${lazyAuto}${sizes}"`);
     }
@@ -822,7 +861,7 @@ function enrichImageAttributes(html, { responsiveSizes, deprioritizeLazyImages =
 const buildDate = new Date().toISOString().slice(0, 10);
 // Shared navigation gained substantial page links on this date. Advance this
 // only for a meaningful shared-content change, never for CSS, JS or copyright.
-const sharedContentModified = "2026-11-23";
+const sharedContentModified = "2026-11-25";
 // Advance the relevant date when transformed copy changes, not for build fixes.
 const derivedContentModified = {
   "Home.html": "2026-11-22",
@@ -866,6 +905,7 @@ function footer(route) {
   const groups = [
     ["Showroom", "Nhà may", ["/", "/gioi-thieu/", "/gallery/", fittingFilmRoute, "/lien-he/"]],
     ["Tailoring services", "Dịch vụ may đo", ["/dich-vu/", ...serviceRoutes.map((page) => page.route), "/bang-gia/"]],
+    ...showcaseHubs.map(({ route: hubRoute, labels }) => [...labels, [hubRoute, ...showcaseItemsFor(hubRoute).map(({ route }) => route)]]),
     ["Tailoring guide", "Cẩm nang may đo", ["/cam-nang-may-do/", ...guideRoutes.map(([href]) => href)]],
     ["Client Care", "Chăm sóc khách hàng", policyRoutes]
   ];
@@ -881,13 +921,17 @@ function footer(route) {
 }
 
 function documentFor(route, sourceFile, title, description, shareImage, shareImageAlt, lastModified) {
+  const showcasePage = showcasePages.find(({ source }) => source === sourceFile);
+  const showcaseHub = showcaseHubs.find(({ route: href }) => href === route);
   const responsiveSizes = {
     "/gallery/": "(max-width: 760px) 100vw, (max-width: 1080px) 50vw, 33vw",
     "/": homeEditorialSizes,
     // The square guide photo covers a 560px-tall frame on desktop.
-    "/cam-nang-may-do/": "(max-width: 560px) calc(100vw - 28px), (max-width: 860px) calc(100vw - 48px), 560px"
+    "/cam-nang-may-do/": "(max-width: 560px) calc(100vw - 28px), (max-width: 860px) calc(100vw - 48px), 560px",
+    "/san-pham/": "(max-width: 600px) calc(100vw - 34px), (max-width: 1080px) calc(50vw - 30px), min(calc(25vw - 26px), 270px)",
+    "/du-an/": "(max-width: 600px) calc(100vw - 34px), min(calc(50vw - 30px), 470px)"
   }[route] ?? "(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 800px";
-  const body = enrichImageAttributes(transformPage(sourceFile, readSource(sourceFile)), {
+  const body = enrichImageAttributes(transformPage(sourceFile, readSource(sourceFile), showcasePage), {
     responsiveSizes,
     deprioritizeLazyImages: sourceFile === "Home.html" || sourceFile === "Gallery.html"
   });
@@ -924,7 +968,8 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     name: "S.T Tailor services",
     itemListElement: ["Bespoke suits and vests", "Blazers and separates", "Shirts and trousers", "Formalwear", "Womenswear", "Wedding and traditional clothing", "Clothing alterations", "Cloth consultation"].map((name) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name, provider: { "@id": "https://sttailor.com/#business" } } }))
   };
-  const pageType = route === "/gioi-thieu/" ? "AboutPage" : route === "/lien-he/" ? "ContactPage" : ["/gallery/", "/cam-nang-may-do/"].includes(route) ? "CollectionPage" : "WebPage";
+  const isCollection = showcaseHub || ["/gallery/", "/cam-nang-may-do/"].includes(route);
+  const pageType = route === "/gioi-thieu/" ? "AboutPage" : route === "/lien-he/" ? "ContactPage" : isCollection ? "CollectionPage" : "WebPage";
   const webPage = { "@type": pageType, "@id": `${canonical}#webpage`, url: canonical, name: title, description, isPartOf: { "@id": "https://sttailor.com/#website" }, about: { "@id": "https://sttailor.com/#business" }, primaryImageOfPage: { "@type": "ImageObject", url: `https://sttailor.com${shareImage}`, caption: shareImageAlt }, inLanguage: ["en", "vi"], dateModified: lastModified };
   const graph = [
     business,
@@ -980,6 +1025,28 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     const serviceId = `${canonical}#service`;
     graph.push({ "@type": "Service", "@id": serviceId, name: service.labels[0], alternateName: service.labels[1], description, url: canonical, image: `https://sttailor.com${shareImage}`, provider: { "@id": "https://sttailor.com/#business" }, areaServed: { "@type": "City", name: "Ho Chi Minh City" } });
     webPage.mainEntity = { "@id": serviceId };
+  }
+  if (showcaseHub) {
+    const items = showcaseItemsFor(route);
+    const listId = `${canonical}#work`;
+    graph.push({
+      "@type": "ItemList", "@id": listId, name: showcaseHub.labels.join(" | "), numberOfItems: items.length,
+      itemListElement: items.map(({ route: href, labels }, index) => ({
+        "@type": "ListItem", position: index + 1, name: labels.join(" | "), url: `https://sttailor.com${href}`
+      }))
+    });
+    webPage.mainEntity = { "@id": listId };
+  } else if (showcasePage) {
+    const articleId = `${canonical}#article`;
+    const about = route === "/du-an/nina-campos/"
+      ? { "@type": "Person", name: "Niña Campos", jobTitle: "Singer" }
+      : { "@type": "Thing", name: showcasePage.labels[0], alternateName: showcasePage.labels[1] };
+    graph.push({
+      "@type": "Article", "@id": articleId, headline: showcasePage.labels[0], description,
+      image: `https://sttailor.com${shareImage}`, about, dateModified: lastModified, inLanguage: ["en", "vi"],
+      author: { "@id": business["@id"] }, publisher: { "@id": business["@id"] }, mainEntityOfPage: { "@id": webPage["@id"] }
+    });
+    webPage.mainEntity = { "@id": articleId };
   }
   const trail = breadcrumbTrail(route);
   if (trail.length) {
@@ -1244,8 +1311,10 @@ mkdirSync(path.join(dist, ".well-known"), { recursive: true });
 copyFileSync(path.join(root, "source", "security.txt"), path.join(dist, ".well-known", "security.txt"));
 const llmsLink = ([route, , , description]) => `- [${pageLabels.get(route).join(" / ")}](https://sttailor.com${route}): ${description}`;
 const guidePaths = new Set(["/cam-nang-may-do/", ...guideRoutes.map(([route]) => route)]);
+const showcasePaths = new Set(showcasePages.map(({ route }) => route));
 const llmsSections = [
-  ["Showroom and services / Nhà may và dịch vụ", routes.filter(([route]) => !policyRoutes.includes(route) && !guidePaths.has(route))],
+  ["Showroom and services / Nhà may và dịch vụ", routes.filter(([route]) => !policyRoutes.includes(route) && !guidePaths.has(route) && !showcasePaths.has(route))],
+  ...showcaseHubs.map(({ route: hubRoute, labels }) => [labels.join(" / "), routes.filter(([route]) => route.startsWith(hubRoute))]),
   ["Tailoring guide / Cẩm nang may đo", routes.filter(([route]) => guidePaths.has(route))],
   ["Client Care / Chăm sóc khách hàng", routes.filter(([route]) => policyRoutes.includes(route))]
 ].map(([heading, entries]) => `## ${heading}\n\n${entries.map(llmsLink).join("\n")}`).join("\n\n");

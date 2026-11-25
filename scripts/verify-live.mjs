@@ -326,6 +326,10 @@ for (const [icon, limit] of [["sttailor-favicon-48.png", 5000], ["sttailor-apple
 
 const legacy = await fetchWithRetry(`${origin}/about/`, { redirect: "manual" });
 expect(legacy.status === 301 && legacy.headers.get("location") === `${origin}/gioi-thieu/`, "Legacy URL mapping is not a 301");
+const legacyBlazer = await fetchWithRetry(`${origin}/product-category/blazer/`, { redirect: "manual" });
+expect(legacyBlazer.status === 301 && legacyBlazer.headers.get("location") === `${origin}/san-pham/`, "Legacy blazer category does not reach the garment showcase");
+const restoredBlazer = await fetchWithRetry(`${origin}/san-pham/blazer-mau-be/`, { redirect: "manual" });
+expect(restoredBlazer.status === 200, "The original beige blazer URL does not serve its dedicated showcase");
 const oldEnglishHome = await fetchWithRetry(`${origin}/en/`, { redirect: "manual" });
 const oldEnglishAbout = await fetchWithRetry(`${origin}/en/gioi-thieu/`, { redirect: "manual" });
 expect(oldEnglishAbout.status === 301 && oldEnglishAbout.headers.get("location") === `${origin}/gioi-thieu/`, "Bing AI's old English About URL does not redirect to the current About page");
