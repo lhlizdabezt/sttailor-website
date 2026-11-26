@@ -65,12 +65,14 @@ const pageTypes = {
   "/dich-vu/suit-may-do/": "service_suits",
   "/dich-vu/le-phuc-cuoi/": "service_wedding",
   "/dich-vu/trang-phuc-nu/": "service_womenswear",
+  "/dich-vu/so-mi-may-do/": "service_shirts",
   "/gallery/": "gallery",
   "/phim-thu-do/": "fitting_film",
   "/bang-gia/": "pricing",
   "/phuong-thuc-thanh-toan/": "payment",
   "/lien-he/": "contact",
   "/cam-nang-may-do/": "guide_hub",
+  "/cam-nang-may-do/buoi-tu-van-dau-tien/": "guide_first_consultation",
   "/cam-nang-may-do/thu-do-khi-du-lich/": "guide_travel_fittings",
   "/cam-nang-may-do/chon-suit-hai-manh-ba-manh/": "guide_suit_pieces",
   "/chon-vai-may-do/": "guide_cloth",
@@ -101,9 +103,9 @@ const sendEvent = (name, parameters) => {
   if (typeof window.clarity === "function") window.clarity("event", name);
 };
 const linkPlacement = (link) => {
+  if (link.closest("main")) return "main";
   if (link.closest("header")) return "header";
   if (link.closest("footer")) return "footer";
-  if (link.closest("main")) return "main";
   return "other";
 };
 const directContactMethod = (href) => {
