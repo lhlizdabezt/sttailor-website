@@ -27,6 +27,24 @@ export const tailoringPages = [
     imageAlt: "White tailored womenswear suit at S.T Tailor | Bộ suit nữ trắng may đo tại S.T Tailor"
   },
   {
+    route: "/dich-vu/so-mi-may-do/",
+    source: "ServiceShirts.html",
+    labels: ["Made-to-measure shirts", "Sơ mi may đo"],
+    title: "Made-to-Measure Shirts in Ho Chi Minh City | S.T Tailor",
+    description: "Order a made-to-measure shirt at S.T Tailor in Ho Chi Minh City. Compare collar, cuffs, cloth and hem, and see how to check the fit in person.",
+    image: "/media/2026/11/st-tailor-light-blue-short-sleeve-shirt-front.webp",
+    imageAlt: "Light blue short-sleeve shirt with an open collar and an untucked hem | Sơ mi xanh nhạt tay ngắn, mở cổ và thả lai ngoài quần"
+  },
+  {
+    route: "/cam-nang-may-do/buoi-tu-van-dau-tien/",
+    source: "GuideFirstConsultation.html",
+    labels: ["First tailoring consultation", "Buổi tư vấn may đo đầu tiên"],
+    title: "What to Bring to Your First Tailoring Consultation | S.T Tailor",
+    description: "Prepare for your first tailoring consultation at S.T Tailor. Know what to bring, what to discuss before placing an order and how to find the showroom.",
+    image: "/media/2026/09/st-tailor-client-fabric-consultation.jpg",
+    imageAlt: "Client and tailor reviewing fabric samples at S.T Tailor | Khách hàng cùng thợ may xem mẫu vải tại S.T Tailor"
+  },
+  {
     route: "/cam-nang-may-do/thu-do-khi-du-lich/",
     source: "GuideTravelFittings.html",
     labels: ["Fittings while travelling", "Thử đồ khi du lịch"],

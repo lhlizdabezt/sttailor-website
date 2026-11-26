@@ -15,6 +15,8 @@ This is a static-first rebuild of S.T Tailor from the owner-approved, read-only 
 - [Bespoke suits in Ho Chi Minh City](https://sttailor.com/dich-vu/suit-may-do/)
 - [Wedding and formalwear tailoring](https://sttailor.com/dich-vu/le-phuc-cuoi/)
 - [Made-to-measure womenswear](https://sttailor.com/dich-vu/trang-phuc-nu/)
+- [Made-to-measure shirts in Ho Chi Minh City](https://sttailor.com/dich-vu/so-mi-may-do/)
+- [Prepare for your first tailoring consultation](https://sttailor.com/cam-nang-may-do/buoi-tu-van-dau-tien/)
 - [Plan fittings during a visit](https://sttailor.com/cam-nang-may-do/thu-do-khi-du-lich/)
 - [Suit fitting checklist](https://sttailor.com/cam-nang-may-do/kiem-tra-phom-suit/)
 - [Choosing a two-piece or three-piece suit](https://sttailor.com/cam-nang-may-do/chon-suit-hai-manh-ba-manh/)

@@ -44,6 +44,8 @@ const suitFitHeroSizes = "(max-width: 560px) min(calc(100vw - 28px), 420px), (ma
 const liningGuide = tailoringPages.find(({ source }) => source === "GuideJacketLining.html");
 const suitPiecesGuide = tailoringPages.find(({ source }) => source === "GuideSuitPieces.html");
 const liningHeroSizes = "(max-width: 860px) min(calc(100vw - 48px), 480px), min(calc(45vw - 46px), 480px)";
+const consultationHeroes = tailoringPages.filter(({ source }) => source === "GuideFirstConsultation.html" || source === "ServiceShirts.html");
+const consultationHeroSizes = "(max-width: 560px) calc(100vw - 28px), (max-width: 860px) calc(100vw - 48px), min(calc(46vw - 36px), 540px)";
 
 function imageSourceSet(candidates) {
   return candidates.map(({ src, width }) => `${src} ${width}w`).join(", ");
@@ -369,7 +371,7 @@ function transformFooter(html, route) {
       '<section class="st-footer-v7__about" aria-labelledby="st-footer-title">',
       '<section class="st-footer-v7__about" aria-labelledby="st-footer-title">\n        <a class="st-footer-v7__crest" href="/" aria-label="S.T Tailor home"><img src="/media/2026/09/logo-sttailor-1000x1024.png" alt="S.T Tailor" width="1000" height="1024" loading="lazy" decoding="async"></a>'
     );
-  html = html.replace(/(<nav class="st-footer-v7__social"[\s\S]*?)(<\/nav>)/, `$1<a href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer"><img src="https://static.tacdn.com/img2/brand_refresh/Tripadvisor_logomark.svg" alt="" aria-hidden="true" width="20" height="20" loading="lazy" decoding="async"><span>Tripadvisor</span></a>$2`);
+  html = html.replace(/(<nav class="st-footer-v7__social"[\s\S]*?)(<\/nav>)/, `$1<a href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer"><img src="/icons/tripadvisor-logomark.svg" alt="" aria-hidden="true" width="20" height="20" loading="lazy" decoding="async"><span>Tripadvisor</span></a>$2`);
   if (route === "/lien-he/") {
     // Contact already embeds the same showroom map in its main content.
     html = html.replace(/<iframe\b[^>]*title="S\.T Tailor showroom map"[^>]*><\/iframe>/, "");
@@ -934,7 +936,7 @@ function enrichImageAttributes(html, { responsiveSizes, deprioritizeLazyImages =
       const isHomeHero = src === homeHeroImage && /\bst-home-v6__hero-media\b/.test(output);
       const isGalleryHero = /\bst-gallery-hero__story-image\b/.test(output);
       const isSuitFitHero = /\bst-suit-fit__hero-image\b/.test(output);
-      const isGuideHero = /\bst-guide-(?:lining|suit-pieces)-image\b/.test(output);
+      const isGuideHero = /\bst-guide-(?:lining|suit-pieces|consultation)-image\b/.test(output);
       const srcset = imageSourceSet(metadata.responsive);
       const sizes = isHomeHero ? homeHeroSizes : isGalleryHero ? galleryHeroSizes
         : isSuitFitHero ? suitFitHeroSizes
@@ -1048,6 +1050,7 @@ function footer(route) {
 function documentFor(route, sourceFile, title, description, shareImage, shareImageAlt, lastModified) {
   const showcasePage = showcasePages.find((page) => page.route === route);
   const showcaseHub = showcaseHubs.find(({ route: href }) => href === route);
+  const hasConsultationHero = consultationHeroes.some((page) => page.route === route);
   const responsiveSizes = {
     "/gallery/": "(max-width: 760px) 100vw, (max-width: 1080px) 50vw, 33vw",
     "/": homeEditorialSizes,
@@ -1057,7 +1060,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     [suitPiecesGuide.route]: "(max-width: 560px) calc(100vw - 28px), (max-width: 860px) calc(100vw - 48px), 480px",
     "/san-pham/": showcaseCardSizes,
     "/du-an/": showcaseCardSizes
-  }[route] ?? "(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 800px";
+  }[route] ?? (hasConsultationHero ? consultationHeroSizes : "(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 800px");
   const body = enrichImageAttributes(transformPage(sourceFile, readSource(sourceFile), showcasePage), {
     responsiveSizes,
     deprioritizeLazyImages: Boolean(showcaseHub) || sourceFile === "Home.html" || sourceFile === "Gallery.html"
@@ -1203,7 +1206,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
       heroPreload = `<link rel="preload" as="image" type="image/avif" imagesrcset="${imageSourceSet(candidates)}" imagesizes="${galleryHeroSizes}" fetchpriority="high">`;
     }
   }
-  if (sourceFile === suitFitGuide.source || sourceFile === liningGuide.source || sourceFile === suitPiecesGuide.source || showcasePage) {
+  if (sourceFile === suitFitGuide.source || sourceFile === liningGuide.source || sourceFile === suitPiecesGuide.source || hasConsultationHero || showcasePage) {
     const leadImage = showcaseHub ? showcaseItemsFor(route)[0]?.image : shareImage;
     const candidates = imageManifest[leadImage?.slice("/media/".length)]?.responsive_avif;
     if (candidates?.length) {
@@ -1276,7 +1279,7 @@ function buildImageManifest() {
   const shareImages = [...new Set(routes.map(([, , , , image]) => image.slice("/media/".length)))];
   const homeCards = [...transformHome(readSource("Home.html")).matchAll(/class="st-home-editorial__photo" src="\/media\/([^"]+)"/g)]
     .flatMap(([, asset]) => ["--home-card", asset]);
-  const featureImages = [galleryHeroImage, suitFitGuide.image, liningGuide.image, suitPiecesGuide.image, ...showcaseEntries.map(({ image }) => image)]
+  const featureImages = [galleryHeroImage, suitFitGuide.image, liningGuide.image, suitPiecesGuide.image, ...consultationHeroes.map(({ image }) => image), ...showcaseEntries.map(({ image }) => image)]
     .flatMap((asset) => ["--feature-image", asset.slice("/media/".length)]);
   const result = spawnSync("python", [path.join(root, "scripts", "build-image-manifest.py"), sourceMedia, path.join(dist, "image-manifest.json"), ...shareImages, ...homeCards, ...featureImages], { encoding: "utf8" });
   if (result.status !== 0) throw new Error(`Image manifest generation failed:\n${result.stderr || result.stdout}`);
