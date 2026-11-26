@@ -2027,6 +2027,9 @@ html body #main-content a.st-gallery-series__link {
 html body #main-content a.st-gallery-series__link:hover,
 html body #main-content a.st-gallery-series__link:focus-visible { background: #382319; color: #fff8eb; }
 html body #main-content a.st-gallery-series__link:focus-visible { outline: 2px solid #63432f; outline-offset: 3px; }
+@media (min-width: 1100px) {
+  .st-gallery-series__grid:has(> figure:nth-child(4):last-child) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
 @media (max-width: 860px) {
   .st-gallery-series__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

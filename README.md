@@ -26,11 +26,16 @@ This is a static-first rebuild of S.T Tailor from the owner-approved, read-only 
 - [White tailored shirt with checked trim](https://sttailor.com/san-pham/so-mi-trang-vien-ca-ro/)
 - [White tailored women’s suit](https://sttailor.com/san-pham/suit-nu-trang/)
 - [Grey checked tailored trousers](https://sttailor.com/san-pham/quan-tay-ca-ro-xam/)
+- [Dark tailored trousers and waistband details](https://sttailor.com/san-pham/quan-tay-toi-mau/)
+- [Pale olive tailored jacket](https://sttailor.com/san-pham/ao-khoac-mau-o-liu/)
+- [Navy jacket with patterned blue lining](https://sttailor.com/san-pham/ao-khoac-navy-lot-xanh/)
 - [Blush floral silk dress](https://sttailor.com/san-pham/dam-lua-hong-phan-theu-hoa/)
 - [Magenta floral wrap dress](https://sttailor.com/san-pham/dam-quan-hoa-hong-tim/)
 - [Floral jacquard evening jacket](https://sttailor.com/san-pham/ao-khoac-jacquard-hoa/)
 - [Tailoring projects and collaborations](https://sttailor.com/du-an/)
 - [Niña Campos collaboration](https://sttailor.com/du-an/nina-campos/)
+- [Tailoring in wear](https://sttailor.com/du-an/trang-phuc-khi-mac/)
+- [Embroidery and jacquard](https://sttailor.com/du-an/chi-tiet-theu-va-jacquard/)
 - [Client Care for tailored orders](https://sttailor.com/cham-soc-khach-hang/)
 
 ## URL behaviour

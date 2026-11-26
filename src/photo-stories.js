@@ -1,4 +1,5 @@
 import { portfolioCollections, portfolioStories } from "./portfolio-stories.js";
+import { garmentCollections, garmentStories } from "./garment-collections.js";
 
 const blazer = "/san-pham/blazer-xanh-hai-hang-khuy/";
 const navyBlazer = "/du-an/phoi-blazer-xanh-navy/";
@@ -171,7 +172,8 @@ export const photoCollections = [
       ["black-jacket-inside-pocket-and-label", "Close-up of a welted inside pocket, S.T Tailor label and red bird-and-flower pattern.", "Cận túi trong viền, nhãn S.T Tailor và họa tiết chim hoa đỏ."]
     ]
   },
-  ...portfolioCollections
+  ...portfolioCollections,
+  ...garmentCollections
 ];
 
 const stories = [
@@ -248,7 +250,7 @@ const stories = [
       ["Marks for the next adjustment", "Dấu phấn cho lần chỉnh tiếp theo", "A chalk mark records the point the tailor has checked on the wearer. At the armhole, check whether you can move your arm without pulling the shoulder or jacket front out of place.", "Dấu phấn ghi lại vị trí thợ may vừa kiểm tra trên người mặc. Ở vòng nách, hãy thử cử động tay để xem đường vai và thân trước có bị kéo lệch không."],
       ["The details of a finished look", "Chi tiết hoàn thiện khi phối đồ", "The gold pocket square is adjusted with the shirt and jacket already on. A side view shows how the two front edges sit after the adjustment.", "Khăn túi ngực vàng được chỉnh sau khi khách đã mặc sơ mi và áo khoác. Góc nghiêng cho thấy hai vạt trước nằm thế nào sau khi chỉnh."]
     ],
-    related: [greenSuitFitting, navyFitting, "/phim-thu-do/"]
+    related: [greenSuitFitting, navyFitting, shortSleeveShirt, "/du-an/trang-phuc-khi-mac/", "/phim-thu-do/"]
   },
   {
     route: navyFitting, section: "fittings",
@@ -298,7 +300,8 @@ const stories = [
     ],
     related: ["/cam-nang-may-do/chon-lot-ao-khoac/", "/du-an/buoi-thu-suit-lot-vang/"]
   },
-  ...portfolioStories
+  ...portfolioStories,
+  ...garmentStories
 ];
 
 export function photoSource(file) {

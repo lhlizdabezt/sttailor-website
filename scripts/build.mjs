@@ -489,7 +489,7 @@ const galleryAltText = {
   "st-tailor-navy-lapel-detail.jpeg": "Navy double-breasted suit lapel detail | Chi tiết ve áo suit xanh navy hai hàng nút",
   "st-tailor-gallery-duk-9988.jpg": "Light blue tailored suit on a mannequin | Suit xanh nhạt may đo trên mannequin",
   "st-tailor-gallery-duk-9991.jpg": "Lilac tailored suit on a mannequin | Suit tông lilac may đo trên mannequin",
-  "st-tailor-gallery-duk-9858.jpg": "Cream tailored suit with light blue shirt | Suit màu kem may đo cùng sơ mi xanh nhạt",
+  "st-tailor-gallery-duk-9858.jpg": "Pale olive jacket with a white shirt and light blue dotted tie | Áo khoác ô liu nhạt phối sơ mi trắng và cà vạt xanh nhạt chấm bi",
   "st-tailor-womens-white-suit.jpg": "White women's tailored suit on a mannequin | Suit nữ trắng may đo trên mannequin",
   "st-tailor-client-womens-white-suit.jpg": "Client wearing a white women's tailored suit outdoors | Khách hàng mặc suit nữ trắng may đo ngoài trời",
   "st-tailor-client-womens-fitting.jpg": "Women's trouser fitting in the showroom | Buổi thử quần nữ tại showroom",
@@ -970,12 +970,13 @@ const derivedContentModified = {
   "Returns.html": "2026-11-26", "Shipping.html": "2026-10-18",
   "Terms.html": "2026-10-18", "Privacy.html": "2026-10-18"
 };
+const photoStorySources = ["src/photo-stories.js", "src/portfolio-stories.js", "src/garment-collections.js"];
 
 function lastModifiedFor(sourceFile) {
   // Derived copy and Gallery additions can change without touching the baseline.
   if (derivedContentModified[sourceFile]) {
     const inputs = [path.join("source", "wordpress", sourceFile)];
-    if (sourceFile === "Gallery.html") inputs.push("source/media", "src/photo-stories.js", "src/portfolio-stories.js");
+    if (sourceFile === "Gallery.html") inputs.push("source/media", ...photoStorySources);
     if (["Returns.html", "Shipping.html", "Terms.html", "Privacy.html"].includes(sourceFile)) inputs.push("src/client-care-pages.js");
     const changed = spawnSync("git", ["status", "--porcelain", "--", ...inputs], { cwd: root, encoding: "utf8" });
     if (changed.status !== 0 || changed.stdout.trim()) return buildDate;
@@ -984,7 +985,7 @@ function lastModifiedFor(sourceFile) {
     return [date, derivedContentModified[sourceFile], sharedContentModified].filter((value) => /^\d{4}-\d{2}-\d{2}$/.test(value)).sort().at(-1);
   }
   const contentFile = path.join("source", "wordpress", sourceFile);
-  const inputs = sourceFile === "ShowcasePhotoStory.html" ? [contentFile, "src/photo-stories.js", "src/portfolio-stories.js"] : [contentFile];
+  const inputs = sourceFile === "ShowcasePhotoStory.html" ? [contentFile, ...photoStorySources] : [contentFile];
   const dirty = spawnSync("git", ["status", "--porcelain", "--", ...inputs], { cwd: root, encoding: "utf8" });
   if (dirty.status !== 0 || dirty.stdout.trim()) return buildDate;
   const history = spawnSync("git", ["log", "-1", "--format=%cs", "--", ...inputs], { cwd: root, encoding: "utf8" });
