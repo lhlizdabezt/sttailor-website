@@ -825,12 +825,15 @@ function transformAbout(html) {
     </header>
     <div class="st-tripadvisor__card">
       <div class="st-tripadvisor__review">
-        <h3>S.T Tailor on Tripadvisor<span lang="vi">S.T Tailor trên Tripadvisor</span></h3>
+        <div>
+          <h3>S.T Tailor on Tripadvisor<span lang="vi">S.T Tailor trên Tripadvisor</span></h3>
+          <p id="st-tripadvisor-link-note">Read reviews and see visitor photos on Tripadvisor. Links open in a new tab.<span lang="vi">Xem đánh giá và ảnh do khách đăng trên Tripadvisor. Liên kết mở trong thẻ mới.</span></p>
+        </div>
         <iframe class="st-tripadvisor__rating" src="${tripadvisorEmbedPath}" title="Tripadvisor badge for S.T Tailor / Huy hiệu Tripadvisor của S.T Tailor" loading="lazy" width="220" height="128" referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
       </div>
       <div class="st-tripadvisor__actions">
-        <a class="st-tripadvisor__link" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer"><span>Read reviews</span><span lang="vi">Đọc đánh giá</span></a>
-        <a class="st-tripadvisor__link st-tripadvisor__link--outline" href="https://www.tripadvisor.com/UserReviewEdit-g293925-d34701232-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer"><span>Write a review</span><span lang="vi">Viết đánh giá</span></a>
+        <a class="st-tripadvisor__link" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note"><span>Read reviews</span><span lang="vi">Đọc đánh giá</span></a>
+        <a class="st-tripadvisor__link st-tripadvisor__link--outline" href="https://www.tripadvisor.com/UserReviewEdit-g293925-d34701232-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note"><span>Write a review</span><span lang="vi">Viết đánh giá</span></a>
       </div>
     </div>
     <div class="st-tripadvisor__card">

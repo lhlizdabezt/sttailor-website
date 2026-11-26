@@ -11,8 +11,31 @@ const paleGrey = "/du-an/buoi-thu-suit-xam-nhat/";
 const threePiece = "/du-an/suit-ba-manh-xam-bac/";
 const dress = "/san-pham/dam-mau-dao-theu-la/";
 const crimson = "/san-pham/ao-khoac-den-lot-do/";
+const greenSuitFitting = "/du-an/thu-suit-xanh-la-dam/";
+const shortSleeveShirt = "/san-pham/so-mi-xanh-nhat-tay-ngan/";
 
 export const photoCollections = [
+  {
+    id: "thu-suit-xanh-la-dam", route: greenSuitFitting, album: "fitting",
+    labels: ["Fitting a deep green suit", "Thử suit xanh lá đậm"],
+    summary: ["Front, angled and rear views of a deep green two-piece suit, followed by a portrait with a garment bag at S.T Tailor.", "Các góc chính diện, góc nghiêng và góc sau của bộ suit hai mảnh xanh lá đậm, cùng ảnh chụp với túi đựng trang phục tại S.T Tailor."],
+    photos: [
+      ["deep-green-suit-fitting-front", "Full-length front view of the deep green two-piece suit worn over a white crew-neck shirt.", "Ảnh toàn thân chính diện bộ suit hai mảnh xanh lá đậm phối áo cổ tròn trắng."],
+      ["deep-green-suit-fitting-angle", "Angled view of the deep green suit showing the jacket lapel, sleeve and jacket length.", "Góc nghiêng bộ suit xanh lá đậm, thấy ve áo, tay áo và chiều dài áo khoác."],
+      ["deep-green-suit-fitting-back", "Rear view of the deep green suit as the client faces the showroom mirror.", "Góc sau bộ suit xanh lá đậm khi khách quay về phía gương trong showroom."],
+      ["showroom-tailoring-garment-bag", "Two people hold a brown garment bag in the S.T Tailor showroom after the fitting.", "Hai người cầm túi đựng trang phục màu nâu tại showroom S.T Tailor sau buổi thử."]
+    ]
+  },
+  {
+    id: "so-mi-xanh-nhat-tay-ngan", route: shortSleeveShirt, album: "shirts-trousers",
+    labels: ["Light blue short-sleeve shirt", "Sơ mi xanh nhạt tay ngắn"],
+    summary: ["An open collar, short sleeves and softly lustrous light blue cloth, photographed with beige shorts at the showroom.", "Cổ áo mở, tay ngắn và vải xanh nhạt ánh nhẹ, chụp cùng quần short màu be tại showroom."],
+    photos: [
+      ["light-blue-short-sleeve-shirt-front", "Three-quarter front of a light blue short-sleeve shirt with an open collar and visible front buttons.", "Góc ba phần tư từ trước của sơ mi xanh nhạt tay ngắn, thấy cổ mở và hàng khuy trước."],
+      ["light-blue-short-sleeve-shirt-right-profile", "Right-side profile of the light blue shirt, showing the sleeve edge and untucked hem above beige shorts.", "Góc nhìn từ bên phải của sơ mi xanh nhạt, thấy mép tay áo và lai thả ngoài quần short be."],
+      ["light-blue-short-sleeve-shirt-left-profile", "Left-side profile of the light blue shirt with the wearer’s arm relaxed, showing how the cloth drapes at the side.", "Góc nhìn từ bên trái của sơ mi xanh nhạt khi người mặc thả lỏng tay, thấy độ rủ của vải ở thân bên."]
+    ]
+  },
   {
     id: "blazer-xanh-hai-hang-khuy", route: blazer, album: "suits",
     labels: ["Blue double-breasted blazer", "Blazer xanh hai hàng khuy"],
@@ -153,6 +176,26 @@ export const photoCollections = [
 
 const stories = [
   {
+    route: greenSuitFitting, section: "fittings",
+    title: "Deep Green Suit Fitting in Ho Chi Minh City | S.T Tailor",
+    description: "See a deep green two-piece suit during a private fitting at S.T Tailor. Compare the jacket, trouser line and rear view before collection.",
+    details: [
+      ["Checking the front and back", "Kiểm tra thân trước và thân sau", "From the front, you can see where the jacket ends and how the trousers taper. The angled view makes the lapel and sleeve length easier to compare. In the mirror, check that the collar sits close and that the upper back stays smooth when your arms are relaxed.", "Góc chính diện cho thấy vị trí lai áo và độ thuôn của ống quần. Góc nghiêng giúp quan sát ve áo và chiều dài tay áo. Khi nhìn qua gương, hãy thả lỏng hai tay để kiểm tra cổ áo có ôm sát và phần lưng trên có nằm phẳng hay không."],
+      ["Before taking the suit home", "Trước khi nhận bộ suit", "Bring the shirt and shoes you plan to wear so you can check the sleeve opening and how the trouser hem rests on the shoe. At collection, try the jacket and trousers together and mention any spot that still feels tight as you sit or reach. The series ends with a portrait in the showroom holding a garment bag.", "Mang theo sơ mi và giày dự định phối để kiểm tra cửa tay áo và vị trí lai quần trên giày. Khi nhận đồ, hãy thử áo khoác cùng quần và trao đổi nếu có chỗ còn căng khi ngồi hoặc với tay. Bộ ảnh khép lại bằng một tấm chụp cùng túi đựng trang phục tại showroom."]
+    ],
+    related: [navyFitting, "/cam-nang-may-do/kiem-tra-phom-suit/", "/quy-trinh-thu-do/", "/dich-vu/suit-may-do/"]
+  },
+  {
+    route: shortSleeveShirt, section: "shirts-and-trousers",
+    title: "Light Blue Short-Sleeve Shirt by S.T Tailor",
+    description: "Study a made-to-measure light blue short-sleeve shirt from S.T Tailor, with an open collar, clean button front and a hem worn untucked.",
+    details: [
+      ["The collar and sleeve line", "Cổ và đường tay áo", "The open collar sits above a row of tonal buttons. Each sleeve ends above the elbow. The two profile photographs show where the sleeve sits against the upper arm and how the fabric falls when the arm hangs naturally.", "Cổ áo mở nằm trên hàng khuy cùng tông. Tay áo kết thúc trên khuỷu tay. Hai góc nghiêng cho thấy vị trí mép tay trên bắp tay và độ rủ của vải khi thả lỏng tay."],
+      ["Length when worn untucked", "Chiều dài khi mặc thả ngoài", "The client wears the shirt loose over beige shorts, keeping the full hem visible. At a fitting, raise your arms and sit down to check the sleeve opening and where the hem returns. If you plan to wear the shirt with trousers as well, bring a pair to compare the proportions.", "Khách mặc sơ mi thả ngoài quần short be nên có thể thấy rõ toàn bộ lai áo. Khi thử, hãy nâng tay rồi ngồi xuống để kiểm tra độ rộng cửa tay và vị trí lai sau khi cử động. Nếu định phối thêm với quần dài, hãy mang theo một chiếc để so tỷ lệ."]
+    ],
+    related: ["/du-an/chi-tiet-so-mi-may-do/", "/san-pham/so-mi-trang-vien-ca-ro/", "/chon-vai-may-do/", "/dich-vu/"]
+  },
+  {
     route: blazer, section: "suits-and-jackets",
     description: "See how a blue double-breasted blazer with peak lapels pairs with grey trousers and an open white collar at S.T Tailor in Ho Chi Minh City.",
     details: [
@@ -205,7 +248,7 @@ const stories = [
       ["Marks for the next adjustment", "Dấu phấn cho lần chỉnh tiếp theo", "A chalk mark records the point the tailor has checked on the wearer. At the armhole, check whether you can move your arm without pulling the shoulder or jacket front out of place.", "Dấu phấn ghi lại vị trí thợ may vừa kiểm tra trên người mặc. Ở vòng nách, hãy thử cử động tay để xem đường vai và thân trước có bị kéo lệch không."],
       ["The details of a finished look", "Chi tiết hoàn thiện khi phối đồ", "The gold pocket square is adjusted with the shirt and jacket already on. A side view shows how the two front edges sit after the adjustment.", "Khăn túi ngực vàng được chỉnh sau khi khách đã mặc sơ mi và áo khoác. Góc nghiêng cho thấy hai vạt trước nằm thế nào sau khi chỉnh."]
     ],
-    related: [navyFitting, "/phim-thu-do/"]
+    related: [greenSuitFitting, navyFitting, "/phim-thu-do/"]
   },
   {
     route: navyFitting, section: "fittings",
@@ -214,7 +257,7 @@ const stories = [
       ["The lapel over a crew neck", "Ve áo trên nền áo cổ tròn", "The dark top makes the two edges of the open navy jacket easy to compare. The tailor sets the lapel with the client standing naturally.", "Áo tối màu bên trong giúp dễ so sánh hai vạt áo xanh navy khi mở. Thợ may chỉnh ve lúc khách đứng tự nhiên."],
       ["The jacket from the side", "Quan sát áo từ bên hông", "Once the client turns, the tailor can see the shoulder, sleeve and fall of the back. The close-up then records the row of dark cuff buttons.", "Khi khách xoay người, thợ may có thể quan sát vai, tay và độ rủ của thân sau. Ảnh cận ghi lại hàng khuy tối ở cổ tay áo."]
     ],
-    related: [navySuit, "/quy-trinh-thu-do/"]
+    related: [navySuit, greenSuitFitting, "/quy-trinh-thu-do/"]
   },
   {
     route: paleGrey, section: "fittings",

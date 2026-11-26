@@ -12585,8 +12585,10 @@ html body .st-tripadvisor__card {
 }
 html body .st-tripadvisor__card h3 { margin: 0; color: #352116; font: 500 25px/1.2 var(--st-wordmark); }
 html body #main-content .st-tripadvisor__card h3 > span[lang="vi"] { display: block; margin-top: 4px; color: #624330; -webkit-text-fill-color: #624330; font: 500 16px/1.4 var(--st-vietnamese) !important; }
-html body .st-tripadvisor__review { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 220px); align-items: center; gap: 12px; }
-html body .st-tripadvisor__rating { display: block; align-self: center; max-width: 100%; border: 0; }
+html body .st-tripadvisor__review { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 200px); align-items: center; gap: clamp(12px, 2vw, 24px); }
+html body .st-tripadvisor__review p { margin: 12px 0 0; color: #4e3527; font: 400 15px/1.55 var(--st-vietnamese); }
+html body .st-tripadvisor__review p [lang="vi"] { display: block; margin-top: 4px; }
+html body .st-tripadvisor__rating { display: block; place-self: center; max-width: 100%; border: 0; }
 html body .st-tripadvisor__actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 10px; padding-top: 14px; border-top: 1px solid #b99672; }
 html body .st-tripadvisor__link { display: grid !important; box-sizing: border-box; min-height: 70px !important; padding: 10px !important; place-content: center !important; gap: 3px !important; border: 1px solid #513320 !important; background: #352116 !important; color: #fff7e9 !important; -webkit-text-fill-color: #fff7e9 !important; font: 650 15px/1.35 var(--st-vietnamese) !important; text-align: center; text-decoration: none !important; transition: background-color .2s ease !important; }
 html body .st-tripadvisor__link span[lang="vi"] { color: #edd0aa !important; -webkit-text-fill-color: #edd0aa !important; }

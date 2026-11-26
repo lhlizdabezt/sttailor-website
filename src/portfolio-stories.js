@@ -311,7 +311,7 @@ export const portfolioStories = [
       ["The collar with an open neck or tie", "Cổ áo khi mở khuy hoặc đeo cà vạt", "Collar samples let you compare how far the points spread and how much of the tie knot will show. The white shirt folds back to reveal a small check inside the collar and cuff. Bring your usual jacket to view the collar beside its lapels.", "Các mẫu cổ áo giúp so sánh độ mở của hai lá cổ và phần nút cà vạt sẽ lộ ra. Sơ mi trắng gập lại để lộ ca rô nhỏ trong cổ và cổ tay. Hãy mang áo khoác thường mặc để xem cổ sơ mi cạnh ve áo."],
       ["Sleeve, shoulder and cuff", "Tay áo, vai và cổ tay", "The close-up shows where the sleeve joins the shoulder. At a fitting, reach forward and check how the shirt feels across the back. If you want to wear cufflinks, discuss a cuff made to take them and try it beside your jacket sleeve.", "Ảnh cận cho thấy đường ráp tay với thân áo ở vai. Khi thử, hãy đưa tay ra trước và cảm nhận phần lưng áo. Nếu muốn dùng khuy măng sét, hãy trao đổi về kiểu cổ tay phù hợp và thử cùng tay áo khoác."]
     ],
-    related: ["/san-pham/so-mi-trang-vien-ca-ro/", geometricTie, fittingProcess]
+    related: ["/san-pham/so-mi-trang-vien-ca-ro/", "/san-pham/so-mi-xanh-nhat-tay-ngan/", geometricTie, fittingProcess]
   },
   {
     route: jacketConstruction, section: "craft-and-style",
