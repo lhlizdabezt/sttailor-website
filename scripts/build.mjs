@@ -42,6 +42,7 @@ const showcaseCardSizes = "(max-width: 600px) calc(100vw - 34px), (max-width: 10
 const suitFitGuide = tailoringPages.find(({ source }) => source === "GuideSuitFit.html");
 const suitFitHeroSizes = "(max-width: 560px) min(calc(100vw - 28px), 420px), (max-width: 860px) 420px, min(calc(44vw - 40px), 440px)";
 const liningGuide = tailoringPages.find(({ source }) => source === "GuideJacketLining.html");
+const suitPiecesGuide = tailoringPages.find(({ source }) => source === "GuideSuitPieces.html");
 const liningHeroSizes = "(max-width: 860px) min(calc(100vw - 48px), 480px), min(calc(45vw - 46px), 480px)";
 
 function imageSourceSet(candidates) {
@@ -267,7 +268,7 @@ function elementRange(html, match) {
   for (let token = matcher.exec(html); token; token = matcher.exec(html)) {
     if (token[0].startsWith("</")) depth -= 1;
     else if (!token[0].endsWith("/>")) depth += 1;
-    if (depth === 0) return { start: match.index, end: matcher.lastIndex };
+    if (depth === 0) return { start: match.index, closeStart: token.index, end: matcher.lastIndex };
   }
   throw new Error(`Could not find closing </${tag}> while transforming a WordPress fragment.`);
 }
@@ -641,6 +642,18 @@ function fittingFilmPlayer(descriptionId, { lazy = false } = {}) {
     </video>`;
 }
 
+const galleryChapters = [
+  ["tuxedo", "Evening tailoring", "Lễ phục", "/san-pham/tuxedo-den-ve-sam/", "See the black tuxedo", "Xem bộ tuxedo đen"],
+  ["suits", "Suits and blazers", "Suit và blazer", "/cam-nang-may-do/chon-suit-hai-manh-ba-manh/", "Compare two- and three-piece suits", "So sánh suit hai mảnh và ba mảnh"],
+  ["womenswear", "Womenswear", "Trang phục nữ", "/dich-vu/trang-phuc-nu/", "Explore women’s tailoring", "Xem dịch vụ may đo nữ"],
+  ["shirts-trousers", "Shirts and trousers", "Sơ mi và quần tây", "/du-an/chi-tiet-so-mi-may-do/", "See the shirt details", "Xem chi tiết sơ mi"],
+  ["jacket-craft", "Jacket construction", "Kỹ thuật may áo khoác", "/cam-nang-may-do/chon-lot-ao-khoac/", "Choose a jacket lining", "Chọn lớp lót áo khoác"],
+  ["cloth", "The cloth library", "Thư viện chất liệu", "/chon-vai-may-do/vai-len-y/", "Explore Italian suiting wool", "Xem vải len Ý may suit"],
+  ["fitting", "The fitting room", "Phòng thử đồ", "/cam-nang-may-do/kiem-tra-phom-suit/", "Open the suit fitting checklist", "Xem cách kiểm tra phom suit"],
+  ["appointments", "People and appointments", "Khách hàng và lịch hẹn", "/du-an/nina-campos/", "View the Niña Campos project", "Xem dự án cùng Niña Campos"],
+  ["showroom", "The showroom", "Không gian nhà may", "/lien-he/#loi-vao-nha-may", "Find the showroom entrance", "Xem lối vào nhà may"]
+];
+
 function transformGallery(html) {
   html = html.replace(
     /<p>Eleven albums gather tailoring[\s\S]*?<\/p>/,
@@ -678,23 +691,14 @@ function transformGallery(html) {
   const seriesInsertAt = evening.start + eveningGrid.end;
   html = `${html.slice(0, seriesInsertAt)}${series}${html.slice(seriesInsertAt)}`;
   const galleryIndex = `
-<section class="st-gallery-numpad" aria-labelledby="st-gallery-numpad-title">
+<section class="st-gallery-numpad" id="gallery-chapters" aria-labelledby="st-gallery-numpad-title" tabindex="-1">
   <div class="st-gallery-shell">
     <header class="st-gallery-numpad__heading st-motion st-motion-1">
-      <p class="st-gallery-kicker">THE HOUSE IN NINE FRAMES <span lang="vi">/ NHÀ MAY TRONG CHÍN KHUNG HÌNH</span></p>
-      <h2 id="st-gallery-numpad-title">Move through the house.<span lang="vi">Đi qua từng lát cắt của nhà may.</span></h2>
-      <p>Choose a chapter below to move directly to the photographs, cloth and fittings that define S.T Tailor.<span lang="vi">Chọn một chương để đi thẳng đến những hình ảnh, chất liệu và buổi thử đồ làm nên S.T Tailor.</span></p>
+      <h2 id="st-gallery-numpad-title">Browse the albums<span lang="vi">Khám phá các album</span></h2>
+      <p>Jump to finished garments, fabric details, fittings and photographs from the showroom.<span lang="vi">Mở nhanh các album về trang phục hoàn thiện, chi tiết chất liệu, buổi thử đồ và không gian nhà may.</span></p>
     </header>
-    <nav class="st-gallery-numpad__grid" aria-label="Gallery chapters">
-      <a href="#album-tuxedo" class="st-gallery-numpad__card st-motion st-motion-1"><span>01</span><strong>Evening tailoring</strong><em lang="vi">Lễ phục</em><i>↗</i></a>
-      <a href="#album-suits" class="st-gallery-numpad__card st-motion st-motion-2"><span>02</span><strong>Suits &amp; blazers</strong><em lang="vi">Suit &amp; blazer</em><i>↗</i></a>
-      <a href="#album-womenswear" class="st-gallery-numpad__card st-motion st-motion-3"><span>03</span><strong>Womenswear</strong><em lang="vi">Trang phục nữ</em><i>↗</i></a>
-      <a href="#album-shirts-trousers" class="st-gallery-numpad__card st-motion st-motion-2"><span>04</span><strong>Shirts &amp; trousers</strong><em lang="vi">Sơ mi &amp; quần</em><i>↗</i></a>
-      <a href="#album-jacket-craft" class="st-gallery-numpad__card st-motion st-motion-3"><span>05</span><strong>Jacket craft</strong><em lang="vi">Kỹ nghệ áo khoác</em><i>↗</i></a>
-      <a href="#album-cloth" class="st-gallery-numpad__card st-motion st-motion-4"><span>06</span><strong>The cloth library</strong><em lang="vi">Thư viện chất liệu</em><i>↗</i></a>
-      <a href="#album-fitting" class="st-gallery-numpad__card st-motion st-motion-3"><span>07</span><strong>The fitting room</strong><em lang="vi">Phòng thử đồ</em><i>↗</i></a>
-      <a href="#album-appointments" class="st-gallery-numpad__card st-motion st-motion-4"><span>08</span><strong>People &amp; appointments</strong><em lang="vi">Con người &amp; lịch hẹn</em><i>↗</i></a>
-      <a href="#album-showroom" class="st-gallery-numpad__card st-motion st-motion-5"><span>09</span><strong>The showroom</strong><em lang="vi">Không gian nhà may</em><i>↗</i></a>
+    <nav class="st-gallery-numpad__grid" aria-label="Gallery chapters | Các album ảnh">
+      ${galleryChapters.map(([id, en, vi]) => `<a href="#album-${id}" class="st-gallery-numpad__card"><strong>${en}</strong><em lang="vi">${vi}</em><i aria-hidden="true">↓</i></a>`).join("\n      ")}
     </nav>
   </div>
 </section>${showcaseHubLinks()}`;
@@ -722,7 +726,19 @@ function transformGallery(html) {
 </section>`;
   const filmInsertAt = womenswear.start + womenswearGrid.end;
   html = `${html.slice(0, filmInsertAt)}${filmMarkup}${html.slice(filmInsertAt)}`;
-  return replaceVisibleAtelier(appendGalleryCollections(applyGalleryAltText(html)));
+  html = appendGalleryCollections(applyGalleryAltText(html));
+  for (const [id, , , href, en, vi] of galleryChapters) {
+    const album = findElementById(html, "section", `album-${id}`);
+    const shell = album && findElementByClass(html.slice(album.start, album.end), "div", "st-gallery-shell");
+    if (!shell) throw new Error(`Gallery chapter has no content container: ${id}`);
+    const at = album.start + shell.closeStart;
+    const actions = `<div class="st-gallery-album__actions">
+      <a class="st-gallery-album__guide" href="${href}">${en}<span lang="vi">${vi}</span></a>
+      <a class="st-gallery-album__guide" href="#gallery-chapters">Back to the albums<span lang="vi">Về danh sách album</span></a>
+    </div>`;
+    html = `${html.slice(0, at)}${actions}${html.slice(at)}`;
+  }
+  return replaceVisibleAtelier(html);
 }
 
 function transformPayment(html) {
@@ -918,7 +934,7 @@ function enrichImageAttributes(html, { responsiveSizes, deprioritizeLazyImages =
       const isHomeHero = src === homeHeroImage && /\bst-home-v6__hero-media\b/.test(output);
       const isGalleryHero = /\bst-gallery-hero__story-image\b/.test(output);
       const isSuitFitHero = /\bst-suit-fit__hero-image\b/.test(output);
-      const isLiningHero = /\bst-guide-lining-image\b/.test(output);
+      const isGuideHero = /\bst-guide-(?:lining|suit-pieces)-image\b/.test(output);
       const srcset = imageSourceSet(metadata.responsive);
       const sizes = isHomeHero ? homeHeroSizes : isGalleryHero ? galleryHeroSizes
         : isSuitFitHero ? suitFitHeroSizes
@@ -926,7 +942,7 @@ function enrichImageAttributes(html, { responsiveSizes, deprioritizeLazyImages =
         : responsiveSizes;
       const lazyAuto = /\bloading="lazy"/i.test(output) ? "auto, " : "";
       output = output.replace(/<img\b/i, `<img srcset="${srcset}" sizes="${lazyAuto}${sizes}"`);
-      if (metadata.responsive_avif?.length && (isGalleryHero || isSuitFitHero || isLiningHero || /\bst-showcase(?:__hero-image|-card__photo)\b/.test(output))) {
+      if (metadata.responsive_avif?.length && (isGalleryHero || isSuitFitHero || isGuideHero || /\bst-showcase(?:__hero-image|-card__photo)\b/.test(output))) {
         return `<picture><source type="image/avif" srcset="${imageSourceSet(metadata.responsive_avif)}" sizes="${lazyAuto}${sizes}">${output}</picture>`;
       }
     }
@@ -1038,6 +1054,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     // The square guide photo covers a 560px-tall frame on desktop.
     "/cam-nang-may-do/": "(max-width: 560px) calc(100vw - 28px), (max-width: 860px) calc(100vw - 48px), 560px",
     [liningGuide.route]: liningHeroSizes,
+    [suitPiecesGuide.route]: "(max-width: 560px) calc(100vw - 28px), (max-width: 860px) calc(100vw - 48px), 480px",
     "/san-pham/": showcaseCardSizes,
     "/du-an/": showcaseCardSizes
   }[route] ?? "(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 800px";
@@ -1186,7 +1203,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
       heroPreload = `<link rel="preload" as="image" type="image/avif" imagesrcset="${imageSourceSet(candidates)}" imagesizes="${galleryHeroSizes}" fetchpriority="high">`;
     }
   }
-  if (sourceFile === suitFitGuide.source || sourceFile === liningGuide.source || showcasePage) {
+  if (sourceFile === suitFitGuide.source || sourceFile === liningGuide.source || sourceFile === suitPiecesGuide.source || showcasePage) {
     const leadImage = showcaseHub ? showcaseItemsFor(route)[0]?.image : shareImage;
     const candidates = imageManifest[leadImage?.slice("/media/".length)]?.responsive_avif;
     if (candidates?.length) {
@@ -1259,7 +1276,7 @@ function buildImageManifest() {
   const shareImages = [...new Set(routes.map(([, , , , image]) => image.slice("/media/".length)))];
   const homeCards = [...transformHome(readSource("Home.html")).matchAll(/class="st-home-editorial__photo" src="\/media\/([^"]+)"/g)]
     .flatMap(([, asset]) => ["--home-card", asset]);
-  const featureImages = [galleryHeroImage, suitFitGuide.image, liningGuide.image, ...showcaseEntries.map(({ image }) => image)]
+  const featureImages = [galleryHeroImage, suitFitGuide.image, liningGuide.image, suitPiecesGuide.image, ...showcaseEntries.map(({ image }) => image)]
     .flatMap((asset) => ["--feature-image", asset.slice("/media/".length)]);
   const result = spawnSync("python", [path.join(root, "scripts", "build-image-manifest.py"), sourceMedia, path.join(dist, "image-manifest.json"), ...shareImages, ...homeCards, ...featureImages], { encoding: "utf8" });
   if (result.status !== 0) throw new Error(`Image manifest generation failed:\n${result.stderr || result.stdout}`);

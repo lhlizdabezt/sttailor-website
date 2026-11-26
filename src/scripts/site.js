@@ -72,6 +72,7 @@ const pageTypes = {
   "/lien-he/": "contact",
   "/cam-nang-may-do/": "guide_hub",
   "/cam-nang-may-do/thu-do-khi-du-lich/": "guide_travel_fittings",
+  "/cam-nang-may-do/chon-suit-hai-manh-ba-manh/": "guide_suit_pieces",
   "/chon-vai-may-do/": "guide_cloth",
   "/chon-vai-may-do/vai-len-y/": "guide_italian_wool",
   "/chon-vai-may-do/lua-viet-nam/": "guide_vietnamese_silk",

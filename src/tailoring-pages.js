@@ -54,6 +54,15 @@ export const tailoringPages = [
     imageAlt: "Dark jacket opened over a white shirt to show its lining and inside pockets | Áo khoác tối màu mở trên sơ mi trắng để lộ lớp lót và túi trong"
   },
   {
+    route: "/cam-nang-may-do/chon-suit-hai-manh-ba-manh/",
+    source: "GuideSuitPieces.html",
+    labels: ["Two-piece and three-piece suits", "Suit hai mảnh và ba mảnh"],
+    title: "Two-Piece or Three-Piece Suit? | S.T Tailor",
+    description: "Compare a two-piece suit and a three-piece suit with a waistcoat. See real S.T Tailor examples and plan your fitting in Ho Chi Minh City.",
+    image: "/media/2026/11/st-tailor-silver-grey-three-piece-front.webp",
+    imageAlt: "Client in a silver-grey three-piece suit with a light blue shirt and straw hat | Khách mặc suit ba mảnh xám bạc cùng sơ mi xanh nhạt và mũ cói"
+  },
+  {
     route: "/chon-vai-may-do/vai-len-y/",
     source: "GuideItalianWool.html",
     labels: ["Italian suiting wool", "Vải len Ý may suit"],

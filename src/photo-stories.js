@@ -279,7 +279,7 @@ const stories = [
       ["The back and trouser drape", "Thân sau và độ rủ quần", "With the client’s arm bent, the rear view shows the back seam, shoulder and sleeve folds. A closer view shows a long pressed trouser crease and subtle cloth texture.", "Khi khách gập tay, góc sau cho thấy đường ráp lưng, vai và nếp tay áo. Ảnh cận làm rõ đường ly quần kéo dài và bề mặt vải nhẹ."],
       ["Checking the jacket on the client", "Kiểm tra áo khoác trên người khách", "The tailor checks the shoulder while the client wears the jacket over the waistcoat. The rear view gives a second look at the centre back and hem. The sleeve close-up records the spacing of the dark cuff buttons beside the pocket.", "Thợ may kiểm tra đường vai khi khách mặc áo khoác ngoài ghi-lê. Góc sau giúp quan sát thêm đường giữa lưng và lai áo. Ảnh cận tay áo ghi lại khoảng cách giữa các khuy tối cạnh túi."]
     ],
-    related: [paleGrey, "/du-an/thu-ao-ghi-le-xam-bac/", "/du-an/chi-tiet-ao-khoac-xam-bac/", "/dich-vu/suit-may-do/"]
+    related: [paleGrey, "/du-an/thu-ao-ghi-le-xam-bac/", "/du-an/chi-tiet-ao-khoac-xam-bac/", "/dich-vu/suit-may-do/", "/cam-nang-may-do/chon-suit-hai-manh-ba-manh/"]
   },
   {
     route: dress, section: "womenswear",

@@ -12387,9 +12387,22 @@ html body .st-gallery-page .st-gallery-album--dark .st-gallery-album__guide { co
 html body .st-gallery-page .st-gallery-album__guide span { font-weight: 400; }
 html body .st-gallery-page .st-gallery-album__guide:hover { box-shadow: inset 0 0 0 1px currentColor; }
 html body .st-gallery-page .st-gallery-album__guide:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.st-gallery-page .st-gallery-album__actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  width: min(100%, 680px);
+  margin: clamp(24px, 5vw, 54px) auto 0;
+}
+html body .st-gallery-page .st-gallery-album__actions > a { margin: 0; }
+@media (max-width: 420px) {
+  .st-gallery-page .st-gallery-album__actions { grid-template-columns: minmax(0, 1fr); }
+}
 
 /* Gallery chapter navigator: a tactile 3x3 heritage index that jumps to each photographic album. */
 html body .st-gallery-numpad { position: relative !important; padding: clamp(68px, 9vw, 120px) 0 !important; overflow: hidden !important; background: #ead2b7 !important; color: #3a2116 !important; }
+#gallery-chapters { scroll-margin-block-start: 115px; }
+#gallery-chapters:focus-visible { outline: 2px solid #6c371e; outline-offset: -4px; }
 html body .st-gallery-numpad::before { content: "" !important; position: absolute !important; inset: 18px !important; border: 1px solid rgba(107, 59, 35, .25) !important; pointer-events: none !important; }
 html body .st-gallery-numpad__heading { display: block !important; width: min(800px, calc(100% - 40px)) !important; max-width: none !important; margin: 0 auto 42px !important; text-align: center !important; }
 html body .st-gallery-numpad__heading .st-gallery-kicker { margin: 0 0 13px !important; color: #83502f !important; -webkit-text-fill-color: #83502f !important; font: 700 13px/1.4 var(--st-vietnamese) !important; letter-spacing: .14em !important; }
@@ -12400,14 +12413,12 @@ html body .st-gallery-numpad__heading > p:last-child { max-width: 640px !importa
 html body .st-gallery-numpad__heading > p:last-child span[lang="vi"] { display: block !important; margin-top: 7px !important; color: #7b533d !important; -webkit-text-fill-color: #7b533d !important; }
 html body .st-gallery-hero--index .st-gallery-hero__copy > p:last-child span[lang="vi"] { font-size: inherit !important; line-height: 1.65 !important; }
 html body .st-gallery-numpad__grid { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 14px !important; max-width: 1120px !important; margin: 0 auto !important; }
-html body .st-gallery-numpad__card { position: relative !important; display: grid !important; min-height: 166px !important; grid-template-columns: 38px minmax(0, 1fr) 22px !important; grid-template-rows: auto auto !important; column-gap: 12px !important; align-content: center !important; padding: 24px 22px !important; border: 1px solid rgba(102, 57, 34, .46) !important; background: rgba(255, 250, 242, .91) !important; box-shadow: 5px 5px 0 rgba(117, 71, 43, .18) !important; color: #382017 !important; -webkit-text-fill-color: #382017 !important; text-decoration: none !important; transition: transform .28s cubic-bezier(.2,.7,.2,1), background-color .28s ease, box-shadow .28s ease, border-color .28s ease !important; }
-html body .st-gallery-numpad__card > span { grid-row: 1 / span 2 !important; align-self: center !important; color: #915632 !important; -webkit-text-fill-color: #915632 !important; font: 700 13px/1 var(--st-vietnamese) !important; letter-spacing: .1em !important; }
+html body .st-gallery-numpad__card { position: relative !important; display: grid !important; min-height: 112px !important; grid-template-columns: minmax(0, 1fr) 22px !important; grid-template-rows: auto auto !important; column-gap: 12px !important; align-content: center !important; padding: 18px 22px !important; border: 1px solid #8a5f44 !important; background: #fffaf2 !important; box-shadow: 3px 3px 0 rgba(117, 71, 43, .18) !important; color: #382017 !important; -webkit-text-fill-color: #382017 !important; text-decoration: none !important; transition: background-color .25s ease, box-shadow .25s ease, border-color .25s ease !important; }
 html body .st-gallery-numpad__card > strong { color: #382017 !important; -webkit-text-fill-color: #382017 !important; font: 500 clamp(18px, 1.6vw, 24px)/1.04 var(--st-wordmark) !important; }
 html body .st-gallery-numpad__card > em { margin-top: 8px !important; color: #76503a !important; -webkit-text-fill-color: #76503a !important; font: 500 13px/1.3 var(--st-vietnamese) !important; font-style: normal !important; }
-html body .st-gallery-numpad__card > i { grid-column: 3 !important; grid-row: 1 / span 2 !important; align-self: center !important; color: #8c502f !important; -webkit-text-fill-color: #8c502f !important; font: 400 21px/1 var(--st-wordmark) !important; font-style: normal !important; transition: transform .28s ease !important; }
+html body .st-gallery-numpad__card > i { grid-column: 2 !important; grid-row: 1 / span 2 !important; align-self: center !important; color: #8c502f !important; -webkit-text-fill-color: #8c502f !important; font: 400 21px/1 var(--st-wordmark) !important; font-style: normal !important; }
 html body .st-gallery-numpad__card:hover, html body .st-gallery-numpad__card:focus-visible { border-color: #4a2719 !important; background: #f4dfc3 !important; box-shadow: 5px 5px 0 rgba(117, 71, 43, .18) !important; color: #321b12 !important; -webkit-text-fill-color: #321b12 !important; transform: none !important; }
 html body .st-gallery-numpad__card:focus-visible { outline: 2px solid #6c371e !important; outline-offset: 4px; }
-html body .st-gallery-numpad__card:hover > i, html body .st-gallery-numpad__card:focus-visible > i { transform: none !important; }
 
 /* Pricing ends with two equally weighted, legible choices: quotation and payment. */
 .stpr-ledger .stpr-hero .stpr-kicker,
@@ -13060,7 +13071,7 @@ html body .st-home-editorial__frame:is(:hover, :focus-within) { background: #4b2
   html body .st-gallery-numpad::before { inset: 8px !important; }
   html body .st-gallery-numpad__heading { width: min(800px, calc(100% - 28px)) !important; margin-bottom: 30px !important; text-align: center !important; }
   html body .st-gallery-numpad__grid { grid-template-columns: 1fr !important; gap: 11px !important; }
-  html body .st-gallery-numpad__card { min-height: 126px !important; padding: 19px 16px !important; }
+  html body .st-gallery-numpad__card { min-height: 78px !important; padding: 12px 16px !important; }
 }
 
 @media (prefers-reduced-motion: reduce) {

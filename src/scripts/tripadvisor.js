@@ -24,10 +24,12 @@ function updateWidget() {
   const logo = badge.querySelector("#CDSWIDFRR img");
   const action = badge.querySelector(".widFRRClickWrap[href]");
   const ready = logo?.complete && logo.naturalWidth && action?.href === listing;
-  widget.toggleAttribute("data-ready", Boolean(ready && document.activeElement !== fallback));
+  const focused = document.activeElement;
+  if ((ready && focused === fallback) || (!ready && badge.contains(focused))) return;
+  widget.toggleAttribute("data-ready", Boolean(ready));
 }
 
-fallback.addEventListener("blur", updateWidget);
+widget.addEventListener("focusout", () => requestAnimationFrame(updateWidget));
 badge.addEventListener("load", updateWidget, true);
 badge.addEventListener("error", updateWidget, true);
 new MutationObserver(updateWidget).observe(badge, {
