@@ -326,6 +326,6 @@ export const garmentStories = [
         "Hãy mang đôi giày dự định phối cùng quần. Đứng và đi vài bước để thợ may xem vị trí gấu và độ rủ ở đầu gối. Cùng một chiều dài quần có thể trông khác khi đổi sang giày có mu cao hoặc thấp hơn."
       ]
     ],
-    related: ["/san-pham/quan-tay-ca-ro-xam/", "/du-an/phoi-giay-voi-suit/", "/du-an/trang-phuc-sang-mau/", fitGuide]
+    related: ["/dich-vu/quan-tay-may-do/", "/san-pham/quan-tay-ca-ro-xam/", "/du-an/phoi-giay-voi-suit/", "/du-an/trang-phuc-sang-mau/", fitGuide]
   }
 ];

@@ -2,8 +2,8 @@
 // snippets inserted by Cloudflare's first-party Google tag gateway.
 // The build and live checks reject executable inline scripts outside this list.
 export const inlineScriptHashes = [
-  "Txl0jxehl06jkFDH497A3Va/XLXOwwrptSj2+4Y+Etc=",
-  "KJezzJvqB3Q7lS9Q0HxeOdHhOaJ/RrVtha21SUMsylQ=",
+  "4dW+cVwcFHTMQrjBeza2ePFKJj8K/diE424cmFrylvA=",
+  "okTkfL6AlDmTktyaJgsNpObHViHjl3sIy2OJnuW+ltw=",
   "yU1/2lX6VdSM1Kp45Hd8q1UXs7KJGTfkHlbmkbpHiS8=",
   "n8EGvd+f0qUCWGy8Y7UVeKDrBiP6td4UjWKroJeastE="
 ];

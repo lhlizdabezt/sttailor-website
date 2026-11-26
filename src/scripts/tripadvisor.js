@@ -14,6 +14,7 @@ function updateWidget() {
       if (link.rel !== "nofollow noopener noreferrer") link.rel = "nofollow noopener noreferrer";
       if (isBadgeLink) {
         link.setAttribute("aria-label", "View S.T Tailor on Tripadvisor / Xem S.T Tailor trên Tripadvisor");
+        link.setAttribute("aria-describedby", "st-tripadvisor-new-tab");
       }
     }
     if (href === "https://www.tripadvisor.com/" && !link.textContent.trim() && !link.hasAttribute("aria-label")) {

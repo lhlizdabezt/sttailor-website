@@ -36,6 +36,15 @@ export const tailoringPages = [
     imageAlt: "Light blue short-sleeve shirt with an open collar and an untucked hem | Sơ mi xanh nhạt tay ngắn, mở cổ và thả lai ngoài quần"
   },
   {
+    route: "/dich-vu/quan-tay-may-do/",
+    source: "ServiceTrousers.html",
+    labels: ["Made-to-measure trousers", "Quần tây may đo"],
+    title: "Made-to-Measure Trousers in HCMC | S.T Tailor",
+    description: "Plan made-to-measure trousers in Ho Chi Minh City. Compare rise, leg shape and side adjusters, then check the hem with your own shoes at S.T Tailor.",
+    image: "/media/2026/11/st-tailor-dark-tailored-trousers-folded-front.webp",
+    imageAlt: "Folded dark tailored trousers with a side adjuster, welt pocket and pressed crease | Quần tây tối màu gấp gọn với đai chỉnh cạp, túi viền và đường ly là"
+  },
+  {
     route: "/cam-nang-may-do/buoi-tu-van-dau-tien/",
     source: "GuideFirstConsultation.html",
     labels: ["First tailoring consultation", "Buổi tư vấn may đo đầu tiên"],
@@ -43,6 +52,15 @@ export const tailoringPages = [
     description: "Prepare for your first tailoring consultation at S.T Tailor. Know what to bring, what to discuss before placing an order and how to find the showroom.",
     image: "/media/2026/09/st-tailor-client-fabric-consultation.jpg",
     imageAlt: "Client and tailor reviewing fabric samples at S.T Tailor | Khách hàng cùng thợ may xem mẫu vải tại S.T Tailor"
+  },
+  {
+    route: "/cam-nang-may-do/nhan-trang-phuc-may-do/",
+    source: "GuideGarmentCollection.html",
+    labels: ["Collecting a tailored garment", "Nhận trang phục may đo"],
+    title: "Collecting Your Tailored Garment | S.T Tailor HCMC",
+    description: "Use S.T Tailor’s checklist for your final try-on, showroom collection or delivery. Check the fit and finish and learn how to care for your garment.",
+    image: "/media/2026/11/st-tailor-showroom-tailoring-garment-bag.webp",
+    imageAlt: "Tailor and client holding a garment bag in the S.T Tailor showroom | Thợ may và khách cầm túi đựng trang phục tại showroom S.T Tailor"
   },
   {
     route: "/cam-nang-may-do/thu-do-khi-du-lich/",

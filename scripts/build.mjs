@@ -44,8 +44,10 @@ const suitFitHeroSizes = "(max-width: 560px) min(calc(100vw - 28px), 420px), (ma
 const liningGuide = tailoringPages.find(({ source }) => source === "GuideJacketLining.html");
 const suitPiecesGuide = tailoringPages.find(({ source }) => source === "GuideSuitPieces.html");
 const liningHeroSizes = "(max-width: 860px) min(calc(100vw - 48px), 480px), min(calc(45vw - 46px), 480px)";
-const consultationHeroes = tailoringPages.filter(({ source }) => source === "GuideFirstConsultation.html" || source === "ServiceShirts.html");
-const consultationHeroSizes = "(max-width: 560px) calc(100vw - 28px), (max-width: 860px) calc(100vw - 48px), min(calc(46vw - 36px), 540px)";
+const editorialGuideHeroes = tailoringPages.filter(({ source }) =>
+  ["GuideFirstConsultation.html", "GuideGarmentCollection.html", "ServiceShirts.html", "ServiceTrousers.html"].includes(source)
+);
+const editorialGuideHeroSizes = "(max-width: 560px) calc(100vw - 28px), (max-width: 860px) calc(100vw - 48px), min(calc(46vw - 36px), 540px)";
 
 function imageSourceSet(candidates) {
   return candidates.map(({ src, width }) => `${src} ${width}w`).join(", ");
@@ -56,10 +58,13 @@ new Date().getTime(),event:'gtm.js'});var started=false;function load(){if(start
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 }function schedule(){
-  w.setTimeout(load,1200);
   if(d.visibilityState==='visible'&&w.requestIdleCallback)
     w.requestAnimationFrame(()=>w.requestAnimationFrame(()=>w.requestIdleCallback(load,{timeout:1200})));
+  else w.setTimeout(load,1200);
 }
+// A stalled image or embed must not postpone the container indefinitely.
+function deadline(){w.setTimeout(load,3500);}
+if(d.readyState==='loading')d.addEventListener('DOMContentLoaded',deadline,{once:true});else deadline();
 if(d.readyState==='complete')schedule();else w.addEventListener('load',schedule,{once:true});
 w.addEventListener('pointerdown',load,{once:true,passive:true});w.addEventListener('keydown',load,{once:true});
 })(window,document,'script','dataLayer','GTM-TQSDB6XT');</script>
@@ -76,7 +81,37 @@ const metaPixelNoScript = `<noscript><img height="1" width="1" style="display:no
 // Clarity tag; only the existing first-party Google tag is downloaded here,
 // after the first paint when Cloudflare has not already injected its gateway.
 // Loading Clarity here as well records sessions twice.
-const analyticsTags = `<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-BQDKE20XR0");(function(c,l,a){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)}})(window,document,"clarity");(()=>{const load=()=>{if(window.__stAnalyticsLoaded)return;window.__stAnalyticsLoaded=true;if([...document.scripts].some(s=>s.src.split("?")[0]===location.origin+"/n31x/"))return;const g=document.createElement("script");g.async=true;g.src="/n31x/";document.head.appendChild(g);};const idle=window.requestIdleCallback||((cb)=>setTimeout(cb,1200));if(document.readyState==="complete")idle(load);else window.addEventListener("load",()=>idle(load),{once:true})})();</script>`;
+const analyticsTags = `<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments)}
+gtag("js",new Date());
+gtag("config","G-BQDKE20XR0");
+(function(c,l,a){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)}})(window,document,"clarity");
+(() => {
+  let started=false;
+  let deadline;
+  function load(){
+    if(started)return;
+    started=true;
+    clearTimeout(deadline);
+    if([...document.scripts].some(s=>s.src.split("?")[0]===location.origin+"/n31x/"))return;
+    const g=document.createElement("script");
+    g.async=true;
+    g.fetchPriority="low";
+    g.src="/n31x/";
+    document.head.appendChild(g);
+  }
+  function schedule(){
+    if(window.requestIdleCallback)window.requestIdleCallback(load,{timeout:1000});
+    else setTimeout(load,1200);
+  }
+  // Give critical rendering the first opportunity, with a deadline if load stalls.
+  function startDeadline(){deadline=setTimeout(load,3000);}
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",startDeadline,{once:true});
+  else startDeadline();
+  if(document.readyState==="complete")schedule();
+  else window.addEventListener("load",schedule,{once:true});
+})();</script>`;
 
 const routes = [
   ["/", "Home.html", "S.T Tailor | Bespoke Tailoring in Ho Chi Minh City", "Bespoke suits, shirts, formalwear and alterations at 1st Floor, 258 Le Thanh Ton, Tan Dinh Ward, Ho Chi Minh City. Private consultations available.", "/media/2026/06/background-hero-trang-lien-he-sttailor.webp", "Private fitting at S.T Tailor in Ho Chi Minh City"],
@@ -1050,7 +1085,7 @@ function footer(route) {
 function documentFor(route, sourceFile, title, description, shareImage, shareImageAlt, lastModified) {
   const showcasePage = showcasePages.find((page) => page.route === route);
   const showcaseHub = showcaseHubs.find(({ route: href }) => href === route);
-  const hasConsultationHero = consultationHeroes.some((page) => page.route === route);
+  const hasEditorialGuideHero = editorialGuideHeroes.some((page) => page.route === route);
   const responsiveSizes = {
     "/gallery/": "(max-width: 760px) 100vw, (max-width: 1080px) 50vw, 33vw",
     "/": homeEditorialSizes,
@@ -1060,7 +1095,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     [suitPiecesGuide.route]: "(max-width: 560px) calc(100vw - 28px), (max-width: 860px) calc(100vw - 48px), 480px",
     "/san-pham/": showcaseCardSizes,
     "/du-an/": showcaseCardSizes
-  }[route] ?? (hasConsultationHero ? consultationHeroSizes : "(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 800px");
+  }[route] ?? (hasEditorialGuideHero ? editorialGuideHeroSizes : "(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 800px");
   const body = enrichImageAttributes(transformPage(sourceFile, readSource(sourceFile), showcasePage), {
     responsiveSizes,
     deprioritizeLazyImages: Boolean(showcaseHub) || sourceFile === "Home.html" || sourceFile === "Gallery.html"
@@ -1206,7 +1241,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
       heroPreload = `<link rel="preload" as="image" type="image/avif" imagesrcset="${imageSourceSet(candidates)}" imagesizes="${galleryHeroSizes}" fetchpriority="high">`;
     }
   }
-  if (sourceFile === suitFitGuide.source || sourceFile === liningGuide.source || sourceFile === suitPiecesGuide.source || hasConsultationHero || showcasePage) {
+  if (sourceFile === suitFitGuide.source || sourceFile === liningGuide.source || sourceFile === suitPiecesGuide.source || hasEditorialGuideHero || showcasePage) {
     const leadImage = showcaseHub ? showcaseItemsFor(route)[0]?.image : shareImage;
     const candidates = imageManifest[leadImage?.slice("/media/".length)]?.responsive_avif;
     if (candidates?.length) {
@@ -1279,7 +1314,7 @@ function buildImageManifest() {
   const shareImages = [...new Set(routes.map(([, , , , image]) => image.slice("/media/".length)))];
   const homeCards = [...transformHome(readSource("Home.html")).matchAll(/class="st-home-editorial__photo" src="\/media\/([^"]+)"/g)]
     .flatMap(([, asset]) => ["--home-card", asset]);
-  const featureImages = [galleryHeroImage, suitFitGuide.image, liningGuide.image, suitPiecesGuide.image, ...consultationHeroes.map(({ image }) => image), ...showcaseEntries.map(({ image }) => image)]
+  const featureImages = [galleryHeroImage, suitFitGuide.image, liningGuide.image, suitPiecesGuide.image, ...editorialGuideHeroes.map(({ image }) => image), ...showcaseEntries.map(({ image }) => image)]
     .flatMap((asset) => ["--feature-image", asset.slice("/media/".length)]);
   const result = spawnSync("python", [path.join(root, "scripts", "build-image-manifest.py"), sourceMedia, path.join(dist, "image-manifest.json"), ...shareImages, ...homeCards, ...featureImages], { encoding: "utf8" });
   if (result.status !== 0) throw new Error(`Image manifest generation failed:\n${result.stderr || result.stdout}`);

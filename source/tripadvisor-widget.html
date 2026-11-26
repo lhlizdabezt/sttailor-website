@@ -13,8 +13,8 @@
     [data-ready] #TA_rated383 { visibility: visible; }
     [data-ready] .st-tripadvisor__fallback { display: none; }
     #TA_rated383 #CDSWIDFRR { outline: 1px solid #815c40; outline-offset: 2px; }
-    .st-tripadvisor__fallback { box-sizing: border-box; display: grid; align-content: center; gap: 4px; width: 100%; max-width: 200px; min-height: 70px; padding: 10px; border: 1px solid #815c40; color: #352116; background: #fff7eb; text-align: center; text-decoration: none; font: 600 15px/1.4 system-ui, sans-serif; }
-    .st-tripadvisor__fallback span { font-weight: 400; }
+    .st-tripadvisor__fallback { box-sizing: border-box; display: grid; align-content: center; gap: 6px; width: 100%; max-width: 200px; min-height: 84px; padding: 10px; border: 1px solid #815c40; color: #352116; background: #fff7eb; text-align: center; text-decoration: none; font: 600 15px/1.35 system-ui, sans-serif; }
+    .st-tripadvisor__fallback span[lang="vi"] { color: #624330; font-weight: 500; }
     .st-tripadvisor__fallback img { justify-self: center; }
     .st-tripadvisor__fallback:hover { background: #eed9bd; }
     .st-tripadvisor__widget a:focus-visible { outline: 2px solid #6c371e !important; outline-offset: 2px !important; }
@@ -24,10 +24,12 @@
 <body>
   <main class="st-tripadvisor__widget">
     <div id="TA_rated383" class="TA_rated"></div>
-    <a class="st-tripadvisor__fallback" target="_blank" rel="noopener noreferrer" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html">
+    <a class="st-tripadvisor__fallback" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-new-tab" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html">
       <img src="/icons/tripadvisor-logomark.svg" width="28" height="18" alt="" aria-hidden="true">
-      Read S.T Tailor reviews on Tripadvisor<span lang="vi">Đọc đánh giá về S.T Tailor trên Tripadvisor</span>
+      <span>Reviews on Tripadvisor</span>
+      <span lang="vi">Đọc đánh giá trên Tripadvisor</span>
     </a>
+    <p id="st-tripadvisor-new-tab" hidden>Opens in a new tab. <span lang="vi">Mở trong thẻ mới.</span></p>
   </main>
   <!-- The official script binds to the load event of this document. -->
   <script async src="https://www.jscache.com/wejs?wtype=rated&amp;uniq=383&amp;locationId=34701232&amp;lang=en_US&amp;display_version=2"></script>
