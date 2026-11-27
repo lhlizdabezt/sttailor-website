@@ -49,7 +49,7 @@ const liningHeroSizes = "(max-width: 860px) min(calc(100vw - 48px), 480px), min(
 const editorialGuideHeroes = tailoringPages.filter(({ source }) =>
   ["GuideFirstConsultation.html", "GuideGarmentCollection.html", "GuideWeddingPlanning.html", "GuideAftercare.html", "GuideShirtCollars.html",
     "GuideOrderQuotation.html", "GuideArrangeDelivery.html", "GuidePackingSuit.html", "GuideBlackTie.html", "GuideShirtCuffs.html",
-    "GuideShirtFit.html", "GuideTrouserHem.html", "ServiceShirts.html", "ServiceTrousers.html", "ServiceJackets.html"].includes(source)
+    "GuideShirtFit.html", "GuideTrouserHem.html", "GuideJacketLapels.html", "GuideTrouserRise.html", "ServiceShirts.html", "ServiceTrousers.html", "ServiceJackets.html"].includes(source)
 );
 const editorialGuideHeroSizes = "(max-width: 560px) calc(100vw - 28px), (max-width: 860px) calc(100vw - 48px), min(calc(46vw - 36px), 540px)";
 
@@ -125,24 +125,24 @@ gtag("config","G-BQDKE20XR0");
 })();</script>`;
 
 const routes = [
-  ["/", "Home.html", "S.T Tailor | Bespoke Tailoring in Ho Chi Minh City", "Bespoke suits, shirts, formalwear and alterations at 1st Floor, 258 Le Thanh Ton, Tan Dinh Ward, Ho Chi Minh City. Private consultations available.", "/media/2026/06/background-hero-trang-lien-he-sttailor.webp", "Private fitting at S.T Tailor in Ho Chi Minh City"],
-  ["/gioi-thieu/", "About.html", "About S.T Tailor | Bespoke Tailoring & Alterations in HCMC", "Meet S.T Tailor in Ho Chi Minh City for bespoke suits, formalwear, clothing alterations, British and Italian cloth, Vietnamese silk and private fittings.", "/media/2026/09/fabric-focus-cloth-books.jpg", "Tailoring cloth books selected at S.T Tailor"],
+  ["/", "Home.html", "S.T Tailor | Bespoke Tailoring in Ho Chi Minh City", "Bespoke suits, shirts, formalwear and alterations at 1st Floor, 258 Le Thanh Ton, Tan Dinh Ward, Ho Chi Minh City. Private consultations available.", "/media/2026/06/background-hero-trang-lien-he-sttailor.webp", "Private fitting at S.T Tailor in Ho Chi Minh City | Buổi thử đồ riêng tại S.T Tailor ở Thành phố Hồ Chí Minh"],
+  ["/gioi-thieu/", "About.html", "About S.T Tailor | Bespoke Tailoring & Alterations in HCMC", "Meet S.T Tailor in Ho Chi Minh City for bespoke suits, formalwear, clothing alterations, British and Italian cloth, Vietnamese silk and private fittings.", "/media/2026/09/fabric-focus-cloth-books.jpg", "Tailoring cloth books selected at S.T Tailor | Các sổ vải may đo được tuyển chọn tại S.T Tailor"],
   ["/dich-vu/", "Services.html", "Bespoke Tailoring & Alterations in HCMC | S.T Tailor", "Explore bespoke suits, shirts, formalwear, womenswear, fittings and clothing alterations by S.T Tailor in central Ho Chi Minh City.", "/media/2026/09/st-tailor-client-fabric-consultation.jpg", "Client reviewing tailoring fabrics with S.T Tailor | Khách hàng chọn vải may đo cùng S.T Tailor"],
-  ["/gallery/", "Gallery.html", "Bespoke Tailoring Gallery in HCMC | S.T Tailor", "View S.T Tailor's cloth, fittings, suits, formalwear, womenswear, garment details and showroom in Ho Chi Minh City.", "/media/2026/09/st-tailor-gallery-showroom-tailoring-display.jpg", "S.T Tailor showroom and tailoring display"],
+  ["/gallery/", "Gallery.html", "Bespoke Tailoring Gallery in HCMC | S.T Tailor", "View S.T Tailor's cloth, fittings, suits, formalwear, womenswear, garment details and showroom in Ho Chi Minh City.", "/media/2026/09/st-tailor-gallery-showroom-tailoring-display.jpg", "S.T Tailor showroom and tailoring display | Showroom và khu trưng bày đồ may đo S.T Tailor"],
   [fittingFilmRoute, "FittingFilm.html", "A Fitting in Motion | S.T Tailor Film", galleryFilm.description, galleryFilm.poster, "Client trying on a long black skirt at S.T Tailor | Khách thử chân váy đen dài tại S.T Tailor"],
-  ["/bang-gia/", "Pricing.html", "Bespoke Tailoring Prices in HCMC | S.T Tailor", "Review starting prices for bespoke suits, shirts, formalwear and clothing alterations before consulting S.T Tailor in Ho Chi Minh City.", "/media/2026/09/st-tailor-navy-double-breasted-front.jpeg", "Navy double-breasted suit by S.T Tailor"],
-  ["/phuong-thuc-thanh-toan/", "Payment.html", "Payment Methods | S.T Tailor HCMC", "Pay S.T Tailor in VND cash, by bank transfer or QR, with international credit/debit cards, or via Apple Pay, Google Pay and Samsung Pay NFC payments.", "/media/2026/06/store-sttailor-2.webp", "S.T Tailor showroom in Ho Chi Minh City"],
-  ["/lien-he/", "Contact.html", "Contact S.T Tailor HCMC | Private Consultation", "Contact S.T Tailor by telephone, email, Messenger, Zalo, Instagram or WhatsApp and arrange a private tailoring consultation.", "/media/2026/06/store-sttailor-1.webp", "S.T Tailor showroom at 258 Le Thanh Ton"],
-  ["/cam-nang-may-do/", "GuideHub.html", "Tailoring Guide in HCMC | S.T Tailor", "Read practical bilingual guidance from S.T Tailor on choosing cloth, fittings, alterations and caring for tailored garments in Ho Chi Minh City.", "/media/2026/09/fabric-focus-swatch-books.jpg", "Tailoring cloth swatches at S.T Tailor"],
-  ["/chon-vai-may-do/", "GuideCloth.html", "How to Choose Suit Fabric in HCMC | S.T Tailor", "Choose suit and formalwear cloth by occasion, climate, drape and care with practical bilingual guidance from S.T Tailor in Ho Chi Minh City.", "/media/2026/09/st-tailor-gallery-canonico-cloth-books.jpg", "Vitale Barberis Canonico cloth books at S.T Tailor"],
-  ["/quy-trinh-thu-do/", "GuideFitting.html", "Bespoke Fitting Process in HCMC | S.T Tailor", "Understand consultation, measurement, fittings, refinement and handover for a bespoke garment at S.T Tailor in central Ho Chi Minh City.", "/media/2026/09/st-tailor-client-measurement-session.jpg", "Tailor measuring a client during a fitting at S.T Tailor"],
-  ["/chinh-sua-trang-phuc/", "GuideAlterations.html", "Clothing Alterations in HCMC | S.T Tailor Guide", "Learn what S.T Tailor assesses before altering trouser hems, waists, jacket sleeves and garment repairs in central Ho Chi Minh City.", "/media/2026/09/st-tailor-gallery-trouser-interior-detail.jpg", "Tailored trouser interior and seam finishing at S.T Tailor"],
-  ["/bao-quan-giat-la/", "GuideCare.html", "Suit Care & Garment Cleaning Guide | S.T Tailor", "Follow a practical bilingual guide to airing, brushing, storing, spot care, washing, ironing and professional cleaning for tailored garments.", "/media/2026/09/st-tailor-gallery-jacket-lining-mannequin.jpg", "Tailored jacket lining and construction at S.T Tailor"],
+  ["/bang-gia/", "Pricing.html", "Bespoke Tailoring Prices in HCMC | S.T Tailor", "Review starting prices for bespoke suits, shirts, formalwear and clothing alterations before consulting S.T Tailor in Ho Chi Minh City.", "/media/2026/09/st-tailor-navy-double-breasted-front.jpeg", "Navy double-breasted suit by S.T Tailor | Suit xanh navy hai hàng khuy do S.T Tailor may"],
+  ["/phuong-thuc-thanh-toan/", "Payment.html", "Payment Methods | S.T Tailor HCMC", "Pay S.T Tailor in VND cash, by bank transfer or QR, with international credit/debit cards, or via Apple Pay, Google Pay and Samsung Pay NFC payments.", "/media/2026/06/store-sttailor-2.webp", "S.T Tailor showroom in Ho Chi Minh City | Showroom S.T Tailor tại Thành phố Hồ Chí Minh"],
+  ["/lien-he/", "Contact.html", "Contact S.T Tailor HCMC | Private Consultation", "Contact S.T Tailor by telephone, email, Messenger, Zalo, Instagram or WhatsApp and arrange a private tailoring consultation.", "/media/2026/06/store-sttailor-1.webp", "S.T Tailor showroom at 258 Le Thanh Ton | Showroom S.T Tailor tại 258 Lê Thánh Tôn"],
+  ["/cam-nang-may-do/", "GuideHub.html", "Tailoring Guide in HCMC | S.T Tailor", "Read practical bilingual guidance from S.T Tailor on choosing cloth, fittings, alterations and caring for tailored garments in Ho Chi Minh City.", "/media/2026/09/fabric-focus-swatch-books.jpg", "Tailoring cloth swatches at S.T Tailor | Mẫu vải may đo tại S.T Tailor"],
+  ["/chon-vai-may-do/", "GuideCloth.html", "How to Choose Suit Fabric in HCMC | S.T Tailor", "Choose suit and formalwear cloth by occasion, climate, drape and care with practical bilingual guidance from S.T Tailor in Ho Chi Minh City.", "/media/2026/09/st-tailor-gallery-canonico-cloth-books.jpg", "Vitale Barberis Canonico cloth books at S.T Tailor | Sổ mẫu vải Vitale Barberis Canonico tại S.T Tailor"],
+  ["/quy-trinh-thu-do/", "GuideFitting.html", "Bespoke Fitting Process in HCMC | S.T Tailor", "Understand consultation, measurement, fittings, refinement and handover for a bespoke garment at S.T Tailor in central Ho Chi Minh City.", "/media/2026/09/st-tailor-client-measurement-session.jpg", "Tailor measuring a client during a fitting at S.T Tailor | Thợ may lấy số đo khách trong buổi thử đồ tại S.T Tailor"],
+  ["/chinh-sua-trang-phuc/", "GuideAlterations.html", "Clothing Alterations in HCMC | S.T Tailor Guide", "Learn what S.T Tailor assesses before altering trouser hems, waists, jacket sleeves and garment repairs in central Ho Chi Minh City.", "/media/2026/09/st-tailor-gallery-trouser-interior-detail.jpg", "Tailored trouser interior and seam finishing at S.T Tailor | Mặt trong quần tây may đo và đường hoàn thiện tại S.T Tailor"],
+  ["/bao-quan-giat-la/", "GuideCare.html", "Suit Care & Garment Cleaning Guide | S.T Tailor", "Learn how to air, brush, wash, press, store and pack tailored garments. Find out when to use a professional cleaner or ask S.T Tailor for a minor repair.", "/media/2026/09/st-tailor-gallery-jacket-lining-mannequin.jpg", "Tailored jacket lining and construction at S.T Tailor | Lớp lót và kết cấu áo khoác may đo tại S.T Tailor"],
   [clientCareHubRoute, "ClientCare.html", "Client Care for Bespoke Orders | S.T Tailor", "Find out how to pay for, collect, care for or raise a concern about a tailored garment from S.T Tailor in Ho Chi Minh City.", "/media/2026/06/store-sttailor-2.webp", "S.T Tailor showroom for garment collection and aftercare | Showroom S.T Tailor, nơi nhận và chăm sóc trang phục"],
-  ["/doi-tra-hoan-tien/", "Returns.html", "Returns & Refunds for Tailored Garments | S.T Tailor", "Read S.T Tailor's bilingual returns and refunds policy for made-to-measure garments, alterations, order concerns, cancellations and refunds.", "/media/2026/09/fabric-focus-cloth-books.jpg", "Tailoring cloth books used when confirming a S.T Tailor order"],
-  ["/chinh-sach-van-chuyen/", "Shipping.html", "Shipping & Delivery for Tailored Garments | S.T Tailor", "Explore S.T Tailor's bilingual delivery options for showroom collection, Ho Chi Minh City couriers, Vietnam shipping and international dispatch.", "/media/2026/06/store-sttailor-2.webp", "S.T Tailor showroom for garment collection and handover"],
-  ["/dieu-khoan-dieu-kien/", "Terms.html", "Terms & Conditions for Tailoring Orders | S.T Tailor", "Review S.T Tailor's bilingual order terms covering quotations, bespoke fittings, payments, delivery, changes and consumer rights in Vietnam.", "/media/2026/09/fabric-focus-cloth-books.jpg", "S.T Tailor fabric library for bespoke orders"],
-  ["/chinh-sach-bao-mat/", "Privacy.html", "Privacy Policy & Client Data | S.T Tailor", "Learn how S.T Tailor handles enquiries, measurements, order details and website analytics, with bilingual privacy information and contact options.", "/media/2026/06/store-sttailor-1.webp", "S.T Tailor showroom in Ho Chi Minh City"],
+  ["/doi-tra-hoan-tien/", "Returns.html", "Returns & Refunds for Tailored Garments | S.T Tailor", "Read S.T Tailor's bilingual returns and refunds policy for made-to-measure garments, alterations, order concerns, cancellations and refunds.", "/media/2026/09/fabric-focus-cloth-books.jpg", "Cloth books for tailoring orders at S.T Tailor | Sổ mẫu vải dùng khi đặt may tại S.T Tailor"],
+  ["/chinh-sach-van-chuyen/", "Shipping.html", "Shipping & Delivery for Tailored Garments | S.T Tailor", "Explore S.T Tailor's bilingual delivery options for showroom collection, Ho Chi Minh City couriers, Vietnam shipping and international dispatch.", "/media/2026/06/store-sttailor-2.webp", "S.T Tailor showroom for garment collection and handover | Showroom S.T Tailor, nơi bàn giao và nhận trang phục"],
+  ["/dieu-khoan-dieu-kien/", "Terms.html", "Terms & Conditions for Tailoring Orders | S.T Tailor", "Review S.T Tailor's bilingual order terms covering quotations, bespoke fittings, payments, delivery, changes and consumer rights in Vietnam.", "/media/2026/09/fabric-focus-cloth-books.jpg", "S.T Tailor cloth selection for bespoke orders | Bộ mẫu vải đặt may riêng của S.T Tailor"],
+  ["/chinh-sach-bao-mat/", "Privacy.html", "Privacy Policy & Client Data | S.T Tailor", "Learn how S.T Tailor handles enquiries, measurements, order details and website analytics, with bilingual privacy information and contact options.", "/media/2026/06/store-sttailor-1.webp", "S.T Tailor showroom in Ho Chi Minh City | Showroom S.T Tailor tại Thành phố Hồ Chí Minh"],
   ...[...tailoringPages, ...showcasePages].map(({ route, source, title, description, image, imageAlt }) => [route, source, title, description, image, imageAlt])
 ];
 
@@ -163,6 +163,7 @@ const guideRoutes = [
     .map(({ route, labels }) => [route, ...labels])
 ];
 const serviceRoutes = tailoringPages.filter(({ source }) => source.startsWith("Service"));
+const usesGuideLayout = (file) => file.startsWith("Guide") || serviceRoutes.some(({ source }) => source === file);
 const serviceCatalog = [
   ...serviceRoutes,
   { route: "/chinh-sua-trang-phuc/", labels: ["Clothing alterations", "Chỉnh sửa trang phục"] },
@@ -297,10 +298,10 @@ function transformShowcase(page, html) {
     <div class="st-showcase__shell st-showcase__hero-grid">
       <div class="st-showcase__lead">
         <h1 id="st-showcase-title">${heading}<span lang="vi">${vietnamese}</span></h1>
-        <p>${summary[0]}<span lang="vi">${summary[1]}</span></p>
         <a class="st-showcase__action st-showcase__action--primary" href="/lien-he/">Arrange a consultation<span lang="vi">Đặt lịch tư vấn</span></a>
       </div>
       <figure class="st-showcase__portrait"><img class="st-showcase__hero-image" src="${image}" alt="${imageAlt}" loading="eager" fetchpriority="high"></figure>
+      ${bilingualProse(`<p class="st-showcase__hero-intro">${summary[0]}<span lang="vi">${summary[1]}</span></p>`)}
     </div>
   </header>`);
 }
@@ -356,6 +357,53 @@ function removeElementByClass(html, tag, className) {
 function removeElementById(html, tag, id) {
   const range = findElementById(html, tag, id);
   return range ? `${html.slice(0, range.start)}${html.slice(range.end)}` : html;
+}
+
+function bilingualProse(markup) {
+  return markup.replace(/<p(?:\s[^>]*)?>([\s\S]*?)<\/p>/g, (paragraph, content) => {
+    const pair = /^([\s\S]+?)<span lang="vi">([\s\S]+)<\/span>\s*$/.exec(content);
+    const opening = paragraph.slice(0, paragraph.indexOf(">"));
+    if (!pair || /class="[^"]*(?:kicker|eyebrow)/.test(opening)) return paragraph;
+    const english = pair[1].trim().replace(/<br\s*\/?\s*>$/i, "").trim();
+    const attributes = opening.includes(' class="')
+      ? opening.replace(/ class="([^"]+)"/, ' class="$1 st-prose-pair"')
+      : opening + ' class="st-prose-pair"';
+    return `${attributes}><span lang="en">${english}</span><span lang="vi">${pair[2]}</span></p>`;
+  });
+}
+
+function layoutEditorialCopy(html) {
+  const regions = [
+    ["div", "st-home-editorial__intro"],
+    ["header", "st-cloth-heritage__head"],
+    ["header", "st-tripadvisor__copy"],
+    ["header", "st-service-commission-map__head"],
+    ["header", "st-bespoke-process__head"],
+    ["header", "st-gallery-numpad__heading"],
+    ["header", "st-gallery-series__head"],
+    ["div", "st-contact-heading"],
+    ["header", "st-client-care__header"],
+    ["header", "st-showcase__collection"],
+    ["div", "st-showcase__details"],
+    ["p", "st-showcase__story-intro"],
+    ["p", "st-payment-methods__note"]
+  ];
+  for (const [tag, name] of regions) {
+    const range = findElementByClass(html, tag, name);
+    if (!range) continue;
+    html = html.slice(0, range.start) + bilingualProse(html.slice(range.start, range.end)) + html.slice(range.end);
+  }
+  const heroCopy = /(<div class="st-guide-hero__copy">)([\s\S]*?)(<\/div>\s*)(?=<figure class="st-guide-hero__media")/;
+  if (!html.includes("st-guide-hero__intro")) {
+    html = html.replace(heroCopy, (whole, opening, copy, closing) => {
+      const intro = copy.match(/<p(?: class="st-suit-fit__intro")?>[\s\S]*?<\/p>/)?.[0];
+      if (!intro) return whole;
+      const prose = bilingualProse(intro).replace('st-prose-pair"', 'st-prose-pair st-guide-hero__intro"');
+      if (prose === intro) return whole;
+      return opening + copy.replace(intro, "") + closing + prose + "\n      ";
+    });
+  }
+  return html;
 }
 
 function replaceVisibleAtelier(html) {
@@ -434,7 +482,7 @@ function transformFooter(html, route) {
   html = html.replace(/(<nav class="st-footer-v7__social"[\s\S]*?)(<\/nav>)/, `$1<a href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer"><img src="/icons/tripadvisor-logomark.svg" alt="" aria-hidden="true" width="20" height="20" loading="lazy" decoding="async"><span>Tripadvisor</span></a>$2`);
   if (route === "/lien-he/") {
     // Contact already embeds the same showroom map in its main content.
-    html = html.replace(/<iframe\b[^>]*title="S\.T Tailor showroom map"[^>]*><\/iframe>/, "");
+    html = html.replace(/<iframe\b[^>]*src="https:\/\/www\.google\.com\/maps\/embed\?[^"]+"[^>]*><\/iframe>/, "");
   }
   return replaceVisibleAtelier(html);
 }
@@ -535,14 +583,14 @@ const galleryAltText = {
   "st-tailor-gallery-duk-0012.jpg": "Black tuxedo with tailored satin lapel | Tuxedo đen với ve satin may đo",
   "st-tailor-gallery-duk-9733.jpg": "White pleated-front dress shirt and black trousers on a tailoring form, with brown shoes beside it | Sơ mi lễ phục trắng xếp ly cùng quần đen trên ma-nơ-canh, bên cạnh là đôi giày nâu",
   "sttailorhcm_3971189422263494295.jpg": "Black jacket with pale basting stitches and red patterned lining | Áo khoác đen có đường chỉ lược sáng màu và lớp lót đỏ họa tiết",
-  "sttailorhcm_3971191631789221081.jpg": "Navy suit displayed on a mannequin | Suit xanh navy trưng bày trên mannequin",
+  "sttailorhcm_3971191631789221081.jpg": "Two-button navy jacket with a flap pocket and a jetted pocket | Áo khoác navy hai khuy với một túi nắp và một túi viền",
   "st-tailor-gallery-client-charcoal-suit.jpg": "Client wearing a charcoal tailored suit in the showroom | Khách hàng mặc suit xám than may đo tại showroom",
   "st-tailor-gallery-navy-formal-front.jpg": "Client in a navy formal suit, front view | Khách hàng mặc suit lễ phục xanh navy, góc chính diện",
   "st-tailor-archive-navy-formal-back.jpg": "Client in a navy formal suit, back view | Khách hàng mặc suit lễ phục xanh navy, góc phía sau",
   "st-tailor-archive-navy-formal-profile.jpg": "Client in a navy formal suit, side profile | Khách hàng mặc suit lễ phục xanh navy, góc nghiêng",
   "st-tailor-navy-double-breasted-front.jpeg": "Navy double-breasted suit on a mannequin | Suit xanh navy hai hàng nút trên mannequin",
-  "st-tailor-archive-atelier-one.jpg": "Navy tailored suit on a mannequin by the coast | Suit xanh navy may đo trên mannequin bên bờ biển",
-  "st-tailor-archive-atelier-two.jpg": "Grey double-breasted suit in a tailoring room | Suit xám hai hàng nút trong không gian nhà may",
+  "st-tailor-archive-navy-coastal-suit.jpg": "Navy tailored suit on a mannequin by the coast | Suit xanh navy may đo trên mannequin bên bờ biển",
+  "st-tailor-archive-grey-double-breasted-suit.jpg": "Grey double-breasted suit in a tailoring room | Suit xám hai hàng nút trong không gian nhà may",
   "st-tailor-gallery-grey-suit.jpg": "Grey tailored suit on a mannequin by a window | Suit xám may đo trên mannequin cạnh cửa sổ",
   "st-tailor-gallery-beige-double-breasted-suit.png": "Cream double-breasted suit on a mannequin | Suit kem hai hàng nút trên mannequin",
   "st-tailor-gallery-gray-double-breasted-suit.png": "Light grey double-breasted suit on a mannequin | Suit xám nhạt hai hàng nút trên mannequin",
@@ -581,7 +629,7 @@ const galleryAltText = {
   "navy-notch-lapel.jpg": "Navy blazer with notch lapel and yellow pocket square | Blazer xanh navy với ve chữ K và khăn túi vàng",
   "navy-suit-construction.jpeg": "Navy suit showing front, side, back and lapel views | Suit xanh navy với các góc chính diện, nghiêng, sau và ve áo",
   "st-tailor-archive-gold-jacket-detail.jpg": "Client opening a jacket to show gold lining | Khách hàng mở áo khoác để thể hiện lớp lót vàng",
-  "st-tailor-archive-atelier-three.jpg": "Grey patterned jacket on a mannequin in the tailoring room | Áo khoác xám họa tiết trên mannequin trong không gian nhà may",
+  "st-tailor-archive-grey-patterned-jacket.jpg": "Grey patterned jacket on a mannequin in the tailoring room | Áo khoác xám họa tiết trên mannequin trong không gian nhà may",
   "st-tailor-gallery-jacket-lining-mannequin.jpg": "Open tailored jacket showing patterned lining and inner labels | Áo khoác may đo mở thân, thể hiện lớp lót hoa văn và nhãn bên trong",
   "fabric-focus-swatch-books.jpg": "Tailoring swatch books with blue and red cloth samples | Sách mẫu vải may đo với các mẫu xanh navy và đỏ",
   "fabric-focus-catalogue.jpg": "Tailoring cloth catalogue and blue fabric book | Catalogue chất liệu may đo và sổ vải xanh",
@@ -631,7 +679,7 @@ const galleryAltText = {
   "st-tailor-archive-founder-five.jpeg": "Watch and measuring tape during a tailoring appointment | Đồng hồ và thước dây trong buổi hẹn may đo",
   "st-tailor-archive-founder-six.jpeg": "Portrait of a client in a brown tailored suit | Chân dung khách hàng trong suit nâu may đo",
   "st-tailor-archive-founder-seven.jpeg": "Man in a taupe suit looking ahead while holding cloth swatches and a measuring tape | Người mặc suit nâu xám nhìn về phía trước, tay cầm mẫu vải và thước dây",
-  "st-tailor-archive-atelier-four.jpg": "Red patterned jacket lining and S.T Tailor label | Lớp lót áo khoác đỏ hoa văn và nhãn S.T Tailor",
+  "st-tailor-archive-red-patterned-lining.jpg": "Red patterned jacket lining and S.T Tailor label | Lớp lót áo khoác đỏ hoa văn và nhãn S.T Tailor",
   "st-tailor-gallery-partner-certificate.jpg": "Official partner certificate displayed at S.T Tailor | Chứng nhận đối tác chính thức trưng bày tại S.T Tailor",
   "st-tailor-gallery-international-client-one.jpg": "An S.T Tailor team member and a client shake hands while holding a garment bag at the showroom | Đại diện S.T Tailor và khách bắt tay khi đang cầm túi đựng trang phục tại showroom",
   "st-tailor-gallery-international-client-two.jpg": "An S.T Tailor team member and a client face the camera while holding a garment bag at the showroom | Đại diện S.T Tailor và khách nhìn về phía máy ảnh khi đang cầm túi đựng trang phục tại showroom",
@@ -734,7 +782,7 @@ function transformGallery(html) {
   if (!archiveRange || !feedbackRange) throw new Error("Expected WordPress gallery albums are missing.");
   const archive = html.slice(archiveRange.start, archiveRange.end);
   const feedback = html.slice(feedbackRange.start, feedbackRange.end);
-  const archiveDetail = figureForAsset(archive, "st-tailor-archive-atelier-four.jpg");
+  const archiveDetail = figureForAsset(archive, "st-tailor-archive-red-patterned-lining.jpg");
   const archiveFabric = figureForAsset(archive, "st-tailor-gallery-partner-certificate.jpg");
   const archivePlacement = [
     ["st-tailor-archive-founder-one.jpeg", "album-shirts-trousers"],
@@ -819,9 +867,7 @@ function transformGallery(html) {
 function transformPayment(html) {
   const range = findElementByClass(html, "section", "st-payment-methods");
   if (!range) throw new Error("The approved payment-method band is missing.");
-  const methods = removeElementByClass(
-    html.slice(range.start, range.end), "article", "st-payment-card--legacy-transfer"
-  )
+  const methods = html.slice(range.start, range.end)
     .replace('<h2 id="st-methods-title">', '<h1 id="st-methods-title">')
     .replace('</h2>', '</h1>')
     .replaceAll("<h3>", "<h2>")
@@ -854,9 +900,9 @@ function transformAbout(html) {
       <p>Cloth is chosen by hand for the line it creates, the climate it serves and the life the garment will lead.<span lang="vi">Chất liệu được chọn trực tiếp theo đường nét tạo nên, khí hậu sử dụng và nhịp sống của trang phục.</span></p>
     </header>
     <div class="st-cloth-heritage__gallery">
-      <figure class="st-motion st-motion-1"><img src="/media/2026/09/fabric-focus-cloth-books.jpg" alt="Selection of tailoring cloth books at S.T Tailor" loading="lazy" decoding="async"><figcaption><b>British cloth</b><span lang="vi">Vải Anh tuyển chọn</span><small>Structure, resilience and a composed finish.<span lang="vi">Cấu trúc rõ nét, bền dáng và vẻ hoàn thiện điềm đạm.</span></small></figcaption></figure>
-      <figure class="st-motion st-motion-2"><img src="/media/2026/09/st-tailor-gallery-canonico-cloth-books.jpg" alt="Vitale Barberis Canonico cloth books at S.T Tailor" loading="lazy" decoding="async"><figcaption><b>Italian cloth</b><span lang="vi">Vải Ý tinh tế</span><small>Supple handle, refined colour and an elegant drape, including Vitale Barberis Canonico selections.<span lang="vi">Mềm tay, màu sắc tinh tế và độ rũ thanh lịch, trong đó có các lựa chọn Vitale Barberis Canonico.</span></small></figcaption></figure>
-      <figure class="st-motion st-motion-3"><img src="/media/2026/09/st-tailor-gallery-blush-silk-floral-dress.jpg" alt="Silk formalwear detail at S.T Tailor" loading="lazy" decoding="async"><figcaption><b>Vietnamese silk</b><span lang="vi">Lụa tơ tằm Việt Nam</span><small>Light, lustre and graceful movement for ceremonial and personal pieces.<span lang="vi">Ánh sắc, độ nhẹ và chuyển động mềm mại cho lễ phục cùng thiết kế riêng.</span></small></figcaption></figure>
+      <figure class="st-motion st-motion-1"><img src="/media/2026/09/fabric-focus-cloth-books.jpg" alt="Selection of tailoring cloth books at S.T Tailor | Các sổ vải may đo được tuyển chọn tại S.T Tailor" loading="lazy" decoding="async"><figcaption><b>British cloth</b><span lang="vi">Vải Anh tuyển chọn</span><small>Structure, resilience and a composed finish.<span lang="vi">Cấu trúc rõ nét, bền dáng và vẻ hoàn thiện điềm đạm.</span></small></figcaption></figure>
+      <figure class="st-motion st-motion-2"><img src="/media/2026/09/st-tailor-gallery-canonico-cloth-books.jpg" alt="Vitale Barberis Canonico cloth books at S.T Tailor | Sổ mẫu vải Vitale Barberis Canonico tại S.T Tailor" loading="lazy" decoding="async"><figcaption><b>Italian cloth</b><span lang="vi">Vải Ý tinh tế</span><small>Supple handle, refined colour and an elegant drape, including Vitale Barberis Canonico selections.<span lang="vi">Mềm tay, màu sắc tinh tế và độ rũ thanh lịch, trong đó có các lựa chọn Vitale Barberis Canonico.</span></small></figcaption></figure>
+      <figure class="st-motion st-motion-3"><img src="/media/2026/09/st-tailor-gallery-blush-silk-floral-dress.jpg" alt="Floral embroidery on blush silk formalwear | Họa tiết thêu hoa trên lễ phục lụa hồng phấn" loading="lazy" decoding="async"><figcaption><b>Vietnamese silk</b><span lang="vi">Lụa tơ tằm Việt Nam</span><small>Light, lustre and graceful movement for ceremonial and personal pieces.<span lang="vi">Ánh sắc, độ nhẹ và chuyển động mềm mại cho lễ phục cùng thiết kế riêng.</span></small></figcaption></figure>
     </div>
   </div>
 </section>`;
@@ -975,7 +1021,8 @@ function transformPage(sourceFile, html, showcasePage) {
     "About.html": transformAbout,
     "Error.html": transformError
   };
-  return (showcasePage ? transformShowcase(showcasePage, html) : (transforms[sourceFile] ?? replaceVisibleAtelier)(html))
+  const rendered = showcasePage ? transformShowcase(showcasePage, html) : (transforms[sourceFile] ?? replaceVisibleAtelier)(html);
+  return layoutEditorialCopy(rendered)
     .replace(/\bclass="([^"]*)"/g, (_, classes) => `class="${classes.split(/\s+/).filter((name) => name && !/^st-motion(?:-\d+)?$/.test(name)).join(" ")}"`)
     .replaceAll("Confirm the work, finish and timing in writing.", "Discuss the work, finish and timing with us.")
     .replaceAll("Xác nhận hạng mục, hoàn thiện và thời gian bằng văn bản.", "Trao đổi hạng mục, hoàn thiện và thời gian cùng chúng tôi.")
@@ -986,6 +1033,20 @@ function transformPage(sourceFile, html, showcasePage) {
 
 function imagePaths(html) {
   return [...html.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^"]+)"[^>]*>/gi)].map(([, src]) => src);
+}
+
+function leadImagePreload(html) {
+  // Use the same source and sizes as the picture the browser will render.
+  // The home page handles its portrait crop with a separate media query.
+  const lead = html.match(/<picture>(?<sources>(?:<source\b[^>]*>)*)<img\b[^>]*\bfetchpriority="high"[^>]*><\/picture>|(?<image><img\b[^>]*\bfetchpriority="high"[^>]*>)/i);
+  const source = lead?.groups.sources?.match(/<source\b[^>]*>/i)?.[0] ?? lead?.groups.image;
+  if (!source || /\smedia=/.test(source)) return "";
+  const type = source.match(/\stype="([^"]+)"/)?.[1];
+  const srcset = source.match(/\ssrcset="([^"]+)"/)?.[1];
+  const sizes = source.match(/\ssizes="([^"]+)"/)?.[1];
+  const src = source.match(/\ssrc="([^"]+)"/)?.[1];
+  const attributes = srcset && sizes ? `imagesrcset="${srcset}" imagesizes="${sizes}"` : src ? `href="${src}"` : "";
+  return attributes ? `<link rel="preload" as="image" ${type ? `type="${type}" ` : ""}${attributes} fetchpriority="high">` : "";
 }
 
 function enrichImageAttributes(html, { responsiveSizes, deprioritizeLazyImages = false } = {}) {
@@ -1004,7 +1065,7 @@ function enrichImageAttributes(html, { responsiveSizes, deprioritizeLazyImages =
       const isHomeHero = src === homeHeroImage && /\bst-home-v6__hero-media\b/.test(output);
       const isGalleryHero = /\bst-gallery-hero__story-image\b/.test(output);
       const isSuitFitHero = /\bst-suit-fit__hero-image\b/.test(output);
-      const isGuideHero = /\bst-guide-(?:lining|suit-pieces|consultation)-image\b/.test(output);
+      const isLeadImage = /\bfetchpriority="high"/i.test(output);
       const srcset = imageSourceSet(metadata.responsive);
       const sizes = isHomeHero ? homeHeroSizes : isGalleryHero ? galleryHeroSizes
         : isSuitFitHero ? suitFitHeroSizes
@@ -1012,7 +1073,7 @@ function enrichImageAttributes(html, { responsiveSizes, deprioritizeLazyImages =
         : responsiveSizes;
       const lazyAuto = /\bloading="lazy"/i.test(output) ? "auto, " : "";
       output = output.replace(/<img\b/i, `<img srcset="${srcset}" sizes="${lazyAuto}${sizes}"`);
-      if (metadata.responsive_avif?.length && (isGalleryHero || isSuitFitHero || isGuideHero || /\bst-showcase(?:__hero-image|-card__photo)\b/.test(output))) {
+      if (!isHomeHero && metadata.responsive_avif?.length && (isLeadImage || /\bst-showcase-card__photo\b/.test(output))) {
         return `<picture><source type="image/avif" srcset="${imageSourceSet(metadata.responsive_avif)}" sizes="${lazyAuto}${sizes}">${output}</picture>`;
       }
     }
@@ -1184,7 +1245,8 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
   };
   const isCollection = showcaseHub || ["/gallery/", "/cam-nang-may-do/", clientCareHubRoute].includes(route);
   const pageType = route === "/gioi-thieu/" ? "AboutPage" : route === "/lien-he/" ? "ContactPage" : isCollection ? "CollectionPage" : "WebPage";
-  const webPage = { "@type": pageType, "@id": `${canonical}#webpage`, url: canonical, name: title, description, isPartOf: { "@id": "https://sttailor.com/#website" }, about: { "@id": "https://sttailor.com/#business" }, primaryImageOfPage: { "@type": "ImageObject", url: `https://sttailor.com${shareImage}`, caption: shareImageAlt }, inLanguage: ["en", "vi"], dateModified: lastModified };
+  const alternateName = pageLabels.get(route)[1];
+  const webPage = { "@type": pageType, "@id": `${canonical}#webpage`, url: canonical, name: title, alternateName, description, isPartOf: { "@id": "https://sttailor.com/#website" }, about: { "@id": "https://sttailor.com/#business" }, primaryImageOfPage: { "@type": "ImageObject", url: `https://sttailor.com${shareImage}`, caption: shareImageAlt }, inLanguage: ["en", "vi"], dateModified: lastModified };
   const graph = [
     business,
     { "@type": "WebSite", "@id": "https://sttailor.com/#website", url: "https://sttailor.com/", name: "S.T Tailor", alternateName: ["S.T Tailor HCMC", "S.T Tailor Ho Chi Minh City"], inLanguage: ["en", "vi"], publisher: { "@id": "https://sttailor.com/#business" } },
@@ -1231,7 +1293,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     webPage.mainEntity = { "@id": `${canonical}#guides` };
   }
   if (guideRoutes.some(([guideRoute]) => guideRoute === route) || clientCareGuides.some((page) => page.route === route)) {
-    graph.push({ "@type": "Article", "@id": `${canonical}#article`, headline: title.split(" | ")[0], description, image: `https://sttailor.com${shareImage}`, author: { "@id": "https://sttailor.com/#business" }, publisher: { "@id": "https://sttailor.com/#business" }, mainEntityOfPage: { "@id": `${canonical}#webpage` }, dateModified: lastModified, inLanguage: ["en", "vi"] });
+    graph.push({ "@type": "Article", "@id": `${canonical}#article`, headline: title.split(" | ")[0], alternativeHeadline: alternateName, description, image: `https://sttailor.com${shareImage}`, author: { "@id": "https://sttailor.com/#business" }, publisher: { "@id": "https://sttailor.com/#business" }, mainEntityOfPage: { "@id": `${canonical}#webpage` }, dateModified: lastModified, inLanguage: ["en", "vi"] });
     webPage.mainEntity = { "@id": `${canonical}#article` };
   }
   const service = serviceRoutes.find((page) => page.route === route);
@@ -1256,7 +1318,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
       ? { "@type": "Person", name: "Niña Campos", jobTitle: "Singer" }
       : { "@type": "Thing", name: showcasePage.labels[0], alternateName: showcasePage.labels[1] };
     graph.push({
-      "@type": "Article", "@id": articleId, headline: showcasePage.labels[0], description,
+      "@type": "Article", "@id": articleId, headline: showcasePage.labels[0], alternativeHeadline: alternateName, description,
       image: [...new Set([shareImage, ...imagePaths(body)])].map((src) => `https://sttailor.com${src}`),
       about, dateModified: lastModified, inLanguage: ["en", "vi"],
       author: { "@id": business["@id"] }, publisher: { "@id": business["@id"] }, mainEntityOfPage: { "@id": webPage["@id"] }
@@ -1279,25 +1341,11 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
   const sharePreview = shareMetadata.share;
   const shareImageUrl = `https://sttailor.com${sharePreview.src}`;
   const shareDimensions = `<meta property="og:image:width" content="${sharePreview.width}"><meta property="og:image:height" content="${sharePreview.height}">`;
-  let heroPreload = "";
+  let heroPreload = leadImagePreload(body);
   if (sourceFile === "Home.html" && shareMetadata?.portrait) {
     const landscapeSizes = imageSourceSet(shareMetadata.responsive);
     heroPreload = `<link rel="preload" as="image" type="image/avif" media="${homeHeroPortraitMedia}" href="${shareMetadata.portrait_avif}" fetchpriority="high">` +
       `<link rel="preload" as="image" media="not all and ${homeHeroPortraitMedia}" imagesrcset="${landscapeSizes}" imagesizes="${homeHeroSizes}" fetchpriority="high">`;
-  }
-  if (sourceFile === "Gallery.html") {
-    const candidates = imageManifest[galleryHeroImage.slice("/media/".length)].responsive_avif;
-    if (candidates?.length) {
-      heroPreload = `<link rel="preload" as="image" type="image/avif" imagesrcset="${imageSourceSet(candidates)}" imagesizes="${galleryHeroSizes}" fetchpriority="high">`;
-    }
-  }
-  if (sourceFile === suitFitGuide.source || sourceFile === liningGuide.source || sourceFile === suitPiecesGuide.source || hasEditorialGuideHero || showcasePage) {
-    const leadImage = showcaseHub ? showcaseItemsFor(route)[0]?.image : shareImage;
-    const candidates = imageManifest[leadImage?.slice("/media/".length)]?.responsive_avif;
-    if (candidates?.length) {
-      const sizes = sourceFile === suitFitGuide.source ? suitFitHeroSizes : showcasePage?.summary ? showcaseHeroSizes : responsiveSizes;
-      heroPreload = `<link rel="preload" as="image" type="image/avif" imagesrcset="${imageSourceSet(candidates)}" imagesizes="${sizes}" fetchpriority="high">`;
-    }
   }
   const isWatchPage = route === fittingFilmRoute;
   if (isWatchPage) {
@@ -1364,7 +1412,8 @@ function buildImageManifest() {
   const shareImages = [...new Set(routes.map(([, , , , image]) => image.slice("/media/".length)))];
   const homeCards = [...transformHome(readSource("Home.html")).matchAll(/class="st-home-editorial__photo" src="\/media\/([^"]+)"/g)]
     .flatMap(([, asset]) => ["--home-card", asset]);
-  const featureImages = [galleryHeroImage, suitFitGuide.image, liningGuide.image, suitPiecesGuide.image, ...editorialGuideHeroes.map(({ image }) => image), ...showcaseEntries.map(({ image }) => image)]
+  const guideHeroImages = routes.filter(([, file]) => usesGuideLayout(file)).map(([, , , , image]) => image);
+  const featureImages = [galleryHeroImage, ...guideHeroImages, ...showcaseEntries.map(({ image }) => image)]
     .flatMap((asset) => ["--feature-image", asset.slice("/media/".length)]);
   const result = spawnSync("python", [path.join(root, "scripts", "build-image-manifest.py"), sourceMedia, path.join(dist, "image-manifest.json"), ...shareImages, ...homeCards, ...featureImages], { encoding: "utf8" });
   if (result.status !== 0) throw new Error(`Image manifest generation failed:\n${result.stderr || result.stdout}`);
@@ -1471,7 +1520,6 @@ const notFoundDocument = documentFor("/", "Error.html", "Page not found | S.T Ta
 // the complete site.css remains available for the 404 and source inspection.
 const routeStyles = {};
 const routeProjectSymbols = [...new Set([...productionCss.matchAll(/[.#]((?:st-|stp-|stpr-)[A-Za-z0-9_-]+)/g)].map((match) => match[1]))];
-const usesGuideLayout = (file) => file.startsWith("Guide") || serviceRoutes.some(({ source }) => source === file);
 const guideMarkup = routes.filter(([, file]) => usesGuideLayout(file))
   .map(([route]) => readFileSync(path.join(dist, route.slice(1), "index.html"), "utf8")).join("\n");
 const legacyPageSymbols = ["st-home-v4", "st-home-v5", "st-refund-v1", "st-privacy-v5"];
@@ -1564,7 +1612,7 @@ const vietnameseDescriptions = new Map([
   ["/chon-vai-may-do/", "Chọn vải may suit và lễ phục theo dịp sử dụng, khí hậu, độ rủ và cách chăm sóc."],
   ["/quy-trinh-thu-do/", "Xem từng bước từ tư vấn, lấy số đo, thử và chỉnh phom đến nhận trang phục tại S.T Tailor."],
   ["/chinh-sua-trang-phuc/", "Tìm hiểu nhà may kiểm tra những gì trước khi sửa lai quần, cạp quần, tay áo khoác hoặc xử lý các hư hỏng trên trang phục."],
-  ["/bao-quan-giat-la/", "Xem cách hong, chải, cất giữ, xử lý vết bẩn, giặt và là trang phục may đo, cũng như khi nào nên mang đi giặt chuyên nghiệp."],
+  ["/bao-quan-giat-la/", "Xem cách hong, chải, giặt, là, cất giữ và mang trang phục may đo khi đi xa. Tìm hiểu khi nào cần giặt chuyên nghiệp hoặc mang đến S.T Tailor sửa nhỏ."],
   [clientCareHubRoute, "Tìm thông tin về thanh toán, nhận và bảo quản đồ may đo, cùng cách trao đổi với nhà may khi cần hỗ trợ."],
   ["/doi-tra-hoan-tien/", "Đọc chính sách đổi trả và hoàn tiền đối với đồ may đo, dịch vụ sửa đồ, vấn đề phát sinh và yêu cầu hủy đơn."],
   ["/chinh-sach-van-chuyen/", "Xem các lựa chọn nhận đồ tại nhà may, giao nội thành TP. Hồ Chí Minh, gửi trong nước và gửi quốc tế."],

@@ -10,7 +10,8 @@ function shareReviewStatus() {
   let height = null;
   if (ready) {
     const style = getComputedStyle(widget);
-    height = Math.ceil(reviewSnippets.scrollHeight + parseFloat(style.paddingTop) + parseFloat(style.paddingBottom));
+    const snippetHeight = Math.max(reviewSnippets.scrollHeight, reviewSnippets.getBoundingClientRect().height);
+    height = Math.ceil(snippetHeight + parseFloat(style.paddingTop) + parseFloat(style.paddingBottom));
   }
   window.parent.postMessage({ type: "st-tailor-tripadvisor-status", ready, height }, location.origin);
 }

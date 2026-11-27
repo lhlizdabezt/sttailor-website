@@ -20,7 +20,7 @@ if (reviewFrame) {
     if (status?.type !== "st-tailor-tripadvisor-status" || typeof status.ready !== "boolean") return;
     if (status.ready && (!Number.isSafeInteger(status.height) || status.height < 1)) return;
     reviewsReady = status.ready;
-    reviewHeight = reviewsReady ? Math.min(status.height, 420) : 0;
+    reviewHeight = reviewsReady ? Math.min(status.height, 680) : 0;
     updateReviewVisibility();
   });
   // The vendor can render before this module or before the frame's load event.

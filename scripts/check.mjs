@@ -164,9 +164,12 @@ for (const route of expectedRoutes) {
   const pageSchema = schemaGraph.find((entity) => entity["@id"] === `${canonical}#webpage`);
   const pageReferences = [pageSchema?.isPartOf, pageSchema?.about, pageSchema?.mainEntity, pageSchema?.breadcrumb];
   if (schemaEntities.size !== schemaGraph.length || pageSchema?.url !== canonical ||
-      !pageSchema?.inLanguage?.includes("en") || !pageSchema?.inLanguage?.includes("vi") ||
+      !pageSchema?.alternateName || !pageSchema?.inLanguage?.includes("en") || !pageSchema?.inLanguage?.includes("vi") ||
       pageReferences.some((reference) => reference && !schemaEntities.has(reference["@id"]))) {
     failures.push(`The bilingual page schema contains conflicting or unresolved references: ${route}`);
+  }
+  if (schemaGraph.some((entity) => entity["@type"] === "Article" && entity.alternativeHeadline !== pageSchema?.alternateName)) {
+    failures.push(`Article schema is missing its Vietnamese title: ${route}`);
   }
   pageDiscovery.set(route, { lastModified: pageSchema?.dateModified, primaryImage: pageSchema?.primaryImageOfPage?.url });
   const breadcrumb = schemaGraph.find((item) => item["@type"] === "BreadcrumbList");
@@ -234,6 +237,12 @@ for (const route of expectedRoutes) {
   if (!shareFile || !existsSync(shareFile) || statSync(shareFile).size > 256 * 1024 || shareDimensions.length !== 2 || shareDimensions.some((size) => size < 1 || size > 1200)) {
     failures.push(`Missing or oversized social preview: ${route}`);
   }
+  if (!/property="og:image:alt" content="[^"]+ (?:\||\/) [^"]+"/.test(html) || !/ (?:\||\/) /.test(pageSchema?.primaryImageOfPage?.caption ?? "")) {
+    failures.push(`Social and schema image descriptions must include English and Vietnamese: ${route}`);
+  }
+  if (/\bfetchpriority="high"/.test(mainContent) && !/<link rel="preload" as="image"/.test(html)) {
+    failures.push(`The priority editorial image has no matching head preload: ${route}`);
+  }
   if (/<meta name="keywords"/i.test(html)) failures.push(`Obsolete keyword meta tag must not be used: ${route}`);
   if (html.includes("beta.sttailor.com")) failures.push(`Beta hostname remains in production HTML: ${route}`);
   if ((html.match(/<footer class="st-footer st-footer-v7 st-footer-v8"/g) ?? []).length !== 1) failures.push(`Footer is not singular: ${route}`);
@@ -284,8 +293,13 @@ for (const route of expectedRoutes) {
     if (!/\balt=("[^"]*"|'[^']*')/i.test(image[0])) failures.push(`Image is missing an alt attribute: ${route}`);
     if (/\bsrc="\/media\//i.test(image[0]) && /\balt=(""|'')/i.test(image[0]) && !/\baria-hidden="true"/i.test(image[0])) failures.push(`Content image has empty alt text: ${route}`);
   }
-  if (/\batelier\b/i.test(visibleAndAccessibleText(html))) failures.push(`Visible or accessible Atelier wording remains: ${route}`);
-  if (/\uFFFD|Ã.|Ä.|Æ.|áº.|á»./u.test(visibleAndAccessibleText(html))) failures.push(`Possible Unicode mojibake remains: ${route}`);
+  for (const [, image] of mainContent.matchAll(/<img\b([^>]*\bsrc="\/media\/[^"\s]+"[^>]*)>/gi)) {
+    if (!/\balt="[^"]+ (?:\||\/) [^"]+"/.test(image)) failures.push(`Editorial image alt text must include English and Vietnamese: ${route}`);
+  }
+  if (/\batelier\b/i.test(visibleAndAccessibleText(html)) || /\batelier\b/i.test(html.split("</head>")[0]) || /\batelier\b/i.test(schemaText ?? "") || /\/media\/[^"\s]*-atelier-/i.test(html)) failures.push(`Retired brand wording remains in public content or metadata: ${route}`);
+  // UTF-8 bytes decoded as Western text produce non-ASCII continuation characters.
+  // Legitimate Vietnamese such as NHÃN must not trip this check.
+  if (/\uFFFD|(?:Ã|Ä|Æ|áº|á»)[^\u0000-\u007F]/u.test(visibleAndAccessibleText(html))) failures.push(`Possible Unicode mojibake remains: ${route}`);
   for (const retired of ["/bao-hanh-sua-chua/", "/refund_returns/"]) {
     if (html.includes(retired)) failures.push(`Retired route remains linked: ${route} -> ${retired}`);
   }
@@ -655,7 +669,7 @@ const watchGraph = JSON.parse(watchPage.match(/<script type="application\/ld\+js
 const watchVideos = watchGraph.filter((item) => item["@type"] === "VideoObject");
 if (galleryGraph.some((item) => item["@type"] === "VideoObject") || watchVideos.length !== 1 || watchVideos[0]?.contentUrl !== `https://sttailor.com${filmPath}` || watchVideos[0]?.thumbnailUrl !== `https://sttailor.com${posterPath}` || watchVideos[0]?.duration !== "PT34S") failures.push("The fitting watch page must own the VideoObject.");
 if (!gallery.includes('href="/phim-thu-do/"') || !watchPage.includes(`src="${filmPath}"`)) failures.push("The fitting watch page or its Gallery link is incomplete.");
-for (const requiredAsset of ["st-tailor-archive-atelier-four.jpg", "st-tailor-gallery-partner-certificate.jpg", "st-tailor-made-to-measure-stories-gallery.jpg", "st-tailor-magenta-floral-wrap-dress-and-navy-suit.jpg", "st-tailor-magenta-floral-wrap-dress-full-length.jpg", "st-tailor-magenta-floral-wrap-dress-detail.jpg", "st-tailor-showroom-exterior-evening.jpg"]) {
+for (const requiredAsset of ["st-tailor-archive-red-patterned-lining.jpg", "st-tailor-gallery-partner-certificate.jpg", "st-tailor-made-to-measure-stories-gallery.jpg", "st-tailor-magenta-floral-wrap-dress-and-navy-suit.jpg", "st-tailor-magenta-floral-wrap-dress-full-length.jpg", "st-tailor-magenta-floral-wrap-dress-detail.jpg", "st-tailor-showroom-exterior-evening.jpg"]) {
   if (galleryContentImages.filter((image) => image[1].endsWith(`/${requiredAsset}`)).length !== 1) failures.push(`Gallery retained image must appear exactly once: ${requiredAsset}`);
 }
 

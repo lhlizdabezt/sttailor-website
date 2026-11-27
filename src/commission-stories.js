@@ -18,7 +18,7 @@ export const ninaCampos = {
     ["nina-campos-light-suit-stage-group", "Niña Campos stands between two people on stage, wearing a light suit and dark top.", "Niña Campos đứng giữa hai người trên sân khấu, phối suit sáng màu với áo tối."],
     ["nina-campos-light-lapel-group-portrait", "Close group portrait with Niña Campos in the centre, showing the light jacket lapel over a dark top.", "Chân dung cận cảnh của nhóm với Niña Campos ở giữa, thấy ve áo khoác sáng trên nền áo tối."],
     ["/media/2026/09/st-tailor-gallery-singer-feedback-one.jpg", "Niña Campos in a light suit and dark top, standing beside a man in a white shirt near a staircase.", "Niña Campos mặc suit sáng màu và áo tối, đứng cạnh một người mặc sơ mi trắng gần cầu thang."],
-    ["/media/2026/09/st-tailor-gallery-singer-feedback-two.jpg", "Niña Campos and a man in a white shirt pose by the staircase, with the light suit trousers and shoes in view.", "Niña Campos và một người mặc sơ mi trắng chụp cạnh cầu thang, thấy rõ quần suit sáng màu và giày."]
+    ["/media/2026/09/st-tailor-gallery-singer-feedback-two.jpg", "Niña Campos poses by the staircase beside a man in a white shirt. Her pale pleated trousers and light trainers are visible.", "Niña Campos chụp cạnh cầu thang bên một người mặc sơ mi trắng. Ảnh cho thấy quần xếp ly và giày thể thao sáng màu của cô."]
   ]
 };
 

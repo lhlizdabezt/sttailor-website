@@ -34,6 +34,12 @@ const legacyRoutes = new Map([
   ["/refund_returns/", "/doi-tra-hoan-tien/"],
   ["/bao-hanh-sua-chua/", "/dich-vu/"]
 ]);
+const archiveMedia = {
+  one: { name: "navy-coastal-suit", widths: [360, 480, 672, 768] },
+  two: { name: "grey-double-breasted-suit", widths: [360, 480] },
+  three: { name: "grey-patterned-jacket", widths: [360, 480, 672] },
+  four: { name: "red-patterned-lining", widths: [360, 480, 672, 768] }
+};
 const staticPrefixes = ["/media/", "/icons/", "/styles/", "/scripts/", "/fonts/"];
 const discoveryFiles = new Set(["/robots.txt", "/sitemap.xml", "/llms.txt"]);
 const hourlyFiles = new Set(["/.well-known/security.txt", "/site.webmanifest", `/${indexNowKeyFile}`]);
@@ -56,12 +62,14 @@ function securityHeaders(response, pathname = "/") {
   const cacheable = response.ok || response.status === 304;
   if (pathname === "/llms.txt" && cacheable) {
     headers.set("Content-Type", "text/plain; charset=utf-8");
+    headers.set("Content-Language", "en, vi");
   }
   const contentType = headers.get("Content-Type") || "";
   const isHtml = routes.has(pathname) || pathname.endsWith(".html") || pathname === "/not-found" || contentType.includes("text/html");
   const revalidate = "public, max-age=0, must-revalidate";
   if (isHtml) {
     const isCanonical = routes.has(pathname) && cacheable;
+    if (isCanonical) headers.set("Content-Language", "en, vi");
     // Keep per-page Early Hints outside the limited static asset rule table.
     const stylesheet = isCanonical && buildManifest.routeStyles[pathname];
     if (stylesheet) headers.set("Link", `<${stylesheet.href}>; rel=preload; as=style`);
@@ -131,6 +139,18 @@ export default {
     // Ordinary campaign/query parameters continue to reach the requested page.
     if (url.searchParams.has("attachment_id") || url.searchParams.has("wc-ajax")) {
       return notFound(request, env, url);
+    }
+    const archiveOriginal = /^\/(?:media|wp-content\/uploads)\/2026\/09\/st-tailor-archive-atelier-(one|two|three|four)\.jpg$/.exec(pathname);
+    const archiveVariant = /^\/media\/_responsive\/2026\/09\/st-tailor-archive-atelier-(one|two|three|four)-(\d+)\.webp$/.exec(pathname);
+    if (archiveOriginal) {
+      const { name } = archiveMedia[archiveOriginal[1]];
+      return Response.redirect(new URL(`/media/2026/09/st-tailor-archive-${name}.jpg${url.search}`, url), 301);
+    }
+    if (archiveVariant) {
+      const { name, widths } = archiveMedia[archiveVariant[1]];
+      if (widths.map(String).includes(archiveVariant[2])) {
+        return Response.redirect(new URL(`/media/_responsive/2026/09/st-tailor-archive-${name}-${archiveVariant[2]}.webp${url.search}`, url), 301);
+      }
     }
     const pathWithSlash = pathname === "/" || pathname.endsWith("/") ? pathname : `${pathname}/`;
     const legacyTarget = legacyRoutes.get(pathWithSlash);

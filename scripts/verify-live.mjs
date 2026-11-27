@@ -68,6 +68,7 @@ for (const route of routes) {
   const stylesheet = pageHtml.match(/<link rel="stylesheet" href="([^"]+)"/i)?.[1];
   expect(stylesheet && response.headers.get("link")?.includes(`<${stylesheet}>; rel=preload; as=style`), `${route} does not advertise its current stylesheet to Cloudflare Early Hints`);
   expect(pageHtml.includes('<link rel="describedby" href="/llms.txt" type="text/plain">'), `${route} does not advertise its bilingual discovery guide`);
+  expect(response.headers.get("content-language") === "en, vi", `${route} does not declare both audience languages`);
   expect(response.headers.get("cache-control") === revalidate, `${route} does not revalidate its HTML before reuse`);
   expect((pageHtml.match(/<main\b/gi) ?? []).length === 1 && (pageHtml.match(/<\/main>/gi) ?? []).length === 1, `${route} must have exactly one main landmark`);
   expect(pageHtml.includes('<noscript><img height="1" width="1" style="display:none" alt="" aria-hidden="true" src="https://www.facebook.com/tr?id=2294442874726399&amp;ev=PageView&amp;noscript=1"></noscript>') && !/\bfbq\s*\(/.test(pageHtml), `${route} must use GTM Meta Pixel with its static noscript fallback only`);
@@ -97,6 +98,7 @@ for (const route of routes) {
   expect(mapFrames.length === 1 && !/data-map-(?:load|template|panel)/.test(pageHtml) && mapInFooter === (route !== "/lien-he/"), `${route} must embed one direct Google map without a click-to-display control`);
   expect(footer.includes('class="st-footer-v7__map" href="https://maps.app.goo.gl/'), `${route} has no independent Google Maps directions link`);
   expect(/property="og:image" content="https:\/\/sttailor\.com\/media\/_responsive\/[^"]+-share-[a-f0-9]{12}\.jpg"/.test(pageHtml) && pageHtml.includes('property="og:image:type" content="image/jpeg"'), `${route} has no optimized JPEG social preview`);
+  expect(/property="og:image:alt" content="[^"]+ (?:\||\/) [^"]+"/.test(pageHtml), `${route} has no bilingual social image description`);
   const tripadvisorProfile = "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html";
   expect(footer.split(`href="${tripadvisorProfile}"`).length === 2 && !footer.includes("st-footer-v7__tripadvisor") && !footer.includes("socialButtonRate") && !footer.includes("Rate us on Tripadvisor"), `${route} footer has a missing or duplicated Tripadvisor link, or still contains the removed rate widget`);
   const reviewEmbed = [...pageHtml.matchAll(/<iframe\b[^>]*>/g)].filter(([tag]) => tag.includes(`src="${tripadvisorEmbedPath}"`));
@@ -312,7 +314,7 @@ console.log(`Audited ${publicAssets.length} public assets: originals, responsive
 // A reachable sitemap alone does not prove Cloudflare serves public HTML to
 // crawler requests. This catches broad user-agent blocks and origin differences.
 const crawlerAgents = ["Googlebot", "bingbot", "OAI-SearchBot", "Claude-SearchBot", "PerplexityBot", "Applebot"];
-const crawlerRoutes = ["/", "/gallery/", "/du-an/nina-campos/", "/san-pham/suit-xam-nhat-ve-chu-k/"];
+const crawlerRoutes = ["/", "/gallery/", "/du-an/nina-campos/", "/san-pham/suit-xam-nhat-ve-chu-k/", "/cam-nang-may-do/"];
 await Promise.all(crawlerAgents.map(async (agent) => {
   for (const route of crawlerRoutes) {
     const response = await fetchWithRetry(`${origin}${route}`, { redirect: "manual", headers: { "User-Agent": agent } });
@@ -321,11 +323,17 @@ await Promise.all(crawlerAgents.map(async (agent) => {
   }
 }));
 console.log(`Checked ${crawlerAgents.length} crawler user agents across ${crawlerRoutes.length} canonical bilingual pages.`);
+const imageBot = await fetchWithRetry(`${origin}/media/2026/09/st-tailor-archive-navy-coastal-suit.jpg`,
+  { method: "HEAD", headers: { "User-Agent": "Googlebot-Image" } });
+expect(imageBot.status === 200 && imageBot.headers.get("content-type")?.startsWith("image/") && !/\b(?:noindex|noimageindex)\b/i.test(imageBot.headers.get("x-robots-tag") ?? ""), "Googlebot-Image could not reach the canonical archive image");
+const legacyArchive = await fetchWithRetry(`${origin}/media/_responsive/2026/09/st-tailor-archive-atelier-one-360.webp`, { method: "HEAD", redirect: "manual" });
+expect(legacyArchive.status === 301 && legacyArchive.headers.get("location") === `${origin}/media/_responsive/2026/09/st-tailor-archive-navy-coastal-suit-360.webp`, "The retired archive derivative URL does not redirect to its replacement");
 
 const llms = await fetchWithRetry(`${origin}/llms.txt`);
 const llmsText = new TextDecoder("utf-8", { fatal: true }).decode(await llms.arrayBuffer());
 expect(llms.status === 200 && /^# S\.T Tailor$/m.test(llmsText), "llms.txt is missing its Markdown heading");
 expect(llms.headers.get("cache-control") === revalidate, "llms.txt does not revalidate before reuse");
+expect(llms.headers.get("content-language") === "en, vi", "llms.txt does not declare both audience languages");
 expect(llms.headers.get("content-type")?.toLowerCase() === "text/plain; charset=utf-8" && llmsText === llmsText.normalize("NFC") && llmsText.includes("Địa chỉ: Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định") && !/\uFFFD|á[º»]|Ã[\u0080-\u00BF]/.test(llmsText), "llms.txt does not serve clean, explicitly declared UTF-8 Vietnamese text");
 expect(llmsText === readFileSync(path.join(dist, "llms.txt"), "utf8"), "Production llms.txt differs from the verified release file");
 

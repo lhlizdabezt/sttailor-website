@@ -490,6 +490,28 @@ export const showcaseEntries = [
     imageAlt: "Navy notch-lapel jacket on a form with a pale blue dotted tie and yellow pocket square | Áo khoác navy ve chữ K trên mannequin, phối cà vạt xanh nhạt chấm bi và khăn túi ngực vàng"
   },
   {
+    route: "/san-pham/suit-nau-nhat-lai-lat/",
+    section: "suits-and-jackets",
+    source: "ShowcaseLightBrownSuit.html",
+    labels: ["Light brown suit with trouser turn-ups", "Suit nâu nhạt với quần lai lật"],
+    title: "Light Brown Suit with Trouser Turn-Ups | S.T Tailor",
+    description: "See a light brown S.T Tailor suit with notch lapels and trouser turn-ups. Compare the cloth, accessories and hem above a leather lace-up.",
+    summary: ["A light brown notch-lapel suit with a white shirt, dark brown tie and turned-up trouser hems above brown lace-ups.", "Suit nâu nhạt ve chữ K, phối sơ mi trắng, cà vạt nâu đậm và quần lai lật trên giày da buộc dây nâu."],
+    image: "/media/2026/09/st-tailor-archive-founder-six.jpeg",
+    imageAlt: "Portrait in a light brown notch-lapel suit with a dark brown tie and small lapel pin | Chân dung trong suit nâu nhạt ve chữ K, phối cà vạt nâu đậm và ghim ve áo nhỏ"
+  },
+  {
+    route: "/san-pham/ao-khoac-navy-hai-kieu-tui/",
+    section: "suits-and-jackets",
+    source: "ShowcaseNavyMixedPocketJacket.html",
+    labels: ["Navy jacket with two pocket styles", "Áo khoác navy với hai kiểu túi"],
+    title: "Navy Jacket with Flap and Jetted Pockets | S.T Tailor",
+    description: "See how a flap pocket and jetted pocket sit on this two-button navy jacket. Check pocket position and depth at your S.T Tailor fitting.",
+    summary: ["A two-button navy jacket with notch lapels and two different hip-pocket finishes, shown from the front.", "Áo khoác navy hai khuy, ve chữ K và hai kiểu túi hông khác nhau, chụp chính diện."],
+    image: "/media/2026/09/sttailorhcm_3971191631789221081.jpg",
+    imageAlt: "Front of a two-button navy jacket on a form with one flap and one jetted hip pocket | Thân trước áo khoác navy hai khuy trên ma-nơ-canh, với một túi nắp và một túi viền ở hông"
+  },
+  {
     route: "/san-pham/ao-khoac-gam-xanh-bac/",
     section: "suits-and-jackets",
     source: "ShowcaseSilverBlueBrocadeJacket.html",

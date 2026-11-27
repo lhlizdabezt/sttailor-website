@@ -190,6 +190,26 @@ export const tailoringPages = [
     imageAlt: "Brown tailored trouser hem above leather shoes at S.T Tailor | Lai quần tây nâu trên giày da tại S.T Tailor"
   },
   {
+    route: "/cam-nang-may-do/chon-ve-ao-khoac/",
+    source: "GuideJacketLapels.html",
+    labels: ["Choosing jacket lapels", "Chọn kiểu ve áo khoác"],
+    title: "Notch, Peak or Shawl Lapels? | S.T Tailor",
+    description: "Compare notch, peak and shawl lapels on finished S.T Tailor jackets. Check the width, neckline and fit with the layers you plan to wear.",
+    descriptionVi: "So sánh ve chữ K, ve nhọn và ve sam trên áo khoác S.T Tailor. Thử độ rộng ve và cách phối cổ áo cùng những lớp áo bạn dự định mặc.",
+    image: "/media/2026/09/navy-notch-lapel.jpg",
+    imageAlt: "Navy jacket with notch lapels, a pale blue tie and a yellow pocket square | Áo khoác navy ve chữ K, phối cà vạt xanh nhạt và khăn túi ngực vàng"
+  },
+  {
+    route: "/cam-nang-may-do/chon-cap-va-ly-quan-tay/",
+    source: "GuideTrouserRise.html",
+    labels: ["Choosing trouser rise and pleats", "Chọn độ cao cạp và ly quần tây"],
+    title: "Choosing Trouser Rise and Pleats | S.T Tailor",
+    description: "Choose where tailored trousers sit at the waist and compare a flat front with pleats. Check comfort while sitting before setting the hem.",
+    descriptionVi: "Chọn vị trí cạp quần và so sánh thân trước phẳng với thân trước có ly. Kiểm tra độ thoải mái khi ngồi trước khi chốt chiều dài lai.",
+    image: "/media/2026/09/st-tailor-gallery-duk-9920.jpg",
+    imageAlt: "Folded slate-blue trousers showing the waistband, front pleat and belt loops | Quần tây xanh xám gấp gọn, thấy cạp, ly trước và đỉa quần"
+  },
+  {
     route: "/cam-nang-may-do/chon-suit-hai-manh-ba-manh/",
     source: "GuideSuitPieces.html",
     labels: ["Two-piece and three-piece suits", "Suit hai mảnh và ba mảnh"],

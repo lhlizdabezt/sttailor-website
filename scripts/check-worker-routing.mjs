@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import worker from "../src/worker.js";
 import { tripadvisorEmbedPath } from "../src/security-policy.js";
 import { tailoringPages } from "../src/tailoring-pages.js";
@@ -178,6 +178,30 @@ test("unmatched retired products retain a true 404 instead of a homepage redirec
   const response = await worker.fetch(new Request("https://sttailor.com/product/diamond-necklace/"), env);
   assert.equal(response.status, 404);
   assert.equal(response.headers.get("Location"), null);
+});
+
+test("former archive image URLs point to the same published originals and responsive sizes", async () => {
+  const originals = [
+    ["one", "navy-coastal-suit", [360, 480, 672, 768]],
+    ["two", "grey-double-breasted-suit", [360, 480]],
+    ["three", "grey-patterned-jacket", [360, 480, 672]],
+    ["four", "red-patterned-lining", [360, 480, 672, 768]]
+  ];
+  for (const [old, current, widths] of originals) {
+    const legacy = `st-tailor-archive-atelier-${old}`;
+    const canonical = `st-tailor-archive-${current}`;
+    const redirects = [
+      [`/media/2026/09/${legacy}.jpg`, `/media/2026/09/${canonical}.jpg`],
+      [`/wp-content/uploads/2026/09/${legacy}.jpg`, `/media/2026/09/${canonical}.jpg`],
+      ...widths.map((width) => [`/media/_responsive/2026/09/${legacy}-${width}.webp`, `/media/_responsive/2026/09/${canonical}-${width}.webp`])
+    ];
+    for (const [from, to] of redirects) {
+      assert.ok(existsSync(new URL(`../dist${to}`, import.meta.url)), to);
+      const response = await worker.fetch(new Request(`https://sttailor.com${from}?v=old`, { method: "HEAD" }), env);
+      assert.equal(response.status, 301, from);
+      assert.equal(response.headers.get("Location"), `https://sttailor.com${to}?v=old`);
+    }
+  }
 });
 
 test("security disclosure is a public text resource while unknown well-known paths remain missing", async () => {

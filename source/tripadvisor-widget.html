@@ -7,7 +7,7 @@
   <title>S.T Tailor on Tripadvisor</title>
   <style>
     body { margin: 0; color: #352116; font: 400 15px/1.45 system-ui, sans-serif; }
-    .st-tripadvisor__widget { box-sizing: border-box; min-height: 100vh; display: grid; align-items: center; padding: 10px clamp(12px, 4vw, 22px); }
+    .st-tripadvisor__widget { box-sizing: border-box; min-height: 100vh; display: grid; align-items: center; padding: 12px clamp(12px, 4vw, 22px); }
     #TA_selfserveprop383, .st-tripadvisor__fallback { grid-area: 1 / 1; }
     #TA_selfserveprop383 { visibility: hidden; }
     [data-ready] #TA_selfserveprop383 { visibility: visible; }
@@ -18,26 +18,27 @@
     .st-tripadvisor__fallback:hover { background: #eed9bd; }
     .st-tripadvisor__widget a:focus-visible { outline: 2px solid #6c371e !important; outline-offset: 2px !important; }
     #TA_selfserveprop383 #CDSWIDSSP { width: 100% !important; margin: 0 !important; border: 0 !important; background: transparent !important; }
-    #TA_selfserveprop383 .widSSPData { padding: 0 !important; }
+    #TA_selfserveprop383 .widSSPData { padding: 0 !important; background: transparent !important; }
     #TA_selfserveprop383 .widSSPClickWrap { display: none !important; }
-    #TA_selfserveprop383 .widSSPBranding { padding: 0 !important; }
+    #TA_selfserveprop383 .widSSPBranding { height: auto !important; padding: 0 !important; overflow: visible !important; background: transparent !important; }
     #TA_selfserveprop383 :is(dl, dd, ul) { margin: 0 !important; }
-    #TA_selfserveprop383 .widSSPComponent { margin: 6px 0 !important; padding: 0 !important; }
+    #TA_selfserveprop383 .widSSPComponent { margin: 9px 0 !important; padding: 0 !important; }
     #TA_selfserveprop383 .widSSPH18 { font: 650 16px/1.4 system-ui, sans-serif !important; }
-    #TA_selfserveprop383 .widSSPH11 { color: #624330 !important; font: 600 13px/1.4 system-ui, sans-serif !important; }
-    #TA_selfserveprop383 .widSSPBullet li { margin: 3px 0 !important; }
-    #TA_selfserveprop383 .widSSPQuote { overflow-wrap: anywhere; color: #352116 !important; font: 400 15px/1.4 system-ui, sans-serif !important; }
+    #TA_selfserveprop383 .widSSPH11 { color: #624330 !important; font: 650 14px/1.45 system-ui, sans-serif !important; }
+    #TA_selfserveprop383 .widSSPBullet { display: grid; gap: 6px; padding: 0 !important; }
+    #TA_selfserveprop383 .widSSPBullet li { margin: 0 !important; padding: 6px 8px !important; border-inline-start: 2px solid #b58866 !important; background: #f7ebdb !important; list-style: none; }
+    #TA_selfserveprop383 .widSSPQuote { overflow-wrap: anywhere; text-align: start; color: #352116 !important; font: 400 15px/1.5 system-ui, sans-serif !important; }
     #TA_selfserveprop383 .widSSPAll { padding-top: 6px !important; }
     #TA_selfserveprop383 #CDSWIDSSP a:not(.widSSPClickWrap) {
       box-sizing: border-box;
       display: inline-flex !important;
       max-width: 100%;
-      min-height: 30px;
+      min-height: 32px;
       align-items: center;
       padding: 3px 8px;
       border: 1px solid #815c40;
       color: #352116 !important;
-      background: #fff7eb;
+      background: transparent;
       text-decoration: none;
       overflow-wrap: anywhere;
     }
