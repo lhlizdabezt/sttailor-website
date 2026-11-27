@@ -6,7 +6,7 @@ Public pages, media, responsive image derivatives, icons, stylesheets, scripts a
 
 The generated JSON-LD uses real business details already present in the approved source: `LocalBusiness` and `ClothingStore`, `WebSite`, `WebPage`, `SiteNavigationElement`, `OfferCatalog`, route-level services, and breadcrumbs for inner pages. It does not contain ratings, reviews, or invented popularity claims.
 
-Run `npm run build && npm run check` before every push. The checks reject beta hostnames in production output, duplicate sitemap image locations, missing canonical/robots/schema metadata, an invalid IndexNow ownership key, and incorrect public route inventory. `npm run verify:live` tests production headers, canonical URLs, robots, sitemap, IndexNow key delivery, redirects, 404 behavior, and public route responses.
+Run `npm run build && npm run check` before every push. The checks compare the original photo inventory with the image manifest and the published files, then confirm each page's image sitemap entries cover its editorial photos. They also check canonical URLs, indexing directives, structured data and the IndexNow ownership key. `npm run verify:live` tests production headers, canonical URLs, robots, sitemap, IndexNow key delivery, redirects, 404 behavior, and public route responses.
 
 The GitHub deployment workflow notifies Bing IndexNow after production verification. The key is intentionally public at the canonical root as required by the protocol; it is not an account credential. See [SEO operations](SEO-OPERATIONS.md) for the operational checklist.
 

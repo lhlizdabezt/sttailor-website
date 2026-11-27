@@ -1,6 +1,6 @@
 import { clientCareFailures } from "./client-care-contract.mjs";
 import { businessProfileFailures } from "./business-profile-contract.mjs";
-import { existsSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -21,6 +21,7 @@ const expectedRoutes = ["/", "/gioi-thieu/", "/dich-vu/", "/gallery/", "/phim-th
 const utf8 = new TextDecoder("utf-8", { fatal: true });
 const pageTitles = new Set();
 const pageDescriptions = new Set();
+const pageEditorialImages = new Map();
 const anchorIds = new Map();
 const siteCssSymbols = new Set([...readFileSync(path.join(dist, "styles", "site.css"), "utf8").matchAll(/[.#]((?:st-|stp-|stpr-)[A-Za-z0-9_-]+)/g)].map((match) => match[1]));
 
@@ -98,6 +99,9 @@ for (const route of expectedRoutes) {
     }
   }
   const mainContent = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1] ?? "";
+  pageEditorialImages.set(route, new Set([...mainContent.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^"?#]+)"/gi)]
+    .map(([, src]) => src)
+    .filter((src) => !/(?:logo-sttailor|LinkedInLogo|chu-ky-)/i.test(src))));
   if (/in writing|written quotation|bằng văn bản/i.test(mainContent)) failures.push(`Rigid written-confirmation wording remains on ${route}`);
   if (/PayPal|\bWise\b/i.test(html)) failures.push(`Removed international payment wallet remains in content or metadata on ${route}`);
   if (!html.includes('name="sttailor-build-revision"')) failures.push(`Build revision marker is missing: ${route}`);
@@ -521,7 +525,14 @@ if (galleryImageSources.size !== galleryContentImages.length) failures.push("Gal
 const galleryCover = galleryContentImages.find(([tag]) => tag.includes("st-gallery-hero__story-image"))?.[0] ?? "";
 if (!/-360\.webp 360w/.test(galleryCover) || !/-736\.webp 736w/.test(galleryCover)) failures.push("Gallery cover needs compact candidates through its native width.");
 const imageManifest = JSON.parse(readFileSync(path.join(dist, "image-manifest.json"), "utf8"));
-const sourceImages = Object.keys(imageManifest);
+const sourceMedia = path.join(root, "source", "media");
+const sourceImages = readdirSync(sourceMedia, { recursive: true, withFileTypes: true })
+  .filter((entry) => entry.isFile() && /\.(?:jpe?g|png|webp)$/i.test(entry.name))
+  .map((entry) => path.relative(sourceMedia, path.join(entry.parentPath, entry.name)).split(path.sep).join("/"));
+for (const asset of sourceImages) {
+  if (!Object.hasOwn(imageManifest, asset)) failures.push(`Source image is absent from the public image manifest: ${asset}`);
+  if (!existsSync(path.join(dist, "media", asset))) failures.push(`Source image original is absent from the public build: ${asset}`);
+}
 const exteriorPhoto = imageManifest["2026/09/st-tailor-showroom-exterior-evening.jpg"];
 if (exteriorPhoto?.width !== 3000 || exteriorPhoto?.height !== 4000) failures.push("Evening storefront image must render upright in its responsive variants.");
 const galleryExempt = new Set([
@@ -530,9 +541,7 @@ const galleryExempt = new Set([
   "2026/06/chu-ky-thinh.webp",
   "2026/09/LinkedInLogo.png",
   "2026/09/logo-sttailor.png",
-  "2026/09/logo-sttailor-1000x1024.png",
-  // The fitting film uses this frame as a video poster.
-  "2026/09/st-tailor-womenswear-fitting-poster.webp"
+  "2026/09/logo-sttailor-1000x1024.png"
 ]);
 for (const asset of sourceImages) {
   if (!galleryExempt.has(asset) && !galleryImageSources.has(`/media/${asset}`)) failures.push(`Source editorial image is absent from Gallery: ${asset}`);
@@ -613,7 +622,18 @@ const watchSitemap = sitemap.match(/<url><loc>https:\/\/sttailor\.com\/phim-thu-
 if (!sitemap.includes('xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"') || (sitemap.match(/<video:video>/g) ?? []).length !== 1 || !watchSitemap.includes(`<video:content_loc>https://sttailor.com${filmPath}</video:content_loc>`) || !watchSitemap.includes(`<video:thumbnail_loc>https://sttailor.com${posterPath}</video:thumbnail_loc>`)) failures.push("Fitting watch page video sitemap entry is missing or duplicated.");
 for (const [, location, entry] of sitemap.matchAll(/<url><loc>([^<]+)<\/loc>([\s\S]*?)<\/url>/g)) {
   const images = [...entry.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)].map(([, image]) => image);
-  if (images.length > 1000 || images.length !== new Set(images).size) failures.push(`Image sitemap has invalid image entries for ${location}`);
+  const imageUrls = new Set(images);
+  if (images.length > 1000 || images.length !== imageUrls.size) failures.push(`Image sitemap has invalid image entries for ${location}`);
+  const page = new URL(location);
+  for (const image of images) {
+    const asset = new URL(image);
+    if (asset.origin !== page.origin || !asset.pathname.startsWith("/media/") || !existsSync(path.join(dist, decodeURIComponent(asset.pathname.slice(1))))) {
+      failures.push(`Image sitemap lists an unpublished image on ${page.pathname}: ${image}`);
+    }
+  }
+  for (const src of pageEditorialImages.get(page.pathname) ?? []) {
+    if (!imageUrls.has(`${page.origin}${src}`)) failures.push(`Image sitemap omits an editorial image on ${page.pathname}: ${src}`);
+  }
 }
 const ninaSitemap = sitemap.match(/<url><loc>https:\/\/sttailor\.com\/du-an\/nina-campos\/[\s\S]*?<\/url>/)?.[0] ?? "";
 const ninaSitemapImages = [...ninaSitemap.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)].map(([, image]) => image);
