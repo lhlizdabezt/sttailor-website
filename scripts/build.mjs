@@ -699,6 +699,10 @@ const galleryChapters = [
   ["appointments", "People and appointments", "Khách hàng và lịch hẹn", "/du-an/nina-campos/", "View the Niña Campos project", "Xem dự án cùng Niña Campos"],
   ["showroom", "The showroom", "Không gian nhà may", "/lien-he/#loi-vao-nha-may", "Find the showroom entrance", "Xem lối vào nhà may"]
 ];
+const galleryPortfolioLinks = {
+  suits: ["/san-pham/suit-xam-nhat-hai-hang-khuy/", "/san-pham/ao-khoac-xanh-da-troi/", "/du-an/suit-le-phuc-navy/"],
+  appointments: ["/du-an/trang-phuc-san-khau/"]
+};
 
 function transformGallery(html) {
   html = html.replace(
@@ -778,8 +782,13 @@ function transformGallery(html) {
     const shell = album && findElementByClass(html.slice(album.start, album.end), "div", "st-gallery-shell");
     if (!shell) throw new Error(`Gallery chapter has no content container: ${id}`);
     const at = album.start + shell.closeStart;
+    const portfolioLinks = (galleryPortfolioLinks[id] ?? []).map((route) => {
+      const [english, vietnamese] = pageLabels.get(route);
+      return `<a class="st-gallery-album__guide" href="${route}">${xmlEscape(english)}<span lang="vi">${xmlEscape(vietnamese)}</span></a>`;
+    }).join("");
     const actions = `<div class="st-gallery-album__actions">
       <a class="st-gallery-album__guide" href="${href}">${en}<span lang="vi">${vi}</span></a>
+      ${portfolioLinks}
       <a class="st-gallery-album__guide" href="#gallery-chapters">Back to the albums<span lang="vi">Về danh sách album</span></a>
     </div>`;
     html = `${html.slice(0, at)}${actions}${html.slice(at)}`;
@@ -793,11 +802,11 @@ function transformPayment(html) {
   let methods = html.slice(range.start, range.end)
     .replace('<h2 id="st-methods-title">', '<h1 id="st-methods-title">')
     .replace('</h2>', '</h1>')
-    .replace(/<p class="st-payment-methods__note">[\s\S]*?<\/p>/, '<p class="st-payment-methods__note">Choose the method that suits you. We will share the payment details for your order.<span lang="vi">Hãy chọn cách thanh toán thuận tiện. Nhà may sẽ cung cấp thông tin thanh toán cho đơn của bạn.</span></p>');
+    .replace(/<p class="st-payment-methods__note">[\s\S]*?<\/p>/, '<p class="st-payment-methods__note">We’ll share the payment details and any deposit or balance due for your order.<span lang="vi">Nhà may sẽ cung cấp thông tin thanh toán và cho bạn biết khoản cọc hoặc số tiền còn lại cần thanh toán cho đơn hàng.</span></p>');
   const copy = [
     ['For cash payments, please use Vietnamese dong (VND) only. You can also pay by bank transfer or QR using the details for your order.', 'Nhà may chỉ nhận tiền mặt bằng đồng Việt Nam (VND). Bạn cũng có thể chuyển khoản hoặc quét mã QR theo thông tin của đơn hàng.'],
-    ['We accept all credit and debit card types and prepaid cards, including Visa, Mastercard, Maestro, American Express, JCB, UnionPay, Discover, Diners Club and RuPay. Local NAPAS cards are accepted. We can help you choose the payment channel for your card.', 'Chúng tôi chấp nhận mọi loại thẻ tín dụng và ghi nợ, cùng thẻ trả trước, gồm Visa, Mastercard, Maestro, American Express, JCB, UnionPay, Discover, Diners Club và RuPay. Có thể thanh toán bằng thẻ nội địa NAPAS. Chúng tôi sẽ hỗ trợ chọn kênh phù hợp với thẻ của bạn.'],
-    ['Pay with Apple Pay, Google Pay or Samsung Pay using a compatible NFC device and supported card. Ask us for help with contactless payment at the showroom.', 'Thanh toán chạm bằng Apple Pay, Google Pay hoặc Samsung Pay với thiết bị NFC và thẻ tương thích. Chúng tôi hỗ trợ thanh toán không tiếp xúc tại showroom.']
+    ['We accept credit and debit cards and prepaid cards, including Visa, Mastercard, Maestro, American Express, JCB, UnionPay, Discover, Diners Club and RuPay. You can also use a Vietnamese NAPAS card. If your card is declined, we can help you choose another way to pay.', 'Chúng tôi nhận thẻ tín dụng và ghi nợ, cũng như thẻ trả trước, gồm Visa, Mastercard, Maestro, American Express, JCB, UnionPay, Discover, Diners Club và RuPay. Bạn cũng có thể dùng thẻ nội địa NAPAS. Nếu giao dịch thẻ bị từ chối, chúng tôi có thể giúp bạn chọn cách thanh toán khác.'],
+    ['Pay with Apple Pay, Google Pay or Samsung Pay at the showroom. You’ll need a compatible NFC device and a card that supports contactless payments through your wallet.', 'Bạn có thể thanh toán bằng Apple Pay, Google Pay hoặc Samsung Pay tại nhà may. Hãy dùng thiết bị có NFC và thẻ hỗ trợ thanh toán chạm qua ví điện tử của bạn.']
   ];
   let card = 0;
   methods = methods.replace(/<article class="st-payment-card">[\s\S]*?<\/article>/g, (article) => {
@@ -883,40 +892,40 @@ function transformAbout(html) {
         <p class="st-lux-eyebrow">TRIPADVISOR</p>
         <h2 id="st-tripadvisor-title">Reviews from our clients<span lang="vi">Đánh giá của khách hàng</span></h2>
       </div>
-      <p>Browse client reviews and visitor photographs before your first fitting. If you have visited the showroom, you can leave a review about your experience.<span lang="vi">Xem đánh giá và ảnh khách đã đăng trước buổi thử đồ đầu tiên. Nếu đã ghé showroom, bạn có thể viết đánh giá về trải nghiệm của mình.</span></p>
+      <p>Read about other clients’ visits before your first fitting. If you’ve visited us, you can share your own experience on Tripadvisor.<span lang="vi">Trước buổi thử đồ đầu tiên, bạn có thể tham khảo trải nghiệm của những khách đã ghé nhà may. Nếu đã đến S.T Tailor, bạn cũng có thể chia sẻ trải nghiệm của mình trên Tripadvisor.</span></p>
     </header>
-    <div class="st-tripadvisor__card">
+    <article class="st-tripadvisor__card" aria-labelledby="st-tripadvisor-listing-title">
       <div class="st-tripadvisor__review">
         <div>
-          <h3>S.T Tailor on Tripadvisor<span lang="vi">S.T Tailor trên Tripadvisor</span></h3>
-          <p>Open the listing to see the latest reviews and visitor photos.<span lang="vi">Mở trang Tripadvisor để xem đánh giá và ảnh mới nhất do khách đăng.</span></p>
-          <p id="st-tripadvisor-link-note" class="st-tripadvisor__window">Tripadvisor links open in a new tab.<span lang="vi">Liên kết Tripadvisor mở trong thẻ mới.</span></p>
+          <h3 id="st-tripadvisor-listing-title">S.T Tailor on Tripadvisor<span lang="vi">S.T Tailor trên Tripadvisor</span></h3>
+          <p>See the latest reviews and visitor photos on our listing.<span lang="vi">Xem đánh giá và ảnh mới nhất do khách đăng trên trang Tripadvisor của nhà may.</span></p>
         </div>
         <div class="st-tripadvisor__badge">
           <div class="st-tripadvisor__badge-placeholder" aria-hidden="true">
             <img src="/icons/tripadvisor-logomark.svg" alt="" width="34" height="24" loading="lazy">
-            <span>Tripadvisor<span lang="vi">Trang đánh giá chính thức</span></span>
+            <span>Tripadvisor<span lang="vi">Trang đánh giá của S.T Tailor</span></span>
           </div>
-          <iframe class="st-tripadvisor__rating" src="${tripadvisorEmbedPath}" title="Tripadvisor badge for S.T Tailor / Huy hiệu Tripadvisor của S.T Tailor" loading="lazy" width="200" height="128" referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
+          <iframe class="st-tripadvisor__rating" src="${tripadvisorEmbedPath}" title="Tripadvisor badge for S.T Tailor / Huy hiệu Tripadvisor của S.T Tailor" loading="lazy" width="180" height="112" referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
         </div>
       </div>
       <div class="st-tripadvisor__actions">
         <a class="st-tripadvisor__link" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note"><span>Read reviews</span><span lang="vi">Đọc đánh giá</span></a>
         <a class="st-tripadvisor__link st-tripadvisor__link--outline" href="https://www.tripadvisor.com/UserReviewEdit-g293925-d34701232-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note"><span>Write a review</span><span lang="vi">Viết đánh giá</span></a>
       </div>
-    </div>
-    <div class="st-tripadvisor__card">
+    </article>
+    <article class="st-tripadvisor__card" aria-labelledby="st-tripadvisor-visit-title">
       <div class="st-tripadvisor__visit">
-        <h3>Visit S.T Tailor<span lang="vi">Ghé S.T Tailor</span></h3>
+        <h3 id="st-tripadvisor-visit-title">Visit S.T Tailor<span lang="vi">Ghé S.T Tailor</span></h3>
         <address>1st Floor, 258 Le Thanh Ton, Tan Dinh Ward<br>Ho Chi Minh City, Vietnam<span lang="vi">Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định<br>Thành phố Hồ Chí Minh, Việt Nam</span></address>
         <p class="st-tripadvisor__hours">Open daily, 09:00–20:00<span lang="vi">Mở cửa mỗi ngày, 09:00–20:00</span></p>
         <p class="st-tripadvisor__arrival">Look for the number 258 and the illuminated tailoring sign at street level.<span lang="vi">Tìm số nhà 258 và biển hiệu nhà may có đèn ở mặt đường.</span></p>
       </div>
       <div class="st-tripadvisor__actions">
-        <a class="st-tripadvisor__link st-tripadvisor__link--outline" href="/lien-he/#st-showroom-map"><span>Directions</span><span lang="vi">Đường đến nhà may</span></a>
-        <a class="st-tripadvisor__link st-tripadvisor__link--outline" href="/lien-he/#loi-vao-nha-may"><span>Entrance photos</span><span lang="vi">Ảnh lối vào nhà may</span></a>
+        <a class="st-tripadvisor__link st-tripadvisor__link--outline" href="/lien-he/#st-showroom-map"><span>Directions</span><span lang="vi">Chỉ đường</span></a>
+        <a class="st-tripadvisor__link st-tripadvisor__link--outline" href="/lien-he/#loi-vao-nha-may"><span>Entrance photos</span><span lang="vi">Ảnh lối vào</span></a>
       </div>
-    </div>
+    </article>
+    <p id="st-tripadvisor-link-note" hidden>Opens in a new tab. <span lang="vi">Mở trong thẻ mới.</span></p>
   </div>
 </section>`;
   html = html.replace('<section class="st-lux-business st-motion st-motion-1">', `${showcaseHubLinks()}\n${tripadvisor}\n<section class="st-lux-business st-motion st-motion-1">`);
@@ -1027,7 +1036,7 @@ function enrichImageAttributes(html, { responsiveSizes, deprioritizeLazyImages =
 const buildDate = new Date().toISOString().slice(0, 10);
 // Shared navigation gained substantial page links on this date. Advance this
 // only for a meaningful shared-content change, never for CSS, JS or copyright.
-const sharedContentModified = "2026-11-26";
+const sharedContentModified = "2026-11-27";
 // Advance the relevant date when transformed copy changes, not for build fixes.
 const derivedContentModified = {
   "Home.html": "2026-11-22",
@@ -1070,28 +1079,32 @@ function header(activePath) {
 }
 
 function footer(route) {
-  const workGroups = showcaseHubs.flatMap(({ route: hubRoute, labels, sections }) => {
-    const entries = showcaseItemsFor(hubRoute);
-    return [
-      [...labels, [hubRoute]],
-      ...sections.map(({ id, labels: sectionLabels }) => [...sectionLabels, entries.filter((page) => page.section === id).map((page) => page.route)])
-    ];
-  });
   const groups = [
     ["Showroom and Gallery", "Nhà may và thư viện ảnh", ["/", "/gioi-thieu/", "/gallery/", fittingFilmRoute, "/lien-he/"]],
     ["Tailoring services", "Dịch vụ may đo", ["/dich-vu/", ...serviceRoutes.map((page) => page.route), "/bang-gia/"]],
     ["Tailoring guide", "Cẩm nang may đo", ["/cam-nang-may-do/", ...guideRoutes.map(([href]) => href)]],
     ["Client Care", "Chăm sóc khách hàng", [clientCareHubRoute, ...policyRoutes, ...clientCareGuides.map(({ route }) => route)]],
-    ...workGroups
+    ...showcaseHubs.map(({ route: hubRoute, labels, sections }) => {
+      const entries = showcaseItemsFor(hubRoute);
+      return [...labels, [hubRoute], sections.map(({ id, labels: sectionLabels }) => [
+        ...sectionLabels, entries.filter((page) => page.section === id).map((page) => page.route)
+      ])];
+    })
   ];
-  const directory = groups.map(([english, vietnamese, paths]) => `
-    <section aria-label="${english} | ${vietnamese}">
-      <h3>${english}<span lang="vi">${vietnamese}</span></h3>
-      <ul>${paths.map((href) => {
-        const [title, translation] = pageLabels.get(href);
-        return `<li><a href="${href}"${href === route ? ' aria-current="page"' : ''}><span>${title}</span><span lang="vi">${translation}</span><code>${href}</code></a></li>`;
-      }).join("")}</ul>
-    </section>`).join("");
+  const directoryList = (paths) => `<ul>${paths.map((href) => {
+    const [title, translation] = pageLabels.get(href);
+    return `<li><a href="${href}"${href === route ? ' aria-current="page"' : ''}><span>${xmlEscape(title)}</span><span lang="vi">${xmlEscape(translation)}</span><code aria-hidden="true">${href}</code></a></li>`;
+  }).join("")}</ul>`;
+  const directory = groups.map(([english, vietnamese, paths, sections = []]) => `
+    <details name="st-site-directory">
+      <summary><span>${xmlEscape(english)}<span lang="vi">${xmlEscape(vietnamese)}</span></span></summary>
+      ${directoryList(paths)}
+      ${sections.filter(([, , entries]) => entries.length).map(([title, translation, entries]) => `
+      <section>
+        <h3>${xmlEscape(title)}<span lang="vi">${xmlEscape(translation)}</span></h3>
+        ${directoryList(entries)}
+      </section>`).join("")}
+    </details>`).join("");
   return transformFooter(readSource("Footer.html"), route).replace("<!-- SITE_DIRECTORY -->", directory);
 }
 
@@ -1482,7 +1495,9 @@ writeFileSync(path.join(tripadvisorEmbedDirectory, "index.html"), readFileSync(p
   .replace("/scripts/tripadvisor.js", `/scripts/tripadvisor.js?v=${tripadvisorScriptVersion}`), "utf8");
 writeFileSync(path.join(dist, "robots.txt"), "User-agent: *\nAllow: /\nSitemap: https://sttailor.com/sitemap.xml\n", "utf8");
 writeFileSync(path.join(dist, indexNowKeyFile), `${indexNowKey}\n`, "utf8");
-const xmlEscape = (value) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&apos;");
+function xmlEscape(value) {
+  return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&apos;");
+}
 const sitemapEntries = routes.map(([route, , , , shareImage]) => {
   const pagePath = route === "/" ? path.join(dist, "index.html") : path.join(dist, route.slice(1), "index.html");
   const pageHtml = readFileSync(pagePath, "utf8");

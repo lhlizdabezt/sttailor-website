@@ -48,6 +48,6 @@ badge.addEventListener("error", updateWidget, true);
 new MutationObserver(updateWidget).observe(badge, {
   childList: true,
   subtree: true,
-  attributeFilter: ["href", "class", "src"],
+  attributeFilter: ["href", "target", "rel", "class", "src"],
 });
 updateWidget();

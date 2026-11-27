@@ -56,7 +56,7 @@ const legacyRoutes = new Map([
   ["/bao-hanh-sua-chua/", "/dich-vu/"]
 ]);
 const staticPrefixes = ["/media/", "/icons/", "/styles/", "/scripts/", "/fonts/"];
-const staticFiles = new Set(["/robots.txt", "/sitemap.xml", "/llms.txt", "/.well-known/security.txt", "/site.webmanifest", `/${indexNowKeyFile}`, "/404.html", "/not-found.html", "/_headers", "/build-manifest.json", "/image-manifest.json"]);
+const staticFiles = new Set(["/robots.txt", "/sitemap.xml", "/llms.txt", "/.well-known/security.txt", "/site.webmanifest", `/${indexNowKeyFile}`, "/build-manifest.json", "/image-manifest.json"]);
 
 function securityHeaders(response, pathname = "/") {
   const headers = new Headers(response.headers);
@@ -71,8 +71,9 @@ function securityHeaders(response, pathname = "/") {
   const contentType = headers.get("Content-Type") || "";
   const isHtml = routes.has(pathname) || pathname.endsWith(".html") || pathname === "/not-found" || contentType.includes("text/html");
   if (isHtml) {
+    const isCanonical = routes.has(pathname) && (response.ok || response.status === 304);
     headers.set("Content-Security-Policy", contentSecurityPolicy(pathname));
-    headers.set("X-Robots-Tag", pathname === tripadvisorEmbedPath ? "noindex, follow" : "index, follow, max-image-preview:large");
+    headers.set("X-Robots-Tag", isCanonical ? "index, follow, max-image-preview:large" : "noindex, follow");
     headers.set("Cache-Control", pathname === tripadvisorEmbedPath
       ? "public, max-age=0, must-revalidate, no-transform"
       : "public, max-age=0, must-revalidate");

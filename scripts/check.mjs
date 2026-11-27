@@ -207,7 +207,7 @@ for (const route of expectedRoutes) {
     if (!footerLinks.has(publishedRoute)) failures.push(`Footer on ${route} omits published page ${publishedRoute}`);
   }
   const directory = footer.match(/<nav class="st-footer-directory__groups"[\s\S]*?<\/nav>/)?.[0] ?? "";
-  const directoryLinks = [...directory.matchAll(/href="([^"]+)"[^>]*>[\s\S]*?<code>([^<]*)<\/code>/g)];
+  const directoryLinks = [...directory.matchAll(/href="([^"]+)"[^>]*>[\s\S]*?<code\b[^>]*>([^<]*)<\/code>/g)];
   if (directoryLinks.length !== expectedRoutes.length || new Set(directoryLinks.map(([, href]) => href)).size !== expectedRoutes.length || directoryLinks.some(([, href, pathText]) => !expectedRoutes.includes(href) || pathText !== href)) {
     failures.push(`The footer directory must show every complete canonical path on ${route}`);
   }
@@ -342,7 +342,7 @@ else for (const injectedAt of ["none", "before-load", "before-idle"]) {
 }
 const builtSiteScript = readFileSync(path.join(dist, "scripts", "site.js"), "utf8");
 const privacyHtml = readFileSync(path.join(dist, "chinh-sach-bao-mat", "index.html"), "utf8");
-for (const disclosure of ["Google Analytics 4", "Microsoft Clarity", "Meta Pixel measures", "Meta Pixel đo", "cookie identifiers", "mã cookie", "body measurements", "số đo cơ thể", "withdraw consent", "rút lại đồng ý"]) {
+for (const disclosure of ["Google Analytics 4", "Microsoft Clarity", "Meta Pixel measures", "Meta Pixel đo", "cookie identifiers", "mã cookie", "body measurements", "số đo cơ thể", "withdraw consent", "rút lại sự đồng ý"]) {
   if (!privacyHtml.includes(disclosure)) failures.push(`Privacy disclosure missing: ${disclosure}`);
 }
 if (builtSiteScript.includes("getBoundingClientRect(") || builtSiteScript.includes("st-scroll-reveal")) failures.push("Site startup must not measure or hide editorial sections.");

@@ -63,6 +63,24 @@ test("retired query endpoints return a non-indexable 404 without redirecting", a
   }
 });
 
+test("the internal error documents and asset headers are not public routes", async () => {
+  const requestedAssets = [];
+  const errorEnv = { ASSETS: { fetch: async (request) => {
+    requestedAssets.push(new URL(request.url).pathname);
+    return new Response(request.method === "HEAD" ? null : "Page not found", { headers: { "Content-Type": "text/html" } });
+  } } };
+  for (const route of ["/404.html", "/404", "/not-found.html", "/not-found", "/_headers"]) {
+    for (const method of ["GET", "HEAD"]) {
+      const response = await worker.fetch(new Request(`https://sttailor.com${route}`, { method }), errorEnv);
+      assert.equal(response.status, 404, route);
+      assert.equal(response.headers.get("Location"), null, route);
+      assert.equal(response.headers.get("X-Robots-Tag"), "noindex, follow", route);
+      assert.equal(await response.text(), method === "GET" ? "Page not found" : "", route);
+    }
+  }
+  assert.deepEqual([...new Set(requestedAssets)], ["/not-found"]);
+});
+
 test("campaign parameters remain on published pages and legacy redirects", async () => {
   const page = await worker.fetch(new Request("https://sttailor.com/?utm_source=facebook&utm_medium=social&fbclid=test"), env);
   assert.equal(page.status, 200);

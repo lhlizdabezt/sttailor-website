@@ -57,6 +57,28 @@ export const showcaseEntries = [
     imageAlt: "Front of S.T Tailor’s navy double-breasted jacket with dark buttons and flap pockets | Mặt trước áo suit xanh navy hai hàng khuy tối màu và túi có nắp của S.T Tailor"
   },
   {
+    route: "/san-pham/suit-xam-nhat-hai-hang-khuy/",
+    section: "suits-and-jackets",
+    source: "ShowcaseLightGreyDoubleBreastedSuit.html",
+    labels: ["Light grey double-breasted suit", "Suit xám nhạt hai hàng khuy"],
+    title: "Light Grey Double-Breasted Suit | S.T Tailor",
+    description: "View a light grey double-breasted suit with wide lapels and matching trousers. Compare button position, jacket length and cloth for your own fitting.",
+    summary: ["Light grey tailoring with wide lapels, an overlapping front and matching trousers.", "Suit xám nhạt với ve bản rộng, hai vạt áo chồng lên nhau và quần đồng bộ."],
+    image: "/media/2026/09/st-tailor-gallery-gray-double-breasted-suit.png",
+    imageAlt: "Light grey double-breasted suit with wide lapels and matching trousers on a tailoring form | Suit xám nhạt hai hàng khuy, ve bản rộng và quần đồng bộ trên ma-nơ-canh"
+  },
+  {
+    route: "/san-pham/ao-khoac-xanh-da-troi/",
+    section: "suits-and-jackets",
+    source: "ShowcaseLightBlueJacket.html",
+    labels: ["Light blue tailored jacket", "Áo khoác may đo xanh da trời"],
+    title: "Light Blue Tailored Jacket | S.T Tailor",
+    description: "See a light blue tailored jacket with notch lapels and jetted pockets. Compare the cloth in two photographs and explore shirt and trouser pairings.",
+    summary: ["A pale tailored jacket with notch lapels and jetted pockets, photographed from the front and at an angle.", "Áo khoác may đo sáng màu với ve chữ K và túi viền không nắp, chụp chính diện và góc nghiêng."],
+    image: "/media/2026/09/st-tailor-gallery-duk-9988.jpg",
+    imageAlt: "Light blue tailored jacket with notch lapels and jetted pockets on a black hanger | Áo khoác may đo xanh da trời nhạt, ve chữ K và túi viền không nắp trên móc đen"
+  },
+  {
     route: "/san-pham/ao-khoac-du-tiec-det-van/",
     section: "suits-and-jackets",
     source: "ShowcaseDinnerJacket.html",
@@ -180,6 +202,17 @@ export const showcaseEntries = [
     photoCollection: ninaCampos
   },
   {
+    route: "/du-an/trang-phuc-san-khau/",
+    section: "craft-and-style",
+    source: "ShowcaseStageTailoring.html",
+    labels: ["Tailoring for the stage", "May đo trang phục sân khấu"],
+    title: "Stage and Performance Tailoring | S.T Tailor",
+    description: "Plan a tailored stage outfit around lighting, movement, microphones and fittings, with photographs from S.T Tailor’s work with singer Niña Campos.",
+    summary: ["What to bring to a stagewear consultation and how to try the cloth, shoes and layers before a performance.", "Những gì nên mang đến buổi tư vấn may trang phục sân khấu và cách thử vải, giày, các lớp áo trước buổi biểu diễn."],
+    image: "/media/2026/11/st-tailor-nina-campos-light-suit-on-stage.webp",
+    imageAlt: "Singer Niña Campos holding a microphone in a pale suit under blue and red stage lights | Ca sĩ Niña Campos cầm micro trong bộ suit sáng màu dưới ánh đèn sân khấu xanh và đỏ"
+  },
+  {
     route: "/du-an/ao-ghi-le-do/",
     section: "client-work",
     source: "ShowcaseRedWaistcoat.html",
@@ -189,6 +222,17 @@ export const showcaseEntries = [
     summary: ["A red patterned waistcoat worn with cool-toned trousers, photographed from the side and back.", "Áo ghi-lê đỏ họa tiết phối quần tông lạnh, ghi lại qua các góc nghiêng và sau lưng."],
     image: "/media/2026/10/st-tailor-red-waistcoat-turning-view.jpg",
     imageAlt: "Client turning in a red patterned waistcoat with an adjustable back strap | Khách xoay người, để lộ đai điều chỉnh sau lưng áo ghi-lê đỏ họa tiết"
+  },
+  {
+    route: "/du-an/suit-le-phuc-navy/",
+    section: "client-work",
+    source: "ShowcaseNavyFormalClient.html",
+    labels: ["Navy formal suit in wear", "Suit lễ phục navy khi mặc"],
+    title: "Navy Formal Suit in Wear | S.T Tailor Project",
+    description: "Explore a client’s navy formal suit from the front, side and back, styled with a burgundy tie. See what each angle reveals at a suit fitting.",
+    summary: ["Three views of a navy suit with a burgundy tie show the jacket balance and trouser line.", "Ba góc nhìn bộ suit navy phối cà vạt đỏ rượu cho thấy độ cân đối của áo khoác và đường ống quần."],
+    image: "/media/2026/09/st-tailor-archive-navy-formal-profile.jpg",
+    imageAlt: "Client seen from the side in a navy suit and black shoes beside a timber wall | Khách mặc suit navy và giày đen, chụp góc nghiêng cạnh vách gỗ"
   },
   {
     route: "/du-an/buoi-thu-suit-lot-vang/",

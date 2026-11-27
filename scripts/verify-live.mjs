@@ -283,13 +283,18 @@ await Promise.all(Array.from({ length: 6 }, async () => {
 }));
 console.log(`Audited ${publicAssets.length} public assets: originals, responsive images, icons, CSS, JavaScript, public build metadata and the first-party measurement gateway.`);
 
-// A reachable sitemap alone does not prove Cloudflare serves HTML to search
-// crawlers. Smoke-test the canonical HTML with representative crawler UAs.
-for (const [agent, route] of [["Googlebot", "/"], ["bingbot", "/"], ["OAI-SearchBot", "/gallery/"]]) {
-  const response = await fetchWithRetry(`${origin}${route}`, { headers: { "User-Agent": agent } });
-  const html = await response.text();
-  expect(response.status === 200 && html.includes(`<link rel="canonical" href="${origin}${route}">`) && /<main\b[^>]*\bid="main-content"(?:\s|>)/.test(html), `${agent} cannot read the canonical HTML for ${route}`);
-}
+// A reachable sitemap alone does not prove Cloudflare serves public HTML to
+// crawler requests. This catches broad user-agent blocks and origin differences.
+const crawlerAgents = ["Googlebot", "bingbot", "OAI-SearchBot", "Claude-SearchBot", "PerplexityBot", "Applebot"];
+const crawlerRoutes = ["/", "/gallery/", "/du-an/nina-campos/"];
+await Promise.all(crawlerAgents.map(async (agent) => {
+  for (const route of crawlerRoutes) {
+    const response = await fetchWithRetry(`${origin}${route}`, { redirect: "manual", headers: { "User-Agent": agent } });
+    const html = await response.text();
+    expect(response.status === 200 && response.headers.get("x-robots-tag")?.startsWith("index, follow") && html.includes(`<link rel="canonical" href="${origin}${route}">`) && /<main\b[^>]*\bid="main-content"(?:\s|>)/.test(html) && /\blang="vi"/.test(html), `${agent} cannot read the canonical bilingual HTML for ${route}`);
+  }
+}));
+console.log(`Checked ${crawlerAgents.length} crawler user agents across ${crawlerRoutes.length} canonical bilingual pages.`);
 
 const llms = await fetchWithRetry(`${origin}/llms.txt`);
 const llmsText = new TextDecoder("utf-8", { fatal: true }).decode(await llms.arrayBuffer());
@@ -354,6 +359,12 @@ expect(missing.status === 404, `Unknown URL returned ${missing.status}`);
 expect(missingHtml.includes("Back to Home"), "404 page has no Back to Home action");
 expect(missing.headers.get("x-robots-tag")?.includes("noindex"), "404 response is not marked noindex");
 expect(missingHtml.includes('<meta name="robots" content="noindex, follow">') && !missingHtml.includes('<link rel="canonical"'), "404 HTML has conflicting index or canonical signals");
+
+for (const internalPath of ["/404.html", "/404", "/not-found.html", "/not-found", "/_headers"]) {
+  const response = await fetchWithRetry(`${origin}${internalPath}`, { redirect: "manual" });
+  const html = await response.text();
+  expect(response.status === 404 && !response.headers.has("location") && response.headers.get("x-robots-tag") === "noindex, follow" && html.includes("Back to Home"), `Internal build path ${internalPath} is not a true, non-indexable 404`);
+}
 
 const retiredWordPress = await fetchWithRetry(`${origin}/wp-login.php`, { redirect: "manual" });
 expect(retiredWordPress.status === 404, `Retired WordPress login returned ${retiredWordPress.status} instead of 404`);
