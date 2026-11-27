@@ -1,4 +1,5 @@
 import { clientCareFailures } from "./client-care-contract.mjs";
+import { businessProfileFailures } from "./business-profile-contract.mjs";
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
@@ -151,7 +152,6 @@ for (const route of expectedRoutes) {
     }
   }
   const businessSchema = schemaGraph.find((item) => Array.isArray(item["@type"]) && item["@type"].includes("LocalBusiness"));
-  if (businessSchema?.address?.streetAddress !== "1st Floor, 258 Le Thanh Ton, Tan Dinh Ward") failures.push(`Showroom floor or ward differs from the confirmed address: ${route}`);
   if (businessSchema?.hasOfferCatalog?.["@type"] !== "OfferCatalog" || businessSchema?.makesOffer) failures.push(`LocalBusiness service catalog uses the wrong Schema.org property: ${route}`);
   if (/https?:\/\/(?:[a-z0-9-]+\.)*(?:x|twitter)\.com(?:[\/:?"\s]|$)|name=["']twitter:/i.test(html)) failures.push(`Retired social integration remains on ${route}`);
   if ((html.match(/href="https:\/\/www\.threads\.com\/@sttailorhcm"/g) ?? []).length !== 1 || (businessSchema?.sameAs ?? []).filter((url) => url === "https://www.threads.com/@sttailorhcm").length !== 1) failures.push(`Official Threads profile is missing or duplicated in social links/schema: ${route}`);
@@ -176,11 +176,7 @@ for (const route of expectedRoutes) {
   if (html.includes("beta.sttailor.com")) failures.push(`Beta hostname remains in production HTML: ${route}`);
   if ((html.match(/<footer class="st-footer st-footer-v7 st-footer-v8"/g) ?? []).length !== 1) failures.push(`Footer is not singular: ${route}`);
   const footer = html.match(/<footer\b[\s\S]*?<\/footer>/i)?.[0] ?? "";
-  const followLinks = [...(footer.match(/<nav class="st-footer-v7__social"[\s\S]*?<\/nav>/)?.[0] ?? "").matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
-  if (followLinks.length !== 10 || new Set(followLinks).size !== 10 ||
-      JSON.stringify(followLinks.toSorted()) !== JSON.stringify(businessSchema?.sameAs?.toSorted())) {
-    failures.push(`FOLLOW and structured data must contain the same ten official social profiles: ${route}`);
-  }
+  for (const failure of businessProfileFailures(footer, schemaGraph)) failures.push(`${failure}: ${route}`);
   const primaryNav = html.match(/<nav id="primary-navigation"[\s\S]*?<\/nav>/)?.[0] ?? "";
   const primaryLinks = [...primaryNav.matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
   if (JSON.stringify(primaryLinks) !== JSON.stringify(["/gioi-thieu/", "/dich-vu/", "/gallery/", "/bang-gia/", "/lien-he/"])) failures.push(`Header must keep its five main destinations: ${route}`);

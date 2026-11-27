@@ -3,6 +3,7 @@ const greyJacket = "/san-pham/ao-khoac-xam-lot-hoa/";
 const navyShirt = "/du-an/so-mi-navy-tay-ngan/";
 const rustShirt = "/san-pham/so-mi-do-gach/";
 const whiteShirt = "/san-pham/so-mi-trang-co-mo-rong/";
+const ivoryShirt = "/san-pham/so-mi-mau-nga-co-nhon/";
 const shirtService = "/dich-vu/so-mi-may-do/";
 const shirtDetails = "/du-an/chi-tiet-so-mi-may-do/";
 
@@ -69,6 +70,16 @@ export const commissionCollections = [
       ["white-spread-collar-shirt-placket", "Closer front view of the white shirt’s open collar and straight button placket.", "Góc cận chính diện cổ mở và nẹp khuy thẳng của sơ mi trắng."],
       ["white-spread-collar-shirt-shoulder", "Angled view of the white spread collar and the seam joining the sleeve to the shoulder.", "Góc nghiêng cho thấy cổ mở rộng và đường ráp tay vào vai của sơ mi trắng."]
     ]
+  },
+  {
+    id: "so-mi-mau-nga-co-nhon", route: ivoryShirt, album: "shirts-trousers",
+    labels: ["Ivory point-collar shirt", "Sơ mi màu ngà cổ nhọn"],
+    summary: ["A finished long-sleeve shirt in ivory with a pointed collar, pale buttons and a curved hem. The front and angled views show how the cloth catches the light.", "Sơ mi dài tay màu ngà đã hoàn thiện, với lá cổ nhọn, khuy sáng và lai cong. Ảnh chính diện và góc nghiêng cho thấy ánh sáng thay đổi trên mặt vải."],
+    includeReferencedPhotos: true,
+    photos: [
+      ["/media/2026/11/st-tailor-ivory-point-collar-shirt-front.jpg", "Front view of an ivory shirt on a form, showing pointed collar tips, pale buttons and long sleeves.", "Mặt trước sơ mi màu ngà trên ma-nơ-canh, thấy lá cổ nhọn, khuy sáng và tay dài."],
+      ["/media/2026/11/st-tailor-ivory-point-collar-shirt-three-quarter.jpg", "Three-quarter view of the ivory shirt, showing its curved hem, long sleeves and button cuffs.", "Sơ mi màu ngà nhìn nghiêng, thấy lai cong, tay dài và măng sét cài khuy."]
+    ]
   }
 ];
 
@@ -121,6 +132,18 @@ export const commissionStories = [
       ["Where the open collar sits", "Vị trí lá cổ khi mở khuy", "The collar points turn outwards and leave a wide opening at the neck. The angled photograph shows the curve of the collar and where the sleeve meets the shoulder. Bring the jacket you intend to wear so the tailor can see how the collar and lapels meet while you move.", "Hai lá cổ mở về hai bên, tạo khoảng rộng ở cổ. Ảnh nghiêng cho thấy độ cong của cổ áo và vị trí tay ráp vào vai. Hãy mang theo áo khoác định phối để thợ may kiểm tra cổ sơ mi và ve áo khi bạn cử động."],
       ["Button front and curved hem", "Nẹp khuy và lai cong", "The closer front view shows a plain button line. The full view shows the curved hem and where it rises on each side. If you plan to tuck in the shirt, sit down and raise your arms at the fitting. For an untucked version, compare the side length over your trousers.", "Ảnh cận chính diện cho thấy nẹp khuy trơn. Ảnh toàn thân áo cho thấy đường lai cong và phần xẻ cao hơn ở hai bên. Nếu định sơ vin, hãy thử ngồi và nâng tay trong buổi thử đồ. Nếu muốn mặc thả, hãy xem chiều dài bên hông khi phối cùng quần của bạn."]
     ],
-    related: [shirtService, "/san-pham/so-mi-trang-vien-ca-ro/", shirtDetails, rustShirt]
+    related: [shirtService, "/san-pham/so-mi-trang-vien-ca-ro/", shirtDetails, rustShirt, ivoryShirt]
+  },
+  {
+    route: ivoryShirt, section: "shirts-and-trousers",
+    cover: 1,
+    title: "Ivory Point-Collar Tailored Shirt | S.T Tailor",
+    description: "See a finished ivory long-sleeve shirt by S.T Tailor. Front and angled photos show its pointed collar, pale buttons and curved hem.",
+    details: [
+      ["Collar and button front", "Lá cổ và nẹp khuy", "The front view shows the pointed collar above a row of pale buttons. Bring the jacket or tie you wear most often to a shirt fitting. With the top button open, check where the collar tips sit under the lapels. If you wear a tie, fasten the collar and check for room to turn your head comfortably.", "Ảnh chính diện cho thấy hai lá cổ nhọn phía trên hàng khuy sáng màu. Hãy mang theo áo khoác hoặc cà vạt bạn thường dùng khi thử sơ mi. Lúc mở khuy trên cùng, quan sát vị trí lá cổ dưới ve áo khoác. Nếu có đeo cà vạt, hãy cài khuy cổ rồi xoay đầu để kiểm tra độ thoải mái."],
+      ["An ivory tone in different light", "Sắc ngà dưới các nguồn sáng", "The cloth looks warmer where the light strikes the front and cooler in the folds of the sleeves. Compare an ivory swatch with the jacket and trousers you plan to wear. Look at the pairing near a window and again under indoor lighting before choosing the cloth.", "Mặt vải ngả ấm ở phần thân trước được chiếu sáng và lạnh hơn ở các nếp tay áo. Hãy đặt mẫu vải màu ngà cạnh áo khoác và quần bạn định phối. Xem cách kết hợp này bên cửa sổ và dưới ánh đèn trong nhà trước khi chọn vải."],
+      ["Curved hem and sleeve length", "Lai cong và chiều dài tay", "The angled view shows how the curved hem rises at the side, as well as the cuffs on both sleeves. If you intend to wear the shirt tucked in, try sitting and reaching forward to check how much of the hem stays inside the waistband. Try the cuffs with your watch and jacket to judge how much sleeve shows.", "Ảnh góc nghiêng cho thấy đường lai cong nâng lên ở bên hông và măng sét ở hai tay áo. Nếu định sơ vin, hãy thử ngồi và đưa tay về phía trước để xem phần lai còn nằm trong cạp quần bao nhiêu. Đeo đồng hồ và mặc áo khoác khi thử để xem phần cổ tay sơ mi lộ ra vừa đủ chưa."]
+    ],
+    related: [shirtService, whiteShirt, shirtDetails, "/san-pham/quan-tay-toi-mau/", "/chon-vai-may-do/"]
   }
 ];

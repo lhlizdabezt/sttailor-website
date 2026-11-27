@@ -1,4 +1,5 @@
 import { clientCareFailures } from "./client-care-contract.mjs";
+import { businessProfileFailures } from "./business-profile-contract.mjs";
 import { createHash } from "node:crypto";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
@@ -84,15 +85,15 @@ for (const route of routes) {
   expect(!pageHtml.toLowerCase().includes("beta.sttailor.com"), `${route} still contains the beta host`);
   expect(pageHtml.includes('name="robots" content="index, follow'), `${route} is not indexable`);
   expect(pageHtml.includes('"hasOfferCatalog":{"@type":"OfferCatalog"') && !pageHtml.includes('"makesOffer":{"@type":"OfferCatalog"'), `${route} has an invalid LocalBusiness service catalog relationship`);
-  expect(pageHtml.includes('"streetAddress":"1st Floor, 258 Le Thanh Ton, Tan Dinh Ward"'), `${route} does not show the confirmed showroom floor and ward in LocalBusiness schema`);
   const footer = pageHtml.match(/<footer\b[\s\S]*?<\/footer>/i)?.[0] ?? "";
+  const schemaText = pageHtml.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i)?.[1];
+  const schemaGraph = schemaText ? JSON.parse(schemaText)["@graph"] : [];
+  for (const failure of businessProfileFailures(footer, schemaGraph)) failures.push(`${failure}: ${route}`);
   const mapFrames = [...pageHtml.replace(/<template\b[\s\S]*?<\/template>/gi, "").matchAll(/<iframe\b[^>]*src="https:\/\/www\.google\.com\/maps\/embed\?[^>]*><\/iframe>/g)];
   const mapInFooter = mapFrames.some(([frame]) => footer.includes(frame));
   expect(mapFrames.length === 1 && !/data-map-(?:load|template|panel)/.test(pageHtml) && mapInFooter === (route !== "/lien-he/"), `${route} must embed one direct Google map without a click-to-display control`);
   expect(footer.includes('class="st-footer-v7__map" href="https://maps.app.goo.gl/'), `${route} has no independent Google Maps directions link`);
   expect(/property="og:image" content="https:\/\/sttailor\.com\/media\/_responsive\/[^"]+-share-[a-f0-9]{12}\.jpg"/.test(pageHtml) && pageHtml.includes('property="og:image:type" content="image/jpeg"'), `${route} has no optimized JPEG social preview`);
-  const followLinks = [...(footer.match(/<nav class="st-footer-v7__social"[\s\S]*?<\/nav>/)?.[0] ?? "").matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
-  expect(followLinks.length === 10 && new Set(followLinks).size === 10, `${route} must publish exactly ten unique FOLLOW destinations`);
   const tripadvisorProfile = "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html";
   expect(footer.split(`href="${tripadvisorProfile}"`).length === 2 && !footer.includes("st-footer-v7__tripadvisor") && !footer.includes("socialButtonRate") && !footer.includes("Rate us on Tripadvisor"), `${route} footer has a missing or duplicated Tripadvisor link, or still contains the removed rate widget`);
   const reviewEmbed = [...pageHtml.matchAll(/<iframe\b[^>]*>/g)].filter(([tag]) => tag.includes(`src="${tripadvisorEmbedPath}"`));
