@@ -722,7 +722,7 @@ const galleryPortfolioLinks = {
 function transformGallery(html) {
   html = html.replace(
     /<p>Eleven albums gather tailoring[\s\S]*?<\/p>/,
-    '<p>Nine albums trace the work of S.T Tailor, from cloth and construction to fittings, client portraits and the rooms where we work.<span lang="vi">Chín album giới thiệu công việc tại S.T Tailor, từ chất liệu và kỹ thuật may đến các buổi thử đồ, chân dung khách hàng và không gian nhà may.</span></p>'
+    '<p>Nine chapters show S.T Tailor’s fabrics, garment construction, fittings, client portraits and workspaces.<span lang="vi">Chín chương ảnh ghi lại chất liệu, kỹ thuật may, các buổi thử đồ, chân dung khách hàng và không gian làm việc của S.T Tailor.</span></p>'
   );
   const archiveRange = findElementById(html, "section", "album-archive");
   const feedbackRange = findElementById(html, "section", "album-client-feedback");

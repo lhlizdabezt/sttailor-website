@@ -206,7 +206,6 @@ for (const route of expectedRoutes) {
   if (JSON.stringify(primaryLinks) !== JSON.stringify(["/gioi-thieu/", "/dich-vu/", "/gallery/", "/bang-gia/", "/lien-he/"])) failures.push(`Header must keep its five main destinations: ${route}`);
   if (footer.includes('st-footer-sections') || /Browse sections|Xem các mục/i.test(footer) || /href="[^"]*#/.test(footer)) failures.push(`Footer must contain canonical page links without anchor shortcuts: ${route}`);
   if (html.includes("\uFFFD") || !html.includes('<meta charset="utf-8">')) failures.push(`Page has invalid Unicode or lacks UTF-8: ${route}`);
-  if (route === "/gallery/" && !mainContent.includes('<span lang="vi">Chín album giới thiệu công việc tại S.T Tailor, từ chất liệu và kỹ thuật may đến các buổi thử đồ, chân dung khách hàng và không gian nhà may.</span>')) failures.push("Gallery is missing its UTF-8 Vietnamese album description.");
   if ((footer.match(/href="https:\/\/www\.tripadvisor\.com\/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City\.html"/g) ?? []).length !== 1 || footer.includes("st-footer-v7__tripadvisor") || footer.includes("socialButtonRate") || footer.includes("Rate us on Tripadvisor")) failures.push(`Footer Tripadvisor link is missing, duplicated, or still includes the removed rate widget: ${route}`);
   const footerLinks = new Set([...footer.matchAll(/\bhref="(\/[^"]*)"/g)].map((match) => match[1]));
   for (const [, href] of html.matchAll(/<a\b[^>]*\bhref="([^"]+)"/gi)) {
@@ -538,7 +537,7 @@ for (const removedBlock of ["album-archive", "album-client-feedback", "st-galler
   if (gallery.includes(removedBlock)) failures.push(`Removed Gallery block remains: ${removedBlock}`);
 }
 if ((gallery.match(/st-gallery-numpad__card/g) ?? []).length !== 9) failures.push("Gallery 3x3 chapter navigator must contain exactly nine cards.");
-if (!gallery.includes("Nine chapters") || !gallery.includes("Chín chương ảnh")) failures.push("The Gallery introduction must describe its nine chapters in both languages.");
+if (!gallery.includes("<p>Nine chapters ") || !gallery.includes('<span lang="vi">Chín chương ảnh ')) failures.push("The Gallery introduction must describe its nine chapters in both languages.");
 if (!gallery.includes("st-gallery-numpad") || !gallery.includes("#album-tuxedo") || !gallery.includes("#album-showroom")) failures.push("Gallery chapter navigator is missing jump targets.");
 const galleryImageTags = [...gallery.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^\"]+)"[^>]*>/gi)];
 const galleryContentImages = galleryImageTags.filter((match) => !match[1].includes("logo-sttailor") && !match[1].endsWith("/LinkedInLogo.png"));
