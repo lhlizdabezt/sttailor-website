@@ -18,6 +18,9 @@
     .st-tripadvisor__fallback img { justify-self: center; }
     .st-tripadvisor__fallback:hover { background: #eed9bd; }
     .st-tripadvisor__widget a:focus-visible { outline: 2px solid #6c371e !important; outline-offset: 2px !important; }
+    @media (forced-colors: active) and (prefers-color-scheme: dark) {
+      .st-tripadvisor__widget img { forced-color-adjust: none; background: #fffaf4 !important; }
+    }
   </style>
   <script defer src="/scripts/tripadvisor.js"></script>
 </head>
