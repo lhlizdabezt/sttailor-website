@@ -247,7 +247,7 @@ if (!missingPage.includes('<meta name="robots" content="noindex, follow">') || !
 
 for (const [route, markers] of Object.entries({
   "/bang-gia/": ['<h2>Bespoke suit', '<h2>Wedding and formal suit', '<h2>Alterations and fitting'],
-  "/lien-he/": ['<h2>ADDRESS / <span lang="vi">ĐỊA CHỈ', '<h2>HOTLINE / <span lang="vi">ĐIỆN THOẠI', '<h2>WEBSITE / <span lang="vi">TRANG WEB'],
+  "/lien-he/": ['<h2>ADDRESS <span lang="vi">Địa chỉ</span></h2>', '<h2>HOTLINE <span lang="vi">Điện thoại</span></h2>', '<h2>EMAIL <span lang="vi">Thư điện tử</span></h2>', '<h2>WEBSITE <span lang="vi">Trang web</span></h2>'],
   "/dich-vu/": ['<h1 id="st-service-commission-map-title">', '<h2>Suits and vests', '<h2 id="st-bespoke-process-title">', '<h3>Private consultation']
 })) {
   const html = readFileSync(path.join(dist, route.slice(1), "index.html"), "utf8");
@@ -587,7 +587,9 @@ for (const requiredAsset of ["st-tailor-archive-atelier-four.jpg", "st-tailor-ga
 const notFound = readFileSync(path.join(dist, "404.html"), "utf8");
 if (!notFound.includes("Back to Home") || !notFound.includes("Về trang chủ")) failures.push("404 page is missing the required Back to Home action.");
 
-if (/X-Robots-Tag:\s*noindex/i.test(assetHeaders)) failures.push("Production headers still prevent search indexing.");
+const sourcePhotoHeaderRule = /^\/media\/sources\/\*\r?\n[ \t]+X-Robots-Tag: noindex$/m;
+if (!sourcePhotoHeaderRule.test(assetHeaders)) failures.push("The full-resolution source photo downloads must not create duplicate image search entries.");
+if (/X-Robots-Tag:\s*noindex/i.test(assetHeaders.replace(sourcePhotoHeaderRule, ""))) failures.push("Production headers still prevent search indexing.");
 if (!assetHeaders.includes("Strict-Transport-Security: max-age=15552000")) failures.push("Production HSTS must remain the conservative six-month policy.");
 for (const staticFile of ["robots.txt", "sitemap.xml", "llms.txt", "site.webmanifest", indexNowKeyFile]) {
   if (!existsSync(path.join(dist, staticFile))) failures.push(`Missing production discovery file: ${staticFile}`);

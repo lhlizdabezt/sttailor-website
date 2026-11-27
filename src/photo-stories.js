@@ -15,8 +15,18 @@ const dress = "/san-pham/dam-mau-dao-theu-la/";
 const crimson = "/san-pham/ao-khoac-den-lot-do/";
 const greenSuitFitting = "/du-an/thu-suit-xanh-la-dam/";
 const shortSleeveShirt = "/san-pham/so-mi-xanh-nhat-tay-ngan/";
+const lightGreyNotchSuit = "/san-pham/suit-xam-nhat-ve-chu-k/";
 
 export const photoCollections = [
+  {
+    id: "suit-xam-nhat-ve-chu-k", route: lightGreyNotchSuit, album: "suits",
+    labels: ["Light grey notch-lapel suit", "Suit xám nhạt ve chữ K"],
+    summary: ["A light grey two-piece suit with notch lapels and contrasting front pocket styles. One photograph shows the jacket with its matching trousers, and the other isolates the jacket’s construction.", "Bộ suit hai mảnh xám nhạt với ve chữ K và hai kiểu túi thân trước. Một ảnh chụp áo cùng quần đồng bộ, ảnh còn lại cho thấy rõ cấu tạo thân trước áo khoác."],
+    photos: [
+      ["light-grey-notch-lapel-suit-with-trousers", "Light grey notch-lapel jacket hanging with matching trousers and pale front buttons.", "Áo khoác xám nhạt ve chữ K với khuy sáng màu, treo cùng quần đồng bộ."],
+      ["light-grey-notch-lapel-jacket-front-pocket-detail", "Front of the light grey jacket with curved shaping seams, a flap pocket and a jetted pocket.", "Thân trước áo khoác xám nhạt với đường may tạo dáng cong, một túi có nắp và một túi viền không nắp."]
+    ]
+  },
   {
     id: "thu-suit-xanh-la-dam", route: greenSuitFitting, album: "fitting",
     labels: ["Fitting a deep green suit", "Thử suit xanh lá đậm"],
@@ -179,6 +189,16 @@ export const photoCollections = [
 ];
 
 const stories = [
+  {
+    route: lightGreyNotchSuit, section: "suits-and-jackets",
+    title: "Light Grey Notch-Lapel Two-Piece Suit | S.T Tailor",
+    description: "Examine a light grey two-piece suit from S.T Tailor in Ho Chi Minh City. See its notch lapels, curved jacket seams, two pocket finishes and matching trousers.",
+    details: [
+      ["Curved seams and two pocket finishes", "Đường may tạo dáng và hai kiểu túi", "In the front view, the curved seams follow the jacket from the armhole toward the waist. One hip pocket has a flap. The other is finished with a narrow welt and leaves the front line uninterrupted. Pale buttons sit close to the shade of the cloth. The jacket-only image makes these details easier to compare.", "Ở góc chính diện, đường may cong chạy từ vòng nách về eo để tạo dáng cho thân áo. Một túi ngang hông có nắp. Túi bên kia dùng viền hẹp để giữ mặt trước gọn. Khuy sáng gần tông màu vải. Ảnh chụp riêng áo khoác giúp nhìn rõ các chi tiết này."],
+      ["Check the jacket and trousers together", "Thử áo khoác cùng quần đồng bộ", "The trousers continue the same light grey below the jacket. Bring the shoes and the shirt or top you intend to wear. With the jacket fastened, check whether the lapels lie flat and the front feels comfortable as you move. With your shoes on, check the trouser hem while standing and after a few steps.", "Quần cùng tông xám nhạt nối tiếp màu của áo khoác. Hãy mang theo giày và sơ mi hoặc áo mặc trong dự định phối. Khi cài khuy, kiểm tra ve có nằm phẳng và thân trước có thoải mái khi cử động hay không. Mang giày rồi xem lại lai quần khi đứng và sau vài bước đi."]
+    ],
+    related: ["/cam-nang-may-do/chon-suit-hai-manh-ba-manh/", "/san-pham/suit-xam-nhat-hai-hang-khuy/", "/quy-trinh-thu-do/", "/dich-vu/suit-may-do/"]
+  },
   {
     route: greenSuitFitting, section: "fittings",
     title: "Deep Green Suit Fitting in Ho Chi Minh City | S.T Tailor",

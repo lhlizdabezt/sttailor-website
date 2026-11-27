@@ -8,6 +8,7 @@ This is a static-first rebuild of S.T Tailor from the owner-approved, read-only 
 - Shared responsive header, mobile navigation and footer.
 - Versioned page fragments and the complete approved WordPress CSS in `source/wordpress`.
 - Versioned approved website uploads in `source/media` and first-party interface icons in `source/icons`. The repository contains no database export, WordPress core, plugins, SSL certificates, API tokens or private keys.
+- Full-resolution HEIC source photos with camera metadata removed are stored in `source/media-sources` and deployed under `/media/sources/`. Gallery and product pages use responsive images generated from `source/media`.
 - A Worker health check at `/healthz`, legacy URL mappings, true 404 responses and security response headers.
 
 ## Visit S.T Tailor
@@ -32,6 +33,7 @@ This is a static-first rebuild of S.T Tailor from the owner-approved, read-only 
 - [Vietnamese silk for custom garments](https://sttailor.com/chon-vai-may-do/lua-viet-nam/)
 - [Finished garments and tailoring details](https://sttailor.com/san-pham/)
 - [Bespoke beige double-breasted blazer](https://sttailor.com/san-pham/blazer-mau-be/)
+- [Light grey notch-lapel two-piece suit](https://sttailor.com/san-pham/suit-xam-nhat-ve-chu-k/)
 - [Black shawl-lapel tuxedo](https://sttailor.com/san-pham/tuxedo-den-ve-sam/)
 - [Burgundy stand-collar ceremonial jacket](https://sttailor.com/san-pham/ao-le-phuc-do-ruou-co-dung/)
 - [White tailored shirt with checked trim](https://sttailor.com/san-pham/so-mi-trang-vien-ca-ro/)

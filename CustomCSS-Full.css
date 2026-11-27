@@ -4811,8 +4811,9 @@ html body .st-gallery-page a.st-gallery-text-link:hover, html body .st-gallery-p
 html body .st-gallery-page a.st-gallery-text-link:hover > span[lang="vi"], html body .st-gallery-page a.st-gallery-text-link:focus-visible > span[lang="vi"] { background:transparent !important; color:#5d301d !important; -webkit-text-fill-color:#5d301d !important; }
 html body .st-gallery-page .st-gallery-actions { padding:0 !important; background:transparent !important; border:0 !important; }
 html body .st-contact-page .st-contact-cta__lead, html body .st-contact-page .st-contact-cta__lead span[lang="vi"] { color:#6c3a24 !important; -webkit-text-fill-color:#6c3a24 !important; opacity:1 !important; text-shadow:none !important; }
-html body .st-payment-page .st-payment-methods__note { max-width:720px !important; margin:14px 0 32px !important; color:#5b3727 !important; font-size:15px !important; line-height:1.75 !important; }
-html body .st-payment-page .st-payment-methods__note span[lang="vi"] { display:block !important; margin-top:7px !important; color:#754022 !important; }
+html body .st-payment-page .st-payment-methods .st-page-kicker > [lang="vi"] { color:inherit !important; -webkit-text-fill-color:currentColor !important; }
+html body .st-payment-page .st-payment-methods__note { max-width:760px !important; margin:14px 0 32px !important; color:#5b3727 !important; font-size:16px !important; line-height:1.85 !important; }
+html body .st-payment-page .st-payment-methods__note > span[lang="vi"] { display:block !important; margin-top:14px !important; color:#754022 !important; }
 html body .st-payment-page .st-payment-card { min-height:330px !important; justify-content:flex-start !important; }
 html body .st-payment-page .st-payment-card > p:last-child { margin:0 !important; padding-top:17px !important; border-top:1px solid rgba(105,54,31,.18) !important; }
 html body .st-lux-founder-signature > img { width:min(220px,100%) !important; height:72px !important; object-fit:contain !important; object-position:left center !important; transform:scale(1.08) !important; transform-origin:left center !important; }
@@ -12425,7 +12426,7 @@ html body .st-contact-page--v2 .st-contact-card > h3 {
   letter-spacing: .035em !important;
 }
 html body .st-contact-page--v2 .st-contact-card > h3 span[lang="vi"] {
-  font-size: 13px !important;
+  font-size: 17px !important;
   letter-spacing: .015em !important;
 }
 html body .st-contact-page--v2 .st-contact-card > a {
@@ -12463,6 +12464,16 @@ html body .st-contact-page .st-contact-info > h2 > span[lang="vi"] {
   margin: 0 !important;
   font-size: .58em !important;
   line-height: 1.35 !important;
+}
+html body .st-contact-page--v2 .st-contact-item h2 {
+  margin: 0 0 8px !important;
+  font-size: 16px !important;
+  line-height: 1.4 !important;
+}
+html body .st-contact-page--v2 .st-contact-item h2 > [lang="vi"] {
+  display: block;
+  margin-top: 2px;
+  font-size: clamp(17px, 1.35vw, 20px) !important;
 }
 /* Contact hero is intentionally concise: the bilingual invitation carries the band without a paragraph wall. */
 html body .st-contact-page--v2 .st-contact-hero-content > p { display: none !important; }
@@ -13305,20 +13316,77 @@ html body .st-guide-article__body > section h2 { margin: 0 !important; color: va
 html body .st-guide-article__body > section h2 span[lang="vi"] { display: block !important; margin-top: 11px !important; color: #75452c !important; font-size: .48em !important; line-height: 1.16 !important; }
 html body .st-guide-article__body > section > p:last-child { margin: 0 !important; color: #53372a !important; font: 400 16px/1.75 var(--st-vietnamese) !important; }
 html body .st-guide-article__body > section > p:last-child span[lang="vi"] { display: block !important; margin-top: 10px !important; color: #76513e !important; }
-html body .st-guide-article__body > section > p a {
+html body .st-guide-article__body > section p a:any-link,
+html body .st-payment-methods__note a:any-link {
   padding: 1px 4px;
-  border: 1px solid #a88665;
-  color: #57301d;
+  border: 1px solid #9e7658;
+  color: #57301d !important;
+  -webkit-text-fill-color: currentColor !important;
+  text-decoration: underline;
   text-underline-offset: .15em;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
+html body .st-guide-article__body > section p a:is(:hover, :focus-visible, :active),
+html body .st-payment-methods__note a:is(:hover, :focus-visible, :active) {
+  background: #f0dfca;
+  color: #392116 !important;
+}
+html body .st-guide-article--bilingual .st-guide-hero__grid {
+  grid-template-areas: "title photo" "lead lead";
+  row-gap: clamp(22px, 4vw, 55px) !important;
+}
+html body .st-guide-article--bilingual .st-guide-hero__copy { grid-area: title; }
+html body .st-guide-article--bilingual .st-guide-hero__media {
+  grid-area: photo;
+  min-height: clamp(300px, 33vw, 460px) !important;
+}
+html body .st-guide-hero__intro {
+  grid-area: lead;
+  border-top: 1px solid rgba(96, 51, 31, .32);
+  padding-top: clamp(18px, 3vw, 30px);
+}
+html body .st-guide-article--bilingual .st-guide-article__body {
+  padding-block: clamp(35px, 6vw, 82px) !important;
+}
+html body .st-guide-article--bilingual .st-guide-article__body > section {
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: clamp(18px, 3vw, 30px) !important;
+}
+html body .st-guide-article--bilingual .st-guide-article__body h2 { line-height: 1.1 !important; }
+html body .st-guide-bilingual {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(20px, 4vw, 56px);
+}
+html body .st-guide-bilingual > p {
+  margin: 0 !important;
+  color: #53372a !important;
+  font: 400 clamp(16px, 1.25vw, 18px)/1.75 var(--st-vietnamese) !important;
+  overflow-wrap: anywhere;
+}
+html body .st-guide-bilingual > p[lang="vi"] { color: #68432e !important; }
+@media (min-width: 861px) {
+  html body .st-guide-bilingual > p[lang="vi"] {
+    border-inline-start: 1px solid rgba(96, 51, 31, .32);
+    padding-inline-start: clamp(16px, 2.2vw, 32px);
+  }
+}
 html body .st-guide-next { display: flex !important; margin-top: 22px !important; gap: 12px !important; justify-content: space-between !important; }
 html body .st-guide-next a,
 html body .st-guide-cta a { display: inline-flex !important; min-height: 50px !important; padding: 13px 18px !important; align-items: center !important; justify-content: center !important; gap: 7px !important; flex-wrap: wrap !important; border: 1px solid #f3d2a4 !important; font: 650 14px/1.4 var(--st-vietnamese) !important; letter-spacing: .045em !important; text-align: center !important; text-decoration: none !important; }
+html body .st-guide-next > a:any-link {
+  flex: 1 1 0;
+  min-width: 0;
+  border-color: #9e7658 !important;
+  background: #fffdf8 !important;
+  color: #452b20 !important;
+  -webkit-text-fill-color: currentColor !important;
+  overflow-wrap: anywhere;
+}
 html body .st-label-separator { display: inline-block !important; margin-inline: 2px !important; }
-html body .st-guide-next a:hover,
-html body .st-guide-next a:focus-visible { background: var(--guide-brown) !important; color: #fff8ed !important; outline: 2px solid #a87855 !important; outline-offset: 3px !important; }
+html body .st-guide-next > a:is(:hover, :focus-visible, :active) { background: var(--guide-brown) !important; color: #fff8ed !important; }
+html body #main-content .st-guide-next > a:focus-visible { outline-color: #6c371e !important; }
 html body .st-guide-next.st-guide-next--checklists { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 html body .st-guide-next--checklists > a { display: grid !important; align-content: center; border-color: #9e7658 !important; }
 html body .st-guide-cta { padding: clamp(42px, 6vw, 76px) 0 !important; background: var(--guide-brown) !important; color: #fff8ed !important; }
@@ -13326,7 +13394,7 @@ html body .st-guide-cta .st-guide-shell { display: flex !important; align-items:
 html body .st-guide-cta :is(p, a, a span) { color: #fff8ed !important; -webkit-text-fill-color: #fff8ed !important; }
 html body .st-guide-cta p { margin: 0 !important; font: 500 clamp(30px, 4vw, 52px)/1.08 var(--st-wordmark) !important; }
 html body .st-guide-cta p span[lang="vi"] { display: block !important; margin-top: 9px !important; color: #f3d2a4 !important; -webkit-text-fill-color: #f3d2a4 !important; font-size: max(16px, .48em) !important; line-height: 1.3 !important; }
-html body .st-guide-cta a:hover { background: #382014 !important; }
+html body .st-guide-cta a:is(:hover, :focus-visible, :active) { background: #382014 !important; }
 html body .st-guide-sources { display: flex !important; flex-wrap: wrap !important; align-items: center !important; gap: 10px 20px !important; padding: 20px 0 28px !important; border-top: 1px solid rgba(96, 51, 31, .32) !important; font: 500 14px/1.5 var(--st-vietnamese) !important; }
 html body .st-guide-sources p { flex-basis: 100% !important; margin: 0 !important; color: #60331f !important; font-weight: 700 !important; }
 html body .st-guide-sources a { color: #60331f !important; text-underline-offset: 4px !important; }
@@ -13370,6 +13438,9 @@ html body .st-footer-v7.st-footer-v8 .st-footer-v7__visit p > a + a { margin-top
 @media (max-width: 860px) {
   html body .st-guide-hero__grid { grid-template-columns: 1fr !important; }
   html body .st-guide-hero__media { min-height: min(118vw, 620px) !important; }
+  html body .st-guide-article--bilingual .st-guide-hero__grid { grid-template-areas: "title" "lead" "photo"; }
+  html body .st-guide-article--bilingual .st-guide-hero__media { min-height: clamp(250px, 85vw, 470px) !important; }
+  html body .st-guide-bilingual { grid-template-columns: minmax(0, 1fr); gap: 14px; }
   html body .st-guide-index__grid { grid-template-columns: 1fr !important; }
   html body .st-guide-index__grid > a { min-height: 0 !important; }
   html body .st-guide-article__body > section { grid-template-columns: 1fr !important; gap: 18px !important; }
@@ -13568,10 +13639,7 @@ html body .st-tailoring-detail .st-guide-next a {
   display: grid !important;
   place-content: center;
   gap: 4px !important;
-  border-color: #9e7658 !important;
-  color: #452b20 !important;
 }
-html body .st-tailoring-detail .st-guide-next a:is(:hover, :focus-visible) { color: #fff8ed !important; }
 @media (max-width: 760px) { html body .st-tailoring-detail .st-guide-next { grid-template-columns: minmax(0, 1fr); } }
 
 html body .st-suit-fit .st-guide-hero { padding-block: clamp(34px, 5.2vw, 76px) !important; }

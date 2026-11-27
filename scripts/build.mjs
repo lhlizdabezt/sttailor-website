@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { transform as minifyCss } from "lightningcss";
 import path from "node:path";
@@ -18,6 +18,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 // are derived below. Its retired social link was removed at the owner's request.
 const sourceRoot = path.join(root, "source", "wordpress");
 const sourceMedia = path.join(root, "source", "media");
+const sourcePhotoArchive = path.join(root, "source", "media-sources");
 const sourceIcons = path.join(root, "source", "icons");
 const sourceFonts = path.join(root, "source", "fonts");
 const vietnameseFont = "noto-sans-vi-8b0a1d0.woff2";
@@ -1363,6 +1364,7 @@ rmSync(dist, { recursive: true, force: true, maxRetries: 5, retryDelay: 250 });
 mkdirSync(dist, { recursive: true });
 assertGalleryHasNoDuplicates();
 const assets = copyAssets();
+cpSync(sourcePhotoArchive, path.join(dist, "media", "sources"), { recursive: true });
 copyGalleryFilm();
 copyIcons();
 mkdirSync(path.join(dist, "fonts"), { recursive: true });
@@ -1594,7 +1596,7 @@ ${llmsSections}
 - [Instagram](https://www.instagram.com/sttailorhcm/)
 - [WhatsApp](https://wa.me/84909556258)
 `.normalize("NFC"), "utf8");
-const assetHeaders = "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n  X-Frame-Options: SAMEORIGIN\n  Strict-Transport-Security: max-age=15552000\n  Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests\n";
+const assetHeaders = "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n  X-Frame-Options: SAMEORIGIN\n  Strict-Transport-Security: max-age=15552000\n  Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests\n\n/media/sources/*\n  X-Robots-Tag: noindex\n";
 writeFileSync(path.join(dist, "_headers"), assetHeaders, "utf8");
 writeFileSync(path.join(dist, "build-manifest.json"), JSON.stringify({ source: "source/wordpress", sourceMedia: "source/media", revision: buildRevision, routes: routes.map(([route]) => route), routeStyles, indexNowPageSignatures, localUploadAssets: assets.length, imageMetadata: imageCount, galleryDuplicateCheck: "passed" }, null, 2), "utf8");
 console.log(`Built ${routes.length} routes from the versioned WordPress reference with ${assets.length} local upload assets and dimensions for ${imageCount} images.`);

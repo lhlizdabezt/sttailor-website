@@ -4811,8 +4811,9 @@ html body .st-gallery-page a.st-gallery-text-link:hover, html body .st-gallery-p
 html body .st-gallery-page a.st-gallery-text-link:hover > span[lang="vi"], html body .st-gallery-page a.st-gallery-text-link:focus-visible > span[lang="vi"] { background:transparent !important; color:#5d301d !important; -webkit-text-fill-color:#5d301d !important; }
 html body .st-gallery-page .st-gallery-actions { padding:0 !important; background:transparent !important; border:0 !important; }
 html body .st-contact-page .st-contact-cta__lead, html body .st-contact-page .st-contact-cta__lead span[lang="vi"] { color:#6c3a24 !important; -webkit-text-fill-color:#6c3a24 !important; opacity:1 !important; text-shadow:none !important; }
-html body .st-payment-page .st-payment-methods__note { max-width:720px !important; margin:14px 0 32px !important; color:#5b3727 !important; font-size:15px !important; line-height:1.75 !important; }
-html body .st-payment-page .st-payment-methods__note span[lang="vi"] { display:block !important; margin-top:7px !important; color:#754022 !important; }
+html body .st-payment-page .st-payment-methods .st-page-kicker > [lang="vi"] { color:inherit !important; -webkit-text-fill-color:currentColor !important; }
+html body .st-payment-page .st-payment-methods__note { max-width:760px !important; margin:14px 0 32px !important; color:#5b3727 !important; font-size:16px !important; line-height:1.85 !important; }
+html body .st-payment-page .st-payment-methods__note > span[lang="vi"] { display:block !important; margin-top:14px !important; color:#754022 !important; }
 html body .st-payment-page .st-payment-card { min-height:330px !important; justify-content:flex-start !important; }
 html body .st-payment-page .st-payment-card > p:last-child { margin:0 !important; padding-top:17px !important; border-top:1px solid rgba(105,54,31,.18) !important; }
 html body .st-lux-founder-signature > img { width:min(220px,100%) !important; height:72px !important; object-fit:contain !important; object-position:left center !important; transform:scale(1.08) !important; transform-origin:left center !important; }
