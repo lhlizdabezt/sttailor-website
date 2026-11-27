@@ -9,14 +9,14 @@ const shirtDetails = "/du-an/chi-tiet-so-mi-may-do/";
 export const ninaCampos = {
   id: "suit-san-khau-nina-campos", route: "/du-an/nina-campos/", album: "appointments",
   labels: ["Niña Campos in a light suit", "Niña Campos trong bộ suit sáng màu"],
-  summary: ["A light two-piece suit with a dark top, seen on stage and in portraits from the collaboration with singer Niña Campos.", "Bộ suit sáng màu hai mảnh phối áo tối, qua ảnh sân khấu và chân dung trong dịp hợp tác cùng ca sĩ Niña Campos."],
+  summary: ["Singer Niña Campos wears a light two-piece suit by S.T Tailor. Six photographs show the outfit from the audience, on stage and in portraits.", "Ca sĩ Niña Campos mặc bộ suit hai mảnh sáng màu do S.T Tailor may. Sáu bức ảnh ghi lại trang phục từ phía khán giả, trên sân khấu và trong các khung hình chân dung."],
   includeReferencedPhotos: true,
   photos: [
-    ["/media/2026/09/st-tailor-gallery-singer-feedback-one.jpg", "Niña Campos in a light suit and dark top, standing beside a man in a white shirt near a staircase.", "Niña Campos mặc suit sáng màu và áo tối, đứng cạnh một người mặc sơ mi trắng gần cầu thang."],
-    ["nina-campos-light-suit-on-stage", "Niña Campos sings in a light open jacket and matching trousers under blue and red stage lighting.", "Niña Campos hát trong áo khoác sáng màu mở vạt và quần đồng bộ dưới ánh đèn sân khấu xanh đỏ."],
-    ["nina-campos-light-suit-stage-group", "Niña Campos stands between two people on stage, wearing a light suit and dark top.", "Niña Campos đứng giữa hai người trên sân khấu, phối suit sáng màu với áo tối."],
+    ["nina-campos-light-suit-on-stage", "Niña Campos holds a microphone in a pale open jacket and matching trousers against blue and red stage lighting.", "Niña Campos cầm micro trong áo khoác sáng màu mở vạt và quần đồng bộ, trước nền đèn sân khấu xanh đỏ."],
     ["nina-campos-performance-audience-view", "Wide audience view of two performers on stage, with Niña Campos in a light suit at left.", "Góc rộng từ phía khán giả nhìn lên hai người biểu diễn, Niña Campos mặc suit sáng màu ở bên trái."],
+    ["nina-campos-light-suit-stage-group", "Niña Campos stands between two people on stage, wearing a light suit and dark top.", "Niña Campos đứng giữa hai người trên sân khấu, phối suit sáng màu với áo tối."],
     ["nina-campos-light-lapel-group-portrait", "Close group portrait with Niña Campos in the centre, showing the light jacket lapel over a dark top.", "Chân dung cận cảnh của nhóm với Niña Campos ở giữa, thấy ve áo khoác sáng trên nền áo tối."],
+    ["/media/2026/09/st-tailor-gallery-singer-feedback-one.jpg", "Niña Campos in a light suit and dark top, standing beside a man in a white shirt near a staircase.", "Niña Campos mặc suit sáng màu và áo tối, đứng cạnh một người mặc sơ mi trắng gần cầu thang."],
     ["/media/2026/09/st-tailor-gallery-singer-feedback-two.jpg", "Niña Campos and a man in a white shirt pose by the staircase, with the light suit trousers and shoes in view.", "Niña Campos và một người mặc sơ mi trắng chụp cạnh cầu thang, thấy rõ quần suit sáng màu và giày."]
   ]
 };

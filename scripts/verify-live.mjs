@@ -65,6 +65,7 @@ for (const route of routes) {
   pages.set(route, pageHtml);
   const stylesheet = pageHtml.match(/<link rel="stylesheet" href="([^"]+)"/i)?.[1];
   expect(stylesheet && response.headers.get("link")?.includes(`<${stylesheet}>; rel=preload; as=style`), `${route} does not advertise its current stylesheet to Cloudflare Early Hints`);
+  expect(pageHtml.includes('<link rel="describedby" href="/llms.txt" type="text/plain">'), `${route} does not advertise its bilingual discovery guide`);
   expect(pageHtml.includes('<noscript><img height="1" width="1" style="display:none" alt="" aria-hidden="true" src="https://www.facebook.com/tr?id=2294442874726399&amp;ev=PageView&amp;noscript=1"></noscript>') && !/\bfbq\s*\(/.test(pageHtml), `${route} must use GTM Meta Pixel with its static noscript fallback only`);
   expect(response.status === 200, `${route} returned ${response.status}`);
   if (expectedBuildRevision) {
@@ -300,8 +301,7 @@ const llms = await fetchWithRetry(`${origin}/llms.txt`);
 const llmsText = new TextDecoder("utf-8", { fatal: true }).decode(await llms.arrayBuffer());
 expect(llms.status === 200 && /^# S\.T Tailor$/m.test(llmsText), "llms.txt is missing its Markdown heading");
 expect(llms.headers.get("content-type")?.toLowerCase() === "text/plain; charset=utf-8" && llmsText === llmsText.normalize("NFC") && llmsText.includes("Địa chỉ: Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định") && !/\uFFFD|á[º»]|Ã[\u0080-\u00BF]/.test(llmsText), "llms.txt does not serve clean, explicitly declared UTF-8 Vietnamese text");
-const llmsUrls = [...llmsText.matchAll(/\[[^\]]+\]\((https:\/\/sttailor\.com\/[^)]*)\)/g)].map((match) => match[1]);
-expect(llmsUrls.length === routes.length && new Set(llmsUrls).size === routes.length && routes.every((route) => llmsUrls.includes(`${origin}${route}`)), "llms.txt does not link to all canonical routes");
+expect(llmsText === readFileSync(path.join(dist, "llms.txt"), "utf8"), "Production llms.txt differs from the verified release file");
 
 const indexNowKeyResponse = await fetchWithRetry(`${origin}/${indexNowKeyFile}`);
 expect(indexNowKeyResponse.status === 200 && (await indexNowKeyResponse.text()).trim() === indexNowKey, "IndexNow ownership key file is missing or invalid");
@@ -309,7 +309,9 @@ expect(indexNowKeyResponse.status === 200 && (await indexNowKeyResponse.text()).
 const sitemap = await fetchWithRetry(`${origin}/sitemap.xml`);
 const sitemapText = await sitemap.text();
 expect(sitemap.status === 200, `sitemap.xml returned ${sitemap.status}`);
-expect((sitemapText.match(/<url>/g) || []).length === routes.length, `sitemap.xml does not contain exactly ${routes.length} public routes`);
+const sitemapLocations = [...sitemapText.matchAll(/<url>\s*<loc>([^<]+)<\/loc>/g)].map(([, location]) => location);
+const sitemapUrls = new Set(sitemapLocations);
+expect(sitemapLocations.length === routes.length && sitemapUrls.size === routes.length && routes.every((route) => sitemapUrls.has(`${origin}${route}`)), "Production sitemap must list every canonical route exactly once");
 expect(sitemapText.includes("xmlns:image="), "Image sitemap namespace is missing");
 expect(sitemapText.includes("<image:image>"), "Image sitemap entries are missing");
 const gallerySitemap = sitemapText.match(/<url><loc>https:\/\/sttailor\.com\/gallery\/[\s\S]*?<\/url>/)?.[0] ?? "";

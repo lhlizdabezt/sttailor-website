@@ -14,6 +14,9 @@ export function clientCareFailures(html, payment = false) {
     for (const expected of ["CHOOSE THE METHOD THAT SUITS YOUR ORDER", "Vietnamese dong (VND) only", "chỉ nhận tiền mặt bằng đồng Việt Nam (VND)", "Visa", "Mastercard", "Maestro", "American Express", "JCB", "UnionPay", "Discover", "Diners Club", "RuPay", "NAPAS", "credit and debit", "tín dụng và ghi nợ", "prepaid cards", "thẻ trả trước", "NFC MOBILE PAYMENTS", "Apple Pay", "Google Pay", "Samsung Pay"]) {
       if (!main.includes(expected)) failures.push(`Payment channel or bilingual cash information missing: ${expected}`);
     }
+    for (const route of ["/dieu-khoan-dieu-kien/#payment", "/doi-tra-hoan-tien/#refund"]) {
+      if (!main.includes(`href="${route}"`)) failures.push(`Payment page is missing its policy link: ${route}`);
+    }
   } else {
     const sections = [...main.matchAll(/<section\b[^>]*class="st-info-section"[^>]*>([\s\S]*?)<\/section>/g)];
     if (sections.length < 5 || sections.length > 6) failures.push("Client care must remain concise: five or six topics");

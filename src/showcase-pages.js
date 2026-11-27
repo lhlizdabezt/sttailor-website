@@ -1,6 +1,8 @@
 import { photoSource, photoStoryPages } from "./photo-stories.js";
 import { ninaCampos } from "./commission-stories.js";
 
+const [ninaCover, ...ninaCoverAlt] = ninaCampos.photos[0];
+
 export const showcaseHubs = [
   {
     route: "/san-pham/",
@@ -22,8 +24,8 @@ export const showcaseHubs = [
     labels: ["Projects and collaborations", "Dự án và hợp tác"],
     title: "Tailoring Projects and Collaborations | S.T Tailor",
     description: "Explore S.T Tailor’s client fittings, finished commissions and collaboration with singer Niña Campos in Ho Chi Minh City.",
-    image: "/media/2026/09/st-tailor-gallery-singer-feedback-one.jpg",
-    imageAlt: "A light tailored suit and dark top in a photograph from the S.T Tailor collaboration archive | Suit sáng màu phối áo tối trong ảnh lưu niệm của S.T Tailor",
+    image: photoSource(ninaCover),
+    imageAlt: ninaCoverAlt.join(" | "),
     sections: [
       { id: "collaborations", labels: ["Collaborations", "Hợp tác"] },
       { id: "client-work", labels: ["Client commissions", "Trang phục của khách"] },
@@ -55,6 +57,17 @@ export const showcaseEntries = [
     summary: ["A deep navy jacket with peaked lapels, dark buttons and a defined shoulder line.", "Áo suit xanh navy đậm, ve nhọn, khuy tối màu và đường vai rõ nét."],
     image: "/media/2026/09/st-tailor-navy-double-breasted-front.jpeg",
     imageAlt: "Front of S.T Tailor’s navy double-breasted jacket with dark buttons and flap pockets | Mặt trước áo suit xanh navy hai hàng khuy tối màu và túi có nắp của S.T Tailor"
+  },
+  {
+    route: "/san-pham/suit-den-ve-chu-k/",
+    section: "suits-and-jackets",
+    source: "ShowcaseBlackNotchSuit.html",
+    labels: ["Black notch-lapel suit", "Suit đen ve chữ K"],
+    title: "Black Notch-Lapel Suit by S.T Tailor",
+    description: "See a finished black two-piece suit with notch lapels, straight-leg trousers and a white shirt. Compare the cut with a shawl-lapel tuxedo.",
+    summary: ["A black two-piece suit paired with a white shirt. The full-length view shows the notch lapels, sleeve length and straight trouser line.", "Bộ suit đen hai mảnh phối sơ mi trắng. Ảnh toàn thân cho thấy ve chữ K, chiều dài tay áo và đường ống quần suông."],
+    image: "/media/2026/09/st-tailor-black-suit-full-length.jpeg",
+    imageAlt: "Black notch-lapel jacket and matching straight-leg trousers on a tailoring form with a white shirt | Áo khoác đen ve chữ K và quần ống suông đồng bộ trên ma-nơ-canh, phối sơ mi trắng"
   },
   {
     route: "/san-pham/suit-xam-nhat-hai-hang-khuy/",
@@ -197,8 +210,8 @@ export const showcaseEntries = [
     title: "Niña Campos Collaboration | S.T Tailor",
     description: "See singer Niña Campos in a light two-piece suit by S.T Tailor, with six photographs from the collaboration and notes on dressing for the stage.",
     summary: ninaCampos.summary,
-    image: photoSource(ninaCampos.photos[0][0]),
-    imageAlt: ninaCampos.photos[0].slice(1).join(" | "),
+    image: photoSource(ninaCover),
+    imageAlt: ninaCoverAlt.join(" | "),
     photoCollection: ninaCampos
   },
   {
@@ -244,6 +257,17 @@ export const showcaseEntries = [
     summary: ["Photographs from a fitting show how a gold shirt, pocket square and lining change the appearance of a dark suit as the jacket opens.", "Ảnh buổi thử cho thấy sơ mi, khăn túi ngực và lớp lót vàng hiện lên thế nào trên bộ suit tối màu khi mở áo khoác."],
     image: "/media/2026/09/st-tailor-archive-gold-jacket-fitting.jpg",
     imageAlt: "Client in a dark suit with a gold shirt and pocket square during a fitting at S.T Tailor | Khách thử suit tối màu phối sơ mi và khăn túi ngực màu vàng tại S.T Tailor"
+  },
+  {
+    route: "/du-an/thu-quan-ong-rong-nu/",
+    section: "fittings",
+    source: "ShowcaseWomensTrouserFitting.html",
+    labels: ["Fitting women’s wide-leg trousers", "Buổi thử quần nữ ống rộng"],
+    title: "Women’s Wide-Leg Trouser Fitting | S.T Tailor",
+    description: "See two views of a women’s wide-leg trouser fitting at S.T Tailor. Check the fall of the cloth, room for movement and hem length with your shoes.",
+    summary: ["Two fitting-room photographs show how dark wide-leg trousers fall beneath a draped ivory top, from the front and the side.", "Hai ảnh trong phòng thử cho thấy độ rủ của quần tối màu ống rộng khi phối với áo màu ngà có nếp rủ, nhìn từ trước và từ bên."],
+    image: "/media/2026/11/st-tailor-draped-ivory-top-with-dark-trousers.webp",
+    imageAlt: "Front view of a client fitting dark wide-leg trousers with a draped ivory top at S.T Tailor | Góc trước khách thử quần tối màu ống rộng cùng áo màu ngà có nếp rủ tại S.T Tailor"
   },
   ...photoStoryPages
 ];

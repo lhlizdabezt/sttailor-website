@@ -534,14 +534,14 @@ const galleryAltText = {
   "st-tailor-gallery-gray-double-breasted-suit.png": "Light grey double-breasted suit on a mannequin | Suit xám nhạt hai hàng nút trên mannequin",
   "st-tailor-gallery-navy-suit-mannequin.png": "Navy double-breasted suit on a mannequin | Suit xanh navy hai hàng nút trên mannequin",
   "st-tailor-gallery-navy-suit-mannequin-editorial.jpg": "Navy blazer with patterned tie and pocket square | Blazer xanh navy với cà vạt hoa văn và khăn túi áo",
-  "st-tailor-black-suit-full-length.jpeg": "Black tailored suit, full length | Suit đen may đo, toàn thân",
+  "st-tailor-black-suit-full-length.jpeg": "Black suit with notch lapels and matching straight-leg trousers, shown full length on a tailoring form with a white shirt | Suit đen ve chữ K, quần ống suông đồng bộ, chụp toàn thân trên ma-nơ-canh cùng sơ mi trắng",
   "st-tailor-navy-lapel-detail.jpeg": "Navy double-breasted suit lapel detail | Chi tiết ve áo suit xanh navy hai hàng nút",
   "st-tailor-gallery-duk-9988.jpg": "Light blue tailored suit on a mannequin | Suit xanh nhạt may đo trên mannequin",
   "st-tailor-gallery-duk-9991.jpg": "Lilac tailored suit on a mannequin | Suit tông lilac may đo trên mannequin",
   "st-tailor-gallery-duk-9858.jpg": "Pale olive jacket with a white shirt and light blue dotted tie | Áo khoác ô liu nhạt phối sơ mi trắng và cà vạt xanh nhạt chấm bi",
   "st-tailor-womens-white-suit.jpg": "White women's tailored suit on a mannequin | Suit nữ trắng may đo trên mannequin",
   "st-tailor-client-womens-white-suit.jpg": "Client wearing a white women's tailored suit outdoors | Khách hàng mặc suit nữ trắng may đo ngoài trời",
-  "st-tailor-client-womens-fitting.jpg": "Women's trouser fitting in the showroom | Buổi thử quần nữ tại showroom",
+  "st-tailor-client-womens-fitting.jpg": "Side view of a client fitting dark wide-leg trousers with a draped ivory top in the showroom | Góc bên khách thử quần ống rộng tối màu cùng áo màu ngà có nếp rủ tại showroom",
   "st-tailor-archive-womens-suit-window.jpg": "White women's suit on a mannequin by the window | Suit nữ trắng trên mannequin cạnh cửa sổ",
   "st-tailor-gallery-womenswear-window-frame.jpg": "Floral womenswear displayed in the showroom window | Trang phục nữ họa tiết hoa trưng bày tại cửa sổ showroom",
   "st-tailor-gallery-blush-silk-floral-dress.jpg": "Blush silk dress with floral embroidery | Đầm lụa hồng phấn thêu hoa",
@@ -700,7 +700,8 @@ const galleryChapters = [
   ["showroom", "The showroom", "Không gian nhà may", "/lien-he/#loi-vao-nha-may", "Find the showroom entrance", "Xem lối vào nhà may"]
 ];
 const galleryPortfolioLinks = {
-  suits: ["/san-pham/suit-xam-nhat-hai-hang-khuy/", "/san-pham/ao-khoac-xanh-da-troi/", "/du-an/suit-le-phuc-navy/"],
+  suits: ["/san-pham/suit-xam-nhat-hai-hang-khuy/", "/san-pham/ao-khoac-xanh-da-troi/", "/san-pham/suit-den-ve-chu-k/", "/du-an/suit-le-phuc-navy/"],
+  womenswear: ["/du-an/thu-quan-ong-rong-nu/"],
   appointments: ["/du-an/trang-phuc-san-khau/"]
 };
 
@@ -799,27 +800,13 @@ function transformGallery(html) {
 function transformPayment(html) {
   const range = findElementByClass(html, "section", "st-payment-methods");
   if (!range) throw new Error("The approved payment-method band is missing.");
-  let methods = html.slice(range.start, range.end)
+  const methods = removeElementByClass(
+    html.slice(range.start, range.end), "article", "st-payment-card--legacy-transfer"
+  )
     .replace('<h2 id="st-methods-title">', '<h1 id="st-methods-title">')
     .replace('</h2>', '</h1>')
-    .replace(/<p class="st-payment-methods__note">[\s\S]*?<\/p>/, '<p class="st-payment-methods__note">We’ll share the payment details and any deposit or balance due for your order.<span lang="vi">Nhà may sẽ cung cấp thông tin thanh toán và cho bạn biết khoản cọc hoặc số tiền còn lại cần thanh toán cho đơn hàng.</span></p>');
-  const copy = [
-    ['For cash payments, please use Vietnamese dong (VND) only. You can also pay by bank transfer or QR using the details for your order.', 'Nhà may chỉ nhận tiền mặt bằng đồng Việt Nam (VND). Bạn cũng có thể chuyển khoản hoặc quét mã QR theo thông tin của đơn hàng.'],
-    ['We accept credit and debit cards and prepaid cards, including Visa, Mastercard, Maestro, American Express, JCB, UnionPay, Discover, Diners Club and RuPay. You can also use a Vietnamese NAPAS card. If your card is declined, we can help you choose another way to pay.', 'Chúng tôi nhận thẻ tín dụng và ghi nợ, cũng như thẻ trả trước, gồm Visa, Mastercard, Maestro, American Express, JCB, UnionPay, Discover, Diners Club và RuPay. Bạn cũng có thể dùng thẻ nội địa NAPAS. Nếu giao dịch thẻ bị từ chối, chúng tôi có thể giúp bạn chọn cách thanh toán khác.'],
-    ['Pay with Apple Pay, Google Pay or Samsung Pay at the showroom. You’ll need a compatible NFC device and a card that supports contactless payments through your wallet.', 'Bạn có thể thanh toán bằng Apple Pay, Google Pay hoặc Samsung Pay tại nhà may. Hãy dùng thiết bị có NFC và thẻ hỗ trợ thanh toán chạm qua ví điện tử của bạn.']
-  ];
-  let card = 0;
-  methods = methods.replace(/<article class="st-payment-card">[\s\S]*?<\/article>/g, (article) => {
-    const index = card++;
-    if (index >= copy.length) return "";
-    if (index === 2) article = article.replace(/<h3>[\s\S]*?<\/h3>/, '<h3>NFC MOBILE PAYMENTS<br><span lang="vi">THANH TOÁN DI ĐỘNG NFC</span></h3>');
-    const headEnd = article.indexOf("</h3>") + 5;
-    if (headEnd < 5) throw new Error("Payment method heading is missing.");
-    const [en, vi] = copy[index];
-    return `${article.slice(0, headEnd)}<p>${en}<span lang="vi">${vi}</span></p></article>`;
-  });
-  if (card !== 4) throw new Error("The approved payment reference must contain four original method cards.");
-  methods = methods.replaceAll("<h3>", "<h2>").replaceAll("</h3>", "</h2>");
+    .replaceAll("<h3>", "<h2>")
+    .replaceAll("</h3>", "</h2>");
   return `<div class="st-payment-page st-payment-page--focused">${methods}</div>`;
 }
 
@@ -884,6 +871,7 @@ function transformAbout(html) {
   </div>
 </section>`;
   html = `${html.slice(0, provenanceRange.end)}${clothHeritage}${consultationGuide}${galleryBridge}${html.slice(provenanceRange.end)}`;
+  const tripadvisorListing = "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html";
   const tripadvisor = `
 <section class="st-tripadvisor" id="st-tripadvisor" aria-labelledby="st-tripadvisor-title">
   <div class="st-lux-shell st-tripadvisor__inner">
@@ -901,15 +889,15 @@ function transformAbout(html) {
           <p>See the latest reviews and visitor photos on our listing.<span lang="vi">Xem đánh giá và ảnh mới nhất do khách đăng trên trang Tripadvisor của nhà may.</span></p>
         </div>
         <div class="st-tripadvisor__badge">
-          <div class="st-tripadvisor__badge-placeholder" aria-hidden="true">
-            <img src="/icons/tripadvisor-logomark.svg" alt="" width="34" height="24" loading="lazy">
+          <a class="st-tripadvisor__badge-link" href="${tripadvisorListing}" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note">
+            <img src="/icons/tripadvisor-logomark.svg" alt="" width="34" height="24" loading="lazy" decoding="async">
             <span>Tripadvisor<span lang="vi">Trang đánh giá của S.T Tailor</span></span>
-          </div>
+          </a>
           <iframe class="st-tripadvisor__rating" src="${tripadvisorEmbedPath}" title="Tripadvisor badge for S.T Tailor / Huy hiệu Tripadvisor của S.T Tailor" loading="lazy" width="180" height="112" referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
         </div>
       </div>
       <div class="st-tripadvisor__actions">
-        <a class="st-tripadvisor__link" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note"><span>Read reviews</span><span lang="vi">Đọc đánh giá</span></a>
+        <a class="st-tripadvisor__link" href="${tripadvisorListing}" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note"><span>Read reviews</span><span lang="vi">Đọc đánh giá</span></a>
         <a class="st-tripadvisor__link st-tripadvisor__link--outline" href="https://www.tripadvisor.com/UserReviewEdit-g293925-d34701232-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note"><span>Write a review</span><span lang="vi">Viết đánh giá</span></a>
       </div>
     </article>
@@ -1041,7 +1029,7 @@ const sharedContentModified = "2026-11-27";
 const derivedContentModified = {
   "Home.html": "2026-11-22",
   "About.html": "2026-11-27",
-  "Gallery.html": "2026-11-26", "Payment.html": "2026-11-26",
+  "Gallery.html": "2026-11-27", "Payment.html": "2026-11-27",
   "Returns.html": "2026-11-26", "Shipping.html": "2026-10-18",
   "Terms.html": "2026-10-18", "Privacy.html": "2026-10-18"
 };
@@ -1286,7 +1274,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     : "";
   const siteHeader = enrichImageAttributes(header(route), { responsiveSizes: "102px" });
   const siteFooter = enrichImageAttributes(footer(sourceFile === "Error.html" ? null : route), { responsiveSizes: "160px" });
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">${heroPreload}<link rel="stylesheet" href="${stylesheetHref}">${fontPreload}${googleTagManagerHead}${analyticsTags}<meta name="description" content="${safeDescription}"><meta name="author" content="S.T Tailor"><meta name="application-name" content="S.T Tailor"><meta name="sttailor-build-revision" content="${buildRevision}"><meta name="color-scheme" content="light"><meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="google-site-verification" content="e1RyHPdDirO6wJIxuZKKSIY6EXYb37XMfktIVl3aJz8"><meta name="p:domain_verify" content="78c108c3384a3aa9201fb90b99f0b225"><link rel="canonical" href="${canonical}"><link rel="icon" href="/icons/sttailor-favicon-48.png" type="image/png" sizes="48x48"><link rel="apple-touch-icon" href="/icons/sttailor-apple-touch-180.png" sizes="180x180"><link rel="manifest" href="/site.webmanifest"><meta property="og:title" content="${safeTitle}"><meta property="og:description" content="${safeDescription}"><meta property="og:type" content="${isWatchPage ? "video.other" : "website"}">${openGraphVideo}<meta property="og:url" content="${canonical}"><meta property="og:site_name" content="S.T Tailor"><meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:image" content="${shareImageUrl}"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:alt" content="${safeImageAlt}">${shareDimensions}<meta name="theme-color" content="#ead1ad"><title>${safeTitle}</title></head><body>${googleTagManagerNoScript}${metaPixelNoScript}<div class="st-site-frame">${siteHeader}<main id="main-content" tabindex="-1">${breadcrumbNavigation(trail)}${body}</main>${siteFooter}</div><script type="module" src="${scriptHref}"></script>${jsonLd}</body></html>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">${heroPreload}<link rel="stylesheet" href="${stylesheetHref}">${fontPreload}${googleTagManagerHead}${analyticsTags}<meta name="description" content="${safeDescription}"><meta name="author" content="S.T Tailor"><meta name="application-name" content="S.T Tailor"><meta name="sttailor-build-revision" content="${buildRevision}"><meta name="color-scheme" content="light"><meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="google-site-verification" content="e1RyHPdDirO6wJIxuZKKSIY6EXYb37XMfktIVl3aJz8"><meta name="p:domain_verify" content="78c108c3384a3aa9201fb90b99f0b225"><link rel="canonical" href="${canonical}"><link rel="describedby" href="/llms.txt" type="text/plain"><link rel="icon" href="/icons/sttailor-favicon-48.png" type="image/png" sizes="48x48"><link rel="apple-touch-icon" href="/icons/sttailor-apple-touch-180.png" sizes="180x180"><link rel="manifest" href="/site.webmanifest"><meta property="og:title" content="${safeTitle}"><meta property="og:description" content="${safeDescription}"><meta property="og:type" content="${isWatchPage ? "video.other" : "website"}">${openGraphVideo}<meta property="og:url" content="${canonical}"><meta property="og:site_name" content="S.T Tailor"><meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:image" content="${shareImageUrl}"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:alt" content="${safeImageAlt}">${shareDimensions}<meta name="theme-color" content="#ead1ad"><title>${safeTitle}</title></head><body>${googleTagManagerNoScript}${metaPixelNoScript}<div class="st-site-frame">${siteHeader}<main id="main-content" tabindex="-1">${breadcrumbNavigation(trail)}${body}</main>${siteFooter}</div><script type="module" src="${scriptHref}"></script>${jsonLd}</body></html>`;
 }
 
 function collectAssetPaths() {
@@ -1506,7 +1494,8 @@ const sitemapEntries = routes.map(([route, , , , shareImage]) => {
   for (const src of imagePaths(main)) {
     if (!/(?:logo-sttailor|LinkedInLogo|chu-ky-)/i.test(src)) imageLocations.add(src);
   }
-  const imageEntries = [...imageLocations].slice(0, 1000).map((src) => `<image:image><image:loc>https://sttailor.com${xmlEscape(src)}</image:loc></image:image>`).join("");
+  if (imageLocations.size > 1000) throw new Error(`${route} exceeds the sitemap limit of 1,000 images per page.`);
+  const imageEntries = [...imageLocations].map((src) => `<image:image><image:loc>https://sttailor.com${xmlEscape(src)}</image:loc></image:image>`).join("");
   const videoEntry = route === fittingFilmRoute
     ? `<video:video><video:thumbnail_loc>https://sttailor.com${galleryFilm.poster}</video:thumbnail_loc><video:title>${xmlEscape(galleryFilm.name)}</video:title><video:description>${xmlEscape(galleryFilm.description)}</video:description><video:content_loc>https://sttailor.com${galleryFilm.src}</video:content_loc><video:duration>${galleryFilm.duration}</video:duration><video:publication_date>${galleryFilm.publishedAt}</video:publication_date></video:video>`
     : "";
@@ -1516,12 +1505,35 @@ writeFileSync(path.join(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF
 writeFileSync(path.join(dist, "site.webmanifest"), JSON.stringify({ name: "S.T Tailor", short_name: "S.T Tailor", description: "Bespoke tailoring and clothing alterations in Ho Chi Minh City.", start_url: "/", scope: "/", display: "standalone", background_color: "#f3e1c5", theme_color: "#ead1ad", icons: [{ src: "/icons/sttailor-app-192.png", sizes: "192x192", type: "image/png", purpose: "any" }, { src: "/icons/sttailor-app-large-512.png", sizes: "512x512", type: "image/png", purpose: "any" }] }, null, 2), "utf8");
 mkdirSync(path.join(dist, ".well-known"), { recursive: true });
 copyFileSync(path.join(root, "source", "security.txt"), path.join(dist, ".well-known", "security.txt"));
-const bilingualSummaries = new Map([
-  ...showcaseEntries.map(({ route, summary }) => [route, summary]),
-  ...tailoringPages.filter(({ descriptionVi }) => descriptionVi)
-    .map(({ route, description, descriptionVi }) => [route, [description, descriptionVi]])
+const vietnameseDescriptions = new Map([
+  ["/", "S.T Tailor may đo suit, sơ mi, lễ phục và chỉnh sửa trang phục tại Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định, TP. Hồ Chí Minh. Có thể đặt lịch tư vấn riêng."],
+  ["/gioi-thieu/", "Tìm hiểu về nhà may S.T Tailor, dịch vụ may đo và sửa đồ, vải Anh và Ý, lụa tơ tằm Việt Nam và các buổi thử riêng."],
+  ["/dich-vu/", "Xem các dịch vụ may suit, sơ mi, lễ phục, trang phục nữ, thử đồ và chỉnh sửa trang phục ở trung tâm TP. Hồ Chí Minh."],
+  ["/gallery/", "Xem ảnh chất liệu, buổi thử đồ, suit, lễ phục, trang phục nữ, chi tiết đường may và không gian S.T Tailor."],
+  [fittingFilmRoute, "Xem khách thử độ rủ và chuyển động của chân váy đen dài trong một buổi thử đồ tại S.T Tailor."],
+  ["/bang-gia/", "Xem giá khởi điểm khi may đo suit, sơ mi, lễ phục hoặc chỉnh sửa trang phục trước buổi tư vấn tại S.T Tailor."],
+  ["/phuong-thuc-thanh-toan/", "Thanh toán bằng tiền mặt VND, chuyển khoản, mã QR, thẻ quốc tế hoặc Apple Pay, Google Pay và Samsung Pay qua NFC."],
+  ["/lien-he/", "Liên hệ qua điện thoại, email, Messenger, Zalo, Instagram hoặc WhatsApp để hẹn tư vấn may đo riêng."],
+  ["/cam-nang-may-do/", "Đọc hướng dẫn song ngữ về chọn vải, thử đồ, chỉnh sửa và chăm sóc trang phục may đo."],
+  ["/chon-vai-may-do/", "Chọn vải may suit và lễ phục theo dịp sử dụng, khí hậu, độ rủ và cách chăm sóc."],
+  ["/quy-trinh-thu-do/", "Xem từng bước từ tư vấn, lấy số đo, thử và chỉnh phom đến nhận trang phục tại S.T Tailor."],
+  ["/chinh-sua-trang-phuc/", "Tìm hiểu nhà may kiểm tra những gì trước khi sửa lai quần, cạp quần, tay áo khoác hoặc xử lý các hư hỏng trên trang phục."],
+  ["/bao-quan-giat-la/", "Xem cách hong, chải, cất giữ, xử lý vết bẩn, giặt và là trang phục may đo, cũng như khi nào nên mang đi giặt chuyên nghiệp."],
+  [clientCareHubRoute, "Tìm thông tin về thanh toán, nhận và bảo quản đồ may đo, cùng cách trao đổi với nhà may khi cần hỗ trợ."],
+  ["/doi-tra-hoan-tien/", "Đọc chính sách đổi trả và hoàn tiền đối với đồ may đo, dịch vụ sửa đồ, vấn đề phát sinh và yêu cầu hủy đơn."],
+  ["/chinh-sach-van-chuyen/", "Xem các lựa chọn nhận đồ tại nhà may, giao nội thành TP. Hồ Chí Minh, gửi trong nước và gửi quốc tế."],
+  ["/dieu-khoan-dieu-kien/", "Xem điều khoản về báo giá, thử đồ, thanh toán, giao nhận, thay đổi đơn và quyền của người tiêu dùng tại Việt Nam."],
+  ["/chinh-sach-bao-mat/", "Tìm hiểu cách S.T Tailor xử lý yêu cầu tư vấn, số đo, thông tin đơn hàng và dữ liệu phân tích website, cùng cách liên hệ về quyền riêng tư."],
+  ["/san-pham/", "Xem từng nhóm trang phục S.T Tailor đã hoàn thiện, từ suit và áo khoác dự tiệc đến trang phục nữ, sơ mi và quần tây."],
+  ["/du-an/", "Xem các buổi thử đồ, trang phục đặt may đã hoàn thiện và dự án hợp tác với ca sĩ Niña Campos tại TP. Hồ Chí Minh."],
+  ...tailoringPages.map(({ route, descriptionVi }) => [route, descriptionVi])
 ]);
-const llmsLink = ([route, , , description]) => `- [${pageLabels.get(route).join(" / ")}](https://sttailor.com${route}): ${bilingualSummaries.get(route)?.join(" / ") ?? description}`;
+const showcaseSummaries = new Map(showcaseEntries.map(({ route, summary }) => [route, summary]));
+const llmsLink = ([route, , , description]) => {
+  const [english, vietnamese] = showcaseSummaries.get(route) ?? [description, vietnameseDescriptions.get(route)];
+  if (!english?.trim() || !vietnamese?.trim()) throw new Error(`Missing a bilingual llms.txt summary for ${route}`);
+  return `- [${pageLabels.get(route).join(" / ")}](https://sttailor.com${route}): ${english} / ${vietnamese}`;
+};
 const guidePaths = new Set(["/cam-nang-may-do/", ...guideRoutes.map(([route]) => route)]);
 const showcasePaths = new Set(showcasePages.map(({ route }) => route));
 const clientCarePaths = new Set([clientCareHubRoute, ...policyRoutes, ...clientCareGuides.map(({ route }) => route)]);

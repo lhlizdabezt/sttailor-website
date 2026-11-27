@@ -37,7 +37,9 @@ const entries = await Promise.all(Object.entries(paths).map(async ([key, path]) 
 const report = Object.fromEntries(entries);
 const settings = Object.fromEntries((report.settings.result ?? []).map((item) => [item.id, item.value]));
 
-const dns = (report.dns.result ?? []).map(({ type, name, content, proxied, ttl }) => ({ type, name, content, proxied, ttl }));
+// Proxied DNS targets and page rule values can contain infrastructure details
+// that public lookups do not expose. Keep the Actions report to inventory.
+const dns = (report.dns.result ?? []).map(({ type, name, proxied, ttl }) => ({ type, name, proxied, ttl }));
 const routeRules = (report.routes.result ?? []).map(({ pattern, script, enabled }) => ({ pattern, script, enabled }));
 const rulesets = (report.rulesets.result ?? []).map(({ name, phase, kind }) => ({ name, phase, kind }));
 const certificates = (report.certificates.result ?? []).map(({ hosts, status, type }) => ({ hosts, status, type }));
@@ -53,7 +55,11 @@ console.log(JSON.stringify({
   certificates,
   workerRoutes: routeRules,
   rulesets,
-  pageRules: (report.pageRules.result ?? []).map(({ targets, actions, status }) => ({ targets, actions, status })),
+  pageRules: (report.pageRules.result ?? []).map(({ targets, actions, status }) => ({
+    targets: (targets ?? []).map(({ target }) => target),
+    actions: (actions ?? []).map(({ id }) => id),
+    status
+  })),
   // Never serialize raw Worker settings: bindings include plaintext variables.
   workerSettings: workerSettings ? {
     compatibilityDate: workerSettings.compatibility_date,

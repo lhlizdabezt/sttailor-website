@@ -1,13 +1,22 @@
 const toggle = document.querySelector("[data-nav-toggle]");
 const nav = document.querySelector("[data-site-nav]");
 const tripadvisorBadge = document.querySelector(".st-tripadvisor__badge");
+const badgeFrame = tripadvisorBadge?.querySelector("iframe");
 
-if (tripadvisorBadge) {
-  const badgeFrame = tripadvisorBadge.querySelector("iframe");
+if (badgeFrame) {
+  const fallback = tripadvisorBadge.querySelector(".st-tripadvisor__badge-link");
+  let badgeReady = false;
+  const updateBadgeVisibility = () => {
+    // The official badge can load while someone is navigating the fallback.
+    if (badgeReady && fallback && document.activeElement === fallback) return;
+    tripadvisorBadge.toggleAttribute("data-badge-ready", badgeReady);
+  };
+  fallback?.addEventListener("blur", () => requestAnimationFrame(updateBadgeVisibility));
   window.addEventListener("message", (event) => {
     if (event.source !== badgeFrame.contentWindow || event.origin !== "null") return;
-    if (event.data === "st-tailor-tripadvisor-ready") tripadvisorBadge.setAttribute("data-badge-ready", "");
-    if (event.data === "st-tailor-tripadvisor-unavailable") tripadvisorBadge.removeAttribute("data-badge-ready");
+    if (event.data !== "st-tailor-tripadvisor-ready" && event.data !== "st-tailor-tripadvisor-unavailable") return;
+    badgeReady = event.data === "st-tailor-tripadvisor-ready";
+    updateBadgeVisibility();
   });
   // The vendor can render before this module or before the frame's load event.
   // The query carries no data and must target the frame's opaque sandbox origin.

@@ -369,27 +369,34 @@ html body .st-tripadvisor__badge {
   min-height: 112px;
   justify-self: center;
 }
-html body .st-tripadvisor__badge-placeholder {
+html body #main-content .st-tripadvisor__badge-link {
   grid-area: 1 / 1;
   box-sizing: border-box;
   display: grid;
   width: 100%;
+  min-height: 100px;
   padding: 12px;
   place-items: center;
+  align-content: center;
   gap: 6px;
-  border: 1px solid #b99672;
+  border: 1px solid #96714f;
   background: #fff8ed;
-  color: #352116;
+  color: #352116 !important;
+  -webkit-text-fill-color: #352116 !important;
   text-align: center;
+  text-decoration: none !important;
   font: 600 16px/1.35 var(--st-vietnamese);
 }
-html body .st-tripadvisor__badge-placeholder [lang="vi"] {
+html body #main-content .st-tripadvisor__badge-link [lang="vi"] {
   display: block;
   margin-top: 3px;
-  color: #624330;
+  color: #624330 !important;
+  -webkit-text-fill-color: #624330 !important;
   font-size: 14px;
   font-weight: 500;
 }
+html body #main-content .st-tripadvisor__badge-link:hover { background: #f2e2cb; }
+html body #main-content .st-tripadvisor__badge-link:focus-visible { outline: 3px solid #764225 !important; outline-offset: 3px !important; }
 html body .st-tripadvisor__rating {
   grid-area: 1 / 1;
   display: block;
@@ -398,7 +405,7 @@ html body .st-tripadvisor__rating {
   visibility: hidden;
 }
 html body .st-tripadvisor__badge[data-badge-ready] .st-tripadvisor__rating { visibility: visible; }
-html body .st-tripadvisor__badge[data-badge-ready] .st-tripadvisor__badge-placeholder { visibility: hidden; }
+html body .st-tripadvisor__badge[data-badge-ready] .st-tripadvisor__badge-link { visibility: hidden; }
 html body .st-tripadvisor__actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 10px; padding-top: 14px; border-top: 1px solid #b99672; }
 html body .st-tripadvisor__link { display: grid !important; box-sizing: border-box; min-height: 70px !important; padding: 10px !important; align-content: center !important; justify-items: center !important; gap: 3px !important; border: 1px solid #513320 !important; background: #352116 !important; color: #fff7e9 !important; -webkit-text-fill-color: #fff7e9 !important; font: 650 15px/1.35 var(--st-vietnamese) !important; text-align: center; text-decoration: none !important; }
 html body .st-tripadvisor__link span[lang="vi"] { color: #edd0aa !important; -webkit-text-fill-color: #edd0aa !important; }
@@ -1749,7 +1756,8 @@ html body #st-home-v6.st-home-v6--mission .st-home-v6__kicker [lang="vi"],
 html body #main-content .st-lux-page.st-lux-about .st-lux-eyebrow [lang="vi"],
 html body .st-lux-page.st-lux-about .st-about-atelier-panel__eyebrow span[lang="vi"],
 html body #st-pricing-v5.stpr-ledger :is(.stpr-priceboard__head, .stpr-next-card, .stpr-cta) .stpr-eyebrow [lang="vi"],
-html body :is(.st-page-kicker, .st-gallery-kicker, .st-guide-kicker, .st-info-kicker, .st-contact-gallery-redirect__eyebrow, .st-policy-refund-link__eyebrow, .st-error-404__eyebrow) > [lang="vi"] { font-size: inherit !important; }
+html body :is(.st-page-kicker, .st-gallery-kicker, .st-guide-kicker, .st-info-kicker, .st-contact-gallery-redirect__eyebrow, .st-policy-refund-link__eyebrow, .st-error-404__eyebrow) > [lang="vi"],
+html body .st-gallery-page--albums .st-gallery-film__copy > .st-gallery-film__kicker [lang="vi"] { font-size: inherit !important; }
 html body .st-contact-page--v2 .st-contact-item h2,
 html body .st-contact-page--v2 .st-contact-card h3,
 html body .st-contact-page--v2 :is(h2, h3),
@@ -2142,7 +2150,7 @@ html body .st-footer-v7.st-footer-v8 :is(.st-footer-v7__nav, .st-footer-v7__visi
   font-weight: 400 !important;
 }
 html body .st-footer-v7.st-footer-v8 .st-footer-v7__eyebrow {
-  font-size: 16px !important;
+  font-size: var(--st-eyebrow-size) !important;
   line-height: 1.55 !important;
 }
 

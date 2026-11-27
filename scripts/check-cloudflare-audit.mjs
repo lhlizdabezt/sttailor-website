@@ -16,6 +16,15 @@ test("Cloudflare audit uses only GET and keeps credentials out of its report", a
     let result = [];
     let status = 200;
     if (url.includes("/zones?")) result = [{ id: "zone", name: "sttailor.com", account: { id: "account" } }];
+    if (url.includes("/dns_records?")) result = [
+      { type: "CNAME", name: "www.sttailor.com", content: secret, proxied: true, ttl: 1 },
+      { type: "TXT", name: "sttailor.com", content: secret, proxied: false, ttl: 1 }
+    ];
+    if (url.endsWith("/pagerules")) result = [{
+      targets: [{ target: "url", constraint: { operator: "matches", value: secret } }],
+      actions: [{ id: "forwarding_url", value: { status_code: 301, url: secret } }],
+      status: "active"
+    }];
     if (url.includes("/workers/scripts/") && url.endsWith("/settings")) result = {
       compatibility_date: "2026-09-23",
       bindings: [
@@ -36,6 +45,11 @@ test("Cloudflare audit uses only GET and keeps credentials out of its report", a
     assert.ok(!output.includes(secret));
     const report = JSON.parse(output);
     assert.equal(Object.keys(report.coverage).length, 9);
+    assert.deepEqual(report.dns, [
+      { type: "CNAME", name: "www.sttailor.com", proxied: true, ttl: 1 },
+      { type: "TXT", name: "sttailor.com", proxied: false, ttl: 1 }
+    ]);
+    assert.deepEqual(report.pageRules, [{ targets: ["url"], actions: ["forwarding_url"], status: "active" }]);
     assert.deepEqual(report.coverage.certificates, { ok: false, status: 403, errorCodes: [10000] });
     assert.deepEqual(report.coverage.routes, { ok: false, status: 0, errorCodes: ["transport_error"] });
     assert.deepEqual(report.workerSettings.bindings, [

@@ -160,9 +160,10 @@ for (const route of expectedRoutes) {
   const widgets = [...html.matchAll(/<iframe\b[^>]*>/g)].filter(([tag]) => tag.includes(`src="${tripadvisorEmbedPath}"`));
   if (html.includes("www.jscache.com/wejs") || widgets.length !== Number(route === "/gioi-thieu/")) failures.push(`Tripadvisor widget placement or isolation is incorrect: ${route}`);
   if (route === "/gioi-thieu/" && (!widgets[0]?.[0].includes('loading="lazy"') || !widgets[0][0].includes('sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"') || !html.includes(`class="st-tripadvisor__link" href="${tripadvisorUrl}"`) || !html.includes('https://www.tripadvisor.com/UserReviewEdit-g293925-d34701232-S_T_Tailor-Ho_Chi_Minh_City.html') || !mainContent.includes('href="/lien-he/#st-showroom-map"'))) failures.push("The Tripadvisor panel needs its sandboxed lazy badge, read and write review links, and showroom map link.");
+  if (route === "/gioi-thieu/" && !mainContent.includes(`class="st-tripadvisor__badge-link" href="${tripadvisorUrl}"`)) failures.push("The Tripadvisor panel needs a direct listing link while the official badge is unavailable.");
   if (route === "/lien-he/" && (!mainContent.includes('id="st-showroom-map"') || !mainContent.includes('href="/gioi-thieu/#st-tripadvisor"'))) failures.push("Contact needs a map anchor and a link to the Tripadvisor panel.");
   if (businessSchema?.currenciesAccepted !== "VND") failures.push(`LocalBusiness currency must match the payment page: ${route}`);
-  for (const marker of ['rel="manifest" href="/site.webmanifest"', 'property="og:image:alt"', 'name="google-site-verification"', 'name="p:domain_verify"']) {
+  for (const marker of ['rel="manifest" href="/site.webmanifest"', 'rel="describedby" href="/llms.txt" type="text/plain"', 'property="og:image:alt"', 'name="google-site-verification"', 'name="p:domain_verify"']) {
     if (!html.includes(marker)) failures.push(`SEO/discovery marker is missing on ${route}: ${marker}`);
   }
   const sharePath = html.match(/property="og:image" content="https:\/\/sttailor\.com(\/media\/_responsive\/[^"]+-share-[a-f0-9]{12}\.jpg)"/)?.[1];
@@ -589,15 +590,24 @@ if (llmsText !== llmsText.normalize("NFC") || /\uFFFD|á[º»]|Ã[\u0080-\u00BF]
 for (const contact of ["tel:+84909556258", "mailto:contact.sttailor@gmail.com", "https://m.me/sttailor.hcm", "https://zalo.me/0909556258", "https://www.instagram.com/sttailorhcm/", "https://wa.me/84909556258"]) {
   if (!llmsText.includes(`](${contact})`)) failures.push(`llms.txt is missing a direct contact channel: ${contact}`);
 }
-const llmsUrls = [...llmsText.matchAll(/\[[^\]]+\]\((https:\/\/sttailor\.com\/[^)]*)\)/g)].map((match) => match[1]);
-if (llmsUrls.length !== expectedRoutes.length || new Set(llmsUrls).size !== expectedRoutes.length || expectedRoutes.some((route) => !llmsUrls.includes(`https://sttailor.com${route}`))) {
-  failures.push("llms.txt must link to every canonical page exactly once in Markdown format.");
+const llmsEntries = [...llmsText.matchAll(/^- \[[^\]]+\]\(https:\/\/sttailor\.com(\/[^)]*)\): ([^\r\n]+)$/gm)];
+const llmsRoutes = new Set(llmsEntries.map(([, route]) => route));
+if (llmsEntries.length !== expectedRoutes.length || llmsRoutes.size !== expectedRoutes.length || expectedRoutes.some((route) => !llmsRoutes.has(route))) {
+  failures.push("llms.txt must describe every canonical page exactly once in Markdown format.");
+}
+for (const [, route, summary] of llmsEntries) {
+  const [english, vietnamese] = summary.split(" / ");
+  if (!english?.trim() || !vietnamese?.trim()) failures.push(`llms.txt must summarize ${route} in English and Vietnamese.`);
 }
 if (existsSync(path.join(dist, indexNowKeyFile)) && readFileSync(path.join(dist, indexNowKeyFile), "utf8") !== `${indexNowKey}\n`) {
   failures.push("IndexNow ownership key file does not contain the expected key.");
 }
 const sitemap = readFileSync(path.join(dist, "sitemap.xml"), "utf8");
-if ((sitemap.match(/<url><loc>https:\/\/sttailor\.com/g) ?? []).length !== expectedRoutes.length || sitemap.includes("beta.sttailor.com")) failures.push("Sitemap does not contain the complete production route set.");
+const sitemapLocations = [...sitemap.matchAll(/<url>\s*<loc>([^<]+)<\/loc>/g)].map(([, location]) => location);
+const sitemapUrls = new Set(sitemapLocations);
+if (sitemapLocations.length !== expectedRoutes.length || sitemapUrls.size !== expectedRoutes.length || expectedRoutes.some((route) => !sitemapUrls.has(`https://sttailor.com${route}`)) || sitemap.includes("beta.sttailor.com")) {
+  failures.push("Sitemap must list every canonical page exactly once.");
+}
 if (!sitemap.includes('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"') || !sitemap.includes("<image:image>")) failures.push("Image sitemap discovery data is missing.");
 const gallerySitemap = sitemap.match(/<url><loc>https:\/\/sttailor\.com\/gallery\/[\s\S]*?<\/url>/)?.[0] ?? "";
 const gallerySitemapImages = [...gallerySitemap.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)].map((match) => match[1]);
