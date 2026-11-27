@@ -5,13 +5,13 @@
 Every successful push to `main` follows this order:
 
 1. Build the public static assets and validate technical SEO.
-2. Deploy the apex Worker and the `www` redirect Worker from GitHub Actions.
+2. Save the current production build manifest, then deploy the apex Worker and the `www` redirect Worker from GitHub Actions.
 3. Verify that production serves the exact Git revision, HTTPS canonical URLs, `robots.txt`, `sitemap.xml`, and the IndexNow ownership key.
-4. Send the canonical URLs from `dist/sitemap.xml` to Bing IndexNow in one batch. The script reads the sitemap so the submission follows the published route set.
+4. Compare the prior and current release manifests. Send new, meaningfully updated and retired canonical URLs to Bing IndexNow in one batch. The script verifies that the current release still matches `dist/sitemap.xml`. The first release after introducing these signatures seeds the baseline. Later releases skip the submission when no URLs change.
 
 The protocol key is published at `https://sttailor.com/7fef6e584133598b3cb206cc3a57f7c2d65f3d2aa8a077d84fe34b88b89cf373.txt`. It is public by design and only proves control of the domain. It is unrelated to Cloudflare or GitHub secrets.
 
-The workflow sends only canonical `https://sttailor.com` pages; it never sends `www`, legacy redirect URLs, `beta`, `workers.dev`, 404s, or media files. Bing receives the update immediately, but acceptance is a crawl hint rather than a promise of ranking or immediate indexing.
+Submitted URLs are canonical `https://sttailor.com` page addresses from either the current or prior production release. GitHub Actions caches the pre-deployment manifest for reruns of the same workflow. IndexNow acceptance gives Bing a crawl hint.
 
 The optional `https://sttailor.com/llms.txt` provides a Markdown summary and links to all canonical pages for AI-agent discovery. It does not replace `robots.txt`, the sitemap, or IndexNow, and its presence does not guarantee inclusion in Bing or any AI answer.
 

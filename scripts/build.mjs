@@ -47,6 +47,7 @@ const suitPiecesGuide = tailoringPages.find(({ source }) => source === "GuideSui
 const liningHeroSizes = "(max-width: 860px) min(calc(100vw - 48px), 480px), min(calc(45vw - 46px), 480px)";
 const editorialGuideHeroes = tailoringPages.filter(({ source }) =>
   ["GuideFirstConsultation.html", "GuideGarmentCollection.html", "GuideWeddingPlanning.html", "GuideAftercare.html", "GuideShirtCollars.html",
+    "GuideOrderQuotation.html", "GuideArrangeDelivery.html", "GuidePackingSuit.html",
     "ServiceShirts.html", "ServiceTrousers.html", "ServiceJackets.html"].includes(source)
 );
 const editorialGuideHeroSizes = "(max-width: 560px) calc(100vw - 28px), (max-width: 860px) calc(100vw - 48px), min(calc(46vw - 36px), 540px)";
@@ -702,8 +703,10 @@ const galleryChapters = [
 const galleryPortfolioLinks = {
   tuxedo: ["/san-pham/so-mi-le-phuc-xep-ly/"],
   suits: ["/san-pham/suit-xam-nhat-hai-hang-khuy/", "/san-pham/ao-khoac-xanh-da-troi/", "/san-pham/suit-den-ve-chu-k/", "/du-an/suit-le-phuc-navy/"],
-  womenswear: ["/du-an/thu-quan-ong-rong-nu/"],
-  appointments: ["/du-an/trang-phuc-san-khau/", "/du-an/ban-giao-trang-phuc-tai-showroom/"]
+  womenswear: ["/du-an/thu-quan-ong-rong-nu/", "/san-pham/ao-co-cao-trang-hoa-thuc-vat/"],
+  "shirts-trousers": ["/san-pham/quan-tay-xanh-xam-xep-ly/", "/du-an/ben-trong-cap-quan-tay/"],
+  "jacket-craft": ["/san-pham/so-mi-soc-nho-co-trang/"],
+  appointments: ["/du-an/trang-phuc-san-khau/", "/du-an/ban-giao-trang-phuc-tai-showroom/", "/du-an/thu-so-mi-trang-va-quan-toi-mau/"]
 };
 
 function transformGallery(html) {
@@ -889,12 +892,12 @@ function transformAbout(html) {
           <h3 id="st-tripadvisor-listing-title">S.T Tailor on Tripadvisor<span lang="vi">S.T Tailor trên Tripadvisor</span></h3>
           <p>See the latest reviews and visitor photos on our listing.<span lang="vi">Xem đánh giá và ảnh mới nhất do khách đăng trên trang Tripadvisor của nhà may.</span></p>
         </div>
-        <div class="st-tripadvisor__badge">
-          <a class="st-tripadvisor__badge-link" href="${tripadvisorListing}" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note">
+        <div class="st-tripadvisor__embed">
+          <a class="st-tripadvisor__embed-link" href="${tripadvisorListing}" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note">
             <img src="/icons/tripadvisor-logomark.svg" alt="" width="34" height="24" loading="lazy" decoding="async">
-            <span>Tripadvisor<span lang="vi">Trang đánh giá của S.T Tailor</span></span>
+            <span>View on Tripadvisor<span lang="vi">Xem trên Tripadvisor</span></span>
           </a>
-          <iframe class="st-tripadvisor__rating" src="${tripadvisorEmbedPath}" title="Tripadvisor badge for S.T Tailor / Huy hiệu Tripadvisor của S.T Tailor" loading="lazy" width="180" height="112" referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
+          <iframe class="st-tripadvisor__frame" src="${tripadvisorEmbedPath}" title="Recent Tripadvisor reviews for S.T Tailor / Đánh giá gần đây của S.T Tailor trên Tripadvisor" loading="lazy" width="248" height="218" referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
         </div>
       </div>
       <div class="st-tripadvisor__actions">
@@ -1058,7 +1061,10 @@ function lastModifiedFor(sourceFile) {
 }
 
 function header(activePath) {
-  const nav = primaryNavigation.map(([href, label, vietnamese]) => `<a href="${href}"${activePath === href ? " aria-current=\"page\"" : ""}><span>${label}</span><span lang="vi">${vietnamese}</span></a>`).join("");
+  const nav = primaryNavigation.map(([href, label, vietnamese]) => {
+    const state = activePath === href ? ' aria-current="page"' : activePath.startsWith(href) ? " data-section-current" : "";
+    return `<a href="${href}"${state}><span>${label}</span><span lang="vi">${vietnamese}</span></a>`;
+  }).join("");
   return `<a class="st-skip-link" href="#main-content">Skip to content <span lang="vi">/ Chuyển đến nội dung</span></a>
 <header class="st-site-header"><div class="st-site-header__bar">
   <a class="st-site-brand" href="/" aria-label="S.T Tailor home"><img src="/media/2026/09/logo-sttailor.png" alt="S.T Tailor" width="1239" height="1269" decoding="async"></a>
@@ -1084,8 +1090,10 @@ function footer(route) {
     const [title, translation] = pageLabels.get(href);
     return `<li><a href="${href}"${href === route ? ' aria-current="page"' : ''}><span>${xmlEscape(title)}</span><span lang="vi">${xmlEscape(translation)}</span><code aria-hidden="true">${href}</code></a></li>`;
   }).join("")}</ul>`;
-  const directory = groups.map(([english, vietnamese, paths, sections = []]) => `
-    <details name="st-site-directory">
+  const directory = groups.map(([english, vietnamese, paths, sections = []]) => {
+    const containsCurrentPage = paths.includes(route) || sections.some(([, , entries]) => entries.includes(route));
+    return `
+    <details name="st-site-directory"${containsCurrentPage ? " data-current-group" : ""}>
       <summary><span>${xmlEscape(english)}<span lang="vi">${xmlEscape(vietnamese)}</span></span></summary>
       ${directoryList(paths)}
       ${sections.filter(([, , entries]) => entries.length).map(([title, translation, entries]) => `
@@ -1093,7 +1101,8 @@ function footer(route) {
         <h3>${xmlEscape(title)}<span lang="vi">${xmlEscape(translation)}</span></h3>
         ${directoryList(entries)}
       </section>`).join("")}
-    </details>`).join("");
+    </details>`;
+  }).join("");
   return transformFooter(readSource("Footer.html"), route).replace("<!-- SITE_DIRECTORY -->", directory);
 }
 
@@ -1237,10 +1246,10 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     webPage.breadcrumb = { "@id": `${canonical}#breadcrumb` };
     graph.push({ "@type": "BreadcrumbList", "@id": `${canonical}#breadcrumb`, itemListElement });
   }
-  const jsonLd = `<script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@graph": graph })}</script>`;
-  const safeTitle = title.replaceAll('"', "&quot;");
-  const safeDescription = description.replaceAll('"', "&quot;");
-  const safeImageAlt = shareImageAlt.replaceAll('"', "&quot;");
+  const jsonLd = `<script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replaceAll("<", "\\u003c")}</script>`;
+  const safeTitle = xmlEscape(title);
+  const safeDescription = xmlEscape(description);
+  const safeImageAlt = xmlEscape(shareImageAlt);
   const shareMetadata = imageManifest[shareImage.slice("/media/".length)];
   const sharePreview = shareMetadata.share;
   const shareImageUrl = `https://sttailor.com${sharePreview.src}`;
@@ -1487,7 +1496,17 @@ writeFileSync(path.join(dist, indexNowKeyFile), `${indexNowKey}\n`, "utf8");
 function xmlEscape(value) {
   return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&apos;");
 }
-const sitemapEntries = routes.map(([route, , , , shareImage]) => {
+const indexNowPageSignatures = {};
+const indexedAssetSignatures = new Map();
+function indexedAssetSignature(asset) {
+  if (!indexedAssetSignatures.has(asset)) {
+    const bytes = readFileSync(path.join(dist, decodeURIComponent(asset.slice(1))));
+    indexedAssetSignatures.set(asset, createHash("sha256").update(bytes).digest("hex"));
+  }
+  return indexedAssetSignatures.get(asset);
+}
+
+const sitemapEntries = routes.map(([route, , title, description, shareImage, shareImageAlt]) => {
   const pagePath = route === "/" ? path.join(dist, "index.html") : path.join(dist, route.slice(1), "index.html");
   const pageHtml = readFileSync(pagePath, "utf8");
   const imageLocations = new Set([shareImage]);
@@ -1495,6 +1514,13 @@ const sitemapEntries = routes.map(([route, , , , shareImage]) => {
   for (const src of imagePaths(main)) {
     if (!/(?:logo-sttailor|LinkedInLogo|chu-ky-)/i.test(src)) imageLocations.add(src);
   }
+  const indexedAssets = [...imageLocations];
+  if (route === fittingFilmRoute) indexedAssets.push(galleryFilm.src, galleryFilm.poster);
+  const schema = JSON.parse(pageHtml.match(/<script type="application\/ld\+json">([^<]+)<\/script>/)[1]);
+  // Publication dates and the shared shell can change without a change to this page's content.
+  const pageContent = JSON.stringify({ title, description, shareImageAlt, main, schema, media: indexedAssets.map(indexedAssetSignature) },
+    (key, value) => key === "dateModified" ? undefined : value);
+  indexNowPageSignatures[route] = createHash("sha256").update(pageContent).digest("hex");
   if (imageLocations.size > 1000) throw new Error(`${route} exceeds the sitemap limit of 1,000 images per page.`);
   const imageEntries = [...imageLocations].map((src) => `<image:image><image:loc>https://sttailor.com${xmlEscape(src)}</image:loc></image:image>`).join("");
   const videoEntry = route === fittingFilmRoute
@@ -1572,5 +1598,5 @@ const assetHeaders = "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: 
 // Cloudflare Early Hints to discover the critical CSS for each public page.
 const stylesheetHints = Object.entries(routeStyles).map(([route, { href }]) => `${route}\n  Link: <${href}>; rel=preload; as=style`);
 writeFileSync(path.join(dist, "_headers"), [assetHeaders.trimEnd(), ...stylesheetHints].join("\n\n") + "\n", "utf8");
-writeFileSync(path.join(dist, "build-manifest.json"), JSON.stringify({ source: "source/wordpress", sourceMedia: "source/media", revision: buildRevision, routes: routes.map(([route]) => route), routeStyles, localUploadAssets: assets.length, imageMetadata: imageCount, galleryDuplicateCheck: "passed" }, null, 2), "utf8");
+writeFileSync(path.join(dist, "build-manifest.json"), JSON.stringify({ source: "source/wordpress", sourceMedia: "source/media", revision: buildRevision, routes: routes.map(([route]) => route), routeStyles, indexNowPageSignatures, localUploadAssets: assets.length, imageMetadata: imageCount, galleryDuplicateCheck: "passed" }, null, 2), "utf8");
 console.log(`Built ${routes.length} routes from the versioned WordPress reference with ${assets.length} local upload assets and dimensions for ${imageCount} images.`);

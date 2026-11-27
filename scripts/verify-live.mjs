@@ -11,7 +11,7 @@ const origin = "https://sttailor.com";
 const expectedBuildRevision = process.env.EXPECTED_BUILD_REVISION;
 if (expectedBuildRevision && !/^[0-9a-f]{40}$/i.test(expectedBuildRevision)) throw new Error("EXPECTED_BUILD_REVISION must be a full Git commit SHA.");
 const dist = fileURLToPath(new URL("../dist/", import.meta.url));
-const { routes } = JSON.parse(readFileSync(path.join(dist, "build-manifest.json"), "utf8"));
+const { routes, indexNowPageSignatures } = JSON.parse(readFileSync(path.join(dist, "build-manifest.json"), "utf8"));
 
 const failures = [];
 const expect = (condition, message) => {
@@ -118,7 +118,7 @@ for (const route of routes) {
 const reviewWidget = await fetchWithRetry(`${origin}${tripadvisorEmbedPath}`);
 const reviewWidgetHtml = await reviewWidget.text();
 expect(reviewWidget.status === 200 && reviewWidget.headers.get("x-robots-tag") === "noindex, follow" && reviewWidget.headers.get("content-security-policy") === contentSecurityPolicy(tripadvisorEmbedPath), "Tripadvisor embed headers are incorrect");
-expect(reviewWidgetHtml.includes('id="TA_rated383"') && reviewWidgetHtml.includes("wejs?wtype=rated") && reviewWidgetHtml.includes('class="st-tripadvisor__fallback"'), "Tripadvisor embed lost the official badge or fallback");
+expect(reviewWidgetHtml.includes('id="TA_selfserveprop383"') && reviewWidgetHtml.includes("wejs?wtype=selfserveprop") && reviewWidgetHtml.includes("&amp;nreviews=2") && reviewWidgetHtml.includes('class="st-tripadvisor__fallback"'), "Tripadvisor embed lost the official review snippets or fallback");
 
 const gatewayHealth = await fetchWithRetry(`${origin}/n31x/healthy`);
 expect(gatewayHealth.status === 200 && (await gatewayHealth.text()).trim() === "ok", "First-party Google tag gateway health check failed");
@@ -306,6 +306,12 @@ expect(llmsText === readFileSync(path.join(dist, "llms.txt"), "utf8"), "Producti
 
 const indexNowKeyResponse = await fetchWithRetry(`${origin}/${indexNowKeyFile}`);
 expect(indexNowKeyResponse.status === 200 && (await indexNowKeyResponse.text()).trim() === indexNowKey, "IndexNow ownership key file is missing or invalid");
+const manifestResponse = await fetchWithRetry(`${origin}/build-manifest.json`);
+const liveManifest = manifestResponse.ok ? await manifestResponse.json() : {};
+expect(manifestResponse.ok && (!expectedBuildRevision || liveManifest.revision === expectedBuildRevision) &&
+  Object.keys(liveManifest.indexNowPageSignatures ?? {}).length === routes.length &&
+  routes.every((route) => liveManifest.indexNowPageSignatures?.[route] === indexNowPageSignatures?.[route]),
+  "Production does not serve the expected IndexNow release signatures");
 
 const sitemap = await fetchWithRetry(`${origin}/sitemap.xml`);
 const sitemapText = await sitemap.text();

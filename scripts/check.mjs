@@ -21,6 +21,7 @@ const expectedRoutes = ["/", "/gioi-thieu/", "/dich-vu/", "/gallery/", "/phim-th
 const utf8 = new TextDecoder("utf-8", { fatal: true });
 const pageTitles = new Set();
 const pageDescriptions = new Set();
+const escapedMetadataCharacter = /&(?:amp|lt|gt|quot|apos);/g;
 const pageEditorialImages = new Map();
 const anchorIds = new Map();
 const siteCssSymbols = new Set([...readFileSync(path.join(dist, "styles", "site.css"), "utf8").matchAll(/[.#]((?:st-|stp-|stpr-)[A-Za-z0-9_-]+)/g)].map((match) => match[1]));
@@ -38,7 +39,7 @@ if (manifest.source !== "source/wordpress" || manifest.sourceMedia !== "source/m
 if (!manifest.revision || !/^(local|[0-9a-f]{40})$/i.test(manifest.revision)) failures.push("Build manifest does not contain a valid deployment revision.");
 if (JSON.stringify(manifest.routes) !== JSON.stringify(expectedRoutes)) failures.push("Published route set does not match the approved site map.");
 const tripadvisorEmbed = readFileSync(path.join(dist, tripadvisorEmbedPath.slice(1), "index.html"), "utf8");
-if (!tripadvisorEmbed.includes('name="robots" content="noindex, follow"') || !tripadvisorEmbed.includes('class="st-tripadvisor__fallback"') || !tripadvisorEmbed.includes('<script async src="https://www.jscache.com/wejs?wtype=rated')) failures.push("The Tripadvisor embed needs its official badge, fallback and noindex directive.");
+if (!tripadvisorEmbed.includes('name="robots" content="noindex, follow"') || !tripadvisorEmbed.includes('class="st-tripadvisor__fallback"') || !tripadvisorEmbed.includes('<script async src="https://www.jscache.com/wejs?wtype=selfserveprop') || !tripadvisorEmbed.includes("&amp;nreviews=2")) failures.push("The Tripadvisor embed needs its official review snippets, fallback and noindex directive.");
 
 for (const route of expectedRoutes) {
   const page = route === "/" ? path.join(dist, "index.html") : path.join(dist, route.slice(1), "index.html");
@@ -75,8 +76,10 @@ for (const route of expectedRoutes) {
   }
   const title = html.match(/<title>([^<]+)<\/title>/)?.[1] ?? "";
   const description = html.match(/<meta name="description" content="([^"]+)"/)?.[1] ?? "";
-  if (!title || title.length < 30 || title.length > 65) failures.push(`SEO title length is outside the useful range: ${route}`);
-  if (!description || description.length < 100 || description.length > 170) failures.push(`SEO description length is outside the useful range: ${route}`);
+  const titleLength = title.replace(escapedMetadataCharacter, " ").length;
+  const descriptionLength = description.replace(escapedMetadataCharacter, " ").length;
+  if (titleLength < 30 || titleLength > 65) failures.push(`SEO title length is outside the useful range: ${route}`);
+  if (descriptionLength < 100 || descriptionLength > 170) failures.push(`SEO description length is outside the useful range: ${route}`);
   pageTitles.add(title);
   pageDescriptions.add(description);
   if (!html.includes("st-site-header") || !html.includes("st-footer-v7 st-footer-v8")) failures.push(`Missing shared navigation or footer: ${route}`);
@@ -163,8 +166,8 @@ for (const route of expectedRoutes) {
   if ((businessSchema?.sameAs ?? []).filter((url) => url === tripadvisorUrl).length !== 1) failures.push(`Official Tripadvisor listing is missing or duplicated in LocalBusiness schema: ${route}`);
   const widgets = [...html.matchAll(/<iframe\b[^>]*>/g)].filter(([tag]) => tag.includes(`src="${tripadvisorEmbedPath}"`));
   if (html.includes("www.jscache.com/wejs") || widgets.length !== Number(route === "/gioi-thieu/")) failures.push(`Tripadvisor widget placement or isolation is incorrect: ${route}`);
-  if (route === "/gioi-thieu/" && (!widgets[0]?.[0].includes('loading="lazy"') || !widgets[0][0].includes('sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"') || !html.includes(`class="st-tripadvisor__link" href="${tripadvisorUrl}"`) || !html.includes('https://www.tripadvisor.com/UserReviewEdit-g293925-d34701232-S_T_Tailor-Ho_Chi_Minh_City.html') || !mainContent.includes('href="/lien-he/#st-showroom-map"'))) failures.push("The Tripadvisor panel needs its sandboxed lazy badge, read and write review links, and showroom map link.");
-  if (route === "/gioi-thieu/" && !mainContent.includes(`class="st-tripadvisor__badge-link" href="${tripadvisorUrl}"`)) failures.push("The Tripadvisor panel needs a direct listing link while the official badge is unavailable.");
+  if (route === "/gioi-thieu/" && (!widgets[0]?.[0].includes('loading="lazy"') || !widgets[0][0].includes('sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"') || !html.includes(`class="st-tripadvisor__link" href="${tripadvisorUrl}"`) || !html.includes('https://www.tripadvisor.com/UserReviewEdit-g293925-d34701232-S_T_Tailor-Ho_Chi_Minh_City.html') || !mainContent.includes('href="/lien-he/#st-showroom-map"'))) failures.push("The Tripadvisor panel needs its sandboxed lazy review snippets, read and write review links, and showroom map link.");
+  if (route === "/gioi-thieu/" && !mainContent.includes(`class="st-tripadvisor__embed-link" href="${tripadvisorUrl}"`)) failures.push("The Tripadvisor panel needs a direct listing link while the official reviews are unavailable.");
   if (route === "/lien-he/" && (!mainContent.includes('id="st-showroom-map"') || !mainContent.includes('href="/gioi-thieu/#st-tripadvisor"'))) failures.push("Contact needs a map anchor and a link to the Tripadvisor panel.");
   if (businessSchema?.currenciesAccepted !== "VND") failures.push(`LocalBusiness currency must match the payment page: ${route}`);
   for (const marker of ['rel="manifest" href="/site.webmanifest"', 'rel="describedby" href="/llms.txt" type="text/plain"', 'property="og:image:alt"', 'name="google-site-verification"', 'name="p:domain_verify"']) {
@@ -243,7 +246,7 @@ if (!missingPage.includes('<meta name="robots" content="noindex, follow">') || !
 
 for (const [route, markers] of Object.entries({
   "/bang-gia/": ['<h2>Bespoke suit', '<h2>Wedding and formal suit', '<h2>Alterations and fitting'],
-  "/lien-he/": ['<h2>ADDRESS / ĐỊA CHỈ', '<h2>HOTLINE / ĐIỆN THOẠI', '<h2>WEBSITE / TRANG WEB'],
+  "/lien-he/": ['<h2>ADDRESS / <span lang="vi">ĐỊA CHỈ', '<h2>HOTLINE / <span lang="vi">ĐIỆN THOẠI', '<h2>WEBSITE / <span lang="vi">TRANG WEB'],
   "/dich-vu/": ['<h1 id="st-service-commission-map-title">', '<h2>Suits and vests', '<h2 id="st-bespoke-process-title">', '<h3>Private consultation']
 })) {
   const html = readFileSync(path.join(dist, route.slice(1), "index.html"), "utf8");
@@ -608,6 +611,11 @@ if (existsSync(path.join(dist, indexNowKeyFile)) && readFileSync(path.join(dist,
   failures.push("IndexNow ownership key file does not contain the expected key.");
 }
 const sitemap = readFileSync(path.join(dist, "sitemap.xml"), "utf8");
+const indexNowPageSignatures = manifest.indexNowPageSignatures ?? {};
+if (Object.keys(indexNowPageSignatures).length !== expectedRoutes.length ||
+    expectedRoutes.some((route) => !/^[a-f0-9]{64}$/.test(indexNowPageSignatures[route] ?? ""))) {
+  failures.push("The IndexNow release manifest must carry a content signature for every canonical page.");
+}
 const sitemapLocations = [...sitemap.matchAll(/<url>\s*<loc>([^<]+)<\/loc>/g)].map(([, location]) => location);
 const sitemapUrls = new Set(sitemapLocations);
 if (sitemapLocations.length !== expectedRoutes.length || sitemapUrls.size !== expectedRoutes.length || expectedRoutes.some((route) => !sitemapUrls.has(`https://sttailor.com${route}`)) || sitemap.includes("beta.sttailor.com")) {

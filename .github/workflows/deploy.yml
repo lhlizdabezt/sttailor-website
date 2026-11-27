@@ -65,6 +65,32 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
+      - name: Capture IndexNow baseline from production
+        id: indexnow-baseline
+        if: github.run_attempt == 1
+        continue-on-error: true
+        run: >-
+          curl --fail --silent --show-error --retry 2 --max-time 15
+          --header 'Cache-Control: no-cache'
+          --output "$RUNNER_TEMP/sttailor-before-deploy.json"
+          https://sttailor.com/build-manifest.json
+
+      - name: Keep IndexNow baseline for workflow retries
+        if: steps.indexnow-baseline.outcome == 'success'
+        continue-on-error: true
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          key: sttailor-indexnow-baseline-${{ github.run_id }}
+          path: ${{ runner.temp }}/sttailor-before-deploy.json
+
+      - name: Restore IndexNow baseline on a workflow retry
+        if: github.run_attempt > 1
+        continue-on-error: true
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          key: sttailor-indexnow-baseline-${{ github.run_id }}
+          path: ${{ runner.temp }}/sttailor-before-deploy.json
+
       - name: Ensure production DNS records
         run: node scripts/run-with-retry.mjs --attempts 3 --delay-ms 10000 -- node scripts/ensure-www-dns.mjs
         env:
@@ -107,7 +133,9 @@ jobs:
         # healthy deploy red or roll back the live Worker.
         continue-on-error: true
         run: node scripts/run-with-retry.mjs --attempts 3 --delay-ms 10000 -- npm run notify:indexnow
+        env:
+          INDEXNOW_PREVIOUS_MANIFEST: ${{ runner.temp }}/sttailor-before-deploy.json
 
       - name: Record deferred IndexNow notification
         if: steps.indexnow.outcome == 'failure'
-        run: echo "::warning title=IndexNow notification deferred::Production was verified, but Bing did not accept the crawl notification after three attempts. Re-run this workflow later; do not redeploy locally."
+        run: echo "::warning title=IndexNow notification deferred::Production was verified. Check the IndexNow step logs and rerun the workflow while its predeployment baseline is available."

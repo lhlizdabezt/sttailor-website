@@ -10,7 +10,7 @@ const shirtDetails = "/du-an/chi-tiet-so-mi-may-do/";
 export const ninaCampos = {
   id: "suit-san-khau-nina-campos", route: "/du-an/nina-campos/", album: "appointments",
   labels: ["Niña Campos in a light suit", "Niña Campos trong bộ suit sáng màu"],
-  summary: ["Singer Niña Campos wears a light two-piece suit by S.T Tailor. Six photographs show the outfit from the audience, on stage and in portraits.", "Ca sĩ Niña Campos mặc bộ suit hai mảnh sáng màu do S.T Tailor may. Sáu bức ảnh ghi lại trang phục từ phía khán giả, trên sân khấu và trong các khung hình chân dung."],
+  summary: ["S.T Tailor made this light two-piece suit for singer Niña Campos. In six photographs, see how she wore it on stage and how the jacket and trousers look in a full-length portrait.", "Bộ suit hai mảnh sáng màu này do S.T Tailor may cho ca sĩ Niña Campos. Sáu bức ảnh cho thấy cách cô mặc trên sân khấu, cùng phom áo khoác và quần qua góc chụp toàn thân."],
   includeReferencedPhotos: true,
   photos: [
     ["nina-campos-light-suit-on-stage", "Niña Campos holds a microphone in a pale open jacket and matching trousers against blue and red stage lighting.", "Niña Campos cầm micro trong áo khoác sáng màu mở vạt và quần đồng bộ, trước nền đèn sân khấu xanh đỏ."],

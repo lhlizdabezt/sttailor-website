@@ -1,28 +1,28 @@
 const toggle = document.querySelector("[data-nav-toggle]");
 const nav = document.querySelector("[data-site-nav]");
-const tripadvisorBadge = document.querySelector(".st-tripadvisor__badge");
-const badgeFrame = tripadvisorBadge?.querySelector("iframe");
+const tripadvisorEmbed = document.querySelector(".st-tripadvisor__embed");
+const reviewFrame = tripadvisorEmbed?.querySelector("iframe");
 
-if (badgeFrame) {
-  const fallback = tripadvisorBadge.querySelector(".st-tripadvisor__badge-link");
-  let badgeReady = false;
-  const updateBadgeVisibility = () => {
-    // The official badge can load while someone is navigating the fallback.
-    if (badgeReady && fallback && document.activeElement === fallback) return;
-    tripadvisorBadge.toggleAttribute("data-badge-ready", badgeReady);
+if (reviewFrame) {
+  const fallback = tripadvisorEmbed.querySelector(".st-tripadvisor__embed-link");
+  let reviewsReady = false;
+  const updateReviewVisibility = () => {
+    // Let keyboard users finish with the fallback before revealing the reviews.
+    if (reviewsReady && document.activeElement === fallback) return;
+    tripadvisorEmbed.toggleAttribute("data-reviews-ready", reviewsReady);
   };
-  fallback?.addEventListener("blur", () => requestAnimationFrame(updateBadgeVisibility));
+  fallback?.addEventListener("blur", () => requestAnimationFrame(updateReviewVisibility));
   window.addEventListener("message", (event) => {
-    if (event.source !== badgeFrame.contentWindow || event.origin !== "null") return;
+    if (event.source !== reviewFrame.contentWindow || event.origin !== "null") return;
     if (event.data !== "st-tailor-tripadvisor-ready" && event.data !== "st-tailor-tripadvisor-unavailable") return;
-    badgeReady = event.data === "st-tailor-tripadvisor-ready";
-    updateBadgeVisibility();
+    reviewsReady = event.data === "st-tailor-tripadvisor-ready";
+    updateReviewVisibility();
   });
   // The vendor can render before this module or before the frame's load event.
   // The query carries no data and must target the frame's opaque sandbox origin.
-  const requestBadgeStatus = () => badgeFrame.contentWindow?.postMessage("st-tailor-tripadvisor-status", "*");
-  badgeFrame.addEventListener("load", requestBadgeStatus);
-  requestBadgeStatus();
+  const requestReviewStatus = () => reviewFrame.contentWindow?.postMessage("st-tailor-tripadvisor-status", "*");
+  reviewFrame.addEventListener("load", requestReviewStatus);
+  requestReviewStatus();
 }
 
 if (toggle && nav) {

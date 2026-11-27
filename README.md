@@ -47,6 +47,8 @@ This is a static-first rebuild of S.T Tailor from the owner-approved, read-only 
 - [Blush floral silk dress](https://sttailor.com/san-pham/dam-lua-hong-phan-theu-hoa/)
 - [Magenta floral wrap dress](https://sttailor.com/san-pham/dam-quan-hoa-hong-tim/)
 - [Floral jacquard evening jacket](https://sttailor.com/san-pham/ao-khoac-jacquard-hoa/)
+- [White botanical-print tunic](https://sttailor.com/san-pham/ao-co-cao-trang-hoa-thuc-vat/)
+- [Slate-blue pleated trousers](https://sttailor.com/san-pham/quan-tay-xanh-xam-xep-ly/)
 - [Tailoring projects and collaborations](https://sttailor.com/du-an/)
 - [Niña Campos collaboration](https://sttailor.com/du-an/nina-campos/)
 - [Garment handover at the showroom](https://sttailor.com/du-an/ban-giao-trang-phuc-tai-showroom/)
@@ -55,8 +57,11 @@ This is a static-first rebuild of S.T Tailor from the owner-approved, read-only 
 - [Olive shirt and ivory trousers in daylight](https://sttailor.com/du-an/so-mi-xanh-o-liu-khi-mac/)
 - [Navy short-sleeve shirt in wear](https://sttailor.com/du-an/so-mi-navy-tay-ngan/)
 - [Tailoring in wear](https://sttailor.com/du-an/trang-phuc-khi-mac/)
+- [Inside a tailored trouser waistband](https://sttailor.com/du-an/ben-trong-cap-quan-tay/)
 - [Embroidery and jacquard](https://sttailor.com/du-an/chi-tiet-theu-va-jacquard/)
 - [Client Care for tailored orders](https://sttailor.com/cham-soc-khach-hang/)
+- [Review your tailoring quotation](https://sttailor.com/cham-soc-khach-hang/bao-gia-va-dat-may/)
+- [Arrange delivery of a tailored garment](https://sttailor.com/cham-soc-khach-hang/sap-xep-giao-trang-phuc/)
 - [Aftercare and minor repairs](https://sttailor.com/cham-soc-khach-hang/sua-chua-sau-khi-nhan-do/)
 
 ## URL behaviour

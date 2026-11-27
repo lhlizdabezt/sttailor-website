@@ -12231,7 +12231,7 @@ html body .st-lux-text-link:focus-visible {
 @media (forced-colors: active) and (prefers-color-scheme: dark) {
   .st-site-brand img,
   html body .st-footer-v7.st-footer-v8 .st-footer-v7__crest img,
-  html body #main-content .st-tripadvisor__badge-link img {
+  html body #main-content .st-tripadvisor__embed-link img {
     forced-color-adjust: none;
     background: #fffaf4 !important;
   }
@@ -12280,7 +12280,7 @@ main { display: block; width: 100%; overflow: hidden; }
 .st-site-brand { display: inline-flex; flex: 0 0 auto; align-items: center; max-width: min(118px, 22vw); padding: 4px; border: 0; }
 .st-site-brand img { display: block; width: min(102px, 20vw); height: auto; margin: 0; background: transparent; border: 0; filter: none; }
 .st-site-nav { display: grid; grid-template-columns: repeat(5, minmax(116px, 1fr)); gap: clamp(8px, 1.2vw, 16px); }
-.st-site-nav a { display: flex; min-height: 48px; padding: 6px 12px; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border: 0; background: transparent; color: #4b2b1d; font-family: var(--st-wordmark); font-size: 13px; font-weight: 600; letter-spacing: .075em; line-height: 1; text-align: center; text-decoration: none; text-transform: uppercase; }
+.st-site-nav a { display: flex; min-height: 48px; padding: 6px 12px; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border: 0; background: transparent; color: #4b2b1d; font-family: var(--st-wordmark); font-size: 14px; font-weight: 600; letter-spacing: .075em; line-height: 1; text-align: center; text-decoration: none; text-transform: uppercase; }
 .st-site-nav a > span:first-child { position: relative; }
 .st-site-nav a > span:first-child::after {
   position: absolute;
@@ -12290,7 +12290,7 @@ main { display: block; width: 100%; overflow: hidden; }
   transform: scaleX(0);
   transition: transform var(--st-control-duration) var(--st-control-easing);
 }
-.st-site-nav a:is(:hover, :focus-visible, [aria-current="page"]) > span:first-child::after { transform: scaleX(1); }
+.st-site-nav a:is(:hover, :focus-visible, [aria-current="page"], [data-section-current]) > span:first-child::after { transform: scaleX(1); }
 .st-site-nav a[aria-current="page"] { font-weight: 750; }
 .st-site-nav a span[lang="vi"] { font: 500 13px/1.25 var(--st-vietnamese); text-transform: none; letter-spacing: 0; }
 .st-site-header :is(.st-site-brand, .st-nav-toggle, .st-site-nav a):focus-visible { outline: 2px solid #6c371e; outline-offset: 3px; }
@@ -12407,6 +12407,48 @@ html body .st-gallery-numpad__card:focus-visible { outline: 2px solid #6c371e !i
 
 /* The approved six direct contact channels complete two balanced rows instead of leaving empty tracks. */
 .st-contact-page--v2 .st-contact-buttons { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+html body .st-contact-page--v2 .st-contact-cta .st-contact-heading > span {
+  font-size: var(--st-eyebrow-size) !important;
+  line-height: 1.5 !important;
+  letter-spacing: .08em !important;
+}
+html body .st-contact-page--v2 .st-contact-card {
+  box-shadow: 2px 2px 0 #a472445e !important;
+}
+html body .st-contact-page--v2 .st-contact-card:is(:hover, :focus-within) {
+  border-color: #805032 !important;
+  box-shadow: 2px 2px 0 #a472447a !important;
+  transform: none !important;
+}
+html body .st-contact-page--v2 .st-contact-card > h3 {
+  font-size: 16px !important;
+  letter-spacing: .035em !important;
+}
+html body .st-contact-page--v2 .st-contact-card > h3 span[lang="vi"] {
+  font-size: 13px !important;
+  letter-spacing: .015em !important;
+}
+html body .st-contact-page--v2 .st-contact-card > a {
+  display: grid !important;
+  align-self: stretch !important;
+  justify-items: center !important;
+  align-content: center !important;
+  gap: 2px !important;
+  min-height: 60px !important;
+  padding: 8px 10px !important;
+  border-color: #61311c !important;
+  box-shadow: none !important;
+  font: 700 13px/1.35 var(--st-vietnamese) !important;
+  text-align: center !important;
+}
+html body .st-contact-page--v2 .st-contact-card > a span[lang="vi"] {
+  font-weight: 550 !important;
+  white-space: normal !important;
+}
+html body .st-contact-page--v2 .st-contact-card > a:is(:hover, :focus-visible, :active) {
+  box-shadow: inset 0 0 0 1px #e1b887 !important;
+  transform: none !important;
+}
 
 /* Give the bilingual contact heading its own rhythm before the detail list. */
 html body .st-contact-page .st-contact-info > h2 {
@@ -12549,7 +12591,7 @@ html body .st-cloth-heritage__gallery figcaption > span[lang="vi"] { margin-top:
 html body .st-cloth-heritage__gallery figcaption small { margin-top: 15px !important; color: #e8d7c8 !important; -webkit-text-fill-color: #e8d7c8 !important; font: 400 14px/1.55 var(--st-vietnamese) !important; }
 html body .st-cloth-heritage__gallery figcaption small span[lang="vi"] { display: block !important; margin-top: 6px !important; color: #d1b293 !important; -webkit-text-fill-color: #d1b293 !important; }
 
-/* About: Tripadvisor's official badge within the site's own typography. */
+/* About: Tripadvisor's official review snippets inside the editorial panel. */
 html body .st-tripadvisor { padding: clamp(48px, 6vw, 88px) 0 !important; background: #f4e5ce !important; color: #2f1e15 !important; border-block: 1px solid #c5a17b !important; }
 html body .st-tripadvisor__inner { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 3vw, 36px); }
 html body .st-tripadvisor__copy {
@@ -12576,29 +12618,23 @@ html body .st-tripadvisor__card {
   border: 1px solid #b99672;
   background: #fff7eb;
 }
-@media (min-width: 761px) {
-  @supports (grid-template-rows: subgrid) {
-    html body .st-tripadvisor__card { grid-row: span 2; grid-template-rows: subgrid; }
-  }
-}
 html body .st-tripadvisor__card h3 { margin: 0; color: #352116; font: 500 25px/1.2 var(--st-wordmark); }
 html body #main-content .st-tripadvisor__card h3 > span[lang="vi"] { display: block; margin-top: 4px; color: #624330; -webkit-text-fill-color: #624330; font: 500 16px/1.4 var(--st-vietnamese) !important; }
-html body .st-tripadvisor__review { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 180px); align-items: center; gap: clamp(12px, 2vw, 24px); }
+html body .st-tripadvisor__review { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 248px); align-items: start; gap: clamp(12px, 2vw, 24px); }
 html body .st-tripadvisor__review p { margin: 12px 0 0; color: #4e3527; font: 400 15px/1.55 var(--st-vietnamese); }
 html body .st-tripadvisor__review p [lang="vi"] { display: block; margin-top: 4px; }
-html body .st-tripadvisor__badge {
+html body .st-tripadvisor__embed {
   display: grid;
-  place-items: center;
-  width: min(100%, 180px);
-  min-height: 112px;
-  justify-self: center;
+  place-items: start center;
+  width: min(100%, 248px);
+  min-height: 218px;
 }
-html body #main-content .st-tripadvisor__badge-link {
+html body #main-content .st-tripadvisor__embed-link {
   grid-area: 1 / 1;
   box-sizing: border-box;
   display: grid;
   width: 100%;
-  min-height: 100px;
+  min-height: 118px;
   padding: 12px;
   place-items: center;
   align-content: center;
@@ -12611,7 +12647,7 @@ html body #main-content .st-tripadvisor__badge-link {
   text-decoration: none !important;
   font: 600 16px/1.35 var(--st-vietnamese);
 }
-html body #main-content .st-tripadvisor__badge-link [lang="vi"] {
+html body #main-content .st-tripadvisor__embed-link [lang="vi"] {
   display: block;
   margin-top: 3px;
   color: #624330 !important;
@@ -12619,17 +12655,17 @@ html body #main-content .st-tripadvisor__badge-link [lang="vi"] {
   font-size: 14px;
   font-weight: 500;
 }
-html body #main-content .st-tripadvisor__badge-link:hover { background: #f2e2cb; }
-html body #main-content .st-tripadvisor__badge-link:focus-visible { outline: 3px solid #764225 !important; outline-offset: 3px !important; }
-html body .st-tripadvisor__rating {
+html body #main-content .st-tripadvisor__embed-link:hover { background: #f2e2cb; }
+html body #main-content .st-tripadvisor__embed-link:focus-visible { outline: 3px solid #764225 !important; outline-offset: 3px !important; }
+html body .st-tripadvisor__frame {
   grid-area: 1 / 1;
   display: block;
   max-width: 100%;
   border: 0;
   visibility: hidden;
 }
-html body .st-tripadvisor__badge[data-badge-ready] .st-tripadvisor__rating { visibility: visible; }
-html body .st-tripadvisor__badge[data-badge-ready] .st-tripadvisor__badge-link { visibility: hidden; }
+html body .st-tripadvisor__embed[data-reviews-ready] .st-tripadvisor__frame { visibility: visible; }
+html body .st-tripadvisor__embed[data-reviews-ready] .st-tripadvisor__embed-link { visibility: hidden; }
 html body .st-tripadvisor__actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 10px; padding-top: 14px; border-top: 1px solid #b99672; }
 html body .st-tripadvisor__link { display: grid !important; box-sizing: border-box; min-height: 70px !important; padding: 10px !important; align-content: center !important; justify-items: center !important; gap: 3px !important; border: 1px solid #513320 !important; background: #352116 !important; color: #fff7e9 !important; -webkit-text-fill-color: #fff7e9 !important; font: 650 15px/1.35 var(--st-vietnamese) !important; text-align: center; text-decoration: none !important; }
 html body .st-tripadvisor__link span[lang="vi"] { color: #edd0aa !important; -webkit-text-fill-color: #edd0aa !important; }
@@ -13423,6 +13459,15 @@ html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:hover span[lang=
 @media (max-width: 600px) { html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 html body .st-footer-v7.st-footer-v8 .st-footer-directory { padding-block: 0 32px; }
+html body .st-footer .st-footer-directory h2 {
+  margin: 0 0 14px !important;
+  padding-block-start: 18px;
+  border-top: 1px solid #a98466;
+  color: #452b20 !important;
+  font: 500 clamp(24px, 2.5vw, 36px)/1.16 var(--st-wordmark) !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
 .st-footer-directory summary,
 .st-footer-directory__groups a {
   box-sizing: border-box;
@@ -13454,12 +13499,12 @@ html body .st-footer-v7.st-footer-v8 .st-footer-directory { padding-block: 0 32p
 .st-footer-directory details[open] > summary::after { margin-top: 4px; transform: rotate(225deg); }
 .st-footer-directory :is(summary, a):hover { background: #f3e3cf; }
 .st-footer-directory :is(summary, a):focus-visible { outline: 2px solid #613a24; outline-offset: 3px; }
-.st-footer-directory__groups {
-  display: grid;
-  gap: 8px;
-  padding: 12px 0 0;
-}
+.st-footer-directory__groups { display: grid; gap: 8px; }
 .st-footer-directory__groups > details > summary { background: #f8eddd; }
+.st-footer-directory__groups > details[data-current-group] > summary {
+  border-inline-start: 3px solid #70432a;
+  padding-inline-start: 16px;
+}
 .st-footer-directory__groups > details[open] > summary,
 .st-footer-directory__groups > details > summary:hover { background: #f3e3cf; }
 .st-footer-directory__groups > details > ul { margin: 12px 0 0; }
@@ -13471,6 +13516,7 @@ html body .st-footer .st-footer-directory__groups h3 {
   letter-spacing: 0 !important;
   text-transform: none !important;
 }
+.st-footer-directory h2 span[lang="vi"],
 .st-footer-directory summary span[lang="vi"],
 html body .st-footer .st-footer-directory__groups h3 span[lang="vi"] {
   display: block;
@@ -13643,12 +13689,12 @@ html body .st-suit-fit .st-guide-next {
   }
   .st-footer-v7.st-footer-v8 {
     content-visibility: auto;
-    contain-intrinsic-block-size: auto 710px;
+    contain-intrinsic-block-size: auto 1320px;
   }
 }
 @media screen and (max-width: 680px) {
   .st-gallery-page--albums .st-gallery-album { contain-intrinsic-block-size: auto 2700px; }
-  .st-footer-v7.st-footer-v8 { contain-intrinsic-block-size: auto 1560px; }
+  .st-footer-v7.st-footer-v8 { contain-intrinsic-block-size: auto 2300px; }
 }
 @media (max-width: 860px) { html body .st-info-hero__grid, html body .st-info-section { grid-template-columns: 1fr !important; } html body .st-info-hero__image { min-height: min(115vw, 620px) !important; } html body .st-info-section { gap: 22px !important; } html body .st-info-next .st-info-shell { align-items: stretch !important; flex-direction: column !important; } }
 @media (max-width: 560px) { html body .st-info-shell { width: calc(100% - 32px) !important; } html body .st-info-hero { padding: 58px 0 !important; } html body .st-info-hero::before { inset: 8px !important; } html body .st-info-hero__image { min-height: 112vw !important; box-shadow: 8px 8px 0 rgba(87, 45, 26, .18) !important; } html body .st-info-hero__link, html body .st-info-next a { width: 100% !important; } }
@@ -13923,7 +13969,7 @@ html body .st-gallery-page--albums .st-gallery-film__media figcaption span[lang=
   }
 }
 
-@media (min-width: 761px) and (max-width: 1040px), (max-width: 480px) {
+@media (min-width: 761px) and (max-width: 1120px), (max-width: 540px) {
   html body .st-tripadvisor__review { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 760px) {
@@ -14361,21 +14407,29 @@ html body .st-footer-v7.st-footer-v8 .st-footer-v7__social {
 html body .st-footer-v7.st-footer-v8 .st-footer-v7__social a {
   display: flex !important;
   align-items: center !important;
-  justify-content: center !important;
+  justify-content: flex-start !important;
   gap: 8px !important;
   width: 100% !important;
   min-width: 0 !important;
   min-height: 46px !important;
   padding: 10px 8px !important;
   box-sizing: border-box !important;
+  font-family: var(--st-vietnamese) !important;
   font-size: 13px !important;
+  font-weight: 650 !important;
+  letter-spacing: .015em !important;
   line-height: 1.4 !important;
+  text-transform: none !important;
 }
 
 /* Footer headings follow the same restrained weight hierarchy as page titles. */
 html body .st-footer-v7.st-footer-v8 #st-footer-title,
 html body .st-footer-v7.st-footer-v8 :is(.st-footer-v7__nav, .st-footer-v7__visit) h3 {
   font-weight: 400 !important;
+}
+html body .st-footer-v7.st-footer-v8 #st-footer-title > [lang="vi"] {
+  font-size: clamp(16px, 1.35vw, 20px) !important;
+  line-height: 1.4 !important;
 }
 html body .st-footer-v7.st-footer-v8 .st-footer-v7__eyebrow {
   font-size: var(--st-eyebrow-size) !important;
@@ -14394,4 +14448,14 @@ html body .st-footer-v7.st-footer-v8 .st-footer-v7__social-label span[lang="vi"]
   font-size: 13px !important;
   letter-spacing: .02em !important;
   line-height: 1.5 !important;
+}
+@media (min-width: 360px) and (max-width: 760px) {
+  html body .st-footer-v7.st-footer-v8 .st-footer-v7__nav {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    align-items: stretch !important;
+    gap: 8px;
+  }
+  html body .st-footer-v7.st-footer-v8 .st-footer-v7__nav > h3 { grid-column: 1 / -1; }
+  html body .st-footer-v7.st-footer-v8 .st-footer-v7__nav > a { margin: 0 !important; }
 }

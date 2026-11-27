@@ -80,6 +80,36 @@ export const tailoringPages = [
     imageAlt: "Tailor and client holding a garment bag at S.T Tailor | Thợ may và khách cầm túi đựng trang phục tại S.T Tailor"
   },
   {
+    route: "/cham-soc-khach-hang/bao-gia-va-dat-may/",
+    source: "GuideOrderQuotation.html",
+    labels: ["Quotations and orders", "Báo giá và đặt may"],
+    title: "Reviewing Your Tailoring Quotation | S.T Tailor",
+    description: "Check the pieces, fabric, fitting dates and payment stages in your S.T Tailor quotation before placing a bespoke order.",
+    descriptionVi: "Xem lại số món, vải, lịch thử và các mốc thanh toán trong báo giá của S.T Tailor trước khi đặt may.",
+    image: "/media/2026/11/st-tailor-showroom-comparing-dark-fabric-swatches.webp",
+    imageAlt: "Comparing dark cloth swatches in the S.T Tailor showroom | So sánh các mẫu vải tối màu tại nhà may S.T Tailor"
+  },
+  {
+    route: "/cham-soc-khach-hang/sap-xep-giao-trang-phuc/",
+    source: "GuideArrangeDelivery.html",
+    labels: ["Arranging garment delivery", "Sắp xếp giao trang phục"],
+    title: "Arranging Delivery of Tailored Garments | S.T Tailor",
+    description: "Plan delivery of an S.T Tailor order to a hotel, an address in Vietnam or an overseas destination. Know what to share before dispatch.",
+    descriptionVi: "Chuẩn bị thông tin để nhận đồ S.T Tailor tại khách sạn, một địa chỉ trong nước hoặc ở nước ngoài.",
+    image: "/media/2026/11/st-tailor-showroom-tailoring-garment-bag.webp",
+    imageAlt: "A client and tailor hold a garment bag at S.T Tailor | Khách và thợ may cầm túi đựng trang phục tại S.T Tailor"
+  },
+  {
+    route: "/cham-soc-khach-hang/mang-suit-khi-di-xa/",
+    source: "GuidePackingSuit.html",
+    labels: ["Travelling with a suit", "Mang suit khi đi xa"],
+    title: "How to Pack a Tailored Suit for Travel | S.T Tailor",
+    description: "Pack a tailored suit in a garment bag or suitcase. Learn how to fold the jacket, protect the trousers and hang each piece when you arrive.",
+    descriptionVi: "Xếp suit may đo vào túi đựng đồ hoặc vali, rồi treo và kiểm tra từng món khi đến nơi.",
+    image: "/media/2026/09/st-tailor-gallery-international-client-one.jpg",
+    imageAlt: "A client receives a garment bag in the S.T Tailor showroom | Khách nhận túi đựng trang phục tại showroom S.T Tailor"
+  },
+  {
     route: "/cam-nang-may-do/buoi-tu-van-dau-tien/",
     source: "GuideFirstConsultation.html",
     labels: ["First tailoring consultation", "Buổi tư vấn may đo đầu tiên"],
