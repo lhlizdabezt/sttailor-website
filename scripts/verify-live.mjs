@@ -269,10 +269,19 @@ await Promise.all(Array.from({ length: 6 }, async () => {
   while (assetCursor < publicAssets.length) {
     const asset = publicAssets[assetCursor++];
     try {
-      const response = await fetchWithRetry(`${origin}${asset}`, { method: "HEAD", signal: AbortSignal.timeout(15000) }, 2);
+      const sourcePhoto = asset.startsWith("/media/sources/") && asset.endsWith(".heic");
+      const response = await fetchWithRetry(`${origin}${asset}`, { method: sourcePhoto ? "GET" : "HEAD", signal: AbortSignal.timeout(15000) }, 2);
       expect(response.status === 200, `Public asset ${asset} returned ${response.status}`);
-      expect(!/\b(?:noindex|none|noimageindex)\b/i.test(response.headers.get("x-robots-tag") ?? ""), `Public asset ${asset} has an indexing restriction`);
-      expect(!response.headers.get("content-type")?.includes("text/html"), `Public asset ${asset} returned HTML instead of its file`);
+      const robotsTag = response.headers.get("x-robots-tag") ?? "";
+      const contentType = response.headers.get("content-type");
+      if (sourcePhoto) {
+        expect(robotsTag === "noindex" && contentType === "image/heic", `Source photo ${asset} must serve as a HEIC download excluded from indexing`);
+        const releasePhoto = readFileSync(path.join(dist, asset.slice(1)));
+        expect(Buffer.from(await response.arrayBuffer()).equals(releasePhoto), `Source photo ${asset} differs from the release file`);
+        continue;
+      }
+      expect(!/\b(?:noindex|none|noimageindex)\b/i.test(robotsTag), `Public asset ${asset} has an indexing restriction`);
+      expect(!contentType?.includes("text/html"), `Public asset ${asset} returned HTML instead of its file`);
       if (/-share-[a-f0-9]{12}\.jpg$/.test(asset)) {
         expect(response.headers.get("content-type")?.includes("image/jpeg") && response.headers.get("cache-control")?.includes("immutable"), `Social preview ${asset} must serve as a cacheable JPEG`);
       }
@@ -289,7 +298,7 @@ console.log(`Audited ${publicAssets.length} public assets: originals, responsive
 // A reachable sitemap alone does not prove Cloudflare serves public HTML to
 // crawler requests. This catches broad user-agent blocks and origin differences.
 const crawlerAgents = ["Googlebot", "bingbot", "OAI-SearchBot", "Claude-SearchBot", "PerplexityBot", "Applebot"];
-const crawlerRoutes = ["/", "/gallery/", "/du-an/nina-campos/"];
+const crawlerRoutes = ["/", "/gallery/", "/du-an/nina-campos/", "/san-pham/suit-xam-nhat-ve-chu-k/"];
 await Promise.all(crawlerAgents.map(async (agent) => {
   for (const route of crawlerRoutes) {
     const response = await fetchWithRetry(`${origin}${route}`, { redirect: "manual", headers: { "User-Agent": agent } });
