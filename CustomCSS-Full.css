@@ -12557,7 +12557,42 @@ html body .st-tripadvisor__review { display: grid; grid-template-columns: minmax
 html body .st-tripadvisor__review p { margin: 12px 0 0; color: #4e3527; font: 400 15px/1.55 var(--st-vietnamese); }
 html body .st-tripadvisor__review p [lang="vi"] { display: block; margin-top: 4px; }
 html body .st-tripadvisor__review .st-tripadvisor__window { font-size: 14px; color: #624330; }
-html body .st-tripadvisor__rating { display: block; place-self: center; max-width: 100%; border: 0; }
+html body .st-tripadvisor__badge {
+  display: grid;
+  place-items: center;
+  width: min(100%, 200px);
+  min-height: 128px;
+  justify-self: center;
+}
+html body .st-tripadvisor__badge-placeholder {
+  grid-area: 1 / 1;
+  display: grid;
+  width: 100%;
+  padding: 12px;
+  place-items: center;
+  gap: 6px;
+  border: 1px solid #b99672;
+  background: #fff8ed;
+  color: #352116;
+  text-align: center;
+  font: 600 16px/1.35 var(--st-vietnamese);
+}
+html body .st-tripadvisor__badge-placeholder [lang="vi"] {
+  display: block;
+  margin-top: 3px;
+  color: #624330;
+  font-size: 14px;
+  font-weight: 500;
+}
+html body .st-tripadvisor__rating {
+  grid-area: 1 / 1;
+  display: block;
+  max-width: 100%;
+  border: 0;
+  visibility: hidden;
+}
+html body .st-tripadvisor__badge[data-badge-ready] .st-tripadvisor__rating { visibility: visible; }
+html body .st-tripadvisor__badge[data-badge-ready] .st-tripadvisor__badge-placeholder { visibility: hidden; }
 html body .st-tripadvisor__actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 10px; padding-top: 14px; border-top: 1px solid #b99672; }
 html body .st-tripadvisor__link { display: grid !important; box-sizing: border-box; min-height: 70px !important; padding: 10px !important; place-content: center !important; gap: 3px !important; border: 1px solid #513320 !important; background: #352116 !important; color: #fff7e9 !important; -webkit-text-fill-color: #fff7e9 !important; font: 650 15px/1.35 var(--st-vietnamese) !important; text-align: center; text-decoration: none !important; transition: background-color .2s ease !important; }
 html body .st-tripadvisor__link span[lang="vi"] { color: #edd0aa !important; -webkit-text-fill-color: #edd0aa !important; }
@@ -13557,10 +13592,10 @@ html body .st-suit-fit .st-guide-next {
   }
 }
 
-/* Skip initial layout below the fold. A Gallery fragment needs the measured
-   heights of the preceding albums so native jumps land at the right heading. */
+/* Native fragments need measured heights through the target album. Albums
+   after it can still defer layout, as can all albums when there is no target. */
 @media screen {
-  .st-gallery-page--albums:not(:has(:target)) .st-gallery-album {
+  .st-gallery-page--albums .st-gallery-album:not(:target, :has(:target, ~ .st-gallery-album:target, ~ .st-gallery-album :target)) {
     content-visibility: auto;
     contain-intrinsic-block-size: auto 1100px;
   }
@@ -13570,7 +13605,7 @@ html body .st-suit-fit .st-guide-next {
   }
 }
 @media screen and (max-width: 680px) {
-  .st-gallery-page--albums:not(:has(:target)) .st-gallery-album { contain-intrinsic-block-size: auto 2700px; }
+  .st-gallery-page--albums .st-gallery-album { contain-intrinsic-block-size: auto 2700px; }
   .st-footer-v7.st-footer-v8 { contain-intrinsic-block-size: auto 1560px; }
 }
 @media (max-width: 860px) { html body .st-info-hero__grid, html body .st-info-section { grid-template-columns: 1fr !important; } html body .st-info-hero__image { min-height: min(115vw, 620px) !important; } html body .st-info-section { gap: 22px !important; } html body .st-info-next .st-info-shell { align-items: stretch !important; flex-direction: column !important; } }

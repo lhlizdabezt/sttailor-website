@@ -15,7 +15,7 @@ The workflow sends only canonical `https://sttailor.com` pages; it never sends `
 
 The optional `https://sttailor.com/llms.txt` provides a Markdown summary and links to all canonical pages for AI-agent discovery. It does not replace `robots.txt`, the sitemap, or IndexNow, and its presence does not guarantee inclusion in Bing or any AI answer.
 
-The fitting film is playable on the Gallery and on its dedicated `/phim-thu-do/` watch page. The video sitemap and `VideoObject` point to the watch page, where the player is the primary content. The Gallery sitemap continues to list its photographs. Image descriptions remain in page alt text and the Gallery's structured data.
+The fitting film is playable on the Gallery and on its dedicated `/phim-thu-do/` watch page. The video sitemap and `VideoObject` point to the watch page, where the player is the primary content. The image sitemap lists the Gallery photographs and associates the same image URLs with relevant service, garment and project pages. Image descriptions remain in the visible page content and alt text.
 
 If Bing is unavailable, GitHub Actions retries three times and adds a warning without failing a verified deployment. Re-run the workflow when Bing is reachable. Do not repeatedly submit unchanged URLs by hand.
 

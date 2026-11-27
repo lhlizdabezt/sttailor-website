@@ -8,6 +8,7 @@ import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
 import { inlineScriptHashes, tripadvisorEmbedPath } from "../src/security-policy.js";
 import { tailoringPages } from "../src/tailoring-pages.js";
 import { showcaseHubs, showcasePages } from "../src/showcase-pages.js";
+import { ninaCampos } from "../src/commission-stories.js";
 import { clientCareHubRoute } from "../src/client-care-pages.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -604,7 +605,15 @@ if (gallerySitemapImages.length !== galleryContentImages.length || [...galleryIm
 if ((gallerySitemap.match(/<lastmod>([^<]+)<\/lastmod>/)?.[1] ?? "") < "2026-10-15") failures.push("Gallery lastmod predates the newly published client photographs.");
 const watchSitemap = sitemap.match(/<url><loc>https:\/\/sttailor\.com\/phim-thu-do\/[\s\S]*?<\/url>/)?.[0] ?? "";
 if (!sitemap.includes('xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"') || (sitemap.match(/<video:video>/g) ?? []).length !== 1 || !watchSitemap.includes(`<video:content_loc>https://sttailor.com${filmPath}</video:content_loc>`) || !watchSitemap.includes(`<video:thumbnail_loc>https://sttailor.com${posterPath}</video:thumbnail_loc>`)) failures.push("Fitting watch page video sitemap entry is missing or duplicated.");
-if ((sitemap.match(/<image:loc>/g) ?? []).length !== new Set([...sitemap.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)].map((match) => match[1])).size) failures.push("Image sitemap contains duplicate image locations.");
+for (const [, location, entry] of sitemap.matchAll(/<url><loc>([^<]+)<\/loc>([\s\S]*?)<\/url>/g)) {
+  const images = [...entry.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)].map(([, image]) => image);
+  if (images.length > 1000 || images.length !== new Set(images).size) failures.push(`Image sitemap has invalid image entries for ${location}`);
+}
+const ninaSitemap = sitemap.match(/<url><loc>https:\/\/sttailor\.com\/du-an\/nina-campos\/[\s\S]*?<\/url>/)?.[0] ?? "";
+const ninaSitemapImages = [...ninaSitemap.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)].map(([, image]) => image);
+if (ninaSitemapImages.length !== ninaCampos.photos.length || ninaSitemapImages.some((image) => !gallerySitemapImages.includes(image))) {
+  failures.push("The Niña Campos project and the Gallery must each list the photographs in the series.");
+}
 const mobileNavRule = [...generatedCss.matchAll(/\.st-site-nav\{[^}]*\}/g)]
   .map((match) => match[0])
   .find((rule) => rule.includes("width:100vw!important"));

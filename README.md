@@ -17,11 +17,13 @@ This is a static-first rebuild of S.T Tailor from the owner-approved, read-only 
 - [Made-to-measure womenswear](https://sttailor.com/dich-vu/trang-phuc-nu/)
 - [Made-to-measure shirts in Ho Chi Minh City](https://sttailor.com/dich-vu/so-mi-may-do/)
 - [Made-to-measure trousers in Ho Chi Minh City](https://sttailor.com/dich-vu/quan-tay-may-do/)
+- [Made-to-measure jackets and blazers](https://sttailor.com/dich-vu/ao-khoac-may-do/)
 - [Prepare for your first tailoring consultation](https://sttailor.com/cam-nang-may-do/buoi-tu-van-dau-tien/)
 - [Check your finished garment at collection](https://sttailor.com/cam-nang-may-do/nhan-trang-phuc-may-do/)
 - [Plan fittings during a visit](https://sttailor.com/cam-nang-may-do/thu-do-khi-du-lich/)
 - [Suit fitting checklist](https://sttailor.com/cam-nang-may-do/kiem-tra-phom-suit/)
 - [Choosing a two-piece or three-piece suit](https://sttailor.com/cam-nang-may-do/chon-suit-hai-manh-ba-manh/)
+- [Planning your wedding attire and fittings](https://sttailor.com/cam-nang-may-do/chuan-bi-trang-phuc-cuoi/)
 - [Gallery of cloth, garments and fittings](https://sttailor.com/gallery/)
 - [Italian suiting wool and Vitale Barberis Canonico](https://sttailor.com/chon-vai-may-do/vai-len-y/)
 - [Vietnamese silk for custom garments](https://sttailor.com/chon-vai-may-do/lua-viet-nam/)
@@ -47,6 +49,7 @@ This is a static-first rebuild of S.T Tailor from the owner-approved, read-only 
 - [Tailoring in wear](https://sttailor.com/du-an/trang-phuc-khi-mac/)
 - [Embroidery and jacquard](https://sttailor.com/du-an/chi-tiet-theu-va-jacquard/)
 - [Client Care for tailored orders](https://sttailor.com/cham-soc-khach-hang/)
+- [Aftercare and minor repairs](https://sttailor.com/cham-soc-khach-hang/sua-chua-sau-khi-nhan-do/)
 
 ## URL behaviour
 

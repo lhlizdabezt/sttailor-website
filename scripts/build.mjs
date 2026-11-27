@@ -46,7 +46,8 @@ const liningGuide = tailoringPages.find(({ source }) => source === "GuideJacketL
 const suitPiecesGuide = tailoringPages.find(({ source }) => source === "GuideSuitPieces.html");
 const liningHeroSizes = "(max-width: 860px) min(calc(100vw - 48px), 480px), min(calc(45vw - 46px), 480px)";
 const editorialGuideHeroes = tailoringPages.filter(({ source }) =>
-  ["GuideFirstConsultation.html", "GuideGarmentCollection.html", "ServiceShirts.html", "ServiceTrousers.html"].includes(source)
+  ["GuideFirstConsultation.html", "GuideGarmentCollection.html", "GuideWeddingPlanning.html", "GuideAftercare.html",
+    "ServiceShirts.html", "ServiceTrousers.html", "ServiceJackets.html"].includes(source)
 );
 const editorialGuideHeroSizes = "(max-width: 560px) calc(100vw - 28px), (max-width: 860px) calc(100vw - 48px), min(calc(46vw - 36px), 540px)";
 
@@ -149,16 +150,19 @@ const guideRoutes = [
   ["/quy-trinh-thu-do/", "The fitting process", "Quy trình thử đồ"],
   ["/chinh-sua-trang-phuc/", "Clothing alterations", "Chỉnh sửa trang phục"],
   ["/bao-quan-giat-la/", "Garment care and cleaning", "Bảo quản và giặt là"],
-  ...tailoringPages.filter(({ source }) => source.startsWith("Guide")).map(({ route, labels }) => [route, ...labels])
+  ...tailoringPages.filter(({ route, source }) => source.startsWith("Guide") && !route.startsWith(clientCareHubRoute))
+    .map(({ route, labels }) => [route, ...labels])
 ];
 const serviceRoutes = tailoringPages.filter(({ source }) => source.startsWith("Service"));
 const policyRoutes = ["/phuong-thuc-thanh-toan/", "/doi-tra-hoan-tien/", "/chinh-sach-van-chuyen/", "/dieu-khoan-dieu-kien/", "/chinh-sach-bao-mat/"];
+const clientCareGuides = tailoringPages.filter(({ route }) => route.startsWith(clientCareHubRoute));
 
 const pageLabels = new Map([
   ["/", ["Home", "Trang chủ"]],
   ...primaryNavigation.map(([route, ...labels]) => [route, labels]),
   ...guideRoutes.map(([route, ...labels]) => [route, labels]),
   ...serviceRoutes.map(({ route, labels }) => [route, labels]),
+  ...clientCareGuides.map(({ route, labels }) => [route, labels]),
   ...showcasePages.map(({ route, labels }) => [route, labels]),
   [fittingFilmRoute, ["A fitting in motion", "Thử phom qua chuyển động"]],
   ["/phuong-thuc-thanh-toan/", ["Payment methods", "Phương thức thanh toán"]],
@@ -789,7 +793,7 @@ function transformPayment(html) {
   let methods = html.slice(range.start, range.end)
     .replace('<h2 id="st-methods-title">', '<h1 id="st-methods-title">')
     .replace('</h2>', '</h1>')
-    .replace(/<p class="st-payment-methods__note">[\s\S]*?<\/p>/, '<p class="st-payment-methods__note">Choose a convenient method; we will share the payment details for your order.<span lang="vi">Chọn phương thức thuận tiện; chúng tôi sẽ cung cấp thông tin thanh toán cho đơn của bạn.</span></p>');
+    .replace(/<p class="st-payment-methods__note">[\s\S]*?<\/p>/, '<p class="st-payment-methods__note">Choose the method that suits you. We will share the payment details for your order.<span lang="vi">Hãy chọn cách thanh toán thuận tiện. Nhà may sẽ cung cấp thông tin thanh toán cho đơn của bạn.</span></p>');
   const copy = [
     ['For cash payments, please use Vietnamese dong (VND) only. You can also pay by bank transfer or QR using the details for your order.', 'Nhà may chỉ nhận tiền mặt bằng đồng Việt Nam (VND). Bạn cũng có thể chuyển khoản hoặc quét mã QR theo thông tin của đơn hàng.'],
     ['We accept all credit and debit card types and prepaid cards, including Visa, Mastercard, Maestro, American Express, JCB, UnionPay, Discover, Diners Club and RuPay. Local NAPAS cards are accepted. We can help you choose the payment channel for your card.', 'Chúng tôi chấp nhận mọi loại thẻ tín dụng và ghi nợ, cùng thẻ trả trước, gồm Visa, Mastercard, Maestro, American Express, JCB, UnionPay, Discover, Diners Club và RuPay. Có thể thanh toán bằng thẻ nội địa NAPAS. Chúng tôi sẽ hỗ trợ chọn kênh phù hợp với thẻ của bạn.'],
@@ -888,7 +892,13 @@ function transformAbout(html) {
           <p>Open the listing to see the latest reviews and visitor photos.<span lang="vi">Mở trang Tripadvisor để xem đánh giá và ảnh mới nhất do khách đăng.</span></p>
           <p id="st-tripadvisor-link-note" class="st-tripadvisor__window">Tripadvisor links open in a new tab.<span lang="vi">Liên kết Tripadvisor mở trong thẻ mới.</span></p>
         </div>
-        <iframe class="st-tripadvisor__rating" src="${tripadvisorEmbedPath}" title="Tripadvisor badge for S.T Tailor / Huy hiệu Tripadvisor của S.T Tailor" loading="lazy" width="220" height="128" referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
+        <div class="st-tripadvisor__badge">
+          <div class="st-tripadvisor__badge-placeholder" aria-hidden="true">
+            <img src="/icons/tripadvisor-logomark.svg" alt="" width="34" height="24" loading="lazy">
+            <span>Tripadvisor<span lang="vi">Trang đánh giá chính thức</span></span>
+          </div>
+          <iframe class="st-tripadvisor__rating" src="${tripadvisorEmbedPath}" title="Tripadvisor badge for S.T Tailor / Huy hiệu Tripadvisor của S.T Tailor" loading="lazy" width="200" height="128" referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
+        </div>
       </div>
       <div class="st-tripadvisor__actions">
         <a class="st-tripadvisor__link" href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note"><span>Read reviews</span><span lang="vi">Đọc đánh giá</span></a>
@@ -954,11 +964,8 @@ function transformPage(sourceFile, html, showcasePage) {
     .replaceAll("Báo giá bằng văn bản", "Báo giá");
 }
 
-function imageMetadata(html) {
-  return [...html.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^\"]+)"[^>]*>/gi)].map((match) => ({
-    src: match[1],
-    alt: /\balt="([^\"]*)"/i.exec(match[0])?.[1] ?? ""
-  }));
+function imagePaths(html) {
+  return [...html.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^"]+)"[^>]*>/gi)].map(([, src]) => src);
 }
 
 function enrichImageAttributes(html, { responsiveSizes, deprioritizeLazyImages = false } = {}) {
@@ -1074,7 +1081,7 @@ function footer(route) {
     ["Showroom and Gallery", "Nhà may và thư viện ảnh", ["/", "/gioi-thieu/", "/gallery/", fittingFilmRoute, "/lien-he/"]],
     ["Tailoring services", "Dịch vụ may đo", ["/dich-vu/", ...serviceRoutes.map((page) => page.route), "/bang-gia/"]],
     ["Tailoring guide", "Cẩm nang may đo", ["/cam-nang-may-do/", ...guideRoutes.map(([href]) => href)]],
-    ["Client Care", "Chăm sóc khách hàng", [clientCareHubRoute, ...policyRoutes]],
+    ["Client Care", "Chăm sóc khách hàng", [clientCareHubRoute, ...policyRoutes, ...clientCareGuides.map(({ route }) => route)]],
     ...workGroups
   ];
   const directory = groups.map(([english, vietnamese, paths]) => `
@@ -1106,7 +1113,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     responsiveSizes,
     deprioritizeLazyImages: Boolean(showcaseHub) || sourceFile === "Home.html" || sourceFile === "Gallery.html"
   });
-  const galleryImages = route === "/gallery/" ? imageMetadata(body) : [];
+  const galleryImages = route === "/gallery/" ? imagePaths(body) : [];
   const canonical = `https://sttailor.com${route}`;
   const business = {
     "@type": ["LocalBusiness", "ClothingStore"],
@@ -1160,10 +1167,10 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     name: "S.T Tailor Gallery | Thư viện hình ảnh S.T Tailor",
     description: "Bespoke tailoring, cloth, fittings, clients and showroom photographs. | Hình ảnh may đo, chất liệu, buổi thử đồ, khách hàng và showroom.",
     numberOfItems: galleryImages.length,
-    itemListElement: galleryImages.map(({ src, alt }, index) => ({
+    itemListElement: galleryImages.map((src, index) => ({
       "@type": "ListItem",
       position: index + 1,
-      item: { "@type": "ImageObject", contentUrl: `https://sttailor.com${src}`, caption: alt, inLanguage: ["en", "vi"] }
+      item: { "@type": "ImageObject", contentUrl: `https://sttailor.com${src}` }
     }))
     });
     webPage.mainEntity = { "@id": `${canonical}#images` };
@@ -1187,7 +1194,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     graph.push({ "@type": "ItemList", "@id": `${canonical}#guides`, name: "S.T Tailor tailoring guide | Cẩm nang may đo S.T Tailor", numberOfItems: guideRoutes.length, itemListElement: guideRoutes.map(([url, english, vietnamese], index) => ({ "@type": "ListItem", position: index + 1, name: `${english} | ${vietnamese}`, url: `https://sttailor.com${url}` })) });
     webPage.mainEntity = { "@id": `${canonical}#guides` };
   }
-  if (guideRoutes.some(([guideRoute]) => guideRoute === route)) {
+  if (guideRoutes.some(([guideRoute]) => guideRoute === route) || clientCareGuides.some((page) => page.route === route)) {
     graph.push({ "@type": "Article", "@id": `${canonical}#article`, headline: title.split(" | ")[0], description, image: `https://sttailor.com${shareImage}`, author: { "@id": "https://sttailor.com/#business" }, publisher: { "@id": "https://sttailor.com/#business" }, mainEntityOfPage: { "@id": `${canonical}#webpage` }, dateModified: lastModified, inLanguage: ["en", "vi"] });
     webPage.mainEntity = { "@id": `${canonical}#article` };
   }
@@ -1214,9 +1221,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
       : { "@type": "Thing", name: showcasePage.labels[0], alternateName: showcasePage.labels[1] };
     graph.push({
       "@type": "Article", "@id": articleId, headline: showcasePage.labels[0], description,
-      image: showcasePage.photoCollection
-        ? showcasePage.photoCollection.photos.map(([file]) => `https://sttailor.com${photoSource(file)}`)
-        : `https://sttailor.com${shareImage}`,
+      image: [...new Set([shareImage, ...imagePaths(body)])].map((src) => `https://sttailor.com${src}`),
       about, dateModified: lastModified, inLanguage: ["en", "vi"],
       author: { "@id": business["@id"] }, publisher: { "@id": business["@id"] }, mainEntityOfPage: { "@id": webPage["@id"] }
     });
@@ -1478,22 +1483,15 @@ writeFileSync(path.join(tripadvisorEmbedDirectory, "index.html"), readFileSync(p
 writeFileSync(path.join(dist, "robots.txt"), "User-agent: *\nAllow: /\nSitemap: https://sttailor.com/sitemap.xml\n", "utf8");
 writeFileSync(path.join(dist, indexNowKeyFile), `${indexNowKey}\n`, "utf8");
 const xmlEscape = (value) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&apos;");
-const publishedImageLocations = new Set();
-const sitemapRouteOrder = [routes.find(([route]) => route === "/gallery/"), ...routes.filter(([route]) => route !== "/gallery/")];
-const sitemapEntries = sitemapRouteOrder.map(([route, , , , shareImage]) => {
+const sitemapEntries = routes.map(([route, , , , shareImage]) => {
   const pagePath = route === "/" ? path.join(dist, "index.html") : path.join(dist, route.slice(1), "index.html");
   const pageHtml = readFileSync(pagePath, "utf8");
   const imageLocations = new Set([shareImage]);
-  for (const match of pageHtml.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^"]+)"[^>]*>/gi)) {
-    if (route === "/gallery/" && /(?:logo-sttailor|LinkedInLogo)/i.test(match[1])) continue;
-    imageLocations.add(match[1]);
+  const main = pageHtml.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] ?? "";
+  for (const src of imagePaths(main)) {
+    if (!/(?:logo-sttailor|LinkedInLogo|chu-ky-)/i.test(src)) imageLocations.add(src);
   }
-  const pageImages = [...imageLocations].filter((src) => {
-    if (publishedImageLocations.has(src)) return false;
-    publishedImageLocations.add(src);
-    return true;
-  });
-  const imageEntries = pageImages.slice(0, 1000).map((src) => `<image:image><image:loc>https://sttailor.com${xmlEscape(src)}</image:loc></image:image>`).join("");
+  const imageEntries = [...imageLocations].slice(0, 1000).map((src) => `<image:image><image:loc>https://sttailor.com${xmlEscape(src)}</image:loc></image:image>`).join("");
   const videoEntry = route === fittingFilmRoute
     ? `<video:video><video:thumbnail_loc>https://sttailor.com${galleryFilm.poster}</video:thumbnail_loc><video:title>${xmlEscape(galleryFilm.name)}</video:title><video:description>${xmlEscape(galleryFilm.description)}</video:description><video:content_loc>https://sttailor.com${galleryFilm.src}</video:content_loc><video:duration>${galleryFilm.duration}</video:duration><video:publication_date>${galleryFilm.publishedAt}</video:publication_date></video:video>`
     : "";
@@ -1503,11 +1501,15 @@ writeFileSync(path.join(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF
 writeFileSync(path.join(dist, "site.webmanifest"), JSON.stringify({ name: "S.T Tailor", short_name: "S.T Tailor", description: "Bespoke tailoring and clothing alterations in Ho Chi Minh City.", start_url: "/", scope: "/", display: "standalone", background_color: "#f3e1c5", theme_color: "#ead1ad", icons: [{ src: "/icons/sttailor-app-192.png", sizes: "192x192", type: "image/png", purpose: "any" }, { src: "/icons/sttailor-app-large-512.png", sizes: "512x512", type: "image/png", purpose: "any" }] }, null, 2), "utf8");
 mkdirSync(path.join(dist, ".well-known"), { recursive: true });
 copyFileSync(path.join(root, "source", "security.txt"), path.join(dist, ".well-known", "security.txt"));
-const showcaseSummaries = new Map(showcaseEntries.map(({ route, summary }) => [route, summary]));
-const llmsLink = ([route, , , description]) => `- [${pageLabels.get(route).join(" / ")}](https://sttailor.com${route}): ${showcaseSummaries.get(route)?.join(" / ") ?? description}`;
+const bilingualSummaries = new Map([
+  ...showcaseEntries.map(({ route, summary }) => [route, summary]),
+  ...tailoringPages.filter(({ descriptionVi }) => descriptionVi)
+    .map(({ route, description, descriptionVi }) => [route, [description, descriptionVi]])
+]);
+const llmsLink = ([route, , , description]) => `- [${pageLabels.get(route).join(" / ")}](https://sttailor.com${route}): ${bilingualSummaries.get(route)?.join(" / ") ?? description}`;
 const guidePaths = new Set(["/cam-nang-may-do/", ...guideRoutes.map(([route]) => route)]);
 const showcasePaths = new Set(showcasePages.map(({ route }) => route));
-const clientCarePaths = new Set([clientCareHubRoute, ...policyRoutes]);
+const clientCarePaths = new Set([clientCareHubRoute, ...policyRoutes, ...clientCareGuides.map(({ route }) => route)]);
 const llmsSections = [
   ["Showroom and services / Nhà may và dịch vụ", routes.filter(([route]) => !clientCarePaths.has(route) && !guidePaths.has(route) && !showcasePaths.has(route))],
   ...showcaseHubs.map(({ route: hubRoute, labels }) => [labels.join(" / "), routes.filter(([route]) => route.startsWith(hubRoute))]),

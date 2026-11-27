@@ -1,5 +1,20 @@
 const toggle = document.querySelector("[data-nav-toggle]");
 const nav = document.querySelector("[data-site-nav]");
+const tripadvisorBadge = document.querySelector(".st-tripadvisor__badge");
+
+if (tripadvisorBadge) {
+  const badgeFrame = tripadvisorBadge.querySelector("iframe");
+  window.addEventListener("message", (event) => {
+    if (event.source !== badgeFrame.contentWindow || event.origin !== "null") return;
+    if (event.data === "st-tailor-tripadvisor-ready") tripadvisorBadge.setAttribute("data-badge-ready", "");
+    if (event.data === "st-tailor-tripadvisor-unavailable") tripadvisorBadge.removeAttribute("data-badge-ready");
+  });
+  // The vendor can render before this module or before the frame's load event.
+  // The query carries no data and must target the frame's opaque sandbox origin.
+  const requestBadgeStatus = () => badgeFrame.contentWindow?.postMessage("st-tailor-tripadvisor-status", "*");
+  badgeFrame.addEventListener("load", requestBadgeStatus);
+  requestBadgeStatus();
+}
 
 if (toggle && nav) {
   const links = [...nav.querySelectorAll("a")];
@@ -67,6 +82,7 @@ const pageTypes = {
   "/dich-vu/trang-phuc-nu/": "service_womenswear",
   "/dich-vu/so-mi-may-do/": "service_shirts",
   "/dich-vu/quan-tay-may-do/": "service_trousers",
+  "/dich-vu/ao-khoac-may-do/": "service_jackets",
   "/gallery/": "gallery",
   "/phim-thu-do/": "fitting_film",
   "/bang-gia/": "pricing",
@@ -76,7 +92,10 @@ const pageTypes = {
   "/cam-nang-may-do/buoi-tu-van-dau-tien/": "guide_first_consultation",
   "/cam-nang-may-do/nhan-trang-phuc-may-do/": "guide_garment_collection",
   "/cam-nang-may-do/thu-do-khi-du-lich/": "guide_travel_fittings",
+  "/cam-nang-may-do/kiem-tra-phom-suit/": "guide_suit_fit",
+  "/cam-nang-may-do/chon-lot-ao-khoac/": "guide_jacket_lining",
   "/cam-nang-may-do/chon-suit-hai-manh-ba-manh/": "guide_suit_pieces",
+  "/cam-nang-may-do/chuan-bi-trang-phuc-cuoi/": "guide_wedding_planning",
   "/chon-vai-may-do/": "guide_cloth",
   "/chon-vai-may-do/vai-len-y/": "guide_italian_wool",
   "/chon-vai-may-do/lua-viet-nam/": "guide_vietnamese_silk",
@@ -84,6 +103,7 @@ const pageTypes = {
   "/chinh-sua-trang-phuc/": "guide_alterations",
   "/bao-quan-giat-la/": "guide_care",
   "/cham-soc-khach-hang/": "client_care",
+  "/cham-soc-khach-hang/sua-chua-sau-khi-nhan-do/": "client_aftercare",
   "/san-pham/": "showcase_garments",
   "/du-an/": "showcase_projects",
   "/doi-tra-hoan-tien/": "returns",

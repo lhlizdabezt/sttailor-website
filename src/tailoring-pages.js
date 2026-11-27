@@ -45,6 +45,36 @@ export const tailoringPages = [
     imageAlt: "Folded dark tailored trousers with a side adjuster, welt pocket and pressed crease | Quần tây tối màu gấp gọn với đai chỉnh cạp, túi viền và đường ly là"
   },
   {
+    route: "/dich-vu/ao-khoac-may-do/",
+    source: "ServiceJackets.html",
+    labels: ["Made-to-measure jackets", "Áo khoác may đo"],
+    title: "Made-to-Measure Jackets & Blazers in HCMC | S.T Tailor",
+    description: "Commission a blazer or standalone tailored jacket in Ho Chi Minh City. Compare cloth, shoulder shape, pockets and lining with S.T Tailor.",
+    descriptionVi: "Đặt may blazer hoặc áo khoác mặc rời tại TP. Hồ Chí Minh. Cùng S.T Tailor chọn vải, dáng vai, kiểu túi và lớp lót.",
+    image: "/media/2026/11/st-tailor-pale-olive-jacket-on-showroom-form.webp",
+    imageAlt: "Pale olive tailored jacket on a showroom form | Áo khoác may đo xanh ô liu nhạt trên mannequin tại nhà may"
+  },
+  {
+    route: "/cam-nang-may-do/chuan-bi-trang-phuc-cuoi/",
+    source: "GuideWeddingPlanning.html",
+    labels: ["Planning wedding tailoring", "Chuẩn bị may lễ phục cưới"],
+    title: "Wedding Tailoring Planning in Ho Chi Minh City | S.T Tailor",
+    description: "Plan clothes for a wedding in Ho Chi Minh City. Coordinate the dress code, fitting dates and final checks with S.T Tailor before the ceremony.",
+    descriptionVi: "Chuẩn bị lễ phục cưới tại TP. Hồ Chí Minh. Cùng S.T Tailor thống nhất quy định trang phục, lịch thử và các bước kiểm tra trước buổi lễ.",
+    image: "/media/2026/09/st-tailor-gallery-navy-formal-front.jpg",
+    imageAlt: "Client wearing a navy formal suit, front view | Khách mặc suit lễ phục xanh navy, góc chính diện"
+  },
+  {
+    route: "/cham-soc-khach-hang/sua-chua-sau-khi-nhan-do/",
+    source: "GuideAftercare.html",
+    labels: ["Aftercare and minor repairs", "Chăm sóc và sửa chữa nhỏ"],
+    title: "Tailored Garment Aftercare & Minor Repairs | S.T Tailor",
+    description: "Find out what to bring for a minor repair on an S.T Tailor garment, how we assess the work and how to contact the showroom after collection.",
+    descriptionVi: "Xem cần mang gì khi sửa chữa nhỏ trang phục S.T Tailor, nhà may kiểm tra ra sao và cách liên hệ sau khi nhận đồ.",
+    image: "/media/2026/11/st-tailor-showroom-tailoring-garment-bag.webp",
+    imageAlt: "Tailor and client holding a garment bag at S.T Tailor | Thợ may và khách cầm túi đựng trang phục tại S.T Tailor"
+  },
+  {
     route: "/cam-nang-may-do/buoi-tu-van-dau-tien/",
     source: "GuideFirstConsultation.html",
     labels: ["First tailoring consultation", "Buổi tư vấn may đo đầu tiên"],
