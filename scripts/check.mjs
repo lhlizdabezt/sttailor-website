@@ -538,6 +538,7 @@ for (const removedBlock of ["album-archive", "album-client-feedback", "st-galler
   if (gallery.includes(removedBlock)) failures.push(`Removed Gallery block remains: ${removedBlock}`);
 }
 if ((gallery.match(/st-gallery-numpad__card/g) ?? []).length !== 9) failures.push("Gallery 3x3 chapter navigator must contain exactly nine cards.");
+if (!gallery.includes("Nine chapters") || !gallery.includes("Chín chương ảnh")) failures.push("The Gallery introduction must describe its nine chapters in both languages.");
 if (!gallery.includes("st-gallery-numpad") || !gallery.includes("#album-tuxedo") || !gallery.includes("#album-showroom")) failures.push("Gallery chapter navigator is missing jump targets.");
 const galleryImageTags = [...gallery.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^\"]+)"[^>]*>/gi)];
 const galleryContentImages = galleryImageTags.filter((match) => !match[1].includes("logo-sttailor") && !match[1].endsWith("/LinkedInLogo.png"));
