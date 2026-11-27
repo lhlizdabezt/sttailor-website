@@ -424,6 +424,39 @@ export const showcaseEntries = [
     imageAlt: "Warm tan tailored jacket with notch lapels and two front buttons on the showroom rail | Áo khoác may đo nâu vàng ve chữ K và hai khuy trước treo tại nhà may"
   },
   {
+    route: "/san-pham/ao-khoac-xam-ca-ro-hai-hang-khuy/",
+    section: "suits-and-jackets",
+    source: "ShowcaseCheckedDoubleBreastedJacket.html",
+    labels: ["Checked grey double-breasted jacket", "Áo khoác xám ca rô hai hàng khuy"],
+    title: "Checked Grey Double-Breasted Jacket | S.T Tailor",
+    description: "See the fine checks, two rows of buttons and patterned blue lining on a finished grey double-breasted jacket by S.T Tailor in Ho Chi Minh City.",
+    summary: ["Fine grey checks run across the front of this double-breasted jacket. The showroom photograph shows the two rows of buttons, flap pockets and blue patterned lining.", "Ca rô mảnh chạy trên thân trước áo khoác xám hai hàng khuy. Ảnh tại nhà may cho thấy hai hàng khuy, túi có nắp và lớp lót xanh họa tiết."],
+    image: "/media/2026/11/st-tailor-checked-grey-double-breasted-jacket-front.webp",
+    imageAlt: "Grey checked double-breasted jacket on a hanger, with front flap pockets and patterned blue lining visible at the collar | Áo khoác xám ca rô hai hàng khuy trên móc, có túi nắp trước và lớp lót xanh họa tiết lộ ở cổ"
+  },
+  {
+    route: "/san-pham/ao-khong-tay-sang-mau-hoa-tiet-nho/",
+    section: "womenswear",
+    source: "ShowcaseTonalMotifTop.html",
+    labels: ["Pale sleeveless top with tonal motifs", "Áo không tay sáng màu họa tiết cùng tông"],
+    title: "Pale Sleeveless Top With Tonal Motifs | S.T Tailor",
+    description: "See the armhole, shaping seam and small tonal motifs on a pale sleeveless top from S.T Tailor. Learn what to check when fitting a sleeveless design.",
+    summary: ["A close showroom view shows how small tonal motifs read beside the armhole and across the shaped bodice.", "Ảnh cận tại nhà may cho thấy họa tiết nhỏ cùng tông hiện lên ra sao cạnh vòng nách và trên thân áo được tạo dáng."],
+    image: "/media/2026/11/st-tailor-pale-sleeveless-top-embroidered-detail.webp",
+    imageAlt: "Close view of small tonal motifs and a curved shaping seam beside the armhole of a pale sleeveless top on a form | Cận họa tiết nhỏ cùng tông và đường may tạo dáng cong cạnh vòng nách áo không tay sáng màu trên ma-nơ-canh"
+  },
+  {
+    route: "/du-an/phoi-ao-khoac-xam-than/",
+    section: "client-work",
+    source: "ShowcaseCharcoalJacketInWear.html",
+    labels: ["Charcoal jacket with dark separates", "Áo khoác xám than phối trang phục tối màu"],
+    title: "A Charcoal Jacket With Dark Separates | S.T Tailor",
+    description: "See a client wear a charcoal jacket over a dark top and trousers at S.T Tailor. Use the portrait to plan a layered outfit and check jacket movement.",
+    summary: ["A showroom portrait shows how a charcoal jacket contrasts with a dark top and trousers, with one hand in a trouser pocket.", "Ảnh tại nhà may cho thấy áo khoác xám than tương phản nhẹ với áo trong và quần tối màu khi khách đặt một tay vào túi quần."],
+    image: "/media/2026/09/st-tailor-gallery-client-charcoal-suit.jpg",
+    imageAlt: "Client in an open charcoal jacket over a dark top and trousers, standing with one hand in a pocket at S.T Tailor | Khách mở vạt áo khoác xám than phối áo trong và quần tối màu, đứng với một tay trong túi quần tại S.T Tailor"
+  },
+  {
     route: "/san-pham/so-mi-hong-nhat-soc-min/",
     section: "shirts-and-trousers",
     source: "ShowcasePinkFineStripeShirt.html",

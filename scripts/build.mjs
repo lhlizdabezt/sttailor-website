@@ -886,6 +886,7 @@ function transformAbout(html) {
 </section>`;
   html = `${html.slice(0, provenanceRange.end)}${clothHeritage}${consultationGuide}${galleryBridge}${html.slice(provenanceRange.end)}`;
   const tripadvisorListing = "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html";
+  const [entrancePhoto, entranceAlt, entranceAltVi] = showroomEntrance.photos[0];
   const tripadvisor = `
 <section class="st-tripadvisor" id="st-tripadvisor" aria-labelledby="st-tripadvisor-title" tabindex="-1">
   <div class="st-lux-shell st-tripadvisor__inner">
@@ -897,18 +898,16 @@ function transformAbout(html) {
       <p>Read about other clients’ visits before your first fitting. If you’ve visited us, you can share your own experience on Tripadvisor.<span lang="vi">Trước buổi thử đồ đầu tiên, bạn có thể tham khảo trải nghiệm của những khách đã ghé nhà may. Nếu đã đến S.T Tailor, bạn cũng có thể chia sẻ trải nghiệm của mình trên Tripadvisor.</span></p>
     </header>
     <article class="st-tripadvisor__card st-tripadvisor__card--reviews" aria-labelledby="st-tripadvisor-listing-title">
-      <div class="st-tripadvisor__review">
-        <div>
+      <div class="st-tripadvisor__card-copy">
           <h3 id="st-tripadvisor-listing-title">S.T Tailor on Tripadvisor<span lang="vi">S.T Tailor trên Tripadvisor</span></h3>
           <p>See what visitors share about their fittings and showroom visits. Tripadvisor also publishes their full reviews and photos.<span lang="vi">Đọc chia sẻ của khách về những buổi thử đồ và trải nghiệm ghé nhà may. Bạn có thể xem toàn văn đánh giá và ảnh của khách trên Tripadvisor.</span></p>
-        </div>
-        <div class="st-tripadvisor__embed">
-          <a class="st-tripadvisor__embed-link" href="${tripadvisorListing}" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note">
-            <img src="/icons/tripadvisor-logomark.svg" alt="" width="34" height="24" loading="lazy" decoding="async">
-            <span>View on Tripadvisor<span lang="vi">Xem trên Tripadvisor</span></span>
-          </a>
-          <iframe class="st-tripadvisor__frame" src="${tripadvisorEmbedPath}" title="Recent Tripadvisor reviews for S.T Tailor / Đánh giá gần đây của S.T Tailor trên Tripadvisor" loading="lazy" width="248" height="200" referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
-        </div>
+      </div>
+      <div class="st-tripadvisor__embed">
+        <a class="st-tripadvisor__embed-link" href="${tripadvisorListing}" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note">
+          <img src="/icons/tripadvisor-logomark.svg" alt="" width="34" height="24" loading="lazy" decoding="async">
+          <span>View on Tripadvisor<span lang="vi">Xem trên Tripadvisor</span></span>
+        </a>
+        <iframe class="st-tripadvisor__frame" src="${tripadvisorEmbedPath}" title="Recent Tripadvisor reviews for S.T Tailor / Đánh giá gần đây của S.T Tailor trên Tripadvisor" loading="lazy" width="500" height="200" referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
       </div>
       <div class="st-tripadvisor__actions">
         <a class="st-tripadvisor__link" href="${tripadvisorListing}" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note"><span>Read reviews</span><span lang="vi">Đọc đánh giá</span></a>
@@ -916,11 +915,16 @@ function transformAbout(html) {
       </div>
     </article>
     <article class="st-tripadvisor__card st-tripadvisor__card--visit" aria-labelledby="st-tripadvisor-visit-title">
-      <div class="st-tripadvisor__visit">
+      <div class="st-tripadvisor__card-copy">
         <h3 id="st-tripadvisor-visit-title">Visit S.T Tailor<span lang="vi">Ghé S.T Tailor</span></h3>
-        <address>1st Floor, 258 Le Thanh Ton, Tan Dinh Ward<br>Ho Chi Minh City, Vietnam<span lang="vi">Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định<br>Thành phố Hồ Chí Minh, Việt Nam</span></address>
-        <p class="st-tripadvisor__hours">Open daily, 09:00–20:00<span lang="vi">Mở cửa mỗi ngày, 09:00–20:00</span></p>
-        <p class="st-tripadvisor__arrival">Look for the number 258 and the illuminated tailoring sign at street level.<span lang="vi">Tìm số nhà 258 và biển hiệu nhà may có đèn ở mặt đường.</span></p>
+        <address>1st Floor, 258 Le Thanh Ton, Tan Dinh Ward, Ho Chi Minh City, Vietnam<span lang="vi">Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định, Thành phố Hồ Chí Minh, Việt Nam</span></address>
+      </div>
+      <div class="st-tripadvisor__arrival">
+        <figure class="st-tripadvisor__entrance"><img src="${photoSource(entrancePhoto)}" alt="${xmlEscape(`${entranceAlt} | ${entranceAltVi}`)}" loading="lazy" decoding="async" fetchpriority="low"></figure>
+        <div>
+          <p class="st-tripadvisor__hours">Open daily, 09:00–20:00<span lang="vi">Mở cửa mỗi ngày, 09:00–20:00</span></p>
+          <p>Look for the number 258 and the illuminated tailoring sign at street level.<span lang="vi">Tìm số nhà 258 và biển hiệu nhà may có đèn ở mặt đường.</span></p>
+        </div>
       </div>
       <div class="st-tripadvisor__actions">
         <a class="st-tripadvisor__link st-tripadvisor__link--outline" href="/lien-he/#st-showroom-map"><span>Directions</span><span lang="vi">Chỉ đường</span></a>

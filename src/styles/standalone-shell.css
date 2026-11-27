@@ -209,7 +209,7 @@ html body .st-gallery-numpad__card:focus-visible { outline: 2px solid #6c371e !i
 .stpr-ledger .stpr-next-steps { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
 
 /* The approved six direct contact channels complete two balanced rows instead of leaving empty tracks. */
-.st-contact-page--v2 .st-contact-buttons { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+.st-contact-page--v2 .st-contact-buttons { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; grid-auto-rows: 1fr; }
 html body .st-contact-page--v2 .st-contact-cta .st-contact-heading > span {
   font-size: var(--st-eyebrow-size) !important;
   line-height: 1.5 !important;
@@ -391,7 +391,7 @@ html body .st-cloth-heritage__gallery figcaption small { margin-top: 15px !impor
 html body .st-cloth-heritage__gallery figcaption small span[lang="vi"] { display: block !important; margin-top: 6px !important; color: #d1b293 !important; -webkit-text-fill-color: #d1b293 !important; }
 
 /* The reviews lead. The adjacent visit information answers the next practical question. */
-html body .st-tripadvisor { padding: clamp(40px, 6vw, 84px) 0 !important; background: #f4e5ce !important; color: #2f1e15 !important; border-block: 1px solid #c5a17b !important; }
+html body .st-tripadvisor { padding: clamp(36px, 5.5vw, 76px) 0 !important; background: #f4e5ce !important; color: #2f1e15 !important; border-block: 1px solid #c5a17b !important; }
 html body .st-tripadvisor__inner { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 2.2vw, 28px); }
 html body .st-tripadvisor__copy {
   grid-column: 1 / -1;
@@ -414,29 +414,28 @@ html body .st-tripadvisor__copy > p { max-width: 64ch !important; margin: 0 !imp
 html body .st-tripadvisor__copy > p span[lang="vi"] { display: block !important; margin-top: 8px !important; color: #624330 !important; -webkit-text-fill-color: #624330 !important; }
 html body .st-tripadvisor__card {
   display: grid;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: auto 1fr auto;
   min-width: 0;
-  gap: clamp(14px, 2.2vw, 26px);
+  gap: clamp(16px, 1.7vw, 23px);
   padding: clamp(16px, 2.4vw, 30px);
-  border: 1px solid #a98361;
+  border: 1px solid #9b7250;
+  border-block-start: 3px solid #795035;
   background: #fff7eb;
 }
-html body .st-tripadvisor__card--reviews { border-block-start: 3px solid #795035; }
 html body .st-tripadvisor__card--visit { background: #faeddc; }
 html body .st-tripadvisor__card h3 { margin: 0; color: #352116; font: 500 clamp(23px, 2.05vw, 30px)/1.2 var(--st-wordmark); }
 html body #main-content .st-tripadvisor__card h3 > span[lang="vi"] { display: block; margin-top: 4px; color: #624330; -webkit-text-fill-color: #624330; font: 500 16px/1.4 var(--st-vietnamese) !important; }
-html body .st-tripadvisor__review { display: grid; grid-template-columns: minmax(0, 1fr) 248px; align-content: start; align-items: start; gap: clamp(14px, 2.2vw, 30px); }
-html body .st-tripadvisor__review p { margin: 12px 0 0; color: #4e3527; font: 400 16px/1.55 var(--st-vietnamese); }
-html body .st-tripadvisor__review p [lang="vi"] { display: block; margin-top: 4px; }
+html body .st-tripadvisor__card-copy :is(p, address) { margin: 12px 0 0; color: #4e3527; font: 400 16px/1.6 var(--st-vietnamese); }
+html body .st-tripadvisor__card-copy :is(p, address) [lang="vi"] { display: block; margin-top: 8px; }
 html body .st-tripadvisor__embed {
   display: grid;
-  grid-template-rows: 1fr;
-  place-items: stretch center;
+  align-self: end;
   min-width: 0;
   min-height: 200px;
-  background: #fffdf8;
-  box-shadow: inset 0 0 0 1px var(--st-control-outline);
+  background: #fffbf3;
+  border: 1px solid transparent;
 }
+html body .st-tripadvisor__embed[data-reviews-ready] { border-color: var(--st-control-outline); }
 html body #main-content .st-tripadvisor__embed-link {
   grid-area: 1 / 1;
   box-sizing: border-box;
@@ -447,7 +446,7 @@ html body #main-content .st-tripadvisor__embed-link {
   align-content: center;
   gap: 6px;
   border: 1px solid var(--st-control-outline);
-  background: #fff8ed;
+  background: transparent;
   color: #352116 !important;
   -webkit-text-fill-color: #352116 !important;
   text-align: center;
@@ -481,12 +480,20 @@ html body .st-tripadvisor__link--outline { border-color: var(--st-control-outlin
 html body .st-tripadvisor__link--outline span[lang="vi"] { color: #624330 !important; -webkit-text-fill-color: #624330 !important; }
 html body .st-tripadvisor__link--outline:hover { background: #f2e2cb !important; }
 html body #main-content .st-tripadvisor__actions .st-tripadvisor__link:focus-visible { outline: 3px solid #764225 !important; outline-offset: 4px !important; }
-html body .st-tripadvisor__visit address { margin: 10px 0 0; color: #4e3527; font: 400 15px/1.55 var(--st-vietnamese); }
-html body .st-tripadvisor__visit address span { display: block; margin-top: 6px; }
-html body .st-tripadvisor__hours { margin: 12px 0 0; color: #4e3527; font: 600 14px/1.55 var(--st-vietnamese); }
-html body .st-tripadvisor__hours span { display: block; font-weight: 400; }
-html body .st-tripadvisor__arrival { margin: 12px 0 0; color: #4e3527; font: 400 14px/1.55 var(--st-vietnamese); }
-html body .st-tripadvisor__arrival span { display: block; margin-top: 4px; }
+html body .st-tripadvisor__arrival {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  align-items: center;
+  align-self: end;
+  gap: clamp(12px, 1.55vw, 20px);
+}
+html body .st-tripadvisor__entrance { margin: 0 !important; border: 1px solid #9b7250; }
+html body .st-tripadvisor__entrance img { display: block; width: 100%; height: 200px; object-fit: cover; object-position: 50% 48%; }
+html body .st-tripadvisor__arrival p { margin: 0; color: #4e3527; font: 400 15px/1.55 var(--st-vietnamese); }
+html body .st-tripadvisor__arrival p + p { margin-top: 12px; }
+html body .st-tripadvisor__arrival span { display: block; margin-top: 6px; }
+html body .st-tripadvisor__arrival .st-tripadvisor__hours { font-weight: 650; }
+html body .st-tripadvisor__hours span { font-weight: 400; }
 
 html body .st-fitting-film {
   display: grid;
@@ -558,7 +565,7 @@ html body .st-about-gallery-bridge__frame { display: grid !important; grid-templ
 html body .st-about-gallery-bridge__frame figure { min-height: 540px !important; margin: 0 !important; overflow: hidden !important; background: #63351f !important; }
 html body .st-about-gallery-bridge__frame img { display: block !important; width: 100% !important; height: 100% !important; min-height: 540px !important; object-fit: cover !important; object-position: center !important; transition: transform .8s cubic-bezier(.2,.7,.2,1) !important; }
 html body .st-about-gallery-bridge__copy { display: flex !important; flex-direction: column !important; align-items: flex-start !important; justify-content: center !important; padding: clamp(34px, 6vw, 88px) !important; background: linear-gradient(135deg, #472818, #28160f) !important; }
-html body .st-about-gallery-bridge__copy .st-lux-eyebrow { margin: 0 0 18px !important; color: #eec995 !important; -webkit-text-fill-color: #eec995 !important; font-size: 13px !important; letter-spacing: .13em !important; }
+html body .st-about-gallery-bridge__copy .st-lux-eyebrow { margin: 0 0 18px !important; color: #eec995 !important; -webkit-text-fill-color: #eec995 !important; font-size: var(--st-eyebrow-size) !important; letter-spacing: .075em !important; }
 html body .st-about-gallery-bridge__copy strong { display: block !important; max-width: 520px !important; color: #fff8ef !important; -webkit-text-fill-color: #fff8ef !important; font: 500 clamp(44px, 5.2vw, 74px)/.96 var(--st-wordmark) !important; }
 html body .st-about-gallery-bridge__copy strong span[lang="vi"] { display: block !important; margin-top: 12px !important; color: #e7bd88 !important; -webkit-text-fill-color: #e7bd88 !important; font-size: .46em !important; line-height: 1.12 !important; }
 html body .st-about-gallery-bridge__copy small { display: block !important; max-width: 500px !important; margin-top: 25px !important; color: #e8d5c1 !important; -webkit-text-fill-color: #e8d5c1 !important; font: 400 clamp(15px, 1.35vw, 18px)/1.68 var(--st-vietnamese) !important; }
@@ -581,7 +588,7 @@ html body .st-service-gallery-suite__media figure { min-width: 0 !important; mar
 html body .st-service-gallery-suite__media figure:nth-child(2) { margin-block: 38px !important; }
 html body .st-service-gallery-suite__media img { display: block !important; width: 100% !important; height: 100% !important; min-height: 620px !important; object-fit: cover !important; filter: saturate(.78) sepia(.08) contrast(1.04) !important; transition: transform .8s cubic-bezier(.2,.72,.2,1), filter .55s ease !important; }
 html body .st-service-gallery-suite__copy { display: flex !important; min-width: 0 !important; padding: clamp(34px, 5vw, 68px) !important; flex-direction: column !important; align-items: flex-start !important; justify-content: center !important; background: linear-gradient(145deg, #fffaf3, #ead1ad) !important; }
-html body .st-service-gallery-suite__copy > small { color: #864820 !important; -webkit-text-fill-color: #864820 !important; font: 800 12px/1.35 var(--st-body) !important; letter-spacing: .12em !important; }
+html body .st-service-gallery-suite__copy > small { color: #864820 !important; -webkit-text-fill-color: #864820 !important; }
 html body .st-service-gallery-suite__copy > small span[lang="vi"] { display: block !important; margin-top: 7px !important; font-family: var(--st-vietnamese) !important; letter-spacing: .045em !important; }
 html body .st-service-gallery-suite__copy > strong { display: block !important; margin-top: 22px !important; color: #2b1911 !important; -webkit-text-fill-color: #2b1911 !important; font: 500 clamp(40px, 4.7vw, 68px)/.96 var(--st-wordmark) !important; text-wrap: balance !important; }
 html body .st-service-gallery-suite__copy > strong span[lang="vi"] { display: block !important; margin-top: 13px !important; color: #754128 !important; -webkit-text-fill-color: #754128 !important; font-size: .46em !important; line-height: 1.14 !important; }
@@ -598,7 +605,7 @@ html body .st-service-gallery-suite__frame:focus-visible { outline: 3px solid #6
 html body .st-pricing-gallery-suite { padding: clamp(66px, 8vw, 112px) clamp(20px, 5vw, 76px) !important; background: #f5e8d5 !important; }
 html body .st-pricing-gallery-suite__frame { display: grid !important; width: min(1160px, 100%) !important; min-height: 570px !important; margin: 0 auto !important; grid-template-columns: minmax(310px, .74fr) minmax(0, 1.26fr) !important; overflow: hidden !important; border: 1px solid #a06b45 !important; background: #2d1a12 !important; text-decoration: none !important; box-shadow: 0 28px 64px rgba(67, 37, 22, .18) !important; }
 html body .st-pricing-gallery-suite__copy { display: flex !important; min-width: 0 !important; padding: clamp(34px, 5.5vw, 74px) !important; flex-direction: column !important; align-items: flex-start !important; justify-content: center !important; background: radial-gradient(circle at 18% 10%, #623821, #281710 66%) !important; }
-html body .st-pricing-gallery-suite__copy > small { color: #e7bd86 !important; -webkit-text-fill-color: #e7bd86 !important; font: 800 12px/1.35 var(--st-body) !important; letter-spacing: .12em !important; }
+html body .st-pricing-gallery-suite__copy > small { color: #e7bd86 !important; -webkit-text-fill-color: #e7bd86 !important; }
 html body .st-pricing-gallery-suite__copy > small span[lang="vi"] { display: block !important; margin-top: 7px !important; font-family: var(--st-vietnamese) !important; letter-spacing: .04em !important; }
 html body .st-pricing-gallery-suite__copy > strong { display: block !important; margin-top: 22px !important; color: #fff9ef !important; -webkit-text-fill-color: #fff9ef !important; font: 500 clamp(42px, 5vw, 72px)/.94 var(--st-wordmark) !important; text-wrap: balance !important; }
 html body .st-pricing-gallery-suite__copy > strong span[lang="vi"] { display: block !important; margin-top: 14px !important; color: #e6ba82 !important; -webkit-text-fill-color: #e6ba82 !important; font-size: .46em !important; line-height: 1.14 !important; }
@@ -648,7 +655,11 @@ html body .st-payment-gallery-suite__frame { display: grid !important; min-heigh
 html body .st-payment-gallery-suite__frame figure { min-height: 560px !important; margin: 0 !important; overflow: hidden !important; background: #6b4029 !important; }
 html body .st-payment-gallery-suite__frame img { display: block !important; width: 100% !important; height: 100% !important; min-height: 560px !important; object-fit: cover !important; filter: saturate(.83) sepia(.06) contrast(1.04) !important; transition: transform .8s cubic-bezier(.2,.72,.2,1), filter .55s ease !important; }
 html body .st-payment-gallery-suite__copy { display: flex !important; min-width: 0 !important; padding: clamp(34px, 6vw, 82px) !important; flex-direction: column !important; align-items: flex-start !important; justify-content: center !important; background: linear-gradient(145deg, #fffaf3, #e9cfaa) !important; }
-html body .st-payment-gallery-suite__copy > small { color: #82461f !important; -webkit-text-fill-color: #82461f !important; font: 800 12px/1.35 var(--st-body) !important; letter-spacing: .12em !important; }
+html body .st-payment-gallery-suite__copy > small { color: #82461f !important; -webkit-text-fill-color: #82461f !important; }
+html body :is(.st-service-gallery-suite__copy, .st-pricing-gallery-suite__copy, .st-payment-gallery-suite__copy) > small {
+  font: 650 var(--st-eyebrow-size)/1.4 var(--st-vietnamese) !important;
+  letter-spacing: .07em !important;
+}
 html body .st-payment-gallery-suite__copy > small span[lang="vi"] { display: block !important; margin-top: 7px !important; font-family: var(--st-vietnamese) !important; letter-spacing: .04em !important; }
 html body .st-payment-gallery-suite__copy > strong { display: block !important; margin-top: 22px !important; color: #2f1a12 !important; -webkit-text-fill-color: #2f1a12 !important; font: 500 clamp(43px, 5vw, 72px)/.95 var(--st-wordmark) !important; text-wrap: balance !important; }
 html body .st-payment-gallery-suite__copy > strong span[lang="vi"] { display: block !important; margin-top: 13px !important; color: #774329 !important; -webkit-text-fill-color: #774329 !important; font-size: .46em !important; line-height: 1.14 !important; }
@@ -1315,16 +1326,18 @@ html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal .st-footer-v8__copyrig
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__copyright > span { display: block !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__copyright > span [lang="vi"] { display: inline !important; margin: 0 0 0 5px !important; color: #eac8a2 !important; -webkit-text-fill-color: #eac8a2 !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal-links { min-width: 0 !important; }
-html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal-label { margin: 0 0 11px !important; color: #e9bc87 !important; font: 750 11px/1.4 var(--st-vietnamese) !important; letter-spacing: .15em !important; text-align: right !important; }
-html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal-label span[lang="vi"] { margin-left: 6px !important; color: #d4ac84 !important; font-weight: 550 !important; letter-spacing: .03em !important; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal-label { margin: 0 0 12px !important; color: #e9bc87 !important; font: 650 14px/1.45 var(--st-vietnamese) !important; letter-spacing: .09em !important; text-align: right !important; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal-label span[lang="vi"] { display: block !important; margin-top: 3px !important; color: #eac8a2 !important; font-weight: 550 !important; letter-spacing: .03em !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav { display: grid !important; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px !important; }
-html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a { display: grid !important; align-content: center; min-width: 0 !important; min-height: 54px; box-sizing: border-box; margin: 0 !important; padding: 7px 9px !important; border: 1px solid #bc9773 !important; background: #39261b !important; color: #fff5e6 !important; -webkit-text-fill-color: #fff5e6 !important; font: 650 12px/1.4 var(--st-vietnamese) !important; letter-spacing: .025em !important; text-align: center; text-decoration: none !important; }
-html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a span[lang="vi"] { display: block !important; margin: 3px 0 0 !important; color: #eac8a2 !important; -webkit-text-fill-color: #eac8a2 !important; font: 500 12px/1.4 var(--st-vietnamese) !important; letter-spacing: 0 !important; text-transform: none !important; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a { display: grid !important; align-content: center; min-width: 0 !important; min-height: 60px; box-sizing: border-box; margin: 0 !important; padding: 8px 9px !important; border: 1px solid #bc9773 !important; background: #39261b !important; color: #fff5e6 !important; -webkit-text-fill-color: #fff5e6 !important; font: 650 14px/1.4 var(--st-vietnamese) !important; letter-spacing: .025em !important; text-align: center !important; text-decoration: none !important; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a span[lang="vi"] { display: block !important; margin: 4px 0 0 !important; color: #eac8a2 !important; -webkit-text-fill-color: #eac8a2 !important; font: 500 13px/1.4 var(--st-vietnamese) !important; letter-spacing: 0 !important; text-transform: none !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:hover, html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:focus-visible { border-color: #efd1ab !important; background: #4d3426 !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:focus-visible { outline: 2px solid #f0d1a9 !important; outline-offset: 5px !important; }
 html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:hover span[lang="vi"], html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav a:focus-visible span[lang="vi"] { color: #f0d1a9 !important; -webkit-text-fill-color: #f0d1a9 !important; }
 @media (max-width: 900px) { html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal .st-footer-v7__shell { grid-template-columns: 1fr !important; align-items: start !important; } html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal-label { text-align: left !important; } }
-@media (max-width: 600px) { html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) {
+  html body .st-footer-v7.st-footer-v8 .st-footer-v8__legal nav { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; }
+}
 
 html body .st-footer-v7.st-footer-v8 .st-footer-directory { padding-block: 0 32px; }
 html body .st-footer .st-footer-directory h2 {
@@ -1371,6 +1384,7 @@ html body .st-footer .st-footer-directory h2 {
 .st-footer-directory__groups { display: grid; gap: 8px; }
 .st-footer-directory__groups > details { min-width: 0; }
 .st-footer-directory__groups > details > summary { background: #f8eddd; }
+.st-footer-directory__groups > details[open] { padding-block-end: 14px; }
 .st-footer-directory__groups > details[data-current-group] > summary {
   border-inline-start: 3px solid #70432a;
   padding-inline-start: 16px;
@@ -1840,8 +1854,9 @@ html body .st-gallery-page--albums .st-gallery-film__media figcaption span[lang=
 @media (max-width: 860px) {
   html body :is(.st-tripadvisor__inner, .st-tripadvisor__copy) { grid-template-columns: minmax(0, 1fr); }
 }
-@media (max-width: 1180px) {
-  html body .st-tripadvisor__review { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 480px) {
+  html body .st-tripadvisor__arrival { grid-template-columns: minmax(0, 1fr); }
+  html body .st-tripadvisor__entrance img { height: clamp(170px, 54vw, 220px); }
 }
 @media (max-width: 360px) {
   html body .st-tripadvisor__link { padding-inline: 6px !important; font-size: 14px !important; }
@@ -2360,6 +2375,12 @@ html body .st-footer-v7.st-footer-v8 #st-footer-title > [lang="vi"] {
   font-size: clamp(16px, 1.35vw, 20px) !important;
   line-height: 1.4 !important;
 }
+html body .st-footer-v7.st-footer-v8 #st-footer-title {
+  font-size: clamp(30px, 3vw, 40px) !important;
+  letter-spacing: .015em !important;
+  line-height: 1.12 !important;
+  text-transform: none !important;
+}
 html body .st-footer-v7.st-footer-v8 .st-footer-v7__eyebrow {
   font-size: var(--st-eyebrow-size) !important;
   line-height: 1.55 !important;
@@ -2374,15 +2395,39 @@ html body .st-footer-v7.st-footer-v8 .st-footer-v7__social-label {
 }
 html body .st-footer-v7.st-footer-v8 :is(.st-footer-v7__nav, .st-footer-v7__visit) h3 [lang="vi"],
 html body .st-footer-v7.st-footer-v8 .st-footer-v7__social-label span[lang="vi"] {
-  font-size: 13px !important;
+  font-size: 14px !important;
   letter-spacing: .02em !important;
   line-height: 1.5 !important;
 }
-@media (min-width: 360px) and (max-width: 760px) {
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__nav > a {
+  display: grid !important;
+  align-content: center;
+  gap: 4px;
+  min-height: 64px;
+  font-size: 14px !important;
+}
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__nav > a > [lang="vi"],
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__about > p:not([class]) > [lang="vi"],
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__visit :is(address, p) [lang="vi"] {
+  font-size: 14px !important;
+  line-height: 1.55 !important;
+}
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__about > p:not([class]) {
+  font-size: 15px !important;
+  line-height: 1.65 !important;
+}
+@media (min-width: 1120px) {
+  html body .st-footer-v7.st-footer-v8 .st-footer-v7__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.17fr) minmax(0, .9fr) !important;
+    gap: clamp(28px, 3vw, 50px) !important;
+  }
+}
+@media (min-width: 1120px), (min-width: 400px) and (max-width: 760px) {
   html body .st-footer-v7.st-footer-v8 .st-footer-v7__nav {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     align-items: stretch !important;
+    align-content: start;
     gap: 8px;
   }
   html body .st-footer-v7.st-footer-v8 .st-footer-v7__nav > h3 { grid-column: 1 / -1; }

@@ -332,7 +332,7 @@ export const portfolioStories = [
       ["Button stance and lapel", "Vị trí khuy và đường ve", "Set the solid blue jacket beside the checked double-breasted jacket. The two rows of buttons establish the front, while the checks draw attention to how the cloth sits around the closure. The tan jacket gives a quieter view of the lapel and flap pocket.", "Đặt áo xanh trơn cạnh áo ca rô hai hàng khuy. Hai hàng khuy tạo bố cục thân trước, còn ô ca rô làm rõ cách vải nằm quanh điểm cài. Áo màu nâu vàng cho thấy ve và túi nắp trên nền vải ít họa tiết hơn."],
       ["Compare sleeve details with the full jacket", "Xem chi tiết tay áo trong tổng thể", "The grey cuff shows how the button row is spaced along the sleeve. Use the complete jacket view to compare cuff position with the shoulder, jacket length and front pockets. Bring a shirt to the fitting if you want a particular amount of cuff to show.", "Cổ tay áo xám cho thấy khoảng cách giữa các khuy dọc ống tay. Từ ảnh toàn áo, hãy so vị trí cổ tay với vai, chiều dài áo và túi trước. Mang theo sơ mi đến buổi thử nếu muốn phần cổ tay áo lộ ra ở một mức nhất định."]
     ],
-    related: ["/san-pham/blazer-xanh-hai-hang-khuy/", "/san-pham/ao-khoac-xam-dang-dai/", fitGuide]
+    related: ["/san-pham/blazer-xanh-hai-hang-khuy/", "/san-pham/ao-khoac-xam-ca-ro-hai-hang-khuy/", "/san-pham/ao-khoac-xam-dang-dai/", fitGuide]
   },
   {
     route: silverJacket, section: "client-work",

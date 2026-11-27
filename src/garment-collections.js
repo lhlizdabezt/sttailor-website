@@ -228,7 +228,7 @@ export const garmentStories = [
         "Các họa tiết nhỏ bắt sáng ở vùng vòng nách trên áo sáng màu không tay. Trên vải jacquard màu than, họa tiết dệt kín đáo và dễ thấy hơn qua các nếp rủ. Hãy so mẫu vải khi trải phẳng và khi buông nhẹ trước khi chọn mật độ họa tiết cho trang phục."
       ]
     ],
-    related: ["/san-pham/dam-mau-dao-theu-la/", "/san-pham/dam-lua-hong-phan-theu-hoa/", "/chon-vai-may-do/lua-viet-nam/", "/dich-vu/trang-phuc-nu/"]
+    related: ["/san-pham/dam-mau-dao-theu-la/", "/san-pham/dam-lua-hong-phan-theu-hoa/", "/san-pham/ao-khong-tay-sang-mau-hoa-tiet-nho/", "/chon-vai-may-do/lua-viet-nam/", "/dich-vu/trang-phuc-nu/"]
   },
   {
     route: "/du-an/trang-phuc-khi-mac/",
@@ -248,7 +248,7 @@ export const garmentStories = [
         "Một chân dung cho thấy cà vạt đỏ rượu nằm giữa hai ve áo navy. Ở ảnh khác, sơ mi và khăn túi ngực vàng làm nổi bật màu phối, còn lớp lót hiện ra khi mở áo. Hãy mang những món dự định mặc để thử từng cách phối trực tiếp."
       ]
     ],
-    related: ["/san-pham/so-mi-xanh-nhat-tay-ngan/", "/san-pham/suit-navy-mot-hang-khuy/", "/du-an/chi-tiet-phong-thu-do/", fittingProcess, fitGuide]
+    related: ["/san-pham/so-mi-xanh-nhat-tay-ngan/", "/san-pham/suit-navy-mot-hang-khuy/", "/du-an/phoi-ao-khoac-xam-than/", "/du-an/chi-tiet-phong-thu-do/", fittingProcess, fitGuide]
   },
   {
     route: "/du-an/trang-phuc-sang-mau/",

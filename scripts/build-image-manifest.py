@@ -31,6 +31,7 @@ GALLERY_COMPACT_THUMBNAILS = {
 # straight to a 320px logo for a roughly 70–100px rendered mark.
 ICON_WIDTHS = (96, 160, 240, 320)
 BRAND_ICON_SIZES = {"favicon": 48, "apple-touch": 180, "app": 192, "app-large": 512}
+BRAND_MARK_STEMS = {"logo-sttailor", "logo-sttailor-1000x1024"}
 
 
 def public_path(path: Path) -> str:
@@ -68,6 +69,17 @@ def build_variant(image: Image.Image, source_relative: Path, width: int, output_
     if avif_quality is not None:
         variant.save(target, "AVIF", quality=avif_quality, speed=5)
         return public_path(target_relative)
+    if stem in BRAND_MARK_STEMS:
+        # Lossless WebP preserves the resized crest's colors and transparency.
+        encoded = BytesIO()
+        variant.save(encoded, "WEBP", lossless=True, exact=True, method=6)
+        data = encoded.getvalue()
+        version = sha256(data).hexdigest()[:12]
+        fingerprinted = target_relative.with_stem(f"{target_relative.stem}-{version}")
+        (output_root / fingerprinted).write_bytes(data)
+        # Keep previously published responsive URLs available under their old names.
+        target.write_bytes(data)
+        return public_path(fingerprinted)
     # Preserve the original uploads as the visual fallback while making the
     # above-the-fold hero materially smaller. The q78 content setting keeps
     # fabric texture and tailoring detail legible; the logo gets a little more

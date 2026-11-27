@@ -17,24 +17,24 @@ window.addEventListener("message", (event) => {
 function updateWidget() {
   for (const link of reviewSnippets.querySelectorAll("a")) {
     const href = link.getAttribute("href")?.trim();
-    const isCoverLink = link.classList.contains("widSSPClickWrap");
-    if (!href || href.startsWith("#") || /^javascript:/i.test(href) || isCoverLink) {
+    if (!href || href.startsWith("#") || /^javascript:/i.test(href)) {
       if (link.href !== listing) link.href = listing;
     }
+    // Use each official href directly inside the strict sandbox.
+    if (link.hasAttribute("onclick")) link.removeAttribute("onclick");
     if (link.href === listing) {
       if (link.target !== "_blank") link.target = "_blank";
+    }
+    if (link.target === "_blank") {
       if (link.rel !== "nofollow noopener noreferrer") link.rel = "nofollow noopener noreferrer";
       link.setAttribute("aria-describedby", "st-tripadvisor-new-tab");
-      if (isCoverLink) {
-        link.setAttribute("aria-label", "View S.T Tailor on Tripadvisor / Xem S.T Tailor trên Tripadvisor");
-      }
     }
     if (href === "https://www.tripadvisor.com/" && !link.textContent.trim() && !link.hasAttribute("aria-label")) {
       link.setAttribute("aria-label", "Tripadvisor homepage / Trang chủ Tripadvisor");
     }
   }
   const logo = reviewSnippets.querySelector("#CDSWIDSSP img");
-  const action = reviewSnippets.querySelector(".widSSPClickWrap[href]");
+  const action = reviewSnippets.querySelector("#allreviews[href]");
   const review = reviewSnippets.querySelector(".widSSPQuote");
   const ready = Boolean(logo?.complete && logo.naturalWidth && action?.href === listing && review?.textContent.trim());
   const focused = document.activeElement;
@@ -50,6 +50,6 @@ reviewSnippets.addEventListener("error", updateWidget, true);
 new MutationObserver(updateWidget).observe(reviewSnippets, {
   childList: true,
   subtree: true,
-  attributeFilter: ["href", "target", "rel", "class", "src"],
+  attributeFilter: ["href", "target", "rel", "class", "src", "onclick"],
 });
 updateWidget();
