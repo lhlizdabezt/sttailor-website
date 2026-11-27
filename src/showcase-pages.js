@@ -346,6 +346,28 @@ export const showcaseEntries = [
     image: "/media/2026/09/st-tailor-gallery-international-client-one.jpg",
     imageAlt: "An S.T Tailor team member and a client shake hands while holding a garment bag at the showroom | Đại diện S.T Tailor và khách bắt tay khi đang cầm túi đựng trang phục tại showroom"
   },
+  {
+    route: "/san-pham/ao-khoac-nau-vang-ve-chu-k/",
+    section: "suits-and-jackets",
+    source: "ShowcaseTanNotchJacket.html",
+    labels: ["Tan notch-lapel jacket", "Áo khoác nâu vàng ve chữ K"],
+    title: "Tan Notch-Lapel Tailored Jacket | S.T Tailor",
+    description: "Examine the warm tan cloth, notch lapels and two-button front of an S.T Tailor jacket and consider how to pair a similar jacket with separate trousers.",
+    summary: ["The showroom photograph shows a warm tan jacket with visible texture in the cloth, notch lapels and two front buttons.", "Ảnh tại nhà may cho thấy áo khoác nâu vàng có vân vải rõ, ve chữ K và hai khuy trước."],
+    image: "/media/2026/11/st-tailor-tan-tailored-jacket-on-rail.webp",
+    imageAlt: "Warm tan tailored jacket with notch lapels and two front buttons on the showroom rail | Áo khoác may đo nâu vàng ve chữ K và hai khuy trước treo tại nhà may"
+  },
+  {
+    route: "/san-pham/so-mi-hong-nhat-soc-min/",
+    section: "shirts-and-trousers",
+    source: "ShowcasePinkFineStripeShirt.html",
+    labels: ["Pale pink fine-stripe shirt", "Sơ mi hồng nhạt sọc mảnh"],
+    title: "Pale Pink Fine-Stripe Tailored Shirt | S.T Tailor",
+    description: "See a pale pink S.T Tailor shirt with fine vertical stripes, a point collar and pale buttons. Compare it with solid ivory and contrast-collar shirts.",
+    summary: ["Fine vertical stripes carry through the body and collar of this pale pink tailored shirt. The photograph shows the collar open and the pale buttons along the front.", "Sọc dọc mảnh chạy trên thân và cổ chiếc sơ mi may đo màu hồng nhạt. Ảnh cho thấy cổ áo mở và hàng khuy sáng phía trước."],
+    image: "/media/2026/11/st-tailor-pale-pink-shirt-on-rail.webp",
+    imageAlt: "Pale pink shirt with fine vertical stripes, an open point collar and pale buttons | Sơ mi hồng nhạt sọc dọc mảnh, cổ nhọn mở và hàng khuy sáng màu"
+  },
   ...photoStoryPages
 ];
 

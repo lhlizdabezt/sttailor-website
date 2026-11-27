@@ -12620,21 +12620,23 @@ html body .st-tripadvisor__card {
 }
 html body .st-tripadvisor__card h3 { margin: 0; color: #352116; font: 500 25px/1.2 var(--st-wordmark); }
 html body #main-content .st-tripadvisor__card h3 > span[lang="vi"] { display: block; margin-top: 4px; color: #624330; -webkit-text-fill-color: #624330; font: 500 16px/1.4 var(--st-vietnamese) !important; }
-html body .st-tripadvisor__review { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 248px); align-items: start; gap: clamp(12px, 2vw, 24px); }
+html body .st-tripadvisor__review { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 248px); align-content: start; align-items: start; gap: clamp(14px, 2vw, 24px); }
 html body .st-tripadvisor__review p { margin: 12px 0 0; color: #4e3527; font: 400 15px/1.55 var(--st-vietnamese); }
 html body .st-tripadvisor__review p [lang="vi"] { display: block; margin-top: 4px; }
 html body .st-tripadvisor__embed {
   display: grid;
-  place-items: start center;
-  width: min(100%, 248px);
-  min-height: 218px;
+  grid-template-rows: 1fr;
+  place-items: stretch center;
+  min-width: 0;
+  min-height: 200px;
+  background: #f6ead8;
+  box-shadow: inset 0 0 0 1px #96714f;
 }
 html body #main-content .st-tripadvisor__embed-link {
   grid-area: 1 / 1;
   box-sizing: border-box;
   display: grid;
   width: 100%;
-  min-height: 118px;
   padding: 12px;
   place-items: center;
   align-content: center;
@@ -13971,9 +13973,13 @@ html body .st-gallery-page--albums .st-gallery-film__media figcaption span[lang=
 
 @media (min-width: 761px) and (max-width: 1120px), (max-width: 540px) {
   html body .st-tripadvisor__review { grid-template-columns: minmax(0, 1fr); }
+  html body .st-tripadvisor__embed { width: min(100%, 300px); }
 }
 @media (max-width: 760px) {
   html body :is(.st-tripadvisor__inner, .st-tripadvisor__copy) { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 360px) {
+  html body .st-tripadvisor__link { padding-inline: 6px !important; font-size: 14px !important; }
 }
 /* Focused payment band and compact, bilingual client-care pages. */
 html body .st-payment-page--focused .st-payment-methods { padding-top: clamp(48px, 6vw, 80px) !important; }

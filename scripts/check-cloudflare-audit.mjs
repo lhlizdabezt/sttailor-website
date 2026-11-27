@@ -20,6 +20,17 @@ test("Cloudflare audit uses only GET and keeps credentials out of its report", a
       { type: "CNAME", name: "www.sttailor.com", content: secret, proxied: true, ttl: 1 },
       { type: "TXT", name: "sttailor.com", content: secret, proxied: false, ttl: 1 }
     ];
+    if (url.endsWith("/bot_management")) result = {
+      ai_search: "disabled",
+      ai_user: "disabled",
+      ai_training: "disallow",
+      ai_agents: { openai_agent: "disabled", unrecognizedAgent: secret },
+      is_robots_txt_managed: false,
+      unrecognizedField: secret
+    };
+    if (url.endsWith("/settings/google-tag-gateway/config")) result = {
+      enabled: true, hideOriginalIp: true, setUpTag: true, endpoint: secret, measurementId: secret
+    };
     if (url.endsWith("/pagerules")) result = [{
       targets: [{ target: "url", constraint: { operator: "matches", value: secret } }],
       actions: [{ id: "forwarding_url", value: { status_code: 301, url: secret } }],
@@ -40,16 +51,23 @@ test("Cloudflare audit uses only GET and keeps credentials out of its report", a
   };
   try {
     await import("./cloudflare-production-audit.mjs");
-    assert.equal(requests.length, 10);
+    assert.equal(requests.length, 12);
     assert.ok(requests.every(({ url, method }) => url.startsWith("https://api.cloudflare.com/client/v4/") && method === "GET"));
     assert.ok(!output.includes(secret));
     const report = JSON.parse(output);
-    assert.equal(Object.keys(report.coverage).length, 9);
+    assert.equal(Object.keys(report.coverage).length, 11);
     assert.deepEqual(report.dns, [
       { type: "CNAME", name: "www.sttailor.com", proxied: true, ttl: 1 },
       { type: "TXT", name: "sttailor.com", proxied: false, ttl: 1 }
     ]);
     assert.deepEqual(report.pageRules, [{ targets: ["url"], actions: ["forwarding_url"], status: "active" }]);
+    assert.deepEqual(report.coverage.botManagement, { ok: true, status: 200, errorCodes: [] });
+    assert.deepEqual(report.botManagement, {
+      aiSearch: "disabled", aiAgents: "disabled", aiTraining: "disallow",
+      personalAgents: { openai_agent: "disabled" }, managedRobots: false
+    });
+    assert.deepEqual(report.coverage.googleTagGateway, { ok: true, status: 200, errorCodes: [] });
+    assert.deepEqual(report.googleTagGateway, { enabled: true, hideOriginalIp: true, autoInject: true });
     assert.deepEqual(report.coverage.certificates, { ok: false, status: 403, errorCodes: [10000] });
     assert.deepEqual(report.coverage.routes, { ok: false, status: 0, errorCodes: ["transport_error"] });
     assert.deepEqual(report.workerSettings.bindings, [

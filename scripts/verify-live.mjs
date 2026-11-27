@@ -67,6 +67,7 @@ for (const route of routes) {
   const stylesheet = pageHtml.match(/<link rel="stylesheet" href="([^"]+)"/i)?.[1];
   expect(stylesheet && response.headers.get("link")?.includes(`<${stylesheet}>; rel=preload; as=style`), `${route} does not advertise its current stylesheet to Cloudflare Early Hints`);
   expect(pageHtml.includes('<link rel="describedby" href="/llms.txt" type="text/plain">'), `${route} does not advertise its bilingual discovery guide`);
+  expect((pageHtml.match(/<main\b/gi) ?? []).length === 1 && (pageHtml.match(/<\/main>/gi) ?? []).length === 1, `${route} must have exactly one main landmark`);
   expect(pageHtml.includes('<noscript><img height="1" width="1" style="display:none" alt="" aria-hidden="true" src="https://www.facebook.com/tr?id=2294442874726399&amp;ev=PageView&amp;noscript=1"></noscript>') && !/\bfbq\s*\(/.test(pageHtml), `${route} must use GTM Meta Pixel with its static noscript fallback only`);
   expect(response.status === 200, `${route} returned ${response.status}`);
   if (expectedBuildRevision) {
@@ -313,9 +314,13 @@ expect(manifestResponse.ok && (!expectedBuildRevision || liveManifest.revision =
   routes.every((route) => liveManifest.indexNowPageSignatures?.[route] === indexNowPageSignatures?.[route]),
   "Production does not serve the expected IndexNow release signatures");
 
-const sitemap = await fetchWithRetry(`${origin}/sitemap.xml`);
-const sitemapText = await sitemap.text();
+const expectedSitemap = expectedBuildRevision ? readFileSync(path.join(dist, "sitemap.xml"), "utf8") : null;
+// The edge may serve the previous sitemap briefly after the HTML has updated.
+const { response: sitemap, text: sitemapText } = await fetchTextUntil(`${origin}/sitemap.xml`,
+  { headers: { "Cache-Control": "no-cache" } },
+  (candidate, text) => candidate.ok && (!expectedSitemap || text === expectedSitemap), expectedSitemap ? 20 : 1);
 expect(sitemap.status === 200, `sitemap.xml returned ${sitemap.status}`);
+if (expectedSitemap) expect(sitemapText === expectedSitemap, "Production sitemap differs from the validated release artifact");
 const sitemapLocations = [...sitemapText.matchAll(/<url>\s*<loc>([^<]+)<\/loc>/g)].map(([, location]) => location);
 const sitemapUrls = new Set(sitemapLocations);
 expect(sitemapLocations.length === routes.length && sitemapUrls.size === routes.length && routes.every((route) => sitemapUrls.has(`${origin}${route}`)), "Production sitemap must list every canonical route exactly once");

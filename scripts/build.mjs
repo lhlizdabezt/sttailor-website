@@ -47,7 +47,7 @@ const suitPiecesGuide = tailoringPages.find(({ source }) => source === "GuideSui
 const liningHeroSizes = "(max-width: 860px) min(calc(100vw - 48px), 480px), min(calc(45vw - 46px), 480px)";
 const editorialGuideHeroes = tailoringPages.filter(({ source }) =>
   ["GuideFirstConsultation.html", "GuideGarmentCollection.html", "GuideWeddingPlanning.html", "GuideAftercare.html", "GuideShirtCollars.html",
-    "GuideOrderQuotation.html", "GuideArrangeDelivery.html", "GuidePackingSuit.html",
+    "GuideOrderQuotation.html", "GuideArrangeDelivery.html", "GuidePackingSuit.html", "GuideBlackTie.html", "GuideShirtCuffs.html",
     "ServiceShirts.html", "ServiceTrousers.html", "ServiceJackets.html"].includes(source)
 );
 const editorialGuideHeroSizes = "(max-width: 560px) calc(100vw - 28px), (max-width: 860px) calc(100vw - 48px), min(calc(46vw - 36px), 540px)";
@@ -890,14 +890,14 @@ function transformAbout(html) {
       <div class="st-tripadvisor__review">
         <div>
           <h3 id="st-tripadvisor-listing-title">S.T Tailor on Tripadvisor<span lang="vi">S.T Tailor trên Tripadvisor</span></h3>
-          <p>See the latest reviews and visitor photos on our listing.<span lang="vi">Xem đánh giá và ảnh mới nhất do khách đăng trên trang Tripadvisor của nhà may.</span></p>
+          <p>Read recent review excerpts here. Our Tripadvisor listing includes the full reviews and photos shared by visitors.<span lang="vi">Bạn có thể đọc trích đoạn từ các đánh giá gần đây tại đây. Trang Tripadvisor của nhà may có toàn văn đánh giá và ảnh do khách chia sẻ.</span></p>
         </div>
         <div class="st-tripadvisor__embed">
           <a class="st-tripadvisor__embed-link" href="${tripadvisorListing}" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note">
             <img src="/icons/tripadvisor-logomark.svg" alt="" width="34" height="24" loading="lazy" decoding="async">
             <span>View on Tripadvisor<span lang="vi">Xem trên Tripadvisor</span></span>
           </a>
-          <iframe class="st-tripadvisor__frame" src="${tripadvisorEmbedPath}" title="Recent Tripadvisor reviews for S.T Tailor / Đánh giá gần đây của S.T Tailor trên Tripadvisor" loading="lazy" width="248" height="218" referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
+          <iframe class="st-tripadvisor__frame" src="${tripadvisorEmbedPath}" title="Recent Tripadvisor reviews for S.T Tailor / Đánh giá gần đây của S.T Tailor trên Tripadvisor" loading="lazy" width="248" height="200" referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
         </div>
       </div>
       <div class="st-tripadvisor__actions">

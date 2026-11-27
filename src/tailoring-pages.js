@@ -180,6 +180,26 @@ export const tailoringPages = [
     imageAlt: "Client in a silver-grey three-piece suit with a light blue shirt and straw hat | Khách mặc suit ba mảnh xám bạc cùng sơ mi xanh nhạt và mũ cói"
   },
   {
+    route: "/cam-nang-may-do/trang-phuc-black-tie/",
+    source: "GuideBlackTie.html",
+    labels: ["Black tie and black tie optional", "Trang phục black tie và black tie optional"],
+    title: "Black Tie or Black Tie Optional? A Tailoring Guide | S.T Tailor",
+    description: "Read your event invitation, compare a tuxedo with a dark suit, and bring the right shirt, shoes and accessories to your formalwear fitting.",
+    descriptionVi: "Đọc quy định trang phục trên thiệp mời, so sánh tuxedo với suit tối màu và chuẩn bị sơ mi, giày, phụ kiện cho buổi thử lễ phục.",
+    image: "/media/2026/11/st-tailor-black-shawl-lapel-tuxedo-side-silhouette.webp",
+    imageAlt: "Black shawl-lapel tuxedo jacket over a white shirt, seen from the side | Áo tuxedo đen ve sam phối sơ mi trắng nhìn từ bên hông"
+  },
+  {
+    route: "/cam-nang-may-do/chon-mang-set-so-mi/",
+    source: "GuideShirtCuffs.html",
+    labels: ["Shirt cuffs and cufflinks", "Măng sét sơ mi và khuy cài"],
+    title: "How to Choose Shirt Cuffs and Cufflinks | S.T Tailor",
+    description: "Compare button cuffs and French cuffs for a tailored shirt. Check your watch allowance, cufflinks and sleeve length with your own jacket at a fitting.",
+    descriptionVi: "So sánh măng sét cài khuy và măng sét gập kiểu Pháp khi may sơ mi. Thử độ rộng quanh đồng hồ và chiều dài tay cùng khuy măng sét, áo khoác của bạn.",
+    image: "/media/2026/11/st-tailor-shirt-collar-and-cuff-samples.webp",
+    imageAlt: "Pale blue shirt collar and button cuff samples on the showroom shelf | Mẫu cổ sơ mi và măng sét cài khuy màu xanh nhạt trên kệ nhà may"
+  },
+  {
     route: "/chon-vai-may-do/vai-len-y/",
     source: "GuideItalianWool.html",
     labels: ["Italian suiting wool", "Vải len Ý may suit"],

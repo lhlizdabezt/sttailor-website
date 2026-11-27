@@ -84,6 +84,7 @@ for (const route of expectedRoutes) {
   pageDescriptions.add(description);
   if (!html.includes("st-site-header") || !html.includes("st-footer-v7 st-footer-v8")) failures.push(`Missing shared navigation or footer: ${route}`);
   if (!html.startsWith('<!doctype html><html lang="en">')) failures.push(`Primary document language is incorrect: ${route}`);
+  if ((html.match(/<main\b/gi) ?? []).length !== 1 || (html.match(/<\/main>/gi) ?? []).length !== 1) failures.push(`Page must contain exactly one main landmark: ${route}`);
   if ((html.match(/<h1\b/g) ?? []).length !== 1) failures.push(`Page must contain exactly one H1: ${route}`);
   const headingStack = [];
   for (const [tag, name] of html.matchAll(/<\/?(h[1-6])\b[^>]*>/gi)) {

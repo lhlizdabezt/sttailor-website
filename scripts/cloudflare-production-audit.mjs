@@ -29,6 +29,8 @@ const paths = {
   certificates: `/zones/${zone.id}/ssl/certificate_packs`,
   routes: `/zones/${zone.id}/workers/routes`,
   rulesets: `/zones/${zone.id}/rulesets`,
+  botManagement: `/zones/${zone.id}/bot_management`,
+  googleTagGateway: `/zones/${zone.id}/settings/google-tag-gateway/config`,
   pageRules: `/zones/${zone.id}/pagerules`,
   workerSettings: `/accounts/${zone.account.id}/workers/scripts/sttailor-atelier/settings`,
   workerDomains: `/accounts/${zone.account.id}/workers/scripts/sttailor-atelier/domains`
@@ -43,6 +45,8 @@ const dns = (report.dns.result ?? []).map(({ type, name, proxied, ttl }) => ({ t
 const routeRules = (report.routes.result ?? []).map(({ pattern, script, enabled }) => ({ pattern, script, enabled }));
 const rulesets = (report.rulesets.result ?? []).map(({ name, phase, kind }) => ({ name, phase, kind }));
 const certificates = (report.certificates.result ?? []).map(({ hosts, status, type }) => ({ hosts, status, type }));
+const botManagement = report.botManagement.ok ? report.botManagement.result : null;
+const googleTagGateway = report.googleTagGateway.ok ? report.googleTagGateway.result : null;
 const workerSettings = report.workerSettings.ok ? report.workerSettings.result : null;
 
 console.log(JSON.stringify({
@@ -55,6 +59,26 @@ console.log(JSON.stringify({
   certificates,
   workerRoutes: routeRules,
   rulesets,
+  botManagement: botManagement ? {
+    aiSearch: botManagement.ai_search,
+    aiAgents: botManagement.ai_user,
+    aiTraining: botManagement.ai_training,
+    personalAgents: botManagement.ai_agents ? Object.fromEntries(
+      ["anthropic_agent", "google_agent", "instinct", "muse", "openai_agent"].map((key) => [key, botManagement.ai_agents[key]])
+    ) : null,
+    legacyAiProtection: botManagement.ai_bots_protection,
+    crawlerProtection: botManagement.crawler_protection,
+    contentBotsProtection: botManagement.content_bots_protection,
+    managedRobots: botManagement.is_robots_txt_managed,
+    botPreferenceSync: botManagement.bot_preference_sync_enabled,
+    botFightMode: botManagement.fight_mode,
+    verifiedBots: botManagement.sbfm_verified_bots
+  } : null,
+  googleTagGateway: googleTagGateway ? {
+    enabled: googleTagGateway.enabled,
+    hideOriginalIp: googleTagGateway.hideOriginalIp,
+    autoInject: googleTagGateway.setUpTag
+  } : null,
   pageRules: (report.pageRules.result ?? []).map(({ targets, actions, status }) => ({
     targets: (targets ?? []).map(({ target }) => target),
     actions: (actions ?? []).map(({ id }) => id),
