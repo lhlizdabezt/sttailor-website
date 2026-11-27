@@ -357,9 +357,9 @@ for (const [icon, limit] of [["sttailor-favicon-48.png", 5000], ["sttailor-apple
 if (!home.includes('rel="icon" href="/icons/sttailor-favicon-48.png"') || !home.includes('rel="apple-touch-icon" href="/icons/sttailor-apple-touch-180.png"')) failures.push("Browser icons do not use compact original-color logo assets.");
 if (!home.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward") || !home.includes('lang="vi">Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định')) failures.push("Shared footer must display the approved English and Vietnamese address.");
 const assetHeaders = readFileSync(path.join(dist, "_headers"), "utf8");
-for (const [route, { href }] of Object.entries(manifest.routeStyles)) {
-  if (!assetHeaders.includes(`\n${route}\n  Link: <${href}>; rel=preload; as=style\n`)) failures.push(`Stylesheet preload does not match the generated bundle: ${route}`);
-}
+const assetHeaderRules = assetHeaders.split(/\r?\n/).filter((line) => /^(?:\/|https?:\/\/)/.test(line));
+if (assetHeaderRules.length > 100) failures.push("Static asset headers exceed the Cloudflare Workers rule limit.");
+if (assetHeaders.includes("rel=preload; as=style")) failures.push("The Worker must provide per-page stylesheet preload headers.");
 if (home.includes("st-home-v6__gallery")) failures.push("The removed home gallery strip is still present.");
 if (!home.includes("ARRANGE A PRIVATE CONSULTATION") || !home.includes("ĐẶT LỊCH TƯ VẤN RIÊNG")) failures.push("Home consultation CTA is missing.");
 for (const removedHomeRouteText of ["Five ways into the atelier", "Five ways to begin with S.T Tailor", "Năm lối để bước vào không gian atelier", "Năm lối để bắt đầu cùng S.T Tailor", "st-home-v6__routes"]) {
@@ -586,9 +586,8 @@ for (const requiredAsset of ["st-tailor-archive-atelier-four.jpg", "st-tailor-ga
 const notFound = readFileSync(path.join(dist, "404.html"), "utf8");
 if (!notFound.includes("Back to Home") || !notFound.includes("Về trang chủ")) failures.push("404 page is missing the required Back to Home action.");
 
-const productionHeaders = readFileSync(path.join(dist, "_headers"), "utf8");
-if (/X-Robots-Tag:\s*noindex/i.test(productionHeaders)) failures.push("Production headers still prevent search indexing.");
-if (!productionHeaders.includes("Strict-Transport-Security: max-age=15552000")) failures.push("Production HSTS must remain the conservative six-month policy.");
+if (/X-Robots-Tag:\s*noindex/i.test(assetHeaders)) failures.push("Production headers still prevent search indexing.");
+if (!assetHeaders.includes("Strict-Transport-Security: max-age=15552000")) failures.push("Production HSTS must remain the conservative six-month policy.");
 for (const staticFile of ["robots.txt", "sitemap.xml", "llms.txt", "site.webmanifest", indexNowKeyFile]) {
   if (!existsSync(path.join(dist, staticFile))) failures.push(`Missing production discovery file: ${staticFile}`);
 }

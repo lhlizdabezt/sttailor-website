@@ -152,12 +152,13 @@ test("retired tailoring pages redirect to related content and preserve campaign 
   }
 });
 
-test("the Worker serves every route in the public build manifest", async () => {
-  const { routes } = JSON.parse(readFileSync(new URL("../dist/build-manifest.json", import.meta.url), "utf8"));
+test("the Worker serves every public route with its current stylesheet hint", async () => {
+  const { routes, routeStyles } = JSON.parse(readFileSync(new URL("../dist/build-manifest.json", import.meta.url), "utf8"));
   assert.ok(routes.length);
   for (const route of routes) {
     const response = await worker.fetch(new Request(new URL(route, "https://sttailor.com")), env);
     assert.equal(response.status, 200, route);
+    assert.equal(response.headers.get("Link"), `<${routeStyles[route].href}>; rel=preload; as=style`, route);
     assert.match(response.headers.get("X-Robots-Tag"), /^index, follow\b/, route);
     const policy = response.headers.get("Content-Security-Policy");
     assert.match(policy, /(?:^|; )script-src 'self' 'sha256-/);

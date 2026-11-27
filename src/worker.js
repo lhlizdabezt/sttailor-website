@@ -1,3 +1,4 @@
+import buildManifest from "../dist/build-manifest.json" with { type: "json" };
 import { indexNowKeyFile } from "./indexnow.js";
 import { contentSecurityPolicy, tripadvisorEmbedPath } from "./security-policy.js";
 import { tailoringPages } from "./tailoring-pages.js";
@@ -72,6 +73,9 @@ function securityHeaders(response, pathname = "/") {
   const isHtml = routes.has(pathname) || pathname.endsWith(".html") || pathname === "/not-found" || contentType.includes("text/html");
   if (isHtml) {
     const isCanonical = routes.has(pathname) && (response.ok || response.status === 304);
+    // Keep per-page Early Hints outside the limited static asset rule table.
+    const stylesheet = isCanonical && buildManifest.routeStyles[pathname];
+    if (stylesheet) headers.set("Link", `<${stylesheet.href}>; rel=preload; as=style`);
     headers.set("Content-Security-Policy", contentSecurityPolicy(pathname));
     headers.set("X-Robots-Tag", isCanonical ? "index, follow, max-image-preview:large" : "noindex, follow");
     headers.set("Cache-Control", pathname === tripadvisorEmbedPath

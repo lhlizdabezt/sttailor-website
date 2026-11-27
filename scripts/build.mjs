@@ -1594,9 +1594,6 @@ ${llmsSections}
 - [WhatsApp](https://wa.me/84909556258)
 `.normalize("NFC"), "utf8");
 const assetHeaders = "/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n  X-Frame-Options: SAMEORIGIN\n  Strict-Transport-Security: max-age=15552000\n  Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests\n";
-// The asset binding carries these headers into the Worker response, allowing
-// Cloudflare Early Hints to discover the critical CSS for each public page.
-const stylesheetHints = Object.entries(routeStyles).map(([route, { href }]) => `${route}\n  Link: <${href}>; rel=preload; as=style`);
-writeFileSync(path.join(dist, "_headers"), [assetHeaders.trimEnd(), ...stylesheetHints].join("\n\n") + "\n", "utf8");
+writeFileSync(path.join(dist, "_headers"), assetHeaders, "utf8");
 writeFileSync(path.join(dist, "build-manifest.json"), JSON.stringify({ source: "source/wordpress", sourceMedia: "source/media", revision: buildRevision, routes: routes.map(([route]) => route), routeStyles, indexNowPageSignatures, localUploadAssets: assets.length, imageMetadata: imageCount, galleryDuplicateCheck: "passed" }, null, 2), "utf8");
 console.log(`Built ${routes.length} routes from the versioned WordPress reference with ${assets.length} local upload assets and dimensions for ${imageCount} images.`);
