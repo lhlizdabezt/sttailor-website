@@ -163,6 +163,11 @@ const guideRoutes = [
     .map(({ route, labels }) => [route, ...labels])
 ];
 const serviceRoutes = tailoringPages.filter(({ source }) => source.startsWith("Service"));
+const serviceCatalog = [
+  ...serviceRoutes,
+  { route: "/chinh-sua-trang-phuc/", labels: ["Clothing alterations", "Chỉnh sửa trang phục"] },
+  { route: "/chon-vai-may-do/", labels: ["Cloth consultation", "Tư vấn chọn vải"] }
+];
 const policyRoutes = ["/phuong-thuc-thanh-toan/", "/doi-tra-hoan-tien/", "/chinh-sach-van-chuyen/", "/dieu-khoan-dieu-kien/", "/chinh-sach-bao-mat/"];
 const clientCareGuides = tailoringPages.filter(({ route }) => route.startsWith(clientCareHubRoute));
 
@@ -502,8 +507,8 @@ function transformContact(html) {
     .replace(/\s*<section class="st-contact-gallery-redirect"[\s\S]*?<\/section>/, "")
     .replace(/\s*<div class="st-contact-line small"><\/div>/, "")
     .replace(
-      '<h2>CONTACT DETAILS<br><span lang="vi">THÔNG TIN LIÊN HỆ</span></h2>',
-      '<h1>CONTACT DETAILS<br><span lang="vi">THÔNG TIN LIÊN HỆ</span></h1>'
+      /<h2( id="st-contact-details-title">[\s\S]*?)<\/h2>/,
+      "<h1$1</h1>"
     );
   const entrance = `<div class="st-showcase st-showcase--visit">
     ${photoCollectionSection(showroomEntrance, { intro: showroomEntrance.summary })}
@@ -1065,7 +1070,6 @@ const derivedContentInputs = {
   "Terms.html": ["src/client-care-pages.js"],
   "Privacy.html": ["src/client-care-pages.js"]
 };
-
 function lastModifiedFor(sourceFile) {
   // Generated portfolio, policy and film content can change independently of its template.
   const inputs = [`source/wordpress/${sourceFile}`, ...(derivedContentInputs[sourceFile] ?? [])];
@@ -1164,7 +1168,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     contactPoint: { "@type": "ContactPoint", telephone: "+84 909 556 258", email: "contact.sttailor@gmail.com", contactType: "customer service", areaServed: "VN", availableLanguage: ["Vietnamese", "English"] },
     priceRange: "$$$",
     currenciesAccepted: "VND",
-    paymentAccepted: "Cash (VND only), Bank Transfer, QR, Credit Card, Debit Card, Prepaid Card, Visa, Mastercard, Maestro, American Express, JCB, UnionPay, Discover, Diners Club, RuPay, NAPAS, Apple Pay, Google Pay, Samsung Pay (NFC)",
+    paymentAccepted: "Cash (VND only), Bank Transfer, QR, Credit Card, Debit Card, Prepaid Card, Charge Card, Visa, Mastercard, Maestro, American Express, JCB, UnionPay, Discover, Diners Club, RuPay, NAPAS, Apple Pay, Google Pay, Samsung Pay (NFC)",
     hasMap: "https://maps.app.goo.gl/j8N26uiQUC4J95vT6",
     knowsAbout: ["Bespoke tailoring", "Clothing alterations", "European suiting cloth", "Vietnamese silk", "Fittings and pattern cutting"],
     sameAs: ["https://www.facebook.com/sttailor.hcm/", "https://www.instagram.com/sttailorhcm/", "https://www.threads.com/@sttailorhcm", "https://wa.me/84909556258", "https://zalo.me/0909556258", "https://www.linkedin.com/company/sttailorhcm/", "https://www.youtube.com/@S.Ttailor", "https://www.tiktok.com/@sttailorhcm", "https://www.pinterest.com/sttailorhcm/", "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html"]
@@ -1173,18 +1177,9 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     "@type": "OfferCatalog",
     name: "S.T Tailor services",
     alternateName: "Dịch vụ may đo S.T Tailor",
-    itemListElement: [
-      ["Bespoke suits and vests", "Suit và áo ghi lê may đo", "/dich-vu/suit-may-do/"],
-      ["Blazers and separates", "Blazer và áo khoác may đo", "/dich-vu/ao-khoac-may-do/"],
-      ["Shirts and trousers", "Sơ mi và quần tây", "/dich-vu/"],
-      ["Formalwear", "Lễ phục", "/dich-vu/"],
-      ["Womenswear", "Trang phục nữ", "/dich-vu/trang-phuc-nu/"],
-      ["Wedding and traditional clothing", "Trang phục cưới và trang phục truyền thống", "/dich-vu/le-phuc-cuoi/"],
-      ["Clothing alterations", "Chỉnh sửa trang phục", "/chinh-sua-trang-phuc/"],
-      ["Cloth consultation", "Tư vấn chọn vải", "/chon-vai-may-do/"]
-    ].map(([name, alternateName, url]) => ({
+    itemListElement: serviceCatalog.map(({ route: serviceRoute, labels: [name, alternateName] }) => ({
       "@type": "Offer",
-      itemOffered: { "@type": "Service", name, alternateName, url: `https://sttailor.com${url}`, provider: { "@id": business["@id"] } }
+      itemOffered: { "@type": "Service", name, alternateName, url: `https://sttailor.com${serviceRoute}`, provider: { "@id": business["@id"] } }
     }))
   };
   const isCollection = showcaseHub || ["/gallery/", "/cam-nang-may-do/", clientCareHubRoute].includes(route);
@@ -1605,6 +1600,8 @@ Showroom: 1st Floor, 258 Le Thanh Ton, Tan Dinh Ward, Ho Chi Minh City, Vietnam.
 Services include bespoke and made-to-measure suits, shirts, formalwear, womenswear and clothing alterations. The cloth selection includes European fabrics, such as Vitale Barberis Canonico, alongside Vietnamese silk. The pages below contain both English and Vietnamese.
 
 S.T Tailor nhận may đo suit, sơ mi, lễ phục, trang phục nữ và chỉnh sửa trang phục. Nhà may giới thiệu vải châu Âu, trong đó có Vitale Barberis Canonico, cùng lụa tơ tằm Việt Nam. Các trang bên dưới có nội dung tiếng Anh và tiếng Việt.
+
+[XML sitemap / Sơ đồ trang web XML](https://sttailor.com/sitemap.xml)
 
 ${llmsSections}
 

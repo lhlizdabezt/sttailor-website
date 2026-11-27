@@ -2,6 +2,7 @@ const reviewSnippets = document.querySelector("#TA_selfserveprop383");
 const widget = document.querySelector(".st-tripadvisor__widget");
 const fallback = widget.querySelector(".st-tripadvisor__fallback");
 const listing = fallback.href;
+const listingOrigin = new URL(listing).origin;
 
 function shareReviewStatus() {
   if (window.parent === window) return;
@@ -21,27 +22,22 @@ window.addEventListener("message", (event) => {
 // The vendor can populate its anchor attributes in separate asynchronous steps.
 function updateWidget() {
   for (const link of reviewSnippets.querySelectorAll("a")) {
-    const href = link.getAttribute("href")?.trim();
-    if (!href || href.startsWith("#") || /^javascript:/i.test(href)) {
-      if (link.href !== listing) link.href = listing;
-    }
-    // Use each official href directly inside the strict sandbox.
+    // Keep only official links and use direct navigation within the sandbox.
+    if (link.origin !== listingOrigin || link.username || link.password) link.href = listing;
     if (link.hasAttribute("onclick")) link.removeAttribute("onclick");
-    if (link.href === listing) {
-      if (link.target !== "_blank") link.target = "_blank";
-    }
-    if (link.target === "_blank") {
-      if (link.rel !== "nofollow noopener noreferrer") link.rel = "nofollow noopener noreferrer";
+    if (link.target !== "_blank") link.target = "_blank";
+    if (link.rel !== "nofollow noopener noreferrer") link.rel = "nofollow noopener noreferrer";
+    if (link.getAttribute("aria-describedby") !== "st-tripadvisor-new-tab") {
       link.setAttribute("aria-describedby", "st-tripadvisor-new-tab");
     }
-    if (href === "https://www.tripadvisor.com/" && !link.textContent.trim() && !link.hasAttribute("aria-label")) {
+    if (link.href === `${listingOrigin}/` && !link.textContent.trim() && !link.hasAttribute("aria-label")) {
       link.setAttribute("aria-label", "Tripadvisor homepage / Trang chủ Tripadvisor");
     }
   }
   const logo = reviewSnippets.querySelector("#CDSWIDSSP img");
   const action = reviewSnippets.querySelector("#allreviews[href]");
   const review = reviewSnippets.querySelector(".widSSPQuote");
-  const ready = Boolean(logo?.complete && logo.naturalWidth && action?.href === listing && review?.textContent.trim());
+  const ready = Boolean(logo?.complete && logo.naturalWidth && action?.origin === listingOrigin && review?.textContent.trim());
   const focused = document.activeElement;
   if ((ready && focused === fallback) || (!ready && reviewSnippets.contains(focused))) return;
   widget.toggleAttribute("data-ready", ready);

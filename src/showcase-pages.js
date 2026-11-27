@@ -522,6 +522,39 @@ export const showcaseEntries = [
     image: "/media/2026/09/st-tailor-client-measurement-session.jpg",
     imageAlt: "Tailor measuring near a client’s waist during a showroom appointment | Thợ may lấy số đo ngang eo khách trong buổi hẹn tại showroom"
   },
+  {
+    route: "/san-pham/ao-khoac-xam-tui-nap/",
+    section: "suits-and-jackets",
+    source: "ShowcaseGreyFlapPocketJacket.html",
+    labels: ["Grey tailored jacket with flap pockets", "Áo khoác xám may đo có túi nắp"],
+    title: "Grey Tailored Jacket With Flap Pockets | S.T Tailor",
+    description: "See a finished grey jacket by S.T Tailor in Ho Chi Minh City. Examine the hip flap pocket, shoulder line and grey cloth in window light.",
+    summary: ["A mid-grey jacket photographed beside a window, with a defined shoulder, a hip flap pocket and a white shirt underneath.", "Áo khoác xám trung tính chụp cạnh cửa sổ, với đường vai rõ nét, túi nắp ngang hông và sơ mi trắng bên trong."],
+    image: "/media/2026/09/st-tailor-gallery-grey-suit.jpg",
+    imageAlt: "Three-quarter view of a grey tailored jacket beside a window, showing the shoulder and hip flap pocket | Góc chụp ba phần tư của áo khoác xám may đo cạnh cửa sổ, thấy rõ vai áo và túi nắp ngang hông"
+  },
+  {
+    route: "/du-an/phoi-co-so-mi-voi-ve-ao/",
+    section: "craft-and-style",
+    source: "ShowcaseShirtCollarAndLapels.html",
+    labels: ["Pairing a shirt collar with jacket lapels", "Phối cổ sơ mi với ve áo khoác"],
+    title: "Pairing a Shirt Collar With Jacket Lapels | S.T Tailor",
+    description: "Compare a white shirt with checked collar trim and a navy jacket styled with a tie. See how to check collar, knot and lapels at a fitting.",
+    summary: ["A checked-trim white collar and a navy jacket with a tied collar offer two ways to check the neckline before finishing an outfit.", "Cổ sơ mi trắng viền ca rô và áo khoác navy phối cà vạt cho thấy hai cách kiểm tra phần cổ trước khi hoàn thiện trang phục."],
+    image: "/media/2026/09/st-tailor-gallery-navy-suit-mannequin-editorial.jpg",
+    imageAlt: "Navy tailored jacket on a form at S.T Tailor, paired with a white shirt, patterned tie and yellow pocket square | Áo khoác navy trên ma-nơ-canh tại S.T Tailor, phối sơ mi trắng, cà vạt họa tiết và khăn túi ngực vàng"
+  },
+  {
+    route: "/du-an/trang-phuc-may-do-len-anh/",
+    section: "client-work",
+    source: "ShowcaseTailoringInPortraits.html",
+    labels: ["Tailoring in full-length and close portraits", "Trang phục may đo qua ảnh toàn thân và ảnh cận"],
+    title: "How Tailoring Reads in Portraits | S.T Tailor",
+    description: "Compare photographs of tailored looks worn by S.T Tailor clients, including Niña Campos, and see what to check for a portrait or an event.",
+    summary: ["Client portraits show what comes into view at different distances, from a trouser hem and shoes to the lapel, neckline and tie.", "Ảnh khách hàng cho thấy chi tiết hiện lên ở từng khoảng cách, từ lai quần và giày đến ve áo, đường cổ và cà vạt."],
+    image: "/media/2026/09/st-tailor-gallery-navy-formal-front.jpg",
+    imageAlt: "Full-length portrait of a client in a navy suit, white shirt and burgundy tie | Chân dung toàn thân khách mặc suit navy, sơ mi trắng và cà vạt đỏ rượu"
+  },
   ...photoStoryPages
 ];
 

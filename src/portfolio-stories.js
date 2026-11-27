@@ -265,7 +265,7 @@ export const portfolioStories = [
       ["Where the knot sits", "Vị trí nút thắt", "Set the knot close to the collar and check that it sits between the collar points. In the side view, the navy lapels leave a narrow band of the pattern visible. Consider the collar opening and tie width together when choosing what to wear.", "Đưa nút thắt sát cổ áo và kiểm tra vị trí giữa hai lá cổ. Ở góc nghiêng, hai ve navy để lộ một dải họa tiết hẹp. Khi phối đồ, hãy xem cùng lúc độ mở cổ áo và bản cà vạt."],
       ["Echo one accent colour", "Nhắc lại một màu nhấn", "A yellow pocket square picks up the warm shades in the tie. The white shirt and dark jacket leave room for the geometric pattern. Compare the pocket square folded flat with a softer fold to see how much colour you want at the breast pocket.", "Khăn túi ngực vàng nhắc lại các sắc ấm trên cà vạt. Sơ mi trắng và áo khoác tối tạo nền cho họa tiết hình học. Hãy thử gấp khăn phẳng và gấp mềm để chọn lượng màu muốn để lộ ở túi ngực."]
     ],
-    related: [shirtDetails, "/san-pham/suit-navy-mot-hang-khuy/", footwear]
+    related: [shirtDetails, "/du-an/phoi-co-so-mi-voi-ve-ao/", "/san-pham/suit-navy-mot-hang-khuy/", footwear]
   },
   {
     route: footwear, section: "craft-and-style",

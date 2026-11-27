@@ -23,7 +23,12 @@ const pageTitles = new Set();
 const pageDescriptions = new Set();
 const escapedMetadataCharacter = /&(?:amp|lt|gt|quot|apos);/g;
 const pageEditorialImages = new Map();
+const pageDiscovery = new Map();
 const anchorIds = new Map();
+const expectedCatalogRoutes = [
+  ...tailoringPages.filter(({ source }) => source.startsWith("Service")).map(({ route }) => route),
+  "/chinh-sua-trang-phuc/", "/chon-vai-may-do/"
+];
 const siteCssSymbols = new Set([...readFileSync(path.join(dist, "styles", "site.css"), "utf8").matchAll(/[.#]((?:st-|stp-|stpr-)[A-Za-z0-9_-]+)/g)].map((match) => match[1]));
 
 function visibleAndAccessibleText(html) {
@@ -38,6 +43,13 @@ function visibleAndAccessibleText(html) {
 if (manifest.source !== "source/wordpress" || manifest.sourceMedia !== "source/media") failures.push("Build did not use the versioned WordPress and media source.");
 if (!manifest.revision || !/^(local|[0-9a-f]{40})$/i.test(manifest.revision)) failures.push("Build manifest does not contain a valid deployment revision.");
 if (JSON.stringify(manifest.routes) !== JSON.stringify(expectedRoutes)) failures.push("Published route set does not match the approved site map.");
+const expectedHtml = new Set([...expectedRoutes, tripadvisorEmbedPath].map((route) => `${route.slice(1)}index.html`));
+expectedHtml.add("404.html");
+expectedHtml.add("not-found.html");
+const generatedHtml = readdirSync(dist, { recursive: true }).map((file) => file.split(path.sep).join("/")).filter((file) => file.endsWith(".html"));
+if (generatedHtml.length !== expectedHtml.size || generatedHtml.some((file) => !expectedHtml.has(file))) {
+  failures.push("Generated HTML must match the canonical route inventory, Tripadvisor embed and 404 documents.");
+}
 const tripadvisorEmbed = readFileSync(path.join(dist, tripadvisorEmbedPath.slice(1), "index.html"), "utf8");
 if (!tripadvisorEmbed.includes('name="robots" content="noindex, follow"') || !tripadvisorEmbed.includes('class="st-tripadvisor__fallback"') || !tripadvisorEmbed.includes('<script async src="https://www.jscache.com/wejs?wtype=selfserveprop') || !tripadvisorEmbed.includes("&amp;nreviews=2")) failures.push("The Tripadvisor embed needs its official review snippets, fallback and noindex directive.");
 const fingerprints = new Map();
@@ -115,6 +127,14 @@ for (const route of expectedRoutes) {
     }
   }
   const mainContent = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1] ?? "";
+  const guideBody = mainContent.split(/<div class="[^"\n]*\bst-guide-article__body\b[^"\n]*">/)[1]?.split('<aside class="st-guide-cta"')[0];
+  if (guideBody) {
+    for (const [, section] of guideBody.matchAll(/<section\b[^>]*>([\s\S]*?)<\/section>/g)) {
+      if (!/<div class="st-guide-bilingual">\s*<p lang="en">[\s\S]+?<\/p>\s*<p lang="vi">[\s\S]+?<\/p>\s*<\/div>/.test(section)) {
+        failures.push(`Guide section must have a full-width English and Vietnamese copy block: ${route}`);
+      }
+    }
+  }
   pageEditorialImages.set(route, new Set([...mainContent.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^"?#]+)"/gi)]
     .map(([, src]) => src)
     .filter((src) => !/(?:logo-sttailor|LinkedInLogo|chu-ky-)/i.test(src))));
@@ -122,6 +142,12 @@ for (const route of expectedRoutes) {
   if (/PayPal|\bWise\b/i.test(html)) failures.push(`Removed international payment wallet remains in content or metadata on ${route}`);
   if (!html.includes('name="sttailor-build-revision"')) failures.push(`Build revision marker is missing: ${route}`);
   if (!html.includes('<meta name="robots" content="index, follow')) failures.push(`Indexable robots metadata is missing: ${route}`);
+  const canonical = `https://sttailor.com${route}`;
+  const canonicals = [...html.matchAll(/<link rel="canonical" href="([^"]+)">/g)].map(([, href]) => href);
+  const openGraphUrls = [...html.matchAll(/<meta property="og:url" content="([^"]+)">/g)].map(([, href]) => href);
+  if (canonicals.length !== 1 || canonicals[0] !== canonical || openGraphUrls.length !== 1 || openGraphUrls[0] !== canonical) {
+    failures.push(`Canonical and Open Graph URLs must each identify this page exactly once: ${route}`);
+  }
   if (!html.includes('application/ld+json') || !html.includes('LocalBusiness')) failures.push(`LocalBusiness structured data is missing: ${route}`);
   if (!html.includes('SiteNavigationElement') || !html.includes('OfferCatalog')) failures.push(`Expanded navigation or service structured data is missing: ${route}`);
   if ((html.match(/'GTM-TQSDB6XT'/g) ?? []).length !== 1 || (html.match(/googletagmanager\.com\/gtm\.js\?id=/g) ?? []).length !== 1 || !/<head>[^]*?<!-- Google Tag Manager -->[^]*?<\/head>/.test(html)) failures.push(`Google Tag Manager head snippet is missing or duplicated: ${route}`);
@@ -134,6 +160,15 @@ for (const route of expectedRoutes) {
   if (html.includes("data-consent-panel") || html.includes("data-consent-open")) failures.push(`Unrequested privacy controls remain: ${route}`);
   const schemaText = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i)?.[1];
   const schemaGraph = schemaText ? JSON.parse(schemaText)["@graph"] : [];
+  const schemaEntities = new Set(schemaGraph.map((entity) => entity["@id"]));
+  const pageSchema = schemaGraph.find((entity) => entity["@id"] === `${canonical}#webpage`);
+  const pageReferences = [pageSchema?.isPartOf, pageSchema?.about, pageSchema?.mainEntity, pageSchema?.breadcrumb];
+  if (schemaEntities.size !== schemaGraph.length || pageSchema?.url !== canonical ||
+      !pageSchema?.inLanguage?.includes("en") || !pageSchema?.inLanguage?.includes("vi") ||
+      pageReferences.some((reference) => reference && !schemaEntities.has(reference["@id"]))) {
+    failures.push(`The bilingual page schema contains conflicting or unresolved references: ${route}`);
+  }
+  pageDiscovery.set(route, { lastModified: pageSchema?.dateModified, primaryImage: pageSchema?.primaryImageOfPage?.url });
   const breadcrumb = schemaGraph.find((item) => item["@type"] === "BreadcrumbList");
   const breadcrumbHtml = mainContent.match(/<nav class="st-breadcrumb"[\s\S]*?<\/nav>/)?.[0];
   if (route === "/") {
@@ -174,9 +209,12 @@ for (const route of expectedRoutes) {
   const businessSchema = schemaGraph.find((item) => Array.isArray(item["@type"]) && item["@type"].includes("LocalBusiness"));
   if (businessSchema?.hasOfferCatalog?.["@type"] !== "OfferCatalog" || businessSchema?.makesOffer) failures.push(`LocalBusiness service catalog uses the wrong Schema.org property: ${route}`);
   const catalogItems = businessSchema?.hasOfferCatalog?.itemListElement ?? [];
-  if (catalogItems.length !== 8 || catalogItems.some(({ itemOffered }) =>
-    !itemOffered?.alternateName || !expectedRoutes.some((href) => itemOffered.url === `https://sttailor.com${href}`)
-  )) failures.push(`LocalBusiness offer catalog must link every bilingual service to a canonical route: ${route}`);
+  const catalogUrls = new Set(catalogItems.map(({ itemOffered }) => itemOffered?.url));
+  if (catalogItems.length !== expectedCatalogRoutes.length || catalogUrls.size !== expectedCatalogRoutes.length ||
+      catalogItems.some(({ itemOffered }) => !itemOffered?.alternateName) ||
+      expectedCatalogRoutes.some((serviceRoute) => !catalogUrls.has(`https://sttailor.com${serviceRoute}`))) {
+    failures.push(`LocalBusiness offer catalog must link directly to every bilingual service page: ${route}`);
+  }
   if (/https?:\/\/(?:[a-z0-9-]+\.)*(?:x|twitter)\.com(?:[\/:?"\s]|$)|name=["']twitter:/i.test(html)) failures.push(`Retired social integration remains on ${route}`);
   if ((html.match(/href="https:\/\/www\.threads\.com\/@sttailorhcm"/g) ?? []).length !== 1 || (businessSchema?.sameAs ?? []).filter((url) => url === "https://www.threads.com/@sttailorhcm").length !== 1) failures.push(`Official Threads profile is missing or duplicated in social links/schema: ${route}`);
   const tripadvisorUrl = "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html";
@@ -263,7 +301,7 @@ if (!missingPage.includes('<meta name="robots" content="noindex, follow">') || !
 
 for (const [route, markers] of Object.entries({
   "/bang-gia/": ['<h2>Bespoke suit', '<h2>Wedding and formal suit', '<h2>Alterations and fitting'],
-  "/lien-he/": ['<h2>ADDRESS <span lang="vi">Địa chỉ</span></h2>', '<h2>HOTLINE <span lang="vi">Điện thoại</span></h2>', '<h2>EMAIL <span lang="vi">Thư điện tử</span></h2>', '<h2>WEBSITE <span lang="vi">Trang web</span></h2>'],
+  "/lien-he/": ['<h1 id="st-contact-details-title">', '<h2>ADDRESS <span lang="vi">Địa chỉ</span></h2>', '<h2>TELEPHONE <span lang="vi">Điện thoại</span></h2>', '<h2>EMAIL <span lang="vi">Thư điện tử</span></h2>', '<h2>OPENING HOURS <span lang="vi">Giờ hoạt động</span></h2>', '<h2>WEBSITE <span lang="vi">Trang web</span></h2>'],
   "/dich-vu/": ['<h1 id="st-service-commission-map-title">', '<h2>Suits and vests', '<h2 id="st-bespoke-process-title">', '<h3>Private consultation']
 })) {
   const html = readFileSync(path.join(dist, route.slice(1), "index.html"), "utf8");
@@ -634,6 +672,7 @@ for (const staticFile of ["robots.txt", "sitemap.xml", "llms.txt", "site.webmani
 const llmsText = utf8.decode(readFileSync(path.join(dist, "llms.txt")));
 if (!/^# S\.T Tailor$/m.test(llmsText) || llmsText.length < 50) failures.push("llms.txt is missing its Markdown heading or summary.");
 if (llmsText !== llmsText.normalize("NFC") || /\uFFFD|á[º»]|Ã[\u0080-\u00BF]/.test(llmsText) || !llmsText.includes("Địa chỉ: Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định")) failures.push("llms.txt must preserve normalized Vietnamese text.");
+if (!llmsText.includes("[XML sitemap / Sơ đồ trang web XML](https://sttailor.com/sitemap.xml)")) failures.push("llms.txt must link to the production XML sitemap.");
 for (const contact of ["tel:+84909556258", "mailto:contact.sttailor@gmail.com", "https://m.me/sttailor.hcm", "https://zalo.me/0909556258", "https://www.instagram.com/sttailorhcm/", "https://wa.me/84909556258"]) {
   if (!llmsText.includes(`](${contact})`)) failures.push(`llms.txt is missing a direct contact channel: ${contact}`);
 }
@@ -672,6 +711,12 @@ for (const [, location, entry] of sitemap.matchAll(/<url><loc>([^<]+)<\/loc>([\s
   const imageUrls = new Set(images);
   if (images.length > 1000 || images.length !== imageUrls.size) failures.push(`Image sitemap has invalid image entries for ${location}`);
   const page = new URL(location);
+  const discovery = pageDiscovery.get(page.pathname);
+  const lastModified = entry.match(/<lastmod>([^<]+)<\/lastmod>/)?.[1];
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(lastModified ?? "") || lastModified !== discovery?.lastModified) {
+    failures.push(`Sitemap lastmod does not match the page's dateModified: ${page.pathname}`);
+  }
+  if (!imageUrls.has(discovery?.primaryImage)) failures.push(`Sitemap omits the schema's primary page image: ${page.pathname}`);
   for (const image of images) {
     const asset = new URL(image);
     if (asset.origin !== page.origin || !asset.pathname.startsWith("/media/") || !existsSync(path.join(dist, decodeURIComponent(asset.pathname.slice(1))))) {
