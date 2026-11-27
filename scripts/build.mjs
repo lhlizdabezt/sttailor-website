@@ -49,7 +49,7 @@ const liningHeroSizes = "(max-width: 860px) min(calc(100vw - 48px), 480px), min(
 const editorialGuideHeroes = tailoringPages.filter(({ source }) =>
   ["GuideFirstConsultation.html", "GuideGarmentCollection.html", "GuideWeddingPlanning.html", "GuideAftercare.html", "GuideShirtCollars.html",
     "GuideOrderQuotation.html", "GuideArrangeDelivery.html", "GuidePackingSuit.html", "GuideBlackTie.html", "GuideShirtCuffs.html",
-    "ServiceShirts.html", "ServiceTrousers.html", "ServiceJackets.html"].includes(source)
+    "GuideShirtFit.html", "GuideTrouserHem.html", "ServiceShirts.html", "ServiceTrousers.html", "ServiceJackets.html"].includes(source)
 );
 const editorialGuideHeroSizes = "(max-width: 560px) calc(100vw - 28px), (max-width: 860px) calc(100vw - 48px), min(calc(46vw - 36px), 540px)";
 

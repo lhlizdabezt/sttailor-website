@@ -479,6 +479,17 @@ export const showcaseEntries = [
     imageAlt: "Sand-coloured tailored jacket showing a rounded patch pocket and dark cuff buttons | Áo khoác may đo màu cát với túi đắp bo tròn và khuy tay áo tối màu"
   },
   {
+    route: "/san-pham/ao-khoac-navy-ve-chu-k/",
+    section: "suits-and-jackets",
+    source: "ShowcaseNavyNotchJacket.html",
+    labels: ["Navy notch-lapel jacket", "Áo khoác navy ve chữ K"],
+    title: "Navy Notch-Lapel Jacket with Jetted Pockets | S.T Tailor",
+    description: "See a finished S.T Tailor navy jacket from the front, side and back. Examine its notch lapels, jetted pockets, curved front and contrast buttonhole.",
+    summary: ["A navy jacket with notch lapels and jetted pockets, shown with a white shirt, a pale blue dotted tie and a yellow pocket square.", "Áo khoác navy ve chữ K và túi viền, phối cùng sơ mi trắng, cà vạt xanh nhạt chấm bi và khăn túi ngực màu vàng."],
+    image: "/media/2026/09/navy-notch-lapel.jpg",
+    imageAlt: "Navy notch-lapel jacket on a form with a pale blue dotted tie and yellow pocket square | Áo khoác navy ve chữ K trên mannequin, phối cà vạt xanh nhạt chấm bi và khăn túi ngực vàng"
+  },
+  {
     route: "/san-pham/ao-khoac-gam-xanh-bac/",
     section: "suits-and-jackets",
     source: "ShowcaseSilverBlueBrocadeJacket.html",

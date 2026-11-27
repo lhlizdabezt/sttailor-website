@@ -170,6 +170,26 @@ export const tailoringPages = [
     imageAlt: "White S.T Tailor shirt with a spread collar and button front | Sơ mi trắng S.T Tailor với cổ mở rộng và nẹp cài khuy"
   },
   {
+    route: "/cam-nang-may-do/kiem-tra-phom-so-mi/",
+    source: "GuideShirtFit.html",
+    labels: ["Shirt fitting checklist", "Kiểm tra phom sơ mi"],
+    title: "Made-to-Measure Shirt Fitting Checklist | S.T Tailor",
+    description: "Check the shoulder seam, collar, button line, cuffs and hem of a tailored shirt while standing, sitting and reaching. A bilingual guide from S.T Tailor.",
+    descriptionVi: "Kiểm tra đường ráp vai, cổ áo, nẹp khuy, măng sét và lai sơ mi may đo khi đứng, ngồi và đưa tay. Hướng dẫn song ngữ của S.T Tailor.",
+    image: "/media/2026/11/st-tailor-white-shirt-sleeve-shoulder-seam.webp",
+    imageAlt: "Shoulder seam and upper sleeve of a white tailored shirt | Đường ráp vai và phần tay trên của sơ mi trắng may đo"
+  },
+  {
+    route: "/cam-nang-may-do/chon-do-dai-lai-quan-tay/",
+    source: "GuideTrouserHem.html",
+    labels: ["Choosing your trouser length", "Chọn chiều dài lai quần tây"],
+    title: "Trouser Length and Break at a Fitting | S.T Tailor",
+    description: "Compare a clean trouser hem with a slight or fuller break. Bring your shoes and check the front and back length before hemming tailored trousers.",
+    descriptionVi: "So sánh lai quần không gãy, gãy nhẹ và gãy rõ. Mang giày dự định phối để kiểm tra chiều dài phía trước và sau trước khi lên lai quần tây.",
+    image: "/media/2026/09/st-tailor-archive-founder-one.jpeg",
+    imageAlt: "Brown tailored trouser hem above leather shoes at S.T Tailor | Lai quần tây nâu trên giày da tại S.T Tailor"
+  },
+  {
     route: "/cam-nang-may-do/chon-suit-hai-manh-ba-manh/",
     source: "GuideSuitPieces.html",
     labels: ["Two-piece and three-piece suits", "Suit hai mảnh và ba mảnh"],
