@@ -17,6 +17,7 @@ const failures = [];
 const expect = (condition, message) => {
   if (!condition) failures.push(message);
 };
+const revalidate = "public, max-age=0, must-revalidate";
 
 // Cloudflare may need a short DNS propagation window immediately after a
 // custom-domain Worker deployment. Retry transient network failures only;
@@ -67,6 +68,7 @@ for (const route of routes) {
   const stylesheet = pageHtml.match(/<link rel="stylesheet" href="([^"]+)"/i)?.[1];
   expect(stylesheet && response.headers.get("link")?.includes(`<${stylesheet}>; rel=preload; as=style`), `${route} does not advertise its current stylesheet to Cloudflare Early Hints`);
   expect(pageHtml.includes('<link rel="describedby" href="/llms.txt" type="text/plain">'), `${route} does not advertise its bilingual discovery guide`);
+  expect(response.headers.get("cache-control") === revalidate, `${route} does not revalidate its HTML before reuse`);
   expect((pageHtml.match(/<main\b/gi) ?? []).length === 1 && (pageHtml.match(/<\/main>/gi) ?? []).length === 1, `${route} must have exactly one main landmark`);
   expect(pageHtml.includes('<noscript><img height="1" width="1" style="display:none" alt="" aria-hidden="true" src="https://www.facebook.com/tr?id=2294442874726399&amp;ev=PageView&amp;noscript=1"></noscript>') && !/\bfbq\s*\(/.test(pageHtml), `${route} must use GTM Meta Pixel with its static noscript fallback only`);
   expect(response.status === 200, `${route} returned ${response.status}`);
@@ -140,7 +142,11 @@ expect(icon.status === 200 && icon.headers.get("content-type")?.includes("image/
 
 const home = pages.get("/");
 const siteScriptPath = home.match(/<script type="module" src="([^"]+)"/i)?.[1];
-const siteScript = siteScriptPath ? await (await fetchWithRetry(new URL(siteScriptPath, origin))).text() : "";
+const siteScriptResponse = siteScriptPath ? await fetchWithRetry(new URL(siteScriptPath, origin)) : null;
+const siteScript = siteScriptResponse ? await siteScriptResponse.text() : "";
+const siteScriptVersion = createHash("sha256").update(siteScript).digest("hex").slice(0, 12);
+expect(siteScriptResponse?.status === 200 && siteScriptPath === `/scripts/site-${siteScriptVersion}.js`, "The published site script is unavailable or its filename fingerprint is incorrect");
+expect(siteScriptResponse?.headers.get("cache-control")?.includes("immutable"), "The fingerprinted site script has no immutable caching");
 expect(Boolean(siteScriptPath) && siteScript.includes('"contact_click"') && siteScript.includes('"consultation_intent"') && siteScript.includes('"page_type"'), "Production interaction analytics or Clarity page tags are missing");
 expect(
   (home.match(/<article class="st-home-editorial__frame">/g) ?? []).length === 5 &&
@@ -255,6 +261,7 @@ const disclosure = await fetchWithRetry(`${origin}/.well-known/security.txt`);
 const disclosureText = await disclosure.text();
 expect(disclosure.status === 200 && disclosure.headers.get("content-type")?.includes("text/plain") && disclosureText.includes("Contact: mailto:contact.sttailor@gmail.com") && Date.parse(disclosureText.match(/^Expires: (.+)$/m)?.[1] ?? "") > Date.now(), "security.txt must publish a current vulnerability-reporting contact as plain text");
 expect(robots.status === 200 && robotsText.includes(`Sitemap: ${origin}/sitemap.xml`), "robots.txt is invalid");
+expect(robots.headers.get("cache-control") === revalidate, "robots.txt does not revalidate before reuse");
 expect(/^User-agent:\s*\*\s*$/mi.test(robotsText) && /^Allow:\s*\/\s*$/mi.test(robotsText) && !/^Disallow:\s*\/\s*$/mi.test(robotsText), "robots.txt must allow public pages to be crawled");
 expect(!/^Disallow:\s*\S+/mi.test(robotsText), "robots.txt must not block a published public resource");
 
@@ -288,6 +295,9 @@ await Promise.all(Array.from({ length: 6 }, async () => {
       if (asset.endsWith(".woff2")) {
         expect(response.headers.get("content-type") === "font/woff2" && response.headers.get("cache-control")?.includes("immutable"), `Vietnamese font ${asset} must serve as a cacheable WOFF2`);
       }
+      if (/^\/(?:scripts|styles)\/.*-[a-f0-9]{12}\.(?:css|js)$/.test(asset)) {
+        expect(response.headers.get("cache-control")?.includes("immutable"), `Fingerprinted asset ${asset} has no immutable caching`);
+      }
     } catch {
       failures.push(`Public asset ${asset} could not be reached after retry`);
     }
@@ -311,6 +321,7 @@ console.log(`Checked ${crawlerAgents.length} crawler user agents across ${crawle
 const llms = await fetchWithRetry(`${origin}/llms.txt`);
 const llmsText = new TextDecoder("utf-8", { fatal: true }).decode(await llms.arrayBuffer());
 expect(llms.status === 200 && /^# S\.T Tailor$/m.test(llmsText), "llms.txt is missing its Markdown heading");
+expect(llms.headers.get("cache-control") === revalidate, "llms.txt does not revalidate before reuse");
 expect(llms.headers.get("content-type")?.toLowerCase() === "text/plain; charset=utf-8" && llmsText === llmsText.normalize("NFC") && llmsText.includes("Địa chỉ: Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định") && !/\uFFFD|á[º»]|Ã[\u0080-\u00BF]/.test(llmsText), "llms.txt does not serve clean, explicitly declared UTF-8 Vietnamese text");
 expect(llmsText === readFileSync(path.join(dist, "llms.txt"), "utf8"), "Production llms.txt differs from the verified release file");
 
@@ -329,6 +340,7 @@ const { response: sitemap, text: sitemapText } = await fetchTextUntil(`${origin}
   { headers: { "Cache-Control": "no-cache" } },
   (candidate, text) => candidate.ok && (!expectedSitemap || text === expectedSitemap), expectedSitemap ? 20 : 1);
 expect(sitemap.status === 200, `sitemap.xml returned ${sitemap.status}`);
+expect(sitemap.headers.get("cache-control") === revalidate, "sitemap.xml does not revalidate before reuse");
 if (expectedSitemap) expect(sitemapText === expectedSitemap, "Production sitemap differs from the validated release artifact");
 const sitemapLocations = [...sitemapText.matchAll(/<url>\s*<loc>([^<]+)<\/loc>/g)].map(([, location]) => location);
 const sitemapUrls = new Set(sitemapLocations);
@@ -379,9 +391,19 @@ expect(www.headers.get("strict-transport-security")?.includes("max-age=15552000"
 const missing = await fetchWithRetry(`${origin}/this-page-does-not-exist`);
 const missingHtml = await missing.text();
 expect(missing.status === 404, `Unknown URL returned ${missing.status}`);
+expect(missing.headers.get("cache-control") === "no-store", "A page miss can enter the browser cache");
 expect(missingHtml.includes("Back to Home"), "404 page has no Back to Home action");
 expect(missing.headers.get("x-robots-tag")?.includes("noindex"), "404 response is not marked noindex");
 expect(missingHtml.includes('<meta name="robots" content="noindex, follow">') && !missingHtml.includes('<link rel="canonical"'), "404 HTML has conflicting index or canonical signals");
+
+for (const asset of ["/styles/site.css", "/scripts/site.js", "/scripts/tripadvisor.js"]) {
+  const alias = await fetchWithRetry(`${origin}${asset}`, { method: "HEAD" });
+  expect(alias.status === 200 && alias.headers.get("cache-control") === revalidate, `Stable asset alias ${asset} does not revalidate before reuse`);
+}
+for (const asset of ["/styles/page-000000000000.css", "/scripts/site-000000000000.js", "/media/sttailor-missing-test.webp"]) {
+  const miss = await fetchWithRetry(`${origin}${asset}`, { method: "HEAD" });
+  expect(miss.status === 404 && miss.headers.get("cache-control") === "no-store", `Asset miss ${asset} can enter the browser cache`);
+}
 
 for (const internalPath of ["/404.html", "/404", "/not-found.html", "/not-found", "/_headers"]) {
   const response = await fetchWithRetry(`${origin}${internalPath}`, { redirect: "manual" });

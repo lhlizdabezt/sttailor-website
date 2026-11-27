@@ -235,6 +235,17 @@ export const showcaseEntries = [
     imageAlt: "Long white high-collared tunic with red and blue botanical motifs in the S.T Tailor showroom window | Áo trắng dáng dài cổ cao họa tiết hoa lá đỏ và xanh tại cửa kính nhà may S.T Tailor"
   },
   {
+    route: "/san-pham/ao-nu-mau-nga-ru-cheo/",
+    section: "womenswear",
+    source: "ShowcaseDrapedIvoryTop.html",
+    labels: ["Draped ivory top", "Áo nữ màu ngà rủ chéo"],
+    title: "Draped Ivory Tailored Top With Lace Trim | S.T Tailor",
+    description: "See how soft folds and a slanted lace-trimmed hem shape an ivory top by S.T Tailor, photographed with dark wide-leg trousers during a fitting.",
+    summary: ["Soft folds run diagonally across the front of this ivory top. Lace follows the slanted hem, which falls over dark wide-leg trousers in photographs from the S.T Tailor showroom.", "Các nếp vải mềm chạy chéo trên thân trước áo màu ngà. Viền ren men theo đường lai chéo, phủ nhẹ trên quần ống rộng tối màu trong ảnh tại showroom S.T Tailor."],
+    image: "/media/2026/11/st-tailor-draped-ivory-top-with-dark-trousers.webp",
+    imageAlt: "Client wearing an ivory top with diagonal folds and a lace-trimmed hem over dark wide-leg trousers | Khách mặc áo màu ngà có nếp rủ chéo và lai viền ren cùng quần ống rộng tối màu"
+  },
+  {
     route: "/san-pham/quan-tay-xanh-xam-xep-ly/",
     section: "shirts-and-trousers",
     source: "ShowcaseSlatePleatedTrousers.html",
@@ -284,8 +295,8 @@ export const showcaseEntries = [
     source: "ShowcaseNinaCampos.html",
     labels: ["Niña Campos collaboration", "Hợp tác cùng Niña Campos"],
     heading: "Niña Campos",
-    title: "Niña Campos Collaboration | S.T Tailor",
-    description: "See S.T Tailor’s light two-piece suit for singer Niña Campos in six photographs, from the audience’s view of her performance to a close-up of the lapels.",
+    title: "Niña Campos in a Tailored Stage Suit | S.T Tailor",
+    description: "See the light two-piece stage suit S.T Tailor made for singer Niña Campos in six performance and portrait photographs. Explore the cut, layers and fit in motion.",
     summary: ninaCampos.summary,
     image: photoSource(ninaCover),
     imageAlt: ninaCoverAlt.join(" | "),
@@ -334,6 +345,28 @@ export const showcaseEntries = [
     summary: ["Photographs from a fitting show how a gold shirt, pocket square and lining change the appearance of a dark suit as the jacket opens.", "Ảnh buổi thử cho thấy sơ mi, khăn túi ngực và lớp lót vàng hiện lên thế nào trên bộ suit tối màu khi mở áo khoác."],
     image: "/media/2026/09/st-tailor-archive-gold-jacket-fitting.jpg",
     imageAlt: "Client in a dark suit with a gold shirt and pocket square during a fitting at S.T Tailor | Khách thử suit tối màu phối sơ mi và khăn túi ngực màu vàng tại S.T Tailor"
+  },
+  {
+    route: "/du-an/thu-suit-den-tai-showroom/",
+    section: "fittings",
+    source: "ShowcaseBlackSuitMirrorFitting.html",
+    labels: ["Fitting a black suit at the mirror", "Thử suit đen trước gương"],
+    title: "Black Suit Fitting From Front and Back | S.T Tailor",
+    description: "Follow an S.T Tailor fitting from the front of a black suit to its rear view at the mirror. See how arm movement and a natural stance reveal the jacket balance.",
+    summary: ["Two showroom photographs show the same black suit from the front and back. The client extends his arms in one and stands at ease by the mirror in the other.", "Hai ảnh tại nhà may ghi lại cùng bộ suit đen từ trước và sau. Trong một ảnh, khách dang hai tay. Ảnh còn lại ghi lại tư thế đứng tự nhiên bên gương."],
+    image: "/media/2026/09/st-tailor-client-fitted-suit.jpg",
+    imageAlt: "Client in a black suit and gold shirt extending his arms during a fitting at S.T Tailor | Khách mặc suit đen và sơ mi vàng, dang hai tay trong buổi thử tại S.T Tailor"
+  },
+  {
+    route: "/du-an/chon-vai-cung-khach/",
+    section: "client-work",
+    source: "ShowcaseClothConsultation.html",
+    labels: ["Choosing suit cloth at a consultation", "Chọn vải may suit trong buổi tư vấn"],
+    title: "Choosing Suit Cloth With a Client | S.T Tailor",
+    description: "See a fabric consultation at S.T Tailor in Ho Chi Minh City and learn how to compare colour, pattern scale and drape before commissioning a suit.",
+    summary: ["A client and tailor compare swatches at the showroom. See how to read colour and pattern in a small sample and what to ask about the way the finished cloth will hang.", "Khách và thợ may so sánh các mẫu vải tại showroom. Xem cách nhận biết màu sắc, họa tiết trên mẫu nhỏ và những điều nên hỏi về độ rủ của trang phục sau khi may."],
+    image: "/media/2026/09/st-tailor-client-fabric-consultation.jpg",
+    imageAlt: "Tailor and client seated over an open fabric book at the S.T Tailor showroom | Thợ may và khách ngồi xem quyển mẫu vải mở tại showroom S.T Tailor"
   },
   {
     route: "/du-an/thu-quan-ong-rong-nu/",

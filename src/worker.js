@@ -35,7 +35,15 @@ const legacyRoutes = new Map([
   ["/bao-hanh-sua-chua/", "/dich-vu/"]
 ]);
 const staticPrefixes = ["/media/", "/icons/", "/styles/", "/scripts/", "/fonts/"];
-const staticFiles = new Set(["/robots.txt", "/sitemap.xml", "/llms.txt", "/.well-known/security.txt", "/site.webmanifest", `/${indexNowKeyFile}`, "/build-manifest.json", "/image-manifest.json"]);
+const discoveryFiles = new Set(["/robots.txt", "/sitemap.xml", "/llms.txt"]);
+const hourlyFiles = new Set(["/.well-known/security.txt", "/site.webmanifest", `/${indexNowKeyFile}`]);
+const staticFiles = new Set([...discoveryFiles, ...hourlyFiles, "/build-manifest.json", "/image-manifest.json"]);
+const immutableAssets = [
+  /^\/styles\/(?:page|site)-[a-f0-9]{12}\.css$/,
+  /^\/scripts\/(?:site|tripadvisor)-[a-f0-9]{12}\.js$/,
+  /^\/fonts\/[^/]+-[a-f0-9]{7}\.woff2$/,
+  /^\/media\/_responsive\/.+-share-[a-f0-9]{12}\.jpg$/
+];
 
 function securityHeaders(response, pathname = "/") {
   const headers = new Headers(response.headers);
@@ -44,31 +52,37 @@ function securityHeaders(response, pathname = "/") {
   headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
   headers.set("X-Frame-Options", "SAMEORIGIN");
   headers.set("Strict-Transport-Security", "max-age=15552000");
-  if (pathname === "/llms.txt" && response.ok) {
+  const cacheable = response.ok || response.status === 304;
+  if (pathname === "/llms.txt" && cacheable) {
     headers.set("Content-Type", "text/plain; charset=utf-8");
   }
   const contentType = headers.get("Content-Type") || "";
   const isHtml = routes.has(pathname) || pathname.endsWith(".html") || pathname === "/not-found" || contentType.includes("text/html");
+  const revalidate = "public, max-age=0, must-revalidate";
   if (isHtml) {
-    const isCanonical = routes.has(pathname) && (response.ok || response.status === 304);
+    const isCanonical = routes.has(pathname) && cacheable;
     // Keep per-page Early Hints outside the limited static asset rule table.
     const stylesheet = isCanonical && buildManifest.routeStyles[pathname];
     if (stylesheet) headers.set("Link", `<${stylesheet.href}>; rel=preload; as=style`);
     headers.set("Content-Security-Policy", contentSecurityPolicy(pathname));
     headers.set("X-Robots-Tag", isCanonical ? "index, follow, max-image-preview:large" : "noindex, follow");
-    headers.set("Cache-Control", pathname === tripadvisorEmbedPath
-      ? "public, max-age=0, must-revalidate, no-transform"
-      : "public, max-age=0, must-revalidate");
-  } else if (pathname.startsWith("/styles/") || pathname.startsWith("/scripts/") ||
-      /^\/fonts\/[^/]+-[a-f0-9]{7}\.woff2$/.test(pathname) ||
-      /^\/media\/_responsive\/.+-share-[a-f0-9]{12}\.jpg$/.test(pathname)) {
-    headers.set("Cache-Control", "public, max-age=31536000, immutable");
-  } else if (pathname.startsWith("/media/")) {
-    headers.set("Cache-Control", response.status === 416 ? "no-store" : "public, max-age=604800");
-  } else if (pathname.startsWith("/icons/")) {
-    headers.set("Cache-Control", "public, max-age=604800");
-  } else if (["/robots.txt", "/sitemap.xml", "/llms.txt", "/.well-known/security.txt", "/site.webmanifest", `/${indexNowKeyFile}`].includes(pathname)) {
-    headers.set("Cache-Control", "public, max-age=3600");
+  }
+  if (response.status >= 400) {
+    headers.set("Cache-Control", "no-store");
+  } else if (cacheable) {
+    if (pathname === tripadvisorEmbedPath) {
+      headers.set("Cache-Control", `${revalidate}, no-transform`);
+    } else if (isHtml || discoveryFiles.has(pathname)) {
+      headers.set("Cache-Control", revalidate);
+    } else if (immutableAssets.some((pattern) => pattern.test(pathname))) {
+      headers.set("Cache-Control", "public, max-age=31536000, immutable");
+    } else if (pathname.startsWith("/styles/") || pathname.startsWith("/scripts/") || pathname.startsWith("/fonts/")) {
+      headers.set("Cache-Control", revalidate);
+    } else if (pathname.startsWith("/media/") || pathname.startsWith("/icons/")) {
+      headers.set("Cache-Control", "public, max-age=604800");
+    } else if (hourlyFiles.has(pathname)) {
+      headers.set("Cache-Control", "public, max-age=3600");
+    }
   }
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
 }
@@ -80,15 +94,14 @@ async function notFound(request, env, url) {
   // Cloudflare's asset binding canonicalises HTML files to extensionless URLs.
   // Fetch the canonical asset path directly; requesting `/not-found.html`
   // yields a bodyless 307 response and would produce an empty 404 page.
-  const source = await env.ASSETS.fetch(new Request(new URL("/not-found", url), request));
-  // The asset binding can include its own fallback Location header. A typo
-  // must remain on the requested URL and render the document with a true 404.
+  // Conditions and byte ranges for the original URL do not apply to this page.
+  const source = await env.ASSETS.fetch(new Request(new URL("/not-found", url), { method: request.method === "HEAD" ? "HEAD" : "GET" }));
   const headers = new Headers(source.headers);
   headers.delete("Location");
-  const response = securityHeaders(new Response(source.body, { status: 404, statusText: "Not Found", headers }), url.pathname);
-  const notFoundHeaders = new Headers(response.headers);
-  notFoundHeaders.set("X-Robots-Tag", "noindex, follow");
-  return new Response(response.body, { status: 404, statusText: "Not Found", headers: notFoundHeaders });
+  headers.delete("ETag");
+  headers.delete("Last-Modified");
+  headers.set("Content-Type", "text/html; charset=utf-8");
+  return securityHeaders(new Response(source.body, { status: 404, statusText: "Not Found", headers }), url.pathname);
 }
 
 export default {

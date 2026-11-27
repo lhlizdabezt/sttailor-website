@@ -81,6 +81,22 @@ test("the internal error documents and asset headers are not public routes", asy
   assert.deepEqual([...new Set(requestedAssets)], ["/not-found"]);
 });
 
+test("conditions for a missing URL cannot strip the 404 page body", async () => {
+  const errorEnv = { ASSETS: { fetch: async (request) => {
+    assert.equal(request.headers.get("If-None-Match"), null);
+    assert.equal(request.headers.get("Range"), null);
+    return new Response("Page not found", { headers: { ETag: '"fallback-page"' } });
+  } } };
+  const request = new Request("https://sttailor.com/missing/", {
+    headers: { "If-None-Match": '"fallback-page"', Range: "bytes=0-1" }
+  });
+  const response = await worker.fetch(request, errorEnv);
+  assert.equal(response.status, 404);
+  assert.equal(response.headers.get("Cache-Control"), "no-store");
+  assert.equal(response.headers.get("ETag"), null);
+  assert.equal(await response.text(), "Page not found");
+});
+
 test("campaign parameters remain on published pages and legacy redirects", async () => {
   const page = await worker.fetch(new Request("https://sttailor.com/?utm_source=facebook&utm_medium=social&fbclid=test"), env);
   assert.equal(page.status, 200);
@@ -103,13 +119,52 @@ test("nested canonical redirects retain query parameters and unknown child paths
   }
 });
 
-test("llms.txt advertises UTF-8 for GET and HEAD even if the asset omits its charset", async () => {
+test("llms.txt preserves UTF-8 on GET, HEAD and cache revalidation", async () => {
   const copy = "Địa chỉ: Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định";
-  const textEnv = { ASSETS: { fetch: async (request) => new Response(request.method === "HEAD" ? null : copy, { headers: { "Content-Type": "text/plain" } }) } };
+  const etag = '"llms-fixture"';
+  const textEnv = { ASSETS: { fetch: async (request) => {
+    const validated = request.headers.get("If-None-Match") === etag;
+    return new Response(!validated && request.method === "GET" ? copy : null, {
+      status: validated ? 304 : 200,
+      headers: { "Content-Type": "text/plain", ETag: etag }
+    });
+  } } };
   for (const method of ["GET", "HEAD"]) {
     const response = await worker.fetch(new Request("https://sttailor.com/llms.txt", { method }), textEnv);
     assert.equal(response.headers.get("Content-Type"), "text/plain; charset=utf-8");
+    assert.equal(response.headers.get("Cache-Control"), "public, max-age=0, must-revalidate");
     assert.equal(await response.text(), method === "GET" ? copy : "");
+  }
+  const cached = await worker.fetch(new Request("https://sttailor.com/llms.txt", { headers: { "If-None-Match": etag } }), textEnv);
+  assert.equal(cached.status, 304);
+  assert.equal(cached.headers.get("Content-Type"), "text/plain; charset=utf-8");
+  assert.equal(cached.headers.get("Cache-Control"), "public, max-age=0, must-revalidate");
+});
+
+test("only fingerprinted asset paths are immutable and errors cannot enter the browser cache", async () => {
+  const revalidate = "public, max-age=0, must-revalidate";
+  const immutable = "public, max-age=31536000, immutable";
+  const cases = [
+    ["/scripts/site.js?v=old", 200, revalidate],
+    ["/styles/site.css", 200, revalidate],
+    ["/scripts/site-123456789abc.js", 200, immutable],
+    ["/scripts/tripadvisor-123456789abc.js", 304, immutable],
+    ["/styles/page-123456789abc.css", 200, immutable],
+    ["/styles/site-123456789abc.css", 200, immutable],
+    ["/robots.txt", 200, revalidate],
+    ["/sitemap.xml", 304, revalidate],
+    ["/media/_responsive/archive-share-123456789abc.jpg", 200, immutable],
+    ["/media/archive.webp", 200, "public, max-age=604800"],
+    ["/media/missing.webp", 404, "no-store"],
+    ["/scripts/site-ffffffffffff.js", 404, "no-store"],
+    ["/media/_responsive/missing-share-ffffffffffff.jpg", 503, "no-store"]
+  ];
+  for (const [asset, status, cacheControl] of cases) {
+    const assetEnv = { ASSETS: { fetch: async () => new Response(null, { status, headers: { ETag: '"fixture"' } }) } };
+    const response = await worker.fetch(new Request(`https://sttailor.com${asset}`, { method: "HEAD" }), assetEnv);
+    assert.equal(response.status, status, asset);
+    assert.equal(response.headers.get("Cache-Control"), cacheControl, asset);
+    assert.equal(response.headers.get("ETag"), '"fixture"', asset);
   }
 });
 

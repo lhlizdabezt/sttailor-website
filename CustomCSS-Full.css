@@ -12243,7 +12243,9 @@ html body .st-lux-text-link:focus-visible {
   --st-wordmark: "Palatino Linotype", "Book Antiqua", "Iowan Old Style", Georgia, serif;
   --st-heritage: "Cormorant Garamond", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
   --st-editorial-serif: "Cormorant Garamond", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
-  --st-eyebrow-size: clamp(17px, 1.35vw, 20px);
+  --st-eyebrow-size: clamp(18px, 1.45vw, 21px);
+  --st-control-outline: #795035;
+  --st-control-outline-light: #ddb684;
   --st-control-duration: 200ms;
   --st-control-easing: cubic-bezier(.22, .68, .24, 1);
 }
@@ -12293,7 +12295,7 @@ main { display: block; width: 100%; overflow: hidden; }
 }
 .st-site-nav a:is(:hover, :focus-visible, [aria-current="page"], [data-section-current]) > span:first-child::after { transform: scaleX(1); }
 .st-site-nav a[aria-current="page"] { font-weight: 750; }
-.st-site-nav a span[lang="vi"] { font: 500 13px/1.25 var(--st-vietnamese); text-transform: none; letter-spacing: 0; }
+.st-site-nav a span[lang="vi"] { font: 500 14px/1.25 var(--st-vietnamese); text-transform: none; letter-spacing: 0; }
 .st-site-header :is(.st-site-brand, .st-nav-toggle, .st-site-nav a):focus-visible { outline: 2px solid #6c371e; outline-offset: 3px; }
 .st-nav-toggle { display: none; width: 44px; height: 44px; padding: 11px 10px; border: 1px solid #6c371e; border-radius: 0; background: transparent; color: #6c371e; cursor: pointer; }
 .st-nav-toggle i { display: block; width: 22px; height: 1px; margin: 5px auto; background: currentColor; transition: transform .2s ease, opacity .2s ease; }
@@ -12429,7 +12431,7 @@ html body .st-contact-page--v2 .st-contact-card > h3 span[lang="vi"] {
   font-size: 17px !important;
   letter-spacing: .015em !important;
 }
-html body .st-contact-page--v2 .st-contact-card > a {
+html body #main-content .st-contact-page--v2 .st-contact-card > a {
   display: grid !important;
   align-self: stretch !important;
   justify-items: center !important;
@@ -12437,43 +12439,29 @@ html body .st-contact-page--v2 .st-contact-card > a {
   gap: 2px !important;
   min-height: 60px !important;
   padding: 8px 10px !important;
-  border-color: #61311c !important;
+  border: 1px solid var(--st-control-outline-light) !important;
   box-shadow: none !important;
-  font: 700 13px/1.35 var(--st-vietnamese) !important;
+  font: 650 14px/1.4 var(--st-vietnamese) !important;
   text-align: center !important;
 }
 html body .st-contact-page--v2 .st-contact-card > a span[lang="vi"] {
   font-weight: 550 !important;
   white-space: normal !important;
 }
-html body .st-contact-page--v2 .st-contact-card > a:is(:hover, :focus-visible, :active) {
-  box-shadow: inset 0 0 0 1px #e1b887 !important;
+html body #main-content .st-contact-page--v2 .st-contact-card > a:is(:hover, :focus-visible, :active) {
+  border-color: #f3d1a7 !important;
   transform: none !important;
 }
 
-/* Give the bilingual contact heading its own rhythm before the detail list. */
-html body .st-contact-page .st-contact-info > h2 {
-  display: grid !important;
-  gap: 7px !important;
-  margin: 0 0 30px !important;
-  line-height: 1.08 !important;
-}
-html body .st-contact-page .st-contact-info > h2 > br { display: none !important; }
-html body .st-contact-page .st-contact-info > h2 > span[lang="vi"] {
-  display: block !important;
-  margin: 0 !important;
-  font-size: .58em !important;
-  line-height: 1.35 !important;
-}
 html body .st-contact-page--v2 .st-contact-item h2 {
   margin: 0 0 8px !important;
-  font-size: 16px !important;
+  font-size: clamp(17px, 1.35vw, 20px) !important;
   line-height: 1.4 !important;
 }
 html body .st-contact-page--v2 .st-contact-item h2 > [lang="vi"] {
   display: block;
   margin-top: 2px;
-  font-size: clamp(17px, 1.35vw, 20px) !important;
+  font-size: inherit !important;
 }
 /* Contact hero is intentionally concise: the bilingual invitation carries the band without a paragraph wall. */
 html body .st-contact-page--v2 .st-contact-hero-content > p { display: none !important; }
@@ -12602,38 +12590,43 @@ html body .st-cloth-heritage__gallery figcaption > span[lang="vi"] { margin-top:
 html body .st-cloth-heritage__gallery figcaption small { margin-top: 15px !important; color: #e8d7c8 !important; -webkit-text-fill-color: #e8d7c8 !important; font: 400 14px/1.55 var(--st-vietnamese) !important; }
 html body .st-cloth-heritage__gallery figcaption small span[lang="vi"] { display: block !important; margin-top: 6px !important; color: #d1b293 !important; -webkit-text-fill-color: #d1b293 !important; }
 
-/* About: Tripadvisor's official review snippets inside the editorial panel. */
-html body .st-tripadvisor { padding: clamp(48px, 6vw, 88px) 0 !important; background: #f4e5ce !important; color: #2f1e15 !important; border-block: 1px solid #c5a17b !important; }
-html body .st-tripadvisor__inner { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 3vw, 36px); }
+/* The reviews lead. The adjacent visit information answers the next practical question. */
+html body .st-tripadvisor { padding: clamp(40px, 6vw, 84px) 0 !important; background: #f4e5ce !important; color: #2f1e15 !important; border-block: 1px solid #c5a17b !important; }
+html body .st-tripadvisor__inner { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 2.2vw, 28px); }
 html body .st-tripadvisor__copy {
   grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
   align-items: end;
-  gap: clamp(16px, 3vw, 48px);
+  gap: clamp(14px, 4vw, 64px);
+  padding-block-end: clamp(16px, 3vw, 34px);
+  border-block-end: 1px solid #aa805c;
 }
 html body :is(#st-tripadvisor, #st-showroom-map) { scroll-margin-block-start: 128px; }
 html body #st-tripadvisor:focus-visible { outline: 3px solid #764225; outline-offset: -4px; }
 html body #st-tripadvisor-title { scroll-margin-block-start: 164px; }
 html body :is(#gia-so-mi-may-do, #gia-quan-tay-may-do) { scroll-margin-block-start: 128px; }
 html body :is(.stpr-card__copy, .st-showcase--client-care .st-showcase-card__copy p) a { color: inherit !important; text-decoration: underline !important; text-underline-offset: .18em; }
-html body .st-tripadvisor__copy .st-lux-eyebrow { margin: 0 0 14px !important; color: #764225 !important; -webkit-text-fill-color: #764225 !important; font-size: clamp(17px, 1.75vw, 24px) !important; letter-spacing: .11em !important; }
-html body .st-tripadvisor__copy h2 { margin: 0 !important; color: #2f1e15 !important; -webkit-text-fill-color: #2f1e15 !important; font: 500 clamp(36px, 4.2vw, 60px)/1.05 var(--st-wordmark) !important; }
+html body .st-tripadvisor__copy .st-lux-eyebrow { margin: 0 0 14px !important; color: #764225 !important; -webkit-text-fill-color: #764225 !important; font-size: var(--st-eyebrow-size) !important; letter-spacing: .075em !important; }
+html body .st-tripadvisor__copy h2 { margin: 0 !important; color: #2f1e15 !important; -webkit-text-fill-color: #2f1e15 !important; font: 500 clamp(34px, 4.2vw, 60px)/1.08 var(--st-wordmark) !important; text-wrap: balance; }
 html body .st-tripadvisor__copy h2 span[lang="vi"] { display: block !important; margin-top: 12px !important; color: #75472e !important; -webkit-text-fill-color: #75472e !important; font: 500 max(20px, .46em)/1.3 var(--st-vietnamese) !important; }
 html body .st-tripadvisor__copy > p { max-width: 64ch !important; margin: 0 !important; color: #4e3527 !important; -webkit-text-fill-color: #4e3527 !important; font: 400 clamp(16px, 1.4vw, 18px)/1.6 var(--st-vietnamese) !important; }
 html body .st-tripadvisor__copy > p span[lang="vi"] { display: block !important; margin-top: 8px !important; color: #624330 !important; -webkit-text-fill-color: #624330 !important; }
 html body .st-tripadvisor__card {
   display: grid;
   grid-template-rows: 1fr auto;
-  gap: clamp(12px, 2vw, 20px);
-  padding: clamp(16px, 2.5vw, 30px);
-  border: 1px solid #b99672;
+  min-width: 0;
+  gap: clamp(14px, 2.2vw, 26px);
+  padding: clamp(16px, 2.4vw, 30px);
+  border: 1px solid #a98361;
   background: #fff7eb;
 }
-html body .st-tripadvisor__card h3 { margin: 0; color: #352116; font: 500 25px/1.2 var(--st-wordmark); }
+html body .st-tripadvisor__card--reviews { border-block-start: 3px solid #795035; }
+html body .st-tripadvisor__card--visit { background: #faeddc; }
+html body .st-tripadvisor__card h3 { margin: 0; color: #352116; font: 500 clamp(23px, 2.05vw, 30px)/1.2 var(--st-wordmark); }
 html body #main-content .st-tripadvisor__card h3 > span[lang="vi"] { display: block; margin-top: 4px; color: #624330; -webkit-text-fill-color: #624330; font: 500 16px/1.4 var(--st-vietnamese) !important; }
-html body .st-tripadvisor__review { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 248px); align-content: start; align-items: start; gap: clamp(14px, 2vw, 24px); }
-html body .st-tripadvisor__review p { margin: 12px 0 0; color: #4e3527; font: 400 15px/1.55 var(--st-vietnamese); }
+html body .st-tripadvisor__review { display: grid; grid-template-columns: minmax(0, 1fr) 248px; align-content: start; align-items: start; gap: clamp(14px, 2.2vw, 30px); }
+html body .st-tripadvisor__review p { margin: 12px 0 0; color: #4e3527; font: 400 16px/1.55 var(--st-vietnamese); }
 html body .st-tripadvisor__review p [lang="vi"] { display: block; margin-top: 4px; }
 html body .st-tripadvisor__embed {
   display: grid;
@@ -12641,8 +12634,8 @@ html body .st-tripadvisor__embed {
   place-items: stretch center;
   min-width: 0;
   min-height: 200px;
-  background: #f6ead8;
-  box-shadow: inset 0 0 0 1px #96714f;
+  background: #fffdf8;
+  box-shadow: inset 0 0 0 1px var(--st-control-outline);
 }
 html body #main-content .st-tripadvisor__embed-link {
   grid-area: 1 / 1;
@@ -12653,7 +12646,7 @@ html body #main-content .st-tripadvisor__embed-link {
   place-items: center;
   align-content: center;
   gap: 6px;
-  border: 1px solid #96714f;
+  border: 1px solid var(--st-control-outline);
   background: #fff8ed;
   color: #352116 !important;
   -webkit-text-fill-color: #352116 !important;
@@ -12674,17 +12667,17 @@ html body #main-content .st-tripadvisor__embed-link:focus-visible { outline: 3px
 html body .st-tripadvisor__frame {
   grid-area: 1 / 1;
   display: block;
-  max-width: 100%;
+  width: 100%;
   border: 0;
   visibility: hidden;
 }
 html body .st-tripadvisor__embed[data-reviews-ready] .st-tripadvisor__frame { visibility: visible; }
 html body .st-tripadvisor__embed[data-reviews-ready] .st-tripadvisor__embed-link { visibility: hidden; }
 html body .st-tripadvisor__actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 10px; padding-top: 14px; border-top: 1px solid #b99672; }
-html body .st-tripadvisor__link { display: grid !important; box-sizing: border-box; min-height: 70px !important; padding: 10px !important; align-content: center !important; justify-items: center !important; gap: 3px !important; border: 1px solid #513320 !important; background: #352116 !important; color: #fff7e9 !important; -webkit-text-fill-color: #fff7e9 !important; font: 650 15px/1.35 var(--st-vietnamese) !important; text-align: center; text-decoration: none !important; }
+html body .st-tripadvisor__link { display: grid !important; box-sizing: border-box; min-height: 64px !important; padding: 9px !important; align-content: center !important; justify-items: center !important; gap: 3px !important; border: 1px solid var(--st-control-outline-light) !important; background: #352116 !important; color: #fff7e9 !important; -webkit-text-fill-color: #fff7e9 !important; font: 650 15px/1.35 var(--st-vietnamese) !important; text-align: center; text-decoration: none !important; }
 html body .st-tripadvisor__link span[lang="vi"] { color: #edd0aa !important; -webkit-text-fill-color: #edd0aa !important; }
 html body .st-tripadvisor__link:hover { background: #5a3520 !important; }
-html body .st-tripadvisor__link--outline { background: #f8ecdb !important; color: #352116 !important; -webkit-text-fill-color: #352116 !important; }
+html body .st-tripadvisor__link--outline { border-color: var(--st-control-outline) !important; background: transparent !important; color: #352116 !important; -webkit-text-fill-color: #352116 !important; }
 html body .st-tripadvisor__link--outline span[lang="vi"] { color: #624330 !important; -webkit-text-fill-color: #624330 !important; }
 html body .st-tripadvisor__link--outline:hover { background: #f2e2cb !important; }
 html body #main-content .st-tripadvisor__actions .st-tripadvisor__link:focus-visible { outline: 3px solid #764225 !important; outline-offset: 4px !important; }
@@ -13190,15 +13183,16 @@ html body :is(.st-gallery-numpad__heading, .st-service-page .st-bespoke-process_
 html body .st-contact-page .st-contact-info > h1 {
   margin: 0 0 22px !important;
   color: var(--st-ink) !important;
-  font: 500 clamp(34px, 4.2vw, 56px)/1 var(--st-wordmark) !important;
+  font: 500 clamp(34px, 4.2vw, 56px)/1.08 var(--st-wordmark) !important;
+  text-wrap: balance;
 }
-
+html body .st-contact-page .st-contact-info > h1 > br { display: none; }
 html body .st-contact-page .st-contact-info > h1 span[lang="vi"] {
   display: block !important;
   margin-top: 9px !important;
-  color: var(--st-cognac) !important;
-  font-size: .48em !important;
-  line-height: 1.14 !important;
+  color: #70432b !important;
+  font-size: max(18px, .48em) !important;
+  line-height: 1.35 !important;
 }
 
 /* Keep the LCP headline immediately paintable. Motion remains on supporting content. */
@@ -13545,7 +13539,7 @@ html body .st-footer .st-footer-directory h2 {
 .st-footer-directory summary,
 .st-footer-directory__groups a {
   box-sizing: border-box;
-  border: 1px solid #9e7658;
+  border: 1px solid var(--st-control-outline);
   background: #fff9ee;
   color: #452b20;
   text-decoration: none;
@@ -13555,7 +13549,8 @@ html body .st-footer .st-footer-directory h2 {
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  padding: 12px 18px;
+  min-height: 60px;
+  padding: 9px 18px;
   cursor: pointer;
   list-style: none;
   font: 600 16px/1.4 var(--st-vietnamese);
@@ -13574,6 +13569,7 @@ html body .st-footer .st-footer-directory h2 {
 .st-footer-directory :is(summary, a):hover { background: #f3e3cf; }
 .st-footer-directory :is(summary, a):focus-visible { outline: 2px solid #613a24; outline-offset: 3px; }
 .st-footer-directory__groups { display: grid; gap: 8px; }
+.st-footer-directory__groups > details { min-width: 0; }
 .st-footer-directory__groups > details > summary { background: #f8eddd; }
 .st-footer-directory__groups > details[data-current-group] > summary {
   border-inline-start: 3px solid #70432a;
@@ -13618,6 +13614,7 @@ html body .st-footer .st-footer-directory__groups li > a {
   padding: 9px 12px;
   color: #452b20 !important;
   font: 600 14px/1.4 var(--st-vietnamese) !important;
+  overflow-wrap: anywhere;
   text-decoration: none !important;
 }
 .st-footer-directory__groups a[aria-current="page"] { border-color: #60331f; background: #ecd7bd; }
@@ -14040,12 +14037,11 @@ html body .st-gallery-page--albums .st-gallery-film__media figcaption span[lang=
   }
 }
 
-@media (min-width: 761px) and (max-width: 1120px), (max-width: 540px) {
-  html body .st-tripadvisor__review { grid-template-columns: minmax(0, 1fr); }
-  html body .st-tripadvisor__embed { width: min(100%, 300px); }
-}
-@media (max-width: 760px) {
+@media (max-width: 860px) {
   html body :is(.st-tripadvisor__inner, .st-tripadvisor__copy) { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 1180px) {
+  html body .st-tripadvisor__review { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 360px) {
   html body .st-tripadvisor__link { padding-inline: 6px !important; font-size: 14px !important; }
@@ -14111,9 +14107,24 @@ html body .st-contact-page--v2 :is(h2, h3) [lang="vi"] { font-weight: 500 !impor
 html body #main-content .st-lux-about h3,
 html body #main-content .st-lux-about h3 [lang="vi"] { font-weight: 500 !important; }
 html body .st-site-frame :is(a, button, summary):focus-visible { outline: 2px solid currentColor !important; outline-offset: 4px !important; }
+/* A visible perimeter on filled actions, including those rendered by the retained page templates. */
+html body #main-content :is(
+  .st-fitting-film__book, .st-gallery-series__link,
+  .st-payment-methods__action, .st-showcase__action--primary, .st-error-404__button--dark
+) { border: 1px solid var(--st-control-outline-light) !important; }
+html body #main-content :is(.st-action--primary, .st-bespoke-process__actions > a) { border: 1px solid var(--st-control-outline) !important; }
+html body #main-content .st-error-404__paths { gap: 8px !important; border: 0 !important; background: transparent !important; }
+html body #main-content .st-error-404__paths > a { border: 1px solid var(--st-control-outline) !important; }
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__map {
+  border: 1px solid var(--st-control-outline) !important;
+}
 /* These controls keep light text on focus while the ring sits on pale paper. */
-html body #main-content :is(.st-contact-map__actions > a, .st-contact-card > a, .st-payment-methods__action, .st-guide-index__grid > a):focus-visible {
-  outline-color: #6c371e !important;
+html body #main-content :is(
+  .st-contact-map__actions > a, .st-contact-card > a, .st-payment-methods__action,
+  .st-guide-index__grid > a, .st-fitting-film__book, .st-error-404__button, .st-error-404__paths > a
+):focus-visible,
+html body .st-footer-v7.st-footer-v8 .st-footer-v7__map:focus-visible {
+  outline-color: var(--st-control-outline) !important;
 }
 html body #main-content .st-contact-map__actions {
   display: grid;
@@ -14127,6 +14138,7 @@ html body #main-content .st-contact-map__actions > a {
   min-block-size: 64px;
   margin: 0 !important;
   padding: 9px 8px !important;
+  border: 1px solid var(--st-control-outline-light) !important;
   row-gap: 2px;
   text-align: center;
   font: 600 15px/1.35 var(--st-vietnamese) !important;
@@ -14139,7 +14151,7 @@ html body #main-content .st-contact-map__actions > a > [lang="vi"] {
   font-weight: 500;
 }
 html body #main-content .st-contact-map__actions > .st-contact-map__reviews {
-  border-color: #70482e !important;
+  border-color: var(--st-control-outline) !important;
   background: #fff6e9 !important;
   color: #4e3020 !important;
   -webkit-text-fill-color: #4e3020 !important;
@@ -14151,6 +14163,13 @@ html body #main-content .st-contact-map__actions > .st-contact-map__reviews:hove
 html body .st-site-frame :is(main, footer) :is(a, button, summary) { scroll-margin-block: 120px 28px; }
 
 @media (prefers-reduced-motion: no-preference) {
+  .st-footer-directory summary,
+  .st-footer-directory summary::after,
+  .st-footer-directory__groups a {
+    transition: background-color var(--st-control-duration) var(--st-control-easing),
+      border-color var(--st-control-duration) var(--st-control-easing),
+      transform var(--st-control-duration) var(--st-control-easing);
+  }
   html body #st-home-v6.st-home-v6--mission .st-home-v6__hero-jump,
   html body .st-footer-v7.st-footer-v8 .st-footer-v7__cta,
   html body .st-tripadvisor__actions .st-tripadvisor__link {
@@ -14164,7 +14183,9 @@ html body .st-site-frame :is(main, footer) :is(a, button, summary) { scroll-marg
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* Tiny inherited visibility transitions can leave links hidden on the first Tab after opening. */
   .st-site-nav,
+  .st-site-nav a,
   .st-site-nav a > span:first-child::after,
   .st-nav-toggle i,
   .st-home-editorial__photo { transition: none !important; }
@@ -14386,7 +14407,7 @@ html body #main-content a.st-showcase__action > [lang="vi"] {
 }
 html body #main-content .st-showcase__sections > a.st-showcase__action { padding-inline: 5px; font-size: 14px; }
 html body #main-content a.st-showcase__action--primary { display: inline-grid; }
-html body #main-content a.st-showcase__action:is(.st-showcase__action--primary, :hover, :focus-visible) { background: #573423; color: #fff8eb !important; }
+html body #main-content a.st-showcase__action:is(.st-showcase__action--primary, :hover, :focus-visible) { border-color: var(--st-control-outline-light); background: #573423; color: #fff8eb !important; }
 html body #main-content a.st-showcase__action--primary:is(:hover, :focus-visible) { background: #382319; }
 html body #main-content a.st-showcase__action:focus-visible { outline: 2px solid #633a26 !important; outline-offset: 4px; }
 @media (max-width: 1080px) {

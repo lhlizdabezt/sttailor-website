@@ -40,6 +40,17 @@ if (!manifest.revision || !/^(local|[0-9a-f]{40})$/i.test(manifest.revision)) fa
 if (JSON.stringify(manifest.routes) !== JSON.stringify(expectedRoutes)) failures.push("Published route set does not match the approved site map.");
 const tripadvisorEmbed = readFileSync(path.join(dist, tripadvisorEmbedPath.slice(1), "index.html"), "utf8");
 if (!tripadvisorEmbed.includes('name="robots" content="noindex, follow"') || !tripadvisorEmbed.includes('class="st-tripadvisor__fallback"') || !tripadvisorEmbed.includes('<script async src="https://www.jscache.com/wejs?wtype=selfserveprop') || !tripadvisorEmbed.includes("&amp;nreviews=2")) failures.push("The Tripadvisor embed needs its official review snippets, fallback and noindex directive.");
+const fingerprints = new Map();
+for (const asset of ["/scripts/site.js", "/scripts/tripadvisor.js", "/styles/site.css"]) {
+  const contents = readFileSync(path.join(dist, asset.slice(1)));
+  const version = createHash("sha256").update(contents).digest("hex").slice(0, 12);
+  const extension = path.posix.extname(asset);
+  const fingerprinted = `${asset.slice(0, -extension.length)}-${version}${extension}`;
+  const file = path.join(dist, fingerprinted.slice(1));
+  if (!existsSync(file) || !contents.equals(readFileSync(file))) failures.push(`Missing or mismatched fingerprinted asset: ${fingerprinted}`);
+  fingerprints.set(asset, fingerprinted);
+}
+if (!tripadvisorEmbed.includes(`<script defer src="${fingerprints.get("/scripts/tripadvisor.js")}"></script>`)) failures.push("The Tripadvisor embed must load its fingerprinted local script.");
 
 for (const route of expectedRoutes) {
   const page = route === "/" ? path.join(dist, "index.html") : path.join(dist, route.slice(1), "index.html");
@@ -48,6 +59,7 @@ for (const route of expectedRoutes) {
     continue;
   }
   const html = utf8.decode(readFileSync(page));
+  if (!html.includes(`<script type="module" src="${fingerprints.get("/scripts/site.js")}"></script>`)) failures.push(`Page must load the fingerprinted site script: ${route}`);
   for (const [, attributes, body] of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
     if (!body.trim() || /\btype="application\/ld\+json"/i.test(attributes)) continue;
     const hash = createHash("sha256").update(body.replace(/\r\n?/g, "\n")).digest("base64");
@@ -241,6 +253,7 @@ if (pageTitles.size !== expectedRoutes.length) failures.push("Every public route
 if (pageDescriptions.size !== expectedRoutes.length) failures.push("Every public route must have a unique meta description.");
 
 const missingPage = readFileSync(path.join(dist, "404.html"), "utf8");
+if (!missingPage.includes(`<link rel="stylesheet" href="${fingerprints.get("/styles/site.css")}">`)) failures.push("The error page must load its fingerprinted fallback stylesheet.");
 if (!missingPage.includes('<meta name="robots" content="noindex, follow">') || !missingPage.includes('<meta name="googlebot" content="noindex, follow">') || /<link rel="canonical"/.test(missingPage) || missingPage.includes('application/ld+json')) {
   failures.push("The 404 document must be noindex without a homepage canonical or page schema.");
 }

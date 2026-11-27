@@ -247,7 +247,7 @@ export const portfolioStories = [
       ["Read the cloth in more than one light", "Xem vải dưới nhiều nguồn sáng", "Place shortlisted swatches next to one another, then take them closer to daylight. A fabric that reads as solid from across the room may show both warp and weft colours up close. Holding a fold helps you judge body and drape.", "Đặt các mẫu đã chọn cạnh nhau rồi đưa đến gần nguồn sáng tự nhiên. Vải trông như một màu khi nhìn xa có thể hiện rõ màu sợi dọc và sợi ngang ở cự ly gần. Cầm một nếp gấp giúp cảm nhận độ đứng và độ rủ."],
       ["Choose for the garment and occasion", "Chọn vải theo trang phục và dịp mặc", "Discuss when and where you plan to wear the piece. Compare European suitings, including Vitale Barberis Canonico, for a jacket or suit. Review Vietnamese silk for pieces where its sheen and movement suit the design. Ask to see and feel the cloth you intend to order.", "Hãy chia sẻ khi nào và ở đâu bạn sẽ mặc trang phục. Có thể so sánh vải suit châu Âu, trong đó có Vitale Barberis Canonico, cho áo khoác hoặc bộ suit. Tìm hiểu lụa Việt Nam khi độ óng và độ rủ phù hợp với thiết kế. Hãy xem và chạm mẫu vải dự định đặt may."]
     ],
-    related: [clothGuide, "/chon-vai-may-do/vai-len-y/", "/chon-vai-may-do/lua-viet-nam/", consultation]
+    related: ["/du-an/chon-vai-cung-khach/", clothGuide, "/chon-vai-may-do/vai-len-y/", "/chon-vai-may-do/lua-viet-nam/", consultation]
   },
   {
     route: darkSuit, section: "suits-and-jackets",

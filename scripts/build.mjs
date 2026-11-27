@@ -24,7 +24,7 @@ const sourceFonts = path.join(root, "source", "fonts");
 const vietnameseFont = "noto-sans-vi-8b0a1d0.woff2";
 const iconPaths = JSON.parse(readFileSync(path.join(sourceIcons, "manifest.json"), "utf8"));
 const dist = path.join(root, "dist");
-let stylesheetHref = "/styles/site.css";
+const stylesheetHref = "/styles/site.css";
 const buildRevision = /^[0-9a-f]{40}$/i.test(process.env.STTAILOR_BUILD_REVISION || "")
   ? process.env.STTAILOR_BUILD_REVISION
   : "local";
@@ -56,6 +56,13 @@ const editorialGuideHeroSizes = "(max-width: 560px) calc(100vw - 28px), (max-wid
 function imageSourceSet(candidates) {
   return candidates.map(({ src, width }) => `${src} ${width}w`).join(", ");
 }
+
+function fingerprintedAsset(href, contents) {
+  const version = createHash("sha256").update(contents).digest("hex").slice(0, 12);
+  const extension = path.posix.extname(href);
+  return `${href.slice(0, -extension.length)}-${version}${extension}`;
+}
+
 const googleTagManagerHead = `<!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var started=false;function load(){if(started)return;started=true;var f=d.getElementsByTagName(s)[0],
@@ -583,10 +590,10 @@ const galleryAltText = {
   "st-tailor-archive-jacket-lining-two.jpg": "Grey jacket lining and inner label detail | Chi tiết lớp lót và nhãn bên trong áo khoác xám",
   "st-tailor-gallery-canonico-cloth-books.jpg": "Vitale Barberis Canonico cloth books at S.T Tailor | Sách vải Vitale Barberis Canonico tại S.T Tailor",
   "st-tailor-fabric-books.jpeg": "Stacked suiting fabric books from Italian mills | Chồng sổ vải suit từ các nhà dệt Ý",
-  "st-tailor-client-fitted-suit.jpg": "Client wearing a fitted black suit with yellow shirt | Khách hàng mặc suit đen vừa vặn cùng sơ mi vàng",
-  "st-tailor-client-fitting-suit-back.jpg": "Back view during a black suit fitting | Góc phía sau trong buổi thử suit đen",
+  "st-tailor-client-fitted-suit.jpg": "Client extending his arms in a black suit and gold shirt during a fitting | Khách mặc suit đen và sơ mi vàng, dang hai tay trong buổi thử",
+  "st-tailor-client-fitting-suit-back.jpg": "Rear view of a black suit as the client stands near the showroom mirror | Mặt sau bộ suit đen khi khách đứng bên gương tại nhà may",
   "st-tailor-client-measurement-session.jpg": "Tailor measuring a client during a fitting session | Thợ may lấy số đo khách hàng trong buổi thử đồ",
-  "st-tailor-client-navy-suit-fitting.jpg": "Client receiving a navy suit fitting adjustment | Khách hàng được chỉnh phom suit xanh navy",
+  "st-tailor-client-navy-suit-fitting.jpg": "Tailor checking the sleeve of a black suit jacket worn over a gold shirt | Thợ may kiểm tra tay áo suit đen mặc ngoài sơ mi vàng",
   "st-tailor-client-shirt-trouser-fitting.jpg": "Client trying a white shirt and black trousers | Khách hàng thử sơ mi trắng và quần đen",
   "st-tailor-client-shoulder-fitting.jpg": "Tailor adjusting a client's shirt shoulder | Thợ may chỉnh vai áo sơ mi cho khách hàng",
   "st-tailor-owner-client-white-suit.jpg": "S.T Tailor with a client in a white suit | S.T Tailor cùng khách hàng mặc suit trắng",
@@ -704,10 +711,11 @@ const galleryChapters = [
 const galleryPortfolioLinks = {
   tuxedo: ["/san-pham/so-mi-le-phuc-xep-ly/", "/san-pham/ao-le-phuc-do-ruou-co-dung/"],
   suits: ["/san-pham/suit-xam-nhat-hai-hang-khuy/", "/san-pham/ao-khoac-xanh-da-troi/", "/san-pham/suit-den-ve-chu-k/", "/du-an/suit-le-phuc-navy/"],
-  womenswear: ["/du-an/thu-quan-ong-rong-nu/", "/san-pham/ao-co-cao-trang-hoa-thuc-vat/"],
+  womenswear: ["/du-an/thu-quan-ong-rong-nu/", "/san-pham/ao-nu-mau-nga-ru-cheo/", "/san-pham/ao-co-cao-trang-hoa-thuc-vat/"],
   "shirts-trousers": ["/san-pham/quan-tay-xanh-xam-xep-ly/", "/du-an/ben-trong-cap-quan-tay/"],
   "jacket-craft": ["/du-an/duong-luoc-tren-ao-khoac/", "/san-pham/so-mi-soc-nho-co-trang/"],
-  fitting: ["/du-an/kiem-tra-phom-ao-khoac-khi-ngoi/"],
+  cloth: ["/du-an/chon-vai-cung-khach/"],
+  fitting: ["/du-an/thu-suit-den-tai-showroom/", "/du-an/kiem-tra-phom-ao-khoac-khi-ngoi/"],
   appointments: ["/du-an/trang-phuc-san-khau/", "/du-an/ban-giao-trang-phuc-tai-showroom/", "/du-an/thu-so-mi-trang-va-quan-toi-mau/"]
 };
 
@@ -888,7 +896,7 @@ function transformAbout(html) {
       </div>
       <p>Read about other clients’ visits before your first fitting. If you’ve visited us, you can share your own experience on Tripadvisor.<span lang="vi">Trước buổi thử đồ đầu tiên, bạn có thể tham khảo trải nghiệm của những khách đã ghé nhà may. Nếu đã đến S.T Tailor, bạn cũng có thể chia sẻ trải nghiệm của mình trên Tripadvisor.</span></p>
     </header>
-    <article class="st-tripadvisor__card" aria-labelledby="st-tripadvisor-listing-title">
+    <article class="st-tripadvisor__card st-tripadvisor__card--reviews" aria-labelledby="st-tripadvisor-listing-title">
       <div class="st-tripadvisor__review">
         <div>
           <h3 id="st-tripadvisor-listing-title">S.T Tailor on Tripadvisor<span lang="vi">S.T Tailor trên Tripadvisor</span></h3>
@@ -907,7 +915,7 @@ function transformAbout(html) {
         <a class="st-tripadvisor__link st-tripadvisor__link--outline" href="https://www.tripadvisor.com/UserReviewEdit-g293925-d34701232-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note"><span>Write a review</span><span lang="vi">Viết đánh giá</span></a>
       </div>
     </article>
-    <article class="st-tripadvisor__card" aria-labelledby="st-tripadvisor-visit-title">
+    <article class="st-tripadvisor__card st-tripadvisor__card--visit" aria-labelledby="st-tripadvisor-visit-title">
       <div class="st-tripadvisor__visit">
         <h3 id="st-tripadvisor-visit-title">Visit S.T Tailor<span lang="vi">Ghé S.T Tailor</span></h3>
         <address>1st Floor, 258 Le Thanh Ton, Tan Dinh Ward<br>Ho Chi Minh City, Vietnam<span lang="vi">Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định<br>Thành phố Hồ Chí Minh, Việt Nam</span></address>
@@ -1062,9 +1070,9 @@ function lastModifiedFor(sourceFile) {
   return /^\d{4}-\d{2}-\d{2}$/.test(date) ? (date > sharedContentModified ? date : sharedContentModified) : buildDate;
 }
 
-function header(activePath) {
+function header(activePath, trail) {
   const nav = primaryNavigation.map(([href, label, vietnamese]) => {
-    const state = activePath === href ? ' aria-current="page"' : activePath.startsWith(href) ? " data-section-current" : "";
+    const state = activePath === href ? ' aria-current="page"' : trail.some((page) => page.href === href) ? " data-section-current" : "";
     return `<a href="${href}"${state}><span>${label}</span><span lang="vi">${vietnamese}</span></a>`;
   }).join("");
   return `<a class="st-skip-link" href="#main-content">Skip to content <span lang="vi">/ Chuyển đến nội dung</span></a>
@@ -1284,7 +1292,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
   const openGraphVideo = isWatchPage
     ? `<meta property="og:video" content="https://sttailor.com${galleryFilm.src}"><meta property="og:video:type" content="video/mp4">`
     : "";
-  const siteHeader = enrichImageAttributes(header(route), { responsiveSizes: "102px" });
+  const siteHeader = enrichImageAttributes(header(route, trail), { responsiveSizes: "102px" });
   const siteFooter = enrichImageAttributes(footer(sourceFile === "Error.html" ? null : route), { responsiveSizes: "160px" });
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">${heroPreload}<link rel="stylesheet" href="${stylesheetHref}">${fontPreload}${googleTagManagerHead}${analyticsTags}<meta name="description" content="${safeDescription}"><meta name="author" content="S.T Tailor"><meta name="application-name" content="S.T Tailor"><meta name="sttailor-build-revision" content="${buildRevision}"><meta name="color-scheme" content="light"><meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="google-site-verification" content="e1RyHPdDirO6wJIxuZKKSIY6EXYb37XMfktIVl3aJz8"><meta name="p:domain_verify" content="78c108c3384a3aa9201fb90b99f0b225"><link rel="canonical" href="${canonical}"><link rel="describedby" href="/llms.txt" type="text/plain"><link rel="icon" href="/icons/sttailor-favicon-48.png" type="image/png" sizes="48x48"><link rel="apple-touch-icon" href="/icons/sttailor-apple-touch-180.png" sizes="180x180"><link rel="manifest" href="/site.webmanifest"><meta property="og:title" content="${safeTitle}"><meta property="og:description" content="${safeDescription}"><meta property="og:type" content="${isWatchPage ? "video.other" : "website"}">${openGraphVideo}<meta property="og:url" content="${canonical}"><meta property="og:site_name" content="S.T Tailor"><meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:image" content="${shareImageUrl}"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:alt" content="${safeImageAlt}">${shareDimensions}<meta name="theme-color" content="#ead1ad"><title>${safeTitle}</title></head><body>${googleTagManagerNoScript}${metaPixelNoScript}<div class="st-site-frame">${siteHeader}<main id="main-content" tabindex="-1">${breadcrumbNavigation(trail)}${body}</main>${siteFooter}</div><script type="module" src="${scriptHref}"></script>${jsonLd}</body></html>`;
 }
@@ -1389,11 +1397,10 @@ let productionCss = minifyCss({
   minify: true,
   unusedSymbols: ["st-home-v4", "st-home-v5", "st-refund-v1", "st-privacy-v5"]
 }).code.toString();
-stylesheetHref = `/styles/site.css?v=${createHash("sha256").update(productionCss).digest("hex").slice(0, 12)}`;
-writeFileSync(path.join(dist, "styles", "site.css"), productionCss, "utf8");
 writeFileSync(path.join(root, "CustomCSS-Full.css"), fullCustomCss, "utf8");
 const siteScript = readFileSync(path.join(root, "src", "scripts", "site.js"), "utf8");
-scriptHref = `/scripts/site.js?v=${createHash("sha256").update(siteScript).digest("hex").slice(0, 12)}`;
+scriptHref = fingerprintedAsset("/scripts/site.js", siteScript);
+writeFileSync(path.join(dist, scriptHref.slice(1)), siteScript, "utf8");
 writeFileSync(path.join(dist, "scripts", "site.js"), siteScript, "utf8");
 
 const routeLastModified = new Map();
@@ -1433,18 +1440,12 @@ const leanCss = minifyCss({
   minify: true,
   unusedSymbols: ["st-home-v4", "st-home-v5", "st-refund-v1", "st-privacy-v5", ...unusedProjectSymbols, ...retiredThemeSymbols]
 }).code.toString();
-if (leanCss.length < productionCss.length) {
-  const previousStylesheetHref = stylesheetHref;
-  productionCss = leanCss;
-  stylesheetHref = `/styles/site.css?v=${createHash("sha256").update(productionCss).digest("hex").slice(0, 12)}`;
-  writeFileSync(path.join(dist, "styles", "site.css"), productionCss, "utf8");
-  for (const [route] of routes) {
-    const pagePath = route === "/" ? path.join(dist, "index.html") : path.join(dist, route.slice(1), "index.html");
-    const pageHtml = readFileSync(pagePath, "utf8");
-    writeFileSync(pagePath, pageHtml.replace(previousStylesheetHref, stylesheetHref), "utf8");
-  }
-}
+if (leanCss.length < productionCss.length) productionCss = leanCss;
+const fallbackStylesheetHref = fingerprintedAsset(stylesheetHref, productionCss);
+writeFileSync(path.join(dist, fallbackStylesheetHref.slice(1)), productionCss, "utf8");
+writeFileSync(path.join(dist, stylesheetHref.slice(1)), productionCss, "utf8");
 const notFoundDocument = documentFor("/", "Error.html", "Page not found | S.T Tailor", "The requested S.T Tailor page was not found.", "/media/2026/06/store-sttailor-1.webp", "S.T Tailor showroom in Ho Chi Minh City", lastModifiedFor("Error.html"))
+  .replace(stylesheetHref, fallbackStylesheetHref)
   .replace(/<meta name="robots" content="[^"]+">/, '<meta name="robots" content="noindex, follow">')
   .replace(/<meta name="googlebot" content="[^"]+">/, '<meta name="googlebot" content="noindex, follow">')
   .replace(/<link rel="canonical" href="[^"]+">/, "")
@@ -1479,8 +1480,7 @@ for (const [route, sourceFile] of routes) {
     minify: true,
     unusedSymbols: [...legacyPageSymbols, ...routeProjectSymbols.filter((symbol) => !pageSymbols.includes(symbol)), ...retiredThemeSymbols]
   }).code;
-  const cssHash = createHash("sha256").update(pageCss).digest("hex").slice(0, 12);
-  const href = `/styles/page-${cssHash}.css`;
+  const href = fingerprintedAsset("/styles/page.css", pageCss);
   writeFileSync(path.join(dist, href.slice(1)), pageCss);
   writeFileSync(pagePath, pageHtml.replace(stylesheetHref, href), "utf8");
   routeStyles[route] = { href, bytes: pageCss.length };
@@ -1488,12 +1488,13 @@ for (const [route, sourceFile] of routes) {
 writeFileSync(path.join(dist, "404.html"), notFoundDocument, "utf8");
 writeFileSync(path.join(dist, "not-found.html"), notFoundDocument, "utf8");
 const tripadvisorScript = readFileSync(path.join(root, "src", "scripts", "tripadvisor.js"), "utf8");
-const tripadvisorScriptVersion = createHash("sha256").update(tripadvisorScript).digest("hex").slice(0, 12);
+const tripadvisorScriptHref = fingerprintedAsset("/scripts/tripadvisor.js", tripadvisorScript);
 const tripadvisorEmbedDirectory = path.join(dist, tripadvisorEmbedPath.slice(1));
 mkdirSync(tripadvisorEmbedDirectory, { recursive: true });
+writeFileSync(path.join(dist, tripadvisorScriptHref.slice(1)), tripadvisorScript, "utf8");
 writeFileSync(path.join(dist, "scripts", "tripadvisor.js"), tripadvisorScript, "utf8");
 writeFileSync(path.join(tripadvisorEmbedDirectory, "index.html"), readFileSync(path.join(root, "source", "tripadvisor-widget.html"), "utf8")
-  .replace("/scripts/tripadvisor.js", `/scripts/tripadvisor.js?v=${tripadvisorScriptVersion}`), "utf8");
+  .replace("/scripts/tripadvisor.js", tripadvisorScriptHref), "utf8");
 writeFileSync(path.join(dist, "robots.txt"), "User-agent: *\nAllow: /\nSitemap: https://sttailor.com/sitemap.xml\n", "utf8");
 writeFileSync(path.join(dist, indexNowKeyFile), `${indexNowKey}\n`, "utf8");
 function xmlEscape(value) {
