@@ -175,7 +175,10 @@ for (const route of expectedRoutes) {
   if ((html.match(/<footer class="st-footer st-footer-v7 st-footer-v8"/g) ?? []).length !== 1) failures.push(`Footer is not singular: ${route}`);
   const footer = html.match(/<footer\b[\s\S]*?<\/footer>/i)?.[0] ?? "";
   const followLinks = [...(footer.match(/<nav class="st-footer-v7__social"[\s\S]*?<\/nav>/)?.[0] ?? "").matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
-  if (followLinks.length !== 10 || new Set(followLinks).size !== 10 || businessSchema?.sameAs?.length !== 10) failures.push(`Ten unique social profiles are required in FOLLOW and structured data: ${route}`);
+  if (followLinks.length !== 10 || new Set(followLinks).size !== 10 ||
+      JSON.stringify(followLinks.toSorted()) !== JSON.stringify(businessSchema?.sameAs?.toSorted())) {
+    failures.push(`FOLLOW and structured data must contain the same ten official social profiles: ${route}`);
+  }
   const primaryNav = html.match(/<nav id="primary-navigation"[\s\S]*?<\/nav>/)?.[0] ?? "";
   const primaryLinks = [...primaryNav.matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
   if (JSON.stringify(primaryLinks) !== JSON.stringify(["/gioi-thieu/", "/dich-vu/", "/gallery/", "/bang-gia/", "/lien-he/"])) failures.push(`Header must keep its five main destinations: ${route}`);
@@ -501,9 +504,9 @@ if (!gallery.includes(`href="${entranceRoute}"`) || !about.includes(`href="${ent
     !contact.includes('id="loi-vao-nha-may"') || !contact.includes('href="/gallery/#loi-vao-nha-may"')) {
   failures.push("Showroom entrance photographs must be reachable from Contact, the Gallery and the Tripadvisor panel.");
 }
-for (const { route, collections } of showcasePages.filter((page) => page.collections)) {
+for (const { route, collections, photoCollection } of showcasePages.filter((page) => page.collections || page.photoCollection)) {
   const story = readFileSync(path.join(dist, route.slice(1), "index.html"), "utf8");
-  for (const { id } of collections) {
+  for (const { id } of collections ?? [photoCollection]) {
     if (!story.includes(`href="/gallery/#${id}"`) || !gallery.includes(`id="${id}"`)) failures.push(`${route} must link to its Gallery series #${id}.`);
   }
 }

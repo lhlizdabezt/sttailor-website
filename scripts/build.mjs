@@ -37,6 +37,7 @@ const homeHeroSizes = "(max-width: 760px) 1400px, 1717px";
 const homeHeroPortraitMedia = "(max-width: 600px) and (orientation: portrait)";
 const homeEditorialSizes = "(max-width: 440px) calc(100vw - 34px), (max-width: 760px) calc(50vw - 24px), (max-width: 1120px) calc(33vw - 30px), min(calc(20vw - 30px), 240px)";
 const galleryHeroSizes = "(max-width: 899px) min(calc(100vw - 32px), 760px), min(calc(50vw - 24px), 590px)";
+const galleryPhotoSizes = "(max-width: 599px) calc(100vw - 34px), (max-width: 899px) min(calc(50vw - 24px), 371px), min(calc(33.33vw - 26px), 382px)";
 const showcaseHeroSizes = "(max-width: 760px) min(calc(100vw - 34px), 520px), min(calc(45vw - 36px), 490px)";
 const showcaseCardSizes = "(max-width: 600px) calc(100vw - 34px), (max-width: 1080px) calc(50vw - 30px), min(calc(33.33vw - 32px), 371px)";
 const suitFitGuide = tailoringPages.find(({ source }) => source === "GuideSuitFit.html");
@@ -268,6 +269,12 @@ function transformShowcase(page, html) {
     return html.replace("<!-- SHOWCASE_INDEX -->", `<div class="st-showcase__shell">${index}</div>`);
   }
   if (page.collections) html = html.replace("<!-- SHOWCASE_STORY -->", photoStoryBody(page));
+  if (page.photoCollection) {
+    html = html.replace("<!-- SHOWCASE_COLLECTION -->", photoCollectionSection(page.photoCollection, {
+      heroImage: image,
+      heading: ["On stage and in portraits", "Ảnh sân khấu và chân dung"]
+    }));
+  }
   return html.replace("<!-- SHOWCASE_HERO -->", `<header class="st-showcase__hero">
     <div class="st-showcase__shell st-showcase__hero-grid">
       <div class="st-showcase__lead">
@@ -608,8 +615,6 @@ const galleryAltText = {
   "st-tailor-archive-founder-seven.jpeg": "Man in a taupe suit looking ahead while holding cloth swatches and a measuring tape | Người mặc suit nâu xám nhìn về phía trước, tay cầm mẫu vải và thước dây",
   "st-tailor-archive-atelier-four.jpg": "Red patterned jacket lining and S.T Tailor label | Lớp lót áo khoác đỏ hoa văn và nhãn S.T Tailor",
   "st-tailor-gallery-partner-certificate.jpg": "Official partner certificate displayed at S.T Tailor | Chứng nhận đối tác chính thức trưng bày tại S.T Tailor",
-  "st-tailor-gallery-singer-feedback-one.jpg": "Client feedback portrait at S.T Tailor | Chân dung khách hàng phản hồi tại S.T Tailor",
-  "st-tailor-gallery-singer-feedback-two.jpg": "Client feedback moment at S.T Tailor | Khoảnh khắc phản hồi của khách hàng tại S.T Tailor",
   "st-tailor-gallery-international-client-one.jpg": "International client appointment at S.T Tailor | Buổi hẹn cùng khách hàng quốc tế tại S.T Tailor",
   "st-tailor-gallery-international-client-two.jpg": "International client receiving a garment at S.T Tailor | Khách hàng quốc tế nhận trang phục tại S.T Tailor",
   "mr-Thinh.webp": "Client portrait in a black tailored suit | Chân dung khách hàng trong suit đen may đo",
@@ -654,7 +659,7 @@ function appendGalleryCollections(html) {
     const section = findElementById(html, "section", `album-${album}`);
     const grid = section && findElementByClass(html.slice(section.start, section.end), "div", "st-album-grid");
     if (!grid) throw new Error(`Gallery chapter is missing: ${album}`);
-    const content = series.map(({ id, route, labels, summary, photos }) => `<section class="st-gallery-series" id="${id}" aria-labelledby="${id}-title" tabindex="-1">
+    const content = series.map(({ id, route, labels, summary, photos, includeReferencedPhotos }) => `<section class="st-gallery-series" id="${id}" aria-labelledby="${id}-title" tabindex="-1">
       <header class="st-gallery-series__head">
         <div>
           <h3 id="${id}-title">${labels[0]}<span lang="vi">${labels[1]}</span></h3>
@@ -664,7 +669,7 @@ function appendGalleryCollections(html) {
           ? `<a class="st-gallery-series__link" href="${route}#${id}">Find the showroom<span lang="vi">Xem lối vào nhà may</span></a>`
           : `<a class="st-gallery-series__link" href="${route}">View story<span lang="vi">Xem bài và ảnh</span></a>`}
       </header>
-      <div class="st-gallery-series__grid">${photos.filter(([file]) => !file.startsWith("/")).map(editorialPhoto).join("\n")}</div>
+      <div class="st-gallery-series__grid">${photos.filter(([file]) => includeReferencedPhotos || !file.startsWith("/")).map(editorialPhoto).join("\n")}</div>
     </section>`).join("\n");
     const at = section.start + grid.start;
     html = `${html.slice(0, at)}${content}${html.slice(at)}`;
@@ -874,13 +879,14 @@ function transformAbout(html) {
         <p class="st-lux-eyebrow">TRIPADVISOR</p>
         <h2 id="st-tripadvisor-title">Reviews from our clients<span lang="vi">Đánh giá của khách hàng</span></h2>
       </div>
-      <p>Read how clients chose their cloth, what changed at their fittings and how the finished garments felt. After your visit, you can share your experience on Tripadvisor.<span lang="vi">Đọc chia sẻ của khách hàng về cách chọn vải, những điều chỉnh khi thử đồ và cảm nhận khi mặc trang phục hoàn thiện. Sau khi ghé nhà may, bạn cũng có thể chia sẻ trải nghiệm trên Tripadvisor.</span></p>
+      <p>Browse client reviews and visitor photographs before your first fitting. If you have visited the showroom, you can leave a review about your experience.<span lang="vi">Xem đánh giá và ảnh khách đã đăng trước buổi thử đồ đầu tiên. Nếu đã ghé showroom, bạn có thể viết đánh giá về trải nghiệm của mình.</span></p>
     </header>
     <div class="st-tripadvisor__card">
       <div class="st-tripadvisor__review">
         <div>
           <h3>S.T Tailor on Tripadvisor<span lang="vi">S.T Tailor trên Tripadvisor</span></h3>
-          <p id="st-tripadvisor-link-note">Read reviews and see visitor photos on Tripadvisor. Links open in a new tab.<span lang="vi">Xem đánh giá và ảnh do khách đăng trên Tripadvisor. Liên kết mở trong thẻ mới.</span></p>
+          <p>Open the listing to see the latest reviews and visitor photos.<span lang="vi">Mở trang Tripadvisor để xem đánh giá và ảnh mới nhất do khách đăng.</span></p>
+          <p id="st-tripadvisor-link-note" class="st-tripadvisor__window">Tripadvisor links open in a new tab.<span lang="vi">Liên kết Tripadvisor mở trong thẻ mới.</span></p>
         </div>
         <iframe class="st-tripadvisor__rating" src="${tripadvisorEmbedPath}" title="Tripadvisor badge for S.T Tailor / Huy hiệu Tripadvisor của S.T Tailor" loading="lazy" width="220" height="128" referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
       </div>
@@ -1018,12 +1024,12 @@ const sharedContentModified = "2026-11-26";
 // Advance the relevant date when transformed copy changes, not for build fixes.
 const derivedContentModified = {
   "Home.html": "2026-11-22",
-  "About.html": "2026-11-26",
+  "About.html": "2026-11-27",
   "Gallery.html": "2026-11-26", "Payment.html": "2026-11-26",
   "Returns.html": "2026-11-26", "Shipping.html": "2026-10-18",
   "Terms.html": "2026-10-18", "Privacy.html": "2026-10-18"
 };
-const photoStorySources = ["src/photo-stories.js", "src/portfolio-stories.js", "src/garment-collections.js"];
+const photoStorySources = ["src/photo-stories.js", "src/portfolio-stories.js", "src/garment-collections.js", "src/commission-stories.js"];
 
 function lastModifiedFor(sourceFile) {
   // Derived copy and Gallery additions can change without touching the baseline.
@@ -1087,7 +1093,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
   const showcaseHub = showcaseHubs.find(({ route: href }) => href === route);
   const hasEditorialGuideHero = editorialGuideHeroes.some((page) => page.route === route);
   const responsiveSizes = {
-    "/gallery/": "(max-width: 760px) 100vw, (max-width: 1080px) 50vw, 33vw",
+    "/gallery/": galleryPhotoSizes,
     "/": homeEditorialSizes,
     // The square guide photo covers a 560px-tall frame on desktop.
     "/cam-nang-may-do/": "(max-width: 560px) calc(100vw - 28px), (max-width: 860px) calc(100vw - 48px), 560px",
@@ -1126,7 +1132,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     paymentAccepted: "Cash (VND only), Bank Transfer, QR, Credit Card, Debit Card, Prepaid Card, Visa, Mastercard, Maestro, American Express, JCB, UnionPay, Discover, Diners Club, RuPay, NAPAS, Apple Pay, Google Pay, Samsung Pay (NFC)",
     hasMap: "https://maps.app.goo.gl/j8N26uiQUC4J95vT6",
     knowsAbout: ["Bespoke tailoring", "Clothing alterations", "European suiting cloth", "Vietnamese silk", "Fittings and pattern cutting"],
-    sameAs: ["https://facebook.com/sttailor.hcm/", "https://www.instagram.com/sttailorhcm/", "https://www.threads.com/@sttailorhcm", "https://wa.me/84909556258", "https://zalo.me/0909556258", "https://www.linkedin.com/company/sttailorhcm/", "https://youtube.com/@S.Ttailor", "https://www.tiktok.com/@sttailorhcm", "https://pinterest.com/sttailorhcm/", "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html"]
+    sameAs: ["https://www.facebook.com/sttailor.hcm/", "https://www.instagram.com/sttailorhcm/", "https://www.threads.com/@sttailorhcm", "https://wa.me/84909556258", "https://zalo.me/0909556258", "https://www.linkedin.com/company/sttailorhcm/", "https://www.youtube.com/@S.Ttailor", "https://www.tiktok.com/@sttailorhcm", "https://www.pinterest.com/sttailorhcm/", "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html"]
   };
   business.hasOfferCatalog = {
     "@type": "OfferCatalog",
@@ -1208,7 +1214,10 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
       : { "@type": "Thing", name: showcasePage.labels[0], alternateName: showcasePage.labels[1] };
     graph.push({
       "@type": "Article", "@id": articleId, headline: showcasePage.labels[0], description,
-      image: `https://sttailor.com${shareImage}`, about, dateModified: lastModified, inLanguage: ["en", "vi"],
+      image: showcasePage.photoCollection
+        ? showcasePage.photoCollection.photos.map(([file]) => `https://sttailor.com${photoSource(file)}`)
+        : `https://sttailor.com${shareImage}`,
+      about, dateModified: lastModified, inLanguage: ["en", "vi"],
       author: { "@id": business["@id"] }, publisher: { "@id": business["@id"] }, mainEntityOfPage: { "@id": webPage["@id"] }
     });
     webPage.mainEntity = { "@id": articleId };

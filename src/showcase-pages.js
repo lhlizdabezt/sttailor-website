@@ -1,4 +1,5 @@
-import { photoStoryPages } from "./photo-stories.js";
+import { photoSource, photoStoryPages } from "./photo-stories.js";
+import { ninaCampos } from "./commission-stories.js";
 
 export const showcaseHubs = [
   {
@@ -172,10 +173,11 @@ export const showcaseEntries = [
     labels: ["Niña Campos collaboration", "Hợp tác cùng Niña Campos"],
     heading: "Niña Campos",
     title: "Niña Campos Collaboration | S.T Tailor",
-    description: "Discover S.T Tailor’s tailoring collaboration with singer Niña Campos through a photograph from the house archive and notes on the finished look.",
-    summary: ["A photograph from our collaboration with singer Niña Campos, with notes on the proportions and styling of the light suit.", "Ảnh lưu niệm từ lần hợp tác cùng ca sĩ Niña Campos, kèm ghi chép về tỷ lệ và cách phối bộ suit sáng màu."],
-    image: "/media/2026/09/st-tailor-gallery-singer-feedback-one.jpg",
-    imageAlt: "A light tailored jacket and matching trousers with a dark top in the Niña Campos collaboration archive | Suit sáng màu phối áo tối trong tư liệu hợp tác cùng Niña Campos"
+    description: "See singer Niña Campos in a light two-piece suit by S.T Tailor, with six photographs from the collaboration and notes on dressing for the stage.",
+    summary: ninaCampos.summary,
+    image: photoSource(ninaCampos.photos[0][0]),
+    imageAlt: ninaCampos.photos[0].slice(1).join(" | "),
+    photoCollection: ninaCampos
   },
   {
     route: "/du-an/ao-ghi-le-do/",

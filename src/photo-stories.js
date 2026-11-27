@@ -1,5 +1,6 @@
 import { portfolioCollections, portfolioStories } from "./portfolio-stories.js";
 import { garmentCollections, garmentStories } from "./garment-collections.js";
+import { commissionCollections, commissionStories } from "./commission-stories.js";
 
 const blazer = "/san-pham/blazer-xanh-hai-hang-khuy/";
 const navyBlazer = "/du-an/phoi-blazer-xanh-navy/";
@@ -173,7 +174,8 @@ export const photoCollections = [
     ]
   },
   ...portfolioCollections,
-  ...garmentCollections
+  ...garmentCollections,
+  ...commissionCollections
 ];
 
 const stories = [
@@ -301,7 +303,8 @@ const stories = [
     related: ["/cam-nang-may-do/chon-lot-ao-khoac/", "/du-an/buoi-thu-suit-lot-vang/"]
   },
   ...portfolioStories,
-  ...garmentStories
+  ...garmentStories,
+  ...commissionStories
 ];
 
 export function photoSource(file) {

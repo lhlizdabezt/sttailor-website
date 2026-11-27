@@ -4673,7 +4673,7 @@ html body .st-gallery-showroom-grid img { min-height: 268px !important; transiti
 html body .st-gallery-showroom-grid figure:first-child img { min-height: 430px !important; }
 html body .st-gallery-showroom-grid figure:hover img { transform: scale(1.048) !important; }
 html body .st-gallery-actions { display: flex !important; flex-wrap: wrap !important; align-items: center !important; gap: 17px 25px !important; margin-top: 43px !important; }
-html body .st-gallery-page .st-motion { animation: st-gallery-rise .72s both !important; }
+html body .st-gallery-page :is(.st-gallery-hero, .st-gallery-numpad) .st-motion { animation: st-gallery-rise .72s both !important; }
 html body .st-gallery-page .st-motion-2 { animation-delay: .12s !important; }
 @keyframes st-gallery-rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 960px) {
@@ -5039,17 +5039,21 @@ html body .st-gallery-page--albums .st-gallery-album--dark .st-gallery-album__he
 html body .st-gallery-page--albums .st-gallery-album--warm .st-gallery-kicker,
 html body .st-gallery-page--albums .st-gallery-album--archive .st-gallery-kicker { color:#723d24 !important; -webkit-text-fill-color:#723d24 !important; }
 
-html body .st-gallery-page--albums .st-album-grid { display:grid !important; grid-template-columns:repeat(4,minmax(0,1fr)) !important; grid-auto-flow:dense !important; gap:14px !important; }
-html body .st-gallery-page--albums .st-album-grid__item { position:relative !important; min-height:260px !important; margin:0 !important; overflow:hidden !important; background:#5d301d !important; box-shadow:0 17px 33px rgba(52,28,17,.16) !important; }
-html body .st-gallery-page--albums .st-album-grid__item:nth-child(1) { grid-column:span 2 !important; grid-row:span 2 !important; min-height:534px !important; }
-html body .st-gallery-page--albums .st-album-grid__item:nth-child(7n) { grid-column:span 2 !important; }
-html body .st-gallery-page--albums .st-album-grid__item img { display:block !important; width:100% !important; height:100% !important; min-height:260px !important; object-fit:cover !important; transform:scale(1.001) !important; transition:transform .72s cubic-bezier(.2,.72,.2,1),filter .5s ease !important; }
-html body .st-gallery-page--albums .st-album-grid__item:nth-child(1) img { min-height:534px !important; }
-html body .st-gallery-page--albums .st-album-grid__item::after { content:"" !important; position:absolute !important; inset:0 !important; background:linear-gradient(180deg,transparent 50%,rgba(34,17,10,.78) 100%) !important; opacity:.72 !important; transition:opacity .35s ease !important; pointer-events:none !important; }
-html body .st-gallery-page--albums .st-album-grid__item figcaption { position:absolute !important; z-index:1 !important; right:0 !important; bottom:0 !important; left:0 !important; padding:18px !important; color:#fff9ef !important; -webkit-text-fill-color:#fff9ef !important; font-size:11px !important; font-weight:800 !important; letter-spacing:.06em !important; line-height:1.35 !important; opacity:0 !important; transform:translateY(9px) !important; transition:opacity .3s ease,transform .3s ease !important; }
-html body .st-gallery-page--albums .st-album-grid__item:hover img { transform:scale(1.055) !important; filter:saturate(1.05) contrast(1.025) !important; }
-html body .st-gallery-page--albums .st-album-grid__item:hover::after { opacity:1 !important; }
-html body .st-gallery-page--albums .st-album-grid__item:hover figcaption { opacity:1 !important; transform:translateY(0) !important; }
+html body .st-gallery-page--albums .st-album-grid {
+  display:grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap:14px !important;
+}
+html body .st-gallery-page--albums .st-album-grid__item {
+  display:grid !important; grid-template-rows:auto 1fr !important; min-width:0 !important; margin:0 !important;
+  border:1px solid #b69374 !important; background:#eee1d1 !important;
+}
+html body .st-gallery-page--albums .st-album-grid__item img {
+  display:block !important; width:100% !important; height:auto !important; aspect-ratio:4 / 5 !important;
+  object-fit:contain !important; object-position:center !important; background:#eee1d1 !important;
+}
+html body .st-gallery-page--albums .st-album-grid__item figcaption {
+  padding:12px 16px !important; color:#fff9ef !important; -webkit-text-fill-color:#fff9ef !important;
+  background:#3a2116 !important; font-size:14px !important; line-height:1.5 !important;
+}
 
 html body .st-gallery-page--albums .st-gallery-closing { padding:clamp(58px,9vw,118px) 0 !important; background:#69361f !important; }
 html body .st-gallery-page--albums .st-gallery-closing__inner { display:flex !important; align-items:flex-end !important; justify-content:space-between !important; gap:32px !important; }
@@ -5068,6 +5072,7 @@ html body .st-gallery-page--albums .st-gallery-text-link:focus-visible { color:#
 
 @media (max-width:899px) {
   html body .st-gallery-page--albums .st-gallery-shell { width:min(100% - 32px,760px) !important; }
+  html body .st-gallery-page--albums .st-album-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
   html body .st-gallery-page--albums .st-gallery-hero__grid,
   html body .st-gallery-page--albums .st-gallery-album__heading { grid-template-columns:1fr !important; }
   html body .st-gallery-page--albums .st-gallery-hero__copy { padding:20px 0 0 !important; }
@@ -5088,15 +5093,7 @@ html body .st-gallery-page--albums .st-gallery-text-link:focus-visible { color:#
   html body .st-gallery-page--albums .st-album-index__card { min-height:132px !important; }
   html body .st-gallery-page--albums .st-gallery-album__heading h2,
   html body .st-gallery-page--albums .st-gallery-closing h2 { font-size:42px !important; }
-  html body .st-gallery-page--albums .st-album-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:9px !important; }
-  html body .st-gallery-page--albums .st-album-grid__item,
-  html body .st-gallery-page--albums .st-album-grid__item:nth-child(1),
-  html body .st-gallery-page--albums .st-album-grid__item:nth-child(7n) { grid-column:auto !important; grid-row:auto !important; min-height:210px !important; }
-  html body .st-gallery-page--albums .st-album-grid__item img,
-  html body .st-gallery-page--albums .st-album-grid__item:nth-child(1) img { min-height:210px !important; }
-  html body .st-gallery-page--albums .st-album-grid__item:nth-child(3n+1) { grid-column:span 2 !important; min-height:350px !important; }
-  html body .st-gallery-page--albums .st-album-grid__item:nth-child(3n+1) img { min-height:350px !important; }
-  html body .st-gallery-page--albums .st-album-grid__item figcaption { display:none !important; }
+  html body .st-gallery-page--albums .st-album-grid { grid-template-columns:minmax(0,1fr) !important; gap:12px !important; }
   html body .st-gallery-page--albums .st-gallery-closing__actions { align-items:stretch !important; flex-direction:column !important; width:100% !important; }
   html body .st-gallery-page--albums .st-gallery-closing__actions > a { width:100% !important; }
 }
@@ -5104,49 +5101,8 @@ html body .st-gallery-page--albums .st-gallery-text-link:focus-visible { color:#
   html body .st-gallery-page--albums *,
   html body .st-gallery-page--albums *::before,
   html body .st-gallery-page--albums *::after { scroll-behavior:auto !important; transition:none !important; animation:none !important; }
-  html body .st-gallery-page--albums .st-album-grid__item:hover img,
   html body .st-gallery-page--albums .st-album-index__card:hover,
   html body .st-gallery-page--albums .st-gallery-button:hover { transform:none !important; }
-}
-
-/* S.T TAILOR V9.5 | Floral dinner-jacket gallery sequence
-   Four distinct studies of one commission: full silhouette first, then the
-   showroom context, lapel construction and front-pocket finish. */
-html body .st-gallery-page--albums #album-womenswear .st-gallery-piece--floral {
-  background:#351642 !important;
-}
-html body .st-gallery-page--albums #album-womenswear .st-gallery-piece--floral:nth-last-child(4) {
-  grid-column:span 2 !important;
-  grid-row:span 2 !important;
-  min-height:534px !important;
-}
-html body .st-gallery-page--albums #album-womenswear .st-gallery-piece--floral:nth-last-child(4) img {
-  min-height:534px !important;
-  object-position:center center !important;
-}
-html body .st-gallery-page--albums #album-womenswear .st-gallery-piece--floral figcaption {
-  display:grid !important;
-  gap:3px !important;
-  padding:20px !important;
-}
-html body .st-gallery-page--albums #album-womenswear .st-gallery-piece--floral figcaption span[lang="vi"] {
-  color:#f6d4bc !important;
-  -webkit-text-fill-color:#f6d4bc !important;
-  font-size:.9em !important;
-  font-weight:600 !important;
-}
-html body .st-gallery-page--albums #album-womenswear .st-gallery-piece--floral:nth-last-child(2) img {
-  object-position:58% center !important;
-}
-@media (max-width:599px) {
-  html body .st-gallery-page--albums #album-womenswear .st-gallery-piece--floral:nth-last-child(4) {
-    grid-column:span 2 !important;
-    grid-row:auto !important;
-    min-height:350px !important;
-  }
-  html body .st-gallery-page--albums #album-womenswear .st-gallery-piece--floral:nth-last-child(4) img {
-    min-height:350px !important;
-  }
 }
 
 /* S.T TAILOR V8.9 | Gallery asset correction and Vietnamese type support */

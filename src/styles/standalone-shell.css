@@ -124,8 +124,6 @@ html body .st-service-page .st-service-commission-map { margin-top: 0 !important
 .st-lux-about .st-lux-business h2 { font-size: clamp(36px, 5vw, 70px) !important; line-height: .98 !important; }
 .st-lux-about .st-lux-people .st-lux-section-heading { margin-inline: auto !important; text-align: center !important; }
 
-/* The owner requested no more than three photographs on an album row. */
-.st-gallery-page .st-album-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
 .st-gallery-page .st-gallery-album__heading h2 { font-family: var(--st-wordmark) !important; font-weight: 600 !important; }
 .st-gallery-page .st-gallery-album__heading h2 [lang="vi"] { font-family: var(--st-wordmark) !important; font-weight: 500 !important; }
 .st-gallery-page .st-gallery-album:focus-visible { outline: 2px solid currentColor; outline-offset: -4px; }
@@ -359,6 +357,7 @@ html body #main-content .st-tripadvisor__card h3 > span[lang="vi"] { display: bl
 html body .st-tripadvisor__review { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 200px); align-items: center; gap: clamp(12px, 2vw, 24px); }
 html body .st-tripadvisor__review p { margin: 12px 0 0; color: #4e3527; font: 400 15px/1.55 var(--st-vietnamese); }
 html body .st-tripadvisor__review p [lang="vi"] { display: block; margin-top: 4px; }
+html body .st-tripadvisor__review .st-tripadvisor__window { font-size: 14px; color: #624330; }
 html body .st-tripadvisor__rating { display: block; place-self: center; max-width: 100%; border: 0; }
 html body .st-tripadvisor__actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 10px; padding-top: 14px; border-top: 1px solid #b99672; }
 html body .st-tripadvisor__link { display: grid !important; box-sizing: border-box; min-height: 70px !important; padding: 10px !important; place-content: center !important; gap: 3px !important; border: 1px solid #513320 !important; background: #352116 !important; color: #fff7e9 !important; -webkit-text-fill-color: #fff7e9 !important; font: 650 15px/1.35 var(--st-vietnamese) !important; text-align: center; text-decoration: none !important; transition: background-color .2s ease !important; }
@@ -751,7 +750,6 @@ html body .st-home-editorial__frame:is(:hover, :focus-within) { background: #4b2
   html body .st-payment-gallery-suite__frame figure,
   html body .st-payment-gallery-suite__frame img { min-height: 520px !important; }
   .st-contact-page--v2 .st-contact-buttons { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
-  .st-gallery-page .st-album-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
   html body .st-gallery-numpad__grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
   .stpr-ledger .stpr-next-steps { grid-template-columns: 1fr !important; }
 }
@@ -826,7 +824,6 @@ html body .st-home-editorial__frame:is(:hover, :focus-within) { background: #4b2
   html body .st-payment-gallery-suite__frame img { min-height: 400px !important; }
   html body .st-footer-v7.st-footer-v8 .st-footer-v7__crest { width: 86px !important; }
   .st-contact-page--v2 .st-contact-buttons { grid-template-columns: 1fr !important; }
-  .st-gallery-page .st-album-grid { grid-template-columns: 1fr !important; }
   html body .st-gallery-numpad { padding: 60px 0 !important; }
   html body .st-gallery-numpad::before { inset: 8px !important; }
   html body .st-gallery-numpad__heading { width: min(800px, calc(100% - 28px)) !important; margin-bottom: 30px !important; text-align: center !important; }
