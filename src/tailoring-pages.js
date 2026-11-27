@@ -130,6 +130,16 @@ export const tailoringPages = [
     imageAlt: "Dark jacket opened over a white shirt to show its lining and inside pockets | Áo khoác tối màu mở trên sơ mi trắng để lộ lớp lót và túi trong"
   },
   {
+    route: "/cam-nang-may-do/chon-co-ao-so-mi/",
+    source: "GuideShirtCollars.html",
+    labels: ["Choosing a shirt collar", "Chọn cổ áo sơ mi"],
+    title: "How to Choose a Tailored Shirt Collar | S.T Tailor",
+    description: "Compare point and spread collars on finished S.T Tailor shirts. Learn what to check with a tie, with the top button open and under your jacket.",
+    descriptionVi: "So sánh cổ nhọn và cổ mở rộng trên các mẫu sơ mi S.T Tailor. Xem cách thử cổ áo khi thắt cà vạt, mở khuy trên và mặc cùng áo khoác.",
+    image: "/media/2026/11/st-tailor-white-spread-collar-shirt-front.webp",
+    imageAlt: "White S.T Tailor shirt with a spread collar and button front | Sơ mi trắng S.T Tailor với cổ mở rộng và nẹp cài khuy"
+  },
+  {
     route: "/cam-nang-may-do/chon-suit-hai-manh-ba-manh/",
     source: "GuideSuitPieces.html",
     labels: ["Two-piece and three-piece suits", "Suit hai mảnh và ba mảnh"],

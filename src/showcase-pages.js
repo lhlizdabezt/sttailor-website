@@ -180,6 +180,17 @@ export const showcaseEntries = [
     imageAlt: "White tailored shirt folded on navy cloth | Sơ mi trắng may đo gấp trên nền vải xanh navy"
   },
   {
+    route: "/san-pham/so-mi-le-phuc-xep-ly/",
+    section: "shirts-and-trousers",
+    source: "ShowcasePleatedDressShirt.html",
+    labels: ["White pleated-front dress shirt", "Sơ mi lễ phục trắng xếp ly"],
+    title: "White Pleated-Front Dress Shirt | S.T Tailor",
+    description: "See a white pleated-front dress shirt by S.T Tailor, displayed with black trousers. Learn how to check the shirt front, collar and cuffs with a tuxedo.",
+    summary: ["A white long-sleeve dress shirt with narrow pleats on both sides of the button line, shown with black trousers. See how to check the pleats, collar and cuffs during a tuxedo fitting.", "Sơ mi lễ phục trắng tay dài, có các nếp ly nhỏ dọc hai bên hàng khuy, trưng bày cùng quần đen. Xem cách kiểm tra nếp ly, cổ và măng sét khi thử cùng tuxedo."],
+    image: "/media/2026/09/st-tailor-gallery-duk-9733.jpg",
+    imageAlt: "White pleated-front dress shirt and black trousers on a tailoring form, with brown shoes beside it | Sơ mi lễ phục trắng xếp ly cùng quần đen trên ma-nơ-canh, bên cạnh là đôi giày nâu"
+  },
+  {
     route: "/san-pham/so-mi-xanh-hoa-van/",
     section: "shirts-and-trousers",
     source: "ShowcaseBluePatternedShirt.html",
@@ -268,6 +279,17 @@ export const showcaseEntries = [
     summary: ["Two fitting-room photographs show how dark wide-leg trousers fall beneath a draped ivory top, from the front and the side.", "Hai ảnh trong phòng thử cho thấy độ rủ của quần tối màu ống rộng khi phối với áo màu ngà có nếp rủ, nhìn từ trước và từ bên."],
     image: "/media/2026/11/st-tailor-draped-ivory-top-with-dark-trousers.webp",
     imageAlt: "Front view of a client fitting dark wide-leg trousers with a draped ivory top at S.T Tailor | Góc trước khách thử quần tối màu ống rộng cùng áo màu ngà có nếp rủ tại S.T Tailor"
+  },
+  {
+    route: "/du-an/ban-giao-trang-phuc-tai-showroom/",
+    section: "client-work",
+    source: "ShowcaseShowroomHandover.html",
+    labels: ["A showroom garment handover", "Một buổi bàn giao trang phục tại showroom"],
+    title: "A Garment Handover at the Showroom | S.T Tailor",
+    description: "See a garment handover from the S.T Tailor client archive and plan how to carry your finished tailoring home after collecting it in Ho Chi Minh City.",
+    summary: ["An archive photograph shows a client receiving a garment bag at the S.T Tailor showroom. See what to discuss when you will be travelling with your finished tailoring.", "Ảnh lưu niệm ghi lại khoảnh khắc khách nhận túi đựng trang phục tại showroom S.T Tailor. Xem những điều cần trao đổi nếu bạn sẽ mang trang phục hoàn thiện theo khi đi xa."],
+    image: "/media/2026/09/st-tailor-gallery-international-client-one.jpg",
+    imageAlt: "An S.T Tailor team member and a client shake hands while holding a garment bag at the showroom | Đại diện S.T Tailor và khách bắt tay khi đang cầm túi đựng trang phục tại showroom"
   },
   ...photoStoryPages
 ];

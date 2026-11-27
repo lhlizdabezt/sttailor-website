@@ -46,7 +46,7 @@ const liningGuide = tailoringPages.find(({ source }) => source === "GuideJacketL
 const suitPiecesGuide = tailoringPages.find(({ source }) => source === "GuideSuitPieces.html");
 const liningHeroSizes = "(max-width: 860px) min(calc(100vw - 48px), 480px), min(calc(45vw - 46px), 480px)";
 const editorialGuideHeroes = tailoringPages.filter(({ source }) =>
-  ["GuideFirstConsultation.html", "GuideGarmentCollection.html", "GuideWeddingPlanning.html", "GuideAftercare.html",
+  ["GuideFirstConsultation.html", "GuideGarmentCollection.html", "GuideWeddingPlanning.html", "GuideAftercare.html", "GuideShirtCollars.html",
     "ServiceShirts.html", "ServiceTrousers.html", "ServiceJackets.html"].includes(source)
 );
 const editorialGuideHeroSizes = "(max-width: 560px) calc(100vw - 28px), (max-width: 860px) calc(100vw - 48px), min(calc(46vw - 36px), 540px)";
@@ -519,7 +519,7 @@ const galleryAltText = {
   "st-tailor-gallery-ceremonial-jacket-frame.jpg": "Burgundy ceremonial jacket with gold embroidery | Áo lễ phục đỏ burgundy thêu chỉ vàng",
   "st-tailor-gallery-duk-0010.jpg": "Black tuxedo with white shirt on a mannequin | Tuxedo đen cùng sơ mi trắng trên mannequin",
   "st-tailor-gallery-duk-0012.jpg": "Black tuxedo with tailored satin lapel | Tuxedo đen với ve satin may đo",
-  "st-tailor-gallery-duk-9733.jpg": "Black formal trousers and white pleated shirt | Quần lễ phục đen và sơ mi trắng xếp ly",
+  "st-tailor-gallery-duk-9733.jpg": "White pleated-front dress shirt and black trousers on a tailoring form, with brown shoes beside it | Sơ mi lễ phục trắng xếp ly cùng quần đen trên ma-nơ-canh, bên cạnh là đôi giày nâu",
   "sttailorhcm_3971189422263494295.jpg": "Black pinstripe suit with red lining detail | Suit sọc đen với chi tiết lớp lót đỏ",
   "sttailorhcm_3971191631789221081.jpg": "Navy suit displayed on a mannequin | Suit xanh navy trưng bày trên mannequin",
   "st-tailor-gallery-client-charcoal-suit.jpg": "Client wearing a charcoal tailored suit in the showroom | Khách hàng mặc suit xám than may đo tại showroom",
@@ -619,8 +619,8 @@ const galleryAltText = {
   "st-tailor-archive-founder-seven.jpeg": "Man in a taupe suit looking ahead while holding cloth swatches and a measuring tape | Người mặc suit nâu xám nhìn về phía trước, tay cầm mẫu vải và thước dây",
   "st-tailor-archive-atelier-four.jpg": "Red patterned jacket lining and S.T Tailor label | Lớp lót áo khoác đỏ hoa văn và nhãn S.T Tailor",
   "st-tailor-gallery-partner-certificate.jpg": "Official partner certificate displayed at S.T Tailor | Chứng nhận đối tác chính thức trưng bày tại S.T Tailor",
-  "st-tailor-gallery-international-client-one.jpg": "International client appointment at S.T Tailor | Buổi hẹn cùng khách hàng quốc tế tại S.T Tailor",
-  "st-tailor-gallery-international-client-two.jpg": "International client receiving a garment at S.T Tailor | Khách hàng quốc tế nhận trang phục tại S.T Tailor",
+  "st-tailor-gallery-international-client-one.jpg": "An S.T Tailor team member and a client shake hands while holding a garment bag at the showroom | Đại diện S.T Tailor và khách bắt tay khi đang cầm túi đựng trang phục tại showroom",
+  "st-tailor-gallery-international-client-two.jpg": "An S.T Tailor team member and a client face the camera while holding a garment bag at the showroom | Đại diện S.T Tailor và khách nhìn về phía máy ảnh khi đang cầm túi đựng trang phục tại showroom",
   "mr-Thinh.webp": "Client portrait in a black tailored suit | Chân dung khách hàng trong suit đen may đo",
   "mr-Son.webp": "Client portrait in a navy tailored suit | Chân dung khách hàng trong suit xanh navy may đo"
 };
@@ -700,9 +700,10 @@ const galleryChapters = [
   ["showroom", "The showroom", "Không gian nhà may", "/lien-he/#loi-vao-nha-may", "Find the showroom entrance", "Xem lối vào nhà may"]
 ];
 const galleryPortfolioLinks = {
+  tuxedo: ["/san-pham/so-mi-le-phuc-xep-ly/"],
   suits: ["/san-pham/suit-xam-nhat-hai-hang-khuy/", "/san-pham/ao-khoac-xanh-da-troi/", "/san-pham/suit-den-ve-chu-k/", "/du-an/suit-le-phuc-navy/"],
   womenswear: ["/du-an/thu-quan-ong-rong-nu/"],
-  appointments: ["/du-an/trang-phuc-san-khau/"]
+  appointments: ["/du-an/trang-phuc-san-khau/", "/du-an/ban-giao-trang-phuc-tai-showroom/"]
 };
 
 function transformGallery(html) {
