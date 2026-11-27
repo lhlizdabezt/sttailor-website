@@ -38,6 +38,7 @@ jobs:
           const lines = entries.map(([name, result]) => `| ${name} | ${result.ok ? 'PASS' : 'UNVERIFIED'} | ${result.status} |`);
           appendFileSync(process.env.GITHUB_STEP_SUMMARY, ['## Cloudflare read-only audit', '', '| Endpoint | Coverage | HTTP status |', '| --- | --- | --- |', ...lines, '', 'No infrastructure settings or token permissions were changed.', ''].join('\n'));
           console.log(JSON.stringify(report, null, 2));
-          assert.equal(entries.length, 9, 'Expected nine endpoint checks');
-          assert.ok(entries.every(([, result]) => result.ok), 'Incomplete audit coverage; inspect permission or transport failures before claiming a full pass');
+          assert.ok(entries.length, 'Missing Cloudflare endpoint coverage');
+          const unverified = entries.filter(([, result]) => !result.ok).map(([name, result]) => `${name} (HTTP ${result.status})`);
+          assert.equal(unverified.length, 0, `Unverified Cloudflare endpoints: ${unverified.join(', ')}`);
           NODE

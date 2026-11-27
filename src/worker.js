@@ -1,33 +1,11 @@
 import buildManifest from "../dist/build-manifest.json" with { type: "json" };
 import { indexNowKeyFile } from "./indexnow.js";
 import { contentSecurityPolicy, tripadvisorEmbedPath } from "./security-policy.js";
-import { tailoringPages } from "./tailoring-pages.js";
-import { showcasePages } from "./showcase-pages.js";
-import { clientCareHubRoute } from "./client-care-pages.js";
-import { fetchFittingFilm, fittingFilm, fittingFilmRoute } from "./fitting-film.js";
+import { fetchFittingFilm, fittingFilm } from "./fitting-film.js";
 
 const canonicalHost = "sttailor.com";
-const routes = new Set([
-  "/",
-  "/gioi-thieu/",
-  "/dich-vu/",
-  "/gallery/",
-  fittingFilmRoute,
-  "/bang-gia/",
-  "/phuong-thuc-thanh-toan/",
-  "/lien-he/",
-  "/cam-nang-may-do/",
-  "/chon-vai-may-do/",
-  "/quy-trinh-thu-do/",
-  "/chinh-sua-trang-phuc/",
-  "/bao-quan-giat-la/",
-  "/doi-tra-hoan-tien/",
-  "/chinh-sach-van-chuyen/",
-  "/dieu-khoan-dieu-kien/",
-  "/chinh-sach-bao-mat/",
-  clientCareHubRoute,
-  ...[...tailoringPages, ...showcasePages].map(({ route }) => route)
-]);
+// Serve exactly the canonical routes emitted with the sitemap and page assets.
+const routes = new Set(buildManifest.routes);
 // Retired WordPress paths have an intentional, permanent destination. Any
 // path outside this table and the published routes remains a true 404.
 const legacyRoutes = new Map([

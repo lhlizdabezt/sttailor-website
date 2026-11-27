@@ -114,6 +114,17 @@ export const showcaseEntries = [
     imageAlt: "Black one-button tuxedo jacket with satin shawl lapels and white dress shirt on a tailoring form | Áo tuxedo đen một khuy, ve sam satin và sơ mi trắng trên ma-nơ-canh"
   },
   {
+    route: "/san-pham/ao-le-phuc-do-ruou-co-dung/",
+    section: "suits-and-jackets",
+    source: "ShowcaseBurgundyCeremonialJacket.html",
+    labels: ["Burgundy stand-collar ceremonial jacket", "Áo lễ phục đỏ rượu cổ đứng"],
+    title: "Burgundy Stand-Collar Ceremonial Jacket | S.T Tailor",
+    description: "View a burgundy ceremonial jacket with a short standing collar and red dragon motifs on an ochre panel. Explore pattern placement for an occasion garment.",
+    summary: ["A short standing collar and red dragon motifs on an ochre front panel, framed by burgundy sleeves and sides.", "Cổ đứng thấp và họa tiết rồng đỏ trên mảng thân trước màu vàng đất, điểm cùng tay áo và hai bên thân màu đỏ rượu."],
+    image: "/media/2026/09/st-tailor-gallery-ceremonial-jacket-frame.jpg",
+    imageAlt: "Burgundy stand-collar jacket with red dragon motifs on an ochre front panel | Áo lễ phục đỏ rượu cổ đứng với họa tiết rồng đỏ trên mảng thân trước màu vàng đất"
+  },
+  {
     route: "/san-pham/dam-lua-hong-phan-theu-hoa/",
     section: "womenswear",
     source: "ShowcaseSilkDress.html",
@@ -345,6 +356,28 @@ export const showcaseEntries = [
     summary: ["An archive photograph shows a client receiving a garment bag at the S.T Tailor showroom. See what to discuss when you will be travelling with your finished tailoring.", "Ảnh lưu niệm ghi lại khoảnh khắc khách nhận túi đựng trang phục tại showroom S.T Tailor. Xem những điều cần trao đổi nếu bạn sẽ mang trang phục hoàn thiện theo khi đi xa."],
     image: "/media/2026/09/st-tailor-gallery-international-client-one.jpg",
     imageAlt: "An S.T Tailor team member and a client shake hands while holding a garment bag at the showroom | Đại diện S.T Tailor và khách bắt tay khi đang cầm túi đựng trang phục tại showroom"
+  },
+  {
+    route: "/du-an/kiem-tra-phom-ao-khoac-khi-ngoi/",
+    section: "fittings",
+    source: "ShowcaseSeatedJacketFit.html",
+    labels: ["Checking jacket fit while seated", "Kiểm tra phom áo khoác khi ngồi"],
+    title: "Checking Jacket Fit While Seated | S.T Tailor Fitting Study",
+    description: "Compare two S.T Tailor showroom portraits and see how jacket fronts, shoulder lines and sleeves move as the wearer leans forward or sits back.",
+    summary: ["Two showroom portraits show how a navy blazer and a plum blazer settle as their wearers sit in different positions.", "Hai ảnh tại showroom cho thấy blazer navy và blazer màu mận rủ ra sao khi khách ngồi ở hai tư thế khác nhau."],
+    image: "/media/2026/11/st-tailor-navy-blazer-client-at-table.webp",
+    imageAlt: "Client in a navy blazer and white shirt leaning forward at a showroom table | Khách mặc blazer navy và sơ mi trắng, hơi nghiêng người về phía bàn tại showroom"
+  },
+  {
+    route: "/du-an/duong-luoc-tren-ao-khoac/",
+    section: "craft-and-style",
+    source: "ShowcaseJacketBasting.html",
+    labels: ["Basting stitches on a tailored jacket", "Đường chỉ lược trên áo khoác may đo"],
+    title: "Basting Stitches on a Tailored Jacket | S.T Tailor",
+    description: "See pale basting threads on a black tailored jacket with red patterned lining and learn what temporary stitches do during jacket construction.",
+    summary: ["Pale temporary stitches trace the lapel, shoulder and front of a dark jacket with red patterned lining.", "Đường chỉ lược sáng màu chạy dọc ve, vai và thân trước áo khoác tối màu có lớp lót đỏ họa tiết."],
+    image: "/media/2026/09/sttailorhcm_3971189422263494295.jpg",
+    imageAlt: "Black tailored jacket with pale temporary stitches, opened to show its red patterned lining | Áo khoác đen với đường chỉ lược sáng màu, mở vạt để lộ lớp lót đỏ họa tiết"
   },
   {
     route: "/san-pham/ao-khoac-nau-vang-ve-chu-k/",

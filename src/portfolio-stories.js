@@ -283,7 +283,7 @@ export const portfolioStories = [
       ["Waist placement and length", "Vị trí eo và độ dài áo", "Shaped seams guide the eye through the waist down to the long hem. Pale buttons keep the line through the front in the same tonal range. At a fitting, bring the layer you intend to wear underneath and check that fastening the jacket leaves room to sit.", "Đường chiết dẫn mắt qua eo xuống lai dài. Khuy sáng giúp thân trước đồng nhất về sắc độ. Khi thử, hãy mang lớp áo định mặc bên trong và kiểm tra khi cài khuy vẫn có đủ độ thoải mái để ngồi."],
       ["Inside the jacket", "Bên trong áo khoác", "The blue lining carries a woven-looking motif and a zipped opening. The close view shows how the pattern sits inside the pale outer cloth. Try reaching the inside zip with the jacket on to judge its position and ease of use.", "Lớp lót xanh có họa tiết và một đường khóa kéo. Ảnh cận cho thấy cách họa tiết nằm bên trong nền vải ngoài sáng màu. Hãy thử với tay đến khóa khi đang mặc áo để xem vị trí có thuận tiện không."]
     ],
-    related: [jacketLine, liningGuide, "/san-pham/suit-nu-trang/"]
+    related: [jacketLine, "/du-an/duong-luoc-tren-ao-khoac/", liningGuide, "/san-pham/suit-nu-trang/"]
   },
   {
     route: goldLining, section: "suits-and-jackets",

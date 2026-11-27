@@ -517,11 +517,11 @@ const galleryAltText = {
   ...Object.fromEntries(franceClientPhotos.map(([file, en, vi]) => [file, `${en} | ${vi}`])),
   "st-tailor-made-to-measure-stories-gallery.jpg": "S.T Tailor made-to-measure story with a client and navy jacket | Câu chuyện may đo S.T Tailor với khách hàng và áo khoác xanh navy",
   "st-tailor-gallery-brocade-dinner-jacket.jpg": "Black textured dinner jacket on a mannequin | Áo khoác dự tiệc đen dệt vân trên mannequin",
-  "st-tailor-gallery-ceremonial-jacket-frame.jpg": "Burgundy ceremonial jacket with gold embroidery | Áo lễ phục đỏ burgundy thêu chỉ vàng",
+  "st-tailor-gallery-ceremonial-jacket-frame.jpg": "Burgundy stand-collar jacket with red dragon motifs on an ochre front panel | Áo lễ phục đỏ rượu cổ đứng với họa tiết rồng đỏ trên mảng thân trước màu vàng đất",
   "st-tailor-gallery-duk-0010.jpg": "Black tuxedo with white shirt on a mannequin | Tuxedo đen cùng sơ mi trắng trên mannequin",
   "st-tailor-gallery-duk-0012.jpg": "Black tuxedo with tailored satin lapel | Tuxedo đen với ve satin may đo",
   "st-tailor-gallery-duk-9733.jpg": "White pleated-front dress shirt and black trousers on a tailoring form, with brown shoes beside it | Sơ mi lễ phục trắng xếp ly cùng quần đen trên ma-nơ-canh, bên cạnh là đôi giày nâu",
-  "sttailorhcm_3971189422263494295.jpg": "Black pinstripe suit with red lining detail | Suit sọc đen với chi tiết lớp lót đỏ",
+  "sttailorhcm_3971189422263494295.jpg": "Black jacket with pale basting stitches and red patterned lining | Áo khoác đen có đường chỉ lược sáng màu và lớp lót đỏ họa tiết",
   "sttailorhcm_3971191631789221081.jpg": "Navy suit displayed on a mannequin | Suit xanh navy trưng bày trên mannequin",
   "st-tailor-gallery-client-charcoal-suit.jpg": "Client wearing a charcoal tailored suit in the showroom | Khách hàng mặc suit xám than may đo tại showroom",
   "st-tailor-gallery-navy-formal-front.jpg": "Client in a navy formal suit, front view | Khách hàng mặc suit lễ phục xanh navy, góc chính diện",
@@ -537,8 +537,8 @@ const galleryAltText = {
   "st-tailor-gallery-navy-suit-mannequin-editorial.jpg": "Navy blazer with patterned tie and pocket square | Blazer xanh navy với cà vạt hoa văn và khăn túi áo",
   "st-tailor-black-suit-full-length.jpeg": "Black suit with notch lapels and matching straight-leg trousers, shown full length on a tailoring form with a white shirt | Suit đen ve chữ K, quần ống suông đồng bộ, chụp toàn thân trên ma-nơ-canh cùng sơ mi trắng",
   "st-tailor-navy-lapel-detail.jpeg": "Navy double-breasted suit lapel detail | Chi tiết ve áo suit xanh navy hai hàng nút",
-  "st-tailor-gallery-duk-9988.jpg": "Light blue tailored suit on a mannequin | Suit xanh nhạt may đo trên mannequin",
-  "st-tailor-gallery-duk-9991.jpg": "Lilac tailored suit on a mannequin | Suit tông lilac may đo trên mannequin",
+  "st-tailor-gallery-duk-9988.jpg": "Light blue tailored jacket with notch lapels and jetted pockets on a black hanger | Áo khoác xanh nhạt ve chữ K và túi viền không nắp trên móc đen",
+  "st-tailor-gallery-duk-9991.jpg": "Angled view of a pale tailored jacket on a hanger, with a lilac cast | Áo khoác may đo sáng màu ánh tím nhạt trên móc, nhìn từ góc nghiêng",
   "st-tailor-gallery-duk-9858.jpg": "Pale olive jacket with a white shirt and light blue dotted tie | Áo khoác ô liu nhạt phối sơ mi trắng và cà vạt xanh nhạt chấm bi",
   "st-tailor-womens-white-suit.jpg": "White women's tailored suit on a mannequin | Suit nữ trắng may đo trên mannequin",
   "st-tailor-client-womens-white-suit.jpg": "Client wearing a white women's tailored suit outdoors | Khách hàng mặc suit nữ trắng may đo ngoài trời",
@@ -594,7 +594,7 @@ const galleryAltText = {
   "st-tailor-archive-gold-jacket-fitting.jpg": "Client wearing a black suit with gold shirt during fitting | Khách hàng mặc suit đen cùng sơ mi vàng trong buổi thử đồ",
   "st-tailor-gallery-client-white-jacket.jpg": "Client wearing a white dinner jacket at the showroom entrance | Khách hàng mặc áo khoác dự tiệc trắng tại lối vào showroom",
   "st-tailor-client-handshake.jpg": "S.T Tailor client appointment handshake | Bắt tay trong buổi hẹn cùng khách hàng S.T Tailor",
-  "st-tailor-gallery-duk-9807.jpg": "Client in a blue suit seated in the showroom | Khách hàng mặc suit xanh ngồi tại showroom",
+  "st-tailor-gallery-duk-9807.jpg": "Client in a navy blazer and grey trousers seated with his legs crossed | Khách mặc blazer navy và quần xám, ngồi bắt chéo chân",
   "store-sttailor-1.webp": "S.T Tailor reception and logo wall | Quầy tiếp đón và tường logo S.T Tailor",
   "store-sttailor-2.webp": "S.T Tailor showroom with garments and fitting area | Showroom S.T Tailor với trang phục và khu thử đồ",
   "store-sttailor-3.webp": "Tailored suit and mannequins in the S.T Tailor showroom | Suit may đo và mannequin trong showroom S.T Tailor",
@@ -701,11 +701,12 @@ const galleryChapters = [
   ["showroom", "The showroom", "Không gian nhà may", "/lien-he/#loi-vao-nha-may", "Find the showroom entrance", "Xem lối vào nhà may"]
 ];
 const galleryPortfolioLinks = {
-  tuxedo: ["/san-pham/so-mi-le-phuc-xep-ly/"],
+  tuxedo: ["/san-pham/so-mi-le-phuc-xep-ly/", "/san-pham/ao-le-phuc-do-ruou-co-dung/"],
   suits: ["/san-pham/suit-xam-nhat-hai-hang-khuy/", "/san-pham/ao-khoac-xanh-da-troi/", "/san-pham/suit-den-ve-chu-k/", "/du-an/suit-le-phuc-navy/"],
   womenswear: ["/du-an/thu-quan-ong-rong-nu/", "/san-pham/ao-co-cao-trang-hoa-thuc-vat/"],
   "shirts-trousers": ["/san-pham/quan-tay-xanh-xam-xep-ly/", "/du-an/ben-trong-cap-quan-tay/"],
-  "jacket-craft": ["/san-pham/so-mi-soc-nho-co-trang/"],
+  "jacket-craft": ["/du-an/duong-luoc-tren-ao-khoac/", "/san-pham/so-mi-soc-nho-co-trang/"],
+  fitting: ["/du-an/kiem-tra-phom-ao-khoac-khi-ngoi/"],
   appointments: ["/du-an/trang-phuc-san-khau/", "/du-an/ban-giao-trang-phuc-tai-showroom/", "/du-an/thu-so-mi-trang-va-quan-toi-mau/"]
 };
 
@@ -877,7 +878,7 @@ function transformAbout(html) {
   html = `${html.slice(0, provenanceRange.end)}${clothHeritage}${consultationGuide}${galleryBridge}${html.slice(provenanceRange.end)}`;
   const tripadvisorListing = "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html";
   const tripadvisor = `
-<section class="st-tripadvisor" id="st-tripadvisor" aria-labelledby="st-tripadvisor-title">
+<section class="st-tripadvisor" id="st-tripadvisor" aria-labelledby="st-tripadvisor-title" tabindex="-1">
   <div class="st-lux-shell st-tripadvisor__inner">
     <header class="st-tripadvisor__copy">
       <div>
@@ -890,7 +891,7 @@ function transformAbout(html) {
       <div class="st-tripadvisor__review">
         <div>
           <h3 id="st-tripadvisor-listing-title">S.T Tailor on Tripadvisor<span lang="vi">S.T Tailor trên Tripadvisor</span></h3>
-          <p>Read recent review excerpts here. Our Tripadvisor listing includes the full reviews and photos shared by visitors.<span lang="vi">Bạn có thể đọc trích đoạn từ các đánh giá gần đây tại đây. Trang Tripadvisor của nhà may có toàn văn đánh giá và ảnh do khách chia sẻ.</span></p>
+          <p>See what visitors share about their fittings and showroom visits. Tripadvisor also publishes their full reviews and photos.<span lang="vi">Đọc chia sẻ của khách về những buổi thử đồ và trải nghiệm ghé nhà may. Bạn có thể xem toàn văn đánh giá và ảnh của khách trên Tripadvisor.</span></p>
         </div>
         <div class="st-tripadvisor__embed">
           <a class="st-tripadvisor__embed-link" href="${tripadvisorListing}" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note">

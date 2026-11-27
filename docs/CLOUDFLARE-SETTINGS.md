@@ -2,7 +2,7 @@
 
 The following Free-plan settings describe the production baseline audited on 2026-09-21. They are historical evidence; use a fresh audit to establish current values.
 
-For a current read-only API check, run **Audit Cloudflare production (read-only)** from GitHub Actions, or `gh workflow run audit-cloudflare.yml --ref main`. It uses the existing encrypted production token, runs the audit's GET-only and secret-redaction test, and reports all nine endpoint results in the run summary and sanitized job log. A denied or unreachable endpoint fails this audit instead of appearing as an empty successful result. The workflow does not deploy, change DNS/settings, or expand token permissions. The ordinary deployment workflow remains separate.
+For a current read-only API check, run **Audit Cloudflare production (read-only)** from GitHub Actions, or `gh workflow run audit-cloudflare.yml --ref main`. It uses the existing encrypted production token, runs the audit's GET-only and secret-redaction test, and reports each endpoint's status in the run summary and sanitized job log. A denied or unreachable endpoint is marked unverified and causes the audit to fail. The production deployment runs separately.
 
 | Setting | Value | Purpose | Risk / verification |
 | --- | --- | --- | --- |
@@ -19,4 +19,4 @@ For a current read-only API check, run **Audit Cloudflare production (read-only)
 
 The Worker sets `max-age=0, must-revalidate` for HTML, a one-year immutable policy for versioned CSS/JS, and seven days for stable media URLs. No paid Cloudflare feature, Polish, Mirage, Rocket Loader, or global HTML cache rule is enabled.
 
-HTML responses enforce a script allowlist. The Tripadvisor sources are scoped to the About page. If Cloudflare changes its Google tag gateway snippets, review the returned script contents and update the matching hashes in `src/security-policy.js`. To verify changes, test GA4 page views and consultation events, Clarity, the Meta Pixel and the Tripadvisor link in a real browser. The live smoke check verifies the policy and inline hashes on every published route.
+HTML responses enforce a script allowlist. Tripadvisor scripts run on the dedicated embed route inside the About page's sandboxed iframe. If Cloudflare changes its Google tag gateway snippets, review the returned script contents and update the matching hashes in `src/security-policy.js`. To verify changes, test GA4 page views and consultation events, Clarity, the Meta Pixel and the Tripadvisor link in a real browser. The live smoke check verifies the policy and inline hashes on every published route.

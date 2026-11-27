@@ -215,7 +215,7 @@ const stories = [
       ["Navy, grey and brown", "Xanh navy, xám và nâu", "The outfit keeps a tailored line with an open collar. Grey trousers and brown leather shoes bring a softer contrast to the dark blazer.", "Tổng thể vẫn gọn gàng khi để cổ sơ mi mở. Quần xám và giày da nâu tạo độ tương phản vừa phải với blazer tối màu."],
       ["The same jacket at rest", "Phom áo khi ngồi", "The seated views show how the sleeve and front crease as the wearer leans forward or crosses his legs. Bring the shirt and trousers you expect to wear most often to the fitting.", "Ảnh ngồi cho thấy nếp tay áo và thân trước khi khách nghiêng người hoặc bắt chéo chân. Khi thử đồ, hãy mang sơ mi và quần bạn thường dự định phối."]
     ],
-    related: [blazer, "/quy-trinh-thu-do/"]
+    related: [blazer, "/du-an/kiem-tra-phom-ao-khoac-khi-ngoi/", "/quy-trinh-thu-do/"]
   },
   {
     route: navySuit, section: "suits-and-jackets",
@@ -234,7 +234,7 @@ const stories = [
       ["Colour around the face", "Phối màu quanh cổ áo", "The open shirt collar places a small area of pattern between the plum lapels. Pale trousers leave the stronger colour concentrated in the jacket.", "Cổ sơ mi mở để lộ một khoảng họa tiết giữa hai ve áo màu mận. Quần sáng giúp sắc đậm tập trung ở phần blazer."],
       ["Seated fit", "Phom áo khi ngồi", "The two seated photographs show the jacket open and the trousers in different positions. Try sitting during a fitting to see how the waist, jacket front and trouser crease feel together.", "Hai ảnh ngồi ghi lại áo khoác mở vạt với quần ở các tư thế khác nhau. Hãy thử ngồi để cảm nhận đồng thời độ thoải mái ở eo, thân trước áo và đường ly quần."]
     ],
-    related: [navyBlazer, "/chon-vai-may-do/"]
+    related: [navyBlazer, "/du-an/kiem-tra-phom-ao-khoac-khi-ngoi/", "/chon-vai-may-do/"]
   },
   {
     route: greyJacket, section: "suits-and-jackets",

@@ -120,11 +120,22 @@ const pageTypes = {
   "/dieu-khoan-dieu-kien/": "terms",
   "/chinh-sach-bao-mat/": "privacy"
 };
-const pathname = window.location.pathname;
-const pageType = pageTypes[pathname] ?? (
-  pathname.startsWith("/san-pham/") ? "showcase_garment" :
-  pathname.startsWith("/du-an/") ? "showcase_project" : "other"
-);
+const sectionPageTypes = {
+  "cam-nang-may-do": "guide_article",
+  "chon-vai-may-do": "guide_article",
+  "cham-soc-khach-hang": "client_care_guide",
+  "dich-vu": "service",
+  "san-pham": "showcase_garment",
+  "du-an": "showcase_project"
+};
+// The shared error page has no canonical link. Its URL can still resemble a
+// guide or showcase path, so use the published document's canonical path.
+const canonicalUrl = document.querySelector('link[rel="canonical"]')?.href;
+const canonicalPath = canonicalUrl ? new URL(canonicalUrl).pathname : null;
+const canonicalSection = canonicalPath?.split("/", 2)[1];
+const pageType = canonicalPath
+  ? pageTypes[canonicalPath] ?? sectionPageTypes[canonicalSection] ?? "other"
+  : "not_found";
 
 const claritySet = (key, value) => {
   if (typeof window.clarity === "function") window.clarity("set", key, value);
