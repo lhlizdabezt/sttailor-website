@@ -1855,6 +1855,7 @@ html body .st-gallery-page--albums .st-gallery-film__media figcaption span[lang=
   html body :is(.st-tripadvisor__inner, .st-tripadvisor__copy) { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 480px) {
+  html body .st-tripadvisor__frame { height: 232px; }
   html body .st-tripadvisor__arrival { grid-template-columns: minmax(0, 1fr); }
   html body .st-tripadvisor__entrance img { height: clamp(170px, 54vw, 220px); }
 }
