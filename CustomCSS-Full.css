@@ -12395,6 +12395,17 @@ html body .st-gallery-numpad__heading h2 span[lang="vi"] { display: block !impor
 html body .st-gallery-numpad__heading > p:last-child { max-width: 640px !important; margin: 18px auto 0 !important; color: #62402f !important; -webkit-text-fill-color: #62402f !important; font: 400 16px/1.65 var(--st-vietnamese) !important; }
 html body .st-gallery-numpad__heading > p:last-child span[lang="vi"] { display: block !important; margin-top: 7px !important; color: #7b533d !important; -webkit-text-fill-color: #7b533d !important; }
 html body .st-gallery-hero--index .st-gallery-hero__copy > p:last-child span[lang="vi"] { font-size: inherit !important; line-height: 1.65 !important; }
+@media (max-width: 560px) {
+  html body #main-content .st-gallery-hero--index { padding-block: 20px 28px !important; }
+  html body #main-content .st-gallery-hero--index .st-gallery-hero__grid { gap: 16px !important; }
+  html body #main-content .st-gallery-hero--index .st-gallery-hero__copy { padding: 14px 8px 8px 14px !important; }
+  html body #main-content .st-gallery-hero--index #st-gallery-title {
+    max-width: none !important;
+    font-size: clamp(38px, 10vw, 50px) !important;
+    line-height: 1.02 !important;
+  }
+  html body #main-content .st-gallery-hero--index .st-gallery-hero__copy > p:last-child { margin-top: 15px !important; }
+}
 html body .st-gallery-numpad__grid { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 14px !important; max-width: 1120px !important; margin: 0 auto !important; }
 html body .st-gallery-numpad__card { position: relative !important; display: grid !important; min-height: 112px !important; grid-template-columns: minmax(0, 1fr) 22px !important; grid-template-rows: auto auto !important; column-gap: 12px !important; align-content: center !important; padding: 18px 22px !important; border: 1px solid #8a5f44 !important; background: #fffaf2 !important; box-shadow: 3px 3px 0 rgba(117, 71, 43, .18) !important; color: #382017 !important; -webkit-text-fill-color: #382017 !important; text-decoration: none !important; transition: background-color .25s ease, box-shadow .25s ease, border-color .25s ease !important; }
 html body .st-gallery-numpad__card > strong { color: #382017 !important; -webkit-text-fill-color: #382017 !important; font: 500 clamp(18px, 1.6vw, 24px)/1.04 var(--st-wordmark) !important; }
