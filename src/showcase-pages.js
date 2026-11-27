@@ -467,6 +467,50 @@ export const showcaseEntries = [
     image: "/media/2026/11/st-tailor-pale-pink-shirt-on-rail.webp",
     imageAlt: "Pale pink shirt with fine vertical stripes, an open point collar and pale buttons | Sơ mi hồng nhạt sọc dọc mảnh, cổ nhọn mở và hàng khuy sáng màu"
   },
+  {
+    route: "/san-pham/ao-khoac-mau-cat-tui-dap/",
+    section: "suits-and-jackets",
+    source: "ShowcaseSandPatchPocketJacket.html",
+    labels: ["Sand jacket with a patch pocket", "Áo khoác màu cát có túi đắp"],
+    title: "Sand Jacket with a Rounded Patch Pocket | S.T Tailor",
+    description: "Examine the rounded patch pocket, contoured stitching and dark cuff buttons of a sand-coloured S.T Tailor jacket.",
+    summary: ["A rounded patch pocket follows the line of the jacket front. The close-up shows the stitching around the pocket and the dark buttons on the neighbouring sleeve.", "Túi đắp bo tròn chạy theo đường nét thân trước áo. Ảnh cận cho thấy đường chỉ quanh túi và hàng khuy tối trên tay áo bên cạnh."],
+    image: "/media/2026/11/st-tailor-sand-jacket-rounded-patch-pocket.webp",
+    imageAlt: "Sand-coloured tailored jacket showing a rounded patch pocket and dark cuff buttons | Áo khoác may đo màu cát với túi đắp bo tròn và khuy tay áo tối màu"
+  },
+  {
+    route: "/san-pham/ao-khoac-gam-xanh-bac/",
+    section: "suits-and-jackets",
+    source: "ShowcaseSilverBlueBrocadeJacket.html",
+    labels: ["Silver-blue brocade jacket", "Áo khoác gấm xanh bạc"],
+    title: "Silver-Blue Brocade Jacket and Woven Detail | S.T Tailor",
+    description: "See how the silver-blue woven motif changes around the shoulder of this S.T Tailor brocade jacket, with advice for choosing evening cloth.",
+    summary: ["A close view of the shoulder and sleeve shows how a fine silver-blue motif catches the light along the curve of the seam.", "Ảnh cận vai và tay áo cho thấy họa tiết xanh bạc nhỏ bắt sáng theo đường cong của đường ráp."],
+    image: "/media/2026/11/st-tailor-silver-blue-brocade-shoulder-detail.webp",
+    imageAlt: "Curved shoulder and sleeve seam on a brocade jacket with a silver-blue woven motif | Đường ráp vai và tay áo cong trên áo khoác gấm dệt họa tiết xanh bạc"
+  },
+  {
+    route: "/du-an/phoi-trang-phuc-du-tiec-doi/",
+    section: "craft-and-style",
+    source: "ShowcaseCoordinatedOccasionwear.html",
+    labels: ["A floral dress and navy suit", "Đầm hoa phối cùng suit navy"],
+    title: "A Floral Wrap Dress and Navy Suit, Styled Together | S.T Tailor",
+    description: "See a magenta floral wrap dress displayed with a navy suit at S.T Tailor and explore how to coordinate two made-to-measure looks for an occasion.",
+    summary: ["A magenta floral wrap dress and a navy suit, photographed together in the showroom, illustrate how two occasion outfits can share a palette of deeper tones.", "Đầm quấn hoa hồng tím và suit navy được chụp cạnh nhau tại showroom, gợi ý cách phối hai bộ trang phục dự tiệc với các tông màu trầm."],
+    image: "/media/2026/09/st-tailor-magenta-floral-wrap-dress-and-navy-suit.jpg",
+    imageAlt: "Navy suit with a patterned tie displayed beside a magenta floral wrap dress at S.T Tailor | Suit navy phối cà vạt họa tiết trưng bày cạnh đầm quấn hoa hồng tím tại S.T Tailor"
+  },
+  {
+    route: "/du-an/lay-so-do-may-suit/",
+    section: "fittings",
+    source: "ShowcaseSuitMeasurements.html",
+    labels: ["Taking measurements for a suit", "Lấy số đo may suit"],
+    title: "Taking a Client’s Suit Measurements | S.T Tailor",
+    description: "See a measuring appointment at S.T Tailor and learn how to discuss trouser waist position, layers and fit for a bespoke suit.",
+    summary: ["A tailor takes a measurement at the client’s waist. The appointment is an opportunity to discuss where the trousers will sit and which layers will be worn with the suit.", "Thợ may lấy số đo ở ngang eo khách hàng. Đây cũng là dịp để trao đổi về vị trí cạp quần và những lớp áo sẽ mặc cùng bộ suit."],
+    image: "/media/2026/09/st-tailor-client-measurement-session.jpg",
+    imageAlt: "Tailor measuring near a client’s waist during a showroom appointment | Thợ may lấy số đo ngang eo khách trong buổi hẹn tại showroom"
+  },
   ...photoStoryPages
 ];
 

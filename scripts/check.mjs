@@ -173,6 +173,10 @@ for (const route of expectedRoutes) {
   }
   const businessSchema = schemaGraph.find((item) => Array.isArray(item["@type"]) && item["@type"].includes("LocalBusiness"));
   if (businessSchema?.hasOfferCatalog?.["@type"] !== "OfferCatalog" || businessSchema?.makesOffer) failures.push(`LocalBusiness service catalog uses the wrong Schema.org property: ${route}`);
+  const catalogItems = businessSchema?.hasOfferCatalog?.itemListElement ?? [];
+  if (catalogItems.length !== 8 || catalogItems.some(({ itemOffered }) =>
+    !itemOffered?.alternateName || !expectedRoutes.some((href) => itemOffered.url === `https://sttailor.com${href}`)
+  )) failures.push(`LocalBusiness offer catalog must link every bilingual service to a canonical route: ${route}`);
   if (/https?:\/\/(?:[a-z0-9-]+\.)*(?:x|twitter)\.com(?:[\/:?"\s]|$)|name=["']twitter:/i.test(html)) failures.push(`Retired social integration remains on ${route}`);
   if ((html.match(/href="https:\/\/www\.threads\.com\/@sttailorhcm"/g) ?? []).length !== 1 || (businessSchema?.sameAs ?? []).filter((url) => url === "https://www.threads.com/@sttailorhcm").length !== 1) failures.push(`Official Threads profile is missing or duplicated in social links/schema: ${route}`);
   const tripadvisorUrl = "https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html";
@@ -404,8 +408,8 @@ const portraitSource = home.match(/<picture><source type="image\/avif" media="([
 const [, portraitMedia, portraitPath, portraitFallback] = portraitSource;
 const landscapePreload = heroPreloads.find((tag) => tag.includes(`media="not all and ${portraitMedia}"`)) ?? "";
 const portraitPreload = heroPreloads.find((tag) => tag.includes(`media="${portraitMedia}"`)) ?? "";
-const fullWidthHero = "/media/_responsive/2026/06/background-hero-trang-lien-he-sttailor-1717.webp";
-if (!heroImage.includes('sizes="(max-width: 760px) 1400px, 1717px"') || !heroImage.includes(`${fullWidthHero} 1717w`)) failures.push("Home hero image must offer a compressed native-width candidate for sharp rendering.");
+const fullWidthHero = heroImage.match(/\/media\/_responsive\/2026\/06\/background-hero-trang-lien-he-sttailor-1717-[a-f0-9]{12}\.webp/)?.[0] ?? "";
+if (!fullWidthHero || !heroImage.includes('sizes="(max-width: 760px) 1400px, 1717px"') || !heroImage.includes(`${fullWidthHero} 1717w`)) failures.push("Home hero image must offer a compressed native-width candidate for sharp rendering.");
 if (heroPreloads.length !== 2 || !portraitPath || !portraitPreload.includes(`href="${portraitPath}"`) || !portraitPreload.includes('type="image/avif"') || !landscapePreload.includes('imagesizes="(max-width: 760px) 1400px, 1717px"') || /\shref=/.test(landscapePreload)) failures.push("Home hero preloads must match the portrait and landscape sources for their respective viewports.");
 if (heroImage.match(/\bsrcset="([^"]+)"/)?.[1] !== landscapePreload.match(/\bimagesrcset="([^"]+)"/)?.[1]) failures.push("The landscape preload must request the same responsive candidate as the image.");
 const fullWidthHeroFile = path.join(dist, fullWidthHero.slice(1));
@@ -540,8 +544,28 @@ const galleryContentImages = galleryImageTags.filter((match) => !match[1].includ
 const galleryImageSources = new Set(galleryContentImages.map((image) => image[1]));
 if (galleryImageSources.size !== galleryContentImages.length) failures.push("Gallery repeats an editorial image.");
 const galleryCover = galleryContentImages.find(([tag]) => tag.includes("st-gallery-hero__story-image"))?.[0] ?? "";
-if (!/-360\.webp 360w/.test(galleryCover) || !/-736\.webp 736w/.test(galleryCover)) failures.push("Gallery cover needs compact candidates through its native width.");
+if (!/-360-[a-f0-9]{12}\.webp 360w/.test(galleryCover) || !/-736-[a-f0-9]{12}\.webp 736w/.test(galleryCover)) failures.push("Gallery cover needs fingerprinted compact candidates through its native width.");
 const imageManifest = JSON.parse(readFileSync(path.join(dist, "image-manifest.json"), "utf8"));
+const modernImagePaths = new Set();
+for (const image of Object.values(imageManifest)) {
+  for (const src of [image.portrait_avif, image.portrait, ...(image.mobile_avif ?? []).map(({ src }) => src), ...(image.responsive_avif ?? []).map(({ src }) => src)]) {
+    if (src) modernImagePaths.add(src);
+  }
+  for (const { src } of image.responsive) {
+    if (/-[a-f0-9]{12}\.webp$/.test(src)) modernImagePaths.add(src);
+  }
+}
+for (const src of modernImagePaths) {
+  const file = path.join(dist, src.slice(1));
+  const alias = file.replace(/-[a-f0-9]{12}(?=\.(?:avif|webp)$)/, "");
+  if (file === alias || !existsSync(file) || !existsSync(alias)) {
+    failures.push(`Responsive asset must have a fingerprint and a stable alias: ${src}`);
+    continue;
+  }
+  const contents = readFileSync(file);
+  const hash = createHash("sha256").update(contents).digest("hex").slice(0, 12);
+  if (!src.endsWith(`-${hash}${path.extname(src)}`) || !contents.equals(readFileSync(alias))) failures.push(`Responsive asset fingerprint or alias differs from the encoded bytes: ${src}`);
+}
 const sourceMedia = path.join(root, "source", "media");
 const sourceImages = readdirSync(sourceMedia, { recursive: true, withFileTypes: true })
   .filter((entry) => entry.isFile() && /\.(?:jpe?g|png|webp)$/i.test(entry.name))

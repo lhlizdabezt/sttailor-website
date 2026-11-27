@@ -52,7 +52,16 @@ def check_public_metadata(image: Image.Image, relative: Path) -> None:
         raise ValueError(f"Remove location or camera identity metadata before publishing {relative}")
 
 
-def build_variant(image: Image.Image, source_relative: Path, width: int, output_root: Path, *, avif_quality: int | None = None) -> str:
+def fingerprinted_variant(data: bytes, relative: Path, output_root: Path) -> str:
+    version = sha256(data).hexdigest()[:12]
+    fingerprinted = relative.with_stem(f"{relative.stem}-{version}")
+    (output_root / fingerprinted).write_bytes(data)
+    # Existing pages and caches can continue to use the stable URL.
+    (output_root / relative).write_bytes(data)
+    return public_path(fingerprinted)
+
+
+def build_variant(image: Image.Image, source_relative: Path, width: int, output_root: Path, *, avif_quality: int | None = None, cache_immutable: bool = False) -> str:
     height = round(image.height * width / image.width)
     stem = source_relative.stem.lower()
     compact = width <= 672 and stem in GALLERY_COMPACT_THUMBNAILS
@@ -67,25 +76,24 @@ def build_variant(image: Image.Image, source_relative: Path, width: int, output_
     if variant.mode not in {"RGB", "RGBA"}:
         variant = variant.convert("RGBA" if "A" in variant.getbands() else "RGB")
     if avif_quality is not None:
-        variant.save(target, "AVIF", quality=avif_quality, speed=5)
-        return public_path(target_relative)
+        encoded = BytesIO()
+        variant.save(encoded, "AVIF", quality=avif_quality, speed=5)
+        return fingerprinted_variant(encoded.getvalue(), target_relative, output_root)
     if stem in BRAND_MARK_STEMS:
         # Lossless WebP preserves the resized crest's colors and transparency.
         encoded = BytesIO()
         variant.save(encoded, "WEBP", lossless=True, exact=True, method=6)
-        data = encoded.getvalue()
-        version = sha256(data).hexdigest()[:12]
-        fingerprinted = target_relative.with_stem(f"{target_relative.stem}-{version}")
-        (output_root / fingerprinted).write_bytes(data)
-        # Keep previously published responsive URLs available under their old names.
-        target.write_bytes(data)
-        return public_path(fingerprinted)
+        return fingerprinted_variant(encoded.getvalue(), target_relative, output_root)
     # Preserve the original uploads as the visual fallback while making the
     # above-the-fold hero materially smaller. The q78 content setting keeps
     # fabric texture and tailoring detail legible; the logo gets a little more
     # headroom for fine lettering.
-    quality = 74 if "background-hero" in stem else (84 if "logo" in stem else 78)
-    variant.save(target, "WEBP", quality=68 if compact else quality, method=6)
+    quality = 68 if compact else (74 if "background-hero" in stem else (84 if "logo" in stem else 78))
+    if cache_immutable:
+        encoded = BytesIO()
+        variant.save(encoded, "WEBP", quality=quality, method=6)
+        return fingerprinted_variant(encoded.getvalue(), target_relative, output_root)
+    variant.save(target, "WEBP", quality=quality, method=6)
     return public_path(target_relative)
 
 
@@ -100,7 +108,7 @@ def build_mobile_hero(image: Image.Image, relative: Path, output_root: Path) -> 
     # detail for the full cover while reducing the first mobile transfer.
     width = min(width, 860)
     return {
-        "portrait": build_variant(crop, name, width, output_root),
+        "portrait": build_variant(crop, name, width, output_root, cache_immutable=True),
         "portrait_avif": build_variant(crop, name, width, output_root, avif_quality=55),
     }
 
@@ -151,12 +159,13 @@ def main() -> int:
                 width, height = image.size
                 variants = []
                 responsive_widths = ICON_WIDTHS if "logo" in source.stem.lower() else CONTENT_WIDTHS
+                is_cover = relative.as_posix() in {HOME_HERO, GALLERY_HERO}
                 for candidate in responsive_widths:
                     if candidate < width:
-                        variants.append({"src": build_variant(image, relative, candidate, responsive_root), "width": candidate})
+                        variants.append({"src": build_variant(image, relative, candidate, responsive_root, cache_immutable=is_cover), "width": candidate})
                 entry = {"width": width, "height": height, "responsive": variants}
-                if relative.as_posix() in {HOME_HERO, GALLERY_HERO}:
-                    variants.append({"src": build_variant(image, relative, width, responsive_root), "width": width})
+                if is_cover:
+                    variants.append({"src": build_variant(image, relative, width, responsive_root, cache_immutable=True), "width": width})
                 if relative.as_posix() == HOME_HERO:
                     entry.update(build_mobile_hero(image, relative, responsive_root))
                 if relative.as_posix() in home_cards:

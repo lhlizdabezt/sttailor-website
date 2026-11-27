@@ -43,7 +43,7 @@ const immutableAssets = [
   /^\/scripts\/(?:site|tripadvisor)-[a-f0-9]{12}\.js$/,
   /^\/fonts\/[^/]+-[a-f0-9]{7}\.woff2$/,
   /^\/media\/_responsive\/.+-share-[a-f0-9]{12}\.jpg$/,
-  /^\/media\/_responsive\/2026\/09\/logo-sttailor(?:-1000x1024)?-\d+-[a-f0-9]{12}\.webp$/
+  /^\/media\/_responsive\/.+-\d+(?:-q68)?-[a-f0-9]{12}\.(?:avif|webp)$/
 ];
 
 function securityHeaders(response, pathname = "/") {

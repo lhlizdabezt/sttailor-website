@@ -5,8 +5,13 @@ const listing = fallback.href;
 
 function shareReviewStatus() {
   if (window.parent === window) return;
-  const status = widget.hasAttribute("data-ready") ? "st-tailor-tripadvisor-ready" : "st-tailor-tripadvisor-unavailable";
-  window.parent.postMessage(status, location.origin);
+  const ready = widget.hasAttribute("data-ready");
+  let height = null;
+  if (ready) {
+    const style = getComputedStyle(widget);
+    height = Math.ceil(reviewSnippets.scrollHeight + parseFloat(style.paddingTop) + parseFloat(style.paddingBottom));
+  }
+  window.parent.postMessage({ type: "st-tailor-tripadvisor-status", ready, height }, location.origin);
 }
 
 window.addEventListener("message", (event) => {
@@ -39,8 +44,8 @@ function updateWidget() {
   const ready = Boolean(logo?.complete && logo.naturalWidth && action?.href === listing && review?.textContent.trim());
   const focused = document.activeElement;
   if ((ready && focused === fallback) || (!ready && reviewSnippets.contains(focused))) return;
-  if (widget.hasAttribute("data-ready") === ready) return;
   widget.toggleAttribute("data-ready", ready);
+  // The vendor's fixed wrapper can gain scroll height without changing its box size.
   shareReviewStatus();
 }
 
@@ -52,4 +57,7 @@ new MutationObserver(updateWidget).observe(reviewSnippets, {
   subtree: true,
   attributeFilter: ["href", "target", "rel", "class", "src", "onclick"],
 });
+// New review excerpts or reflow at a narrower width can change the preview size.
+new ResizeObserver(shareReviewStatus).observe(reviewSnippets);
+window.addEventListener("resize", shareReviewStatus);
 updateWidget();

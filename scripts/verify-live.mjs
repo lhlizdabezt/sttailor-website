@@ -292,8 +292,9 @@ await Promise.all(Array.from({ length: 6 }, async () => {
       if (/-share-[a-f0-9]{12}\.jpg$/.test(asset)) {
         expect(response.headers.get("content-type")?.includes("image/jpeg") && response.headers.get("cache-control")?.includes("immutable"), `Social preview ${asset} must serve as a cacheable JPEG`);
       }
-      if (/^\/media\/_responsive\/2026\/09\/logo-sttailor(?:-1000x1024)?-\d+-[a-f0-9]{12}\.webp$/.test(asset)) {
-        expect(contentType === "image/webp" && response.headers.get("cache-control")?.includes("immutable"), `Brand mark ${asset} must serve as a cacheable WebP`);
+      const responsiveFormat = asset.match(/^\/media\/_responsive\/.+-\d+(?:-q68)?-[a-f0-9]{12}\.(avif|webp)$/)?.[1];
+      if (responsiveFormat) {
+        expect(contentType === `image/${responsiveFormat}` && response.headers.get("cache-control")?.includes("immutable"), `Responsive image ${asset} must serve with its ${responsiveFormat} type and immutable caching`);
       }
       if (asset.endsWith(".woff2")) {
         expect(response.headers.get("content-type") === "font/woff2" && response.headers.get("cache-control")?.includes("immutable"), `Vietnamese font ${asset} must serve as a cacheable WOFF2`);

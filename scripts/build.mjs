@@ -1046,32 +1046,35 @@ const sharedContentModified = "2026-11-27";
 // Advance the relevant date when transformed copy changes, not for build fixes.
 const derivedContentModified = {
   "Home.html": "2026-11-22",
-  "About.html": "2026-11-27",
-  "Gallery.html": "2026-11-27", "Payment.html": "2026-11-27",
-  "Returns.html": "2026-11-26", "Shipping.html": "2026-10-18",
+  "About.html": "2026-11-28",
+  "Gallery.html": "2026-11-27", "Payment.html": "2026-11-28",
+  "ClientCare.html": "2026-11-28", "Returns.html": "2026-11-28", "Shipping.html": "2026-10-18",
   "Terms.html": "2026-10-18", "Privacy.html": "2026-10-18"
 };
 const photoStorySources = ["src/photo-stories.js", "src/portfolio-stories.js", "src/garment-collections.js", "src/commission-stories.js"];
+const derivedContentInputs = {
+  "About.html": ["src/portfolio-stories.js"],
+  "Gallery.html": ["source/media", ...photoStorySources],
+  "FittingFilm.html": ["src/fitting-film.js", "source/video"],
+  "ShowcaseGarments.html": ["src/showcase-pages.js", ...photoStorySources],
+  "ShowcaseProjects.html": ["src/showcase-pages.js", ...photoStorySources],
+  "ShowcaseNinaCampos.html": ["src/commission-stories.js"],
+  "ShowcasePhotoStory.html": photoStorySources,
+  "Returns.html": ["src/client-care-pages.js"],
+  "Shipping.html": ["src/client-care-pages.js"],
+  "Terms.html": ["src/client-care-pages.js"],
+  "Privacy.html": ["src/client-care-pages.js"]
+};
 
 function lastModifiedFor(sourceFile) {
-  // Derived copy and Gallery additions can change without touching the baseline.
-  if (derivedContentModified[sourceFile]) {
-    const inputs = [path.join("source", "wordpress", sourceFile)];
-    if (sourceFile === "Gallery.html") inputs.push("source/media", ...photoStorySources);
-    if (["Returns.html", "Shipping.html", "Terms.html", "Privacy.html"].includes(sourceFile)) inputs.push("src/client-care-pages.js");
-    const changed = spawnSync("git", ["status", "--porcelain", "--", ...inputs], { cwd: root, encoding: "utf8" });
-    if (changed.status !== 0 || changed.stdout.trim()) return buildDate;
-    const latest = spawnSync("git", ["log", "-1", "--format=%cs", "--", ...inputs], { cwd: root, encoding: "utf8" });
-    const date = latest.stdout.trim();
-    return [date, derivedContentModified[sourceFile], sharedContentModified].filter((value) => /^\d{4}-\d{2}-\d{2}$/.test(value)).sort().at(-1);
-  }
-  const contentFile = path.join("source", "wordpress", sourceFile);
-  const inputs = sourceFile === "ShowcasePhotoStory.html" ? [contentFile, ...photoStorySources] : [contentFile];
+  // Generated portfolio, policy and film content can change independently of its template.
+  const inputs = [`source/wordpress/${sourceFile}`, ...(derivedContentInputs[sourceFile] ?? [])];
   const dirty = spawnSync("git", ["status", "--porcelain", "--", ...inputs], { cwd: root, encoding: "utf8" });
   if (dirty.status !== 0 || dirty.stdout.trim()) return buildDate;
   const history = spawnSync("git", ["log", "-1", "--format=%cs", "--", ...inputs], { cwd: root, encoding: "utf8" });
   const date = history.status === 0 ? history.stdout.trim() : "";
-  return /^\d{4}-\d{2}-\d{2}$/.test(date) ? (date > sharedContentModified ? date : sharedContentModified) : buildDate;
+  return [date, derivedContentModified[sourceFile], sharedContentModified]
+    .filter((value) => /^\d{4}-\d{2}-\d{2}$/.test(value)).sort().at(-1);
 }
 
 function header(activePath, trail) {
@@ -1169,7 +1172,20 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
   business.hasOfferCatalog = {
     "@type": "OfferCatalog",
     name: "S.T Tailor services",
-    itemListElement: ["Bespoke suits and vests", "Blazers and separates", "Shirts and trousers", "Formalwear", "Womenswear", "Wedding and traditional clothing", "Clothing alterations", "Cloth consultation"].map((name) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name, provider: { "@id": "https://sttailor.com/#business" } } }))
+    alternateName: "Dịch vụ may đo S.T Tailor",
+    itemListElement: [
+      ["Bespoke suits and vests", "Suit và áo ghi lê may đo", "/dich-vu/suit-may-do/"],
+      ["Blazers and separates", "Blazer và áo khoác may đo", "/dich-vu/ao-khoac-may-do/"],
+      ["Shirts and trousers", "Sơ mi và quần tây", "/dich-vu/"],
+      ["Formalwear", "Lễ phục", "/dich-vu/"],
+      ["Womenswear", "Trang phục nữ", "/dich-vu/trang-phuc-nu/"],
+      ["Wedding and traditional clothing", "Trang phục cưới và trang phục truyền thống", "/dich-vu/le-phuc-cuoi/"],
+      ["Clothing alterations", "Chỉnh sửa trang phục", "/chinh-sua-trang-phuc/"],
+      ["Cloth consultation", "Tư vấn chọn vải", "/chon-vai-may-do/"]
+    ].map(([name, alternateName, url]) => ({
+      "@type": "Offer",
+      itemOffered: { "@type": "Service", name, alternateName, url: `https://sttailor.com${url}`, provider: { "@id": business["@id"] } }
+    }))
   };
   const isCollection = showcaseHub || ["/gallery/", "/cam-nang-may-do/", clientCareHubRoute].includes(route);
   const pageType = route === "/gioi-thieu/" ? "AboutPage" : route === "/lien-he/" ? "ContactPage" : isCollection ? "CollectionPage" : "WebPage";
@@ -1296,7 +1312,7 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
   const openGraphVideo = isWatchPage
     ? `<meta property="og:video" content="https://sttailor.com${galleryFilm.src}"><meta property="og:video:type" content="video/mp4">`
     : "";
-  const siteHeader = enrichImageAttributes(header(route, trail), { responsiveSizes: "102px" });
+  const siteHeader = enrichImageAttributes(header(route, trail), { responsiveSizes: "(max-width: 560px) 64px, (max-width: 980px) 72px, 88px" });
   const siteFooter = enrichImageAttributes(footer(sourceFile === "Error.html" ? null : route), { responsiveSizes: "160px" });
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">${heroPreload}<link rel="stylesheet" href="${stylesheetHref}">${fontPreload}${googleTagManagerHead}${analyticsTags}<meta name="description" content="${safeDescription}"><meta name="author" content="S.T Tailor"><meta name="application-name" content="S.T Tailor"><meta name="sttailor-build-revision" content="${buildRevision}"><meta name="color-scheme" content="light"><meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><meta name="google-site-verification" content="e1RyHPdDirO6wJIxuZKKSIY6EXYb37XMfktIVl3aJz8"><meta name="p:domain_verify" content="78c108c3384a3aa9201fb90b99f0b225"><link rel="canonical" href="${canonical}"><link rel="describedby" href="/llms.txt" type="text/plain"><link rel="icon" href="/icons/sttailor-favicon-48.png" type="image/png" sizes="48x48"><link rel="apple-touch-icon" href="/icons/sttailor-apple-touch-180.png" sizes="180x180"><link rel="manifest" href="/site.webmanifest"><meta property="og:title" content="${safeTitle}"><meta property="og:description" content="${safeDescription}"><meta property="og:type" content="${isWatchPage ? "video.other" : "website"}">${openGraphVideo}<meta property="og:url" content="${canonical}"><meta property="og:site_name" content="S.T Tailor"><meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="vi_VN"><meta property="og:image" content="${shareImageUrl}"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:alt" content="${safeImageAlt}">${shareDimensions}<meta name="theme-color" content="#ead1ad"><title>${safeTitle}</title></head><body>${googleTagManagerNoScript}${metaPixelNoScript}<div class="st-site-frame">${siteHeader}<main id="main-content" tabindex="-1">${breadcrumbNavigation(trail)}${body}</main>${siteFooter}</div><script type="module" src="${scriptHref}"></script>${jsonLd}</body></html>`;
 }

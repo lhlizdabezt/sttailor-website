@@ -6,16 +6,21 @@ const reviewFrame = tripadvisorEmbed?.querySelector("iframe");
 if (reviewFrame) {
   const fallback = tripadvisorEmbed.querySelector(".st-tripadvisor__embed-link");
   let reviewsReady = false;
+  let reviewHeight = 0;
   const updateReviewVisibility = () => {
     // Let keyboard users finish with the fallback before revealing the reviews.
     if (reviewsReady && document.activeElement === fallback) return;
+    reviewFrame.style.minHeight = reviewsReady ? `${reviewHeight}px` : "";
     tripadvisorEmbed.toggleAttribute("data-reviews-ready", reviewsReady);
   };
   fallback?.addEventListener("blur", () => requestAnimationFrame(updateReviewVisibility));
   window.addEventListener("message", (event) => {
     if (event.source !== reviewFrame.contentWindow || event.origin !== "null") return;
-    if (event.data !== "st-tailor-tripadvisor-ready" && event.data !== "st-tailor-tripadvisor-unavailable") return;
-    reviewsReady = event.data === "st-tailor-tripadvisor-ready";
+    const status = event.data;
+    if (status?.type !== "st-tailor-tripadvisor-status" || typeof status.ready !== "boolean") return;
+    if (status.ready && (!Number.isSafeInteger(status.height) || status.height < 1)) return;
+    reviewsReady = status.ready;
+    reviewHeight = reviewsReady ? Math.min(status.height, 420) : 0;
     updateReviewVisibility();
   });
   // The vendor can render before this module or before the frame's load event.
