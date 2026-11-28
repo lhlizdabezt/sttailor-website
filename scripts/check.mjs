@@ -591,7 +591,7 @@ for (const removedBlock of ["album-archive", "album-client-feedback", "st-galler
   if (gallery.includes(removedBlock)) failures.push(`Removed Gallery block remains: ${removedBlock}`);
 }
 if ((gallery.match(/st-gallery-numpad__card/g) ?? []).length !== 9) failures.push("Gallery 3x3 chapter navigator must contain exactly nine cards.");
-if (!gallery.includes("<p>Nine chapters ") || !gallery.includes('<span lang="vi">Chín chương ảnh ')) failures.push("The Gallery introduction must describe its nine chapters in both languages.");
+if (!gallery.includes('<p class="st-prose-pair"><span lang="en">Nine chapters ') || !gallery.includes('<span lang="vi">Chín chương ảnh ')) failures.push("The Gallery introduction must describe its nine chapters in both languages.");
 if (!gallery.includes("st-gallery-numpad") || !gallery.includes("#album-tuxedo") || !gallery.includes("#album-showroom")) failures.push("Gallery chapter navigator is missing jump targets.");
 const galleryImageTags = [...gallery.matchAll(/<img\b[^>]*\bsrc="(\/media\/[^\"]+)"[^>]*>/gi)];
 const galleryContentImages = galleryImageTags.filter((match) => !match[1].includes("logo-sttailor") && !match[1].endsWith("/LinkedInLogo.png"));
@@ -643,14 +643,19 @@ for (const asset of sourceImages) {
 }
 const galleryImageDigests = new Map();
 for (const image of galleryContentImages) {
-  const file = path.join(dist, image[1].slice(1));
-  if (existsSync(file)) {
-    const digest = createHash("sha256").update(readFileSync(file)).digest("hex");
-    if (galleryImageDigests.has(digest)) failures.push(`Gallery repeats the same image bytes at ${image[1]} and ${galleryImageDigests.get(digest)}.`);
-    galleryImageDigests.set(digest, image[1]);
+  const [, source] = image;
+  const metadata = imageManifest[source.slice("/media/".length)];
+  if (!metadata || !/^[a-f0-9]{64}$/.test(metadata.decoded_sha256 ?? "")) {
+    failures.push(`Gallery image is missing a decoded pixel digest: ${source}`);
+  } else {
+    const identity = `${metadata.width}x${metadata.height}:${metadata.decoded_sha256}`;
+    const firstSource = galleryImageDigests.get(identity);
+    if (firstSource) failures.push(`Gallery repeats the same decoded image at ${firstSource} and ${source}.`);
+    galleryImageDigests.set(identity, source);
   }
   const alt = /\balt="([^\"]*)"/i.exec(image[0])?.[1] ?? "";
-  if (!alt || !alt.includes(" | ")) failures.push(`Gallery image is missing a bilingual alt text: ${image[1]}`);
+  const [altEn, altVi] = alt.split(" | ");
+  if (!altEn?.trim() || !altVi?.trim()) failures.push(`Gallery image is missing a bilingual alt text: ${source}`);
   if (!/\bwidth="\d+"/i.test(image[0]) || !/\bheight="\d+"/i.test(image[0])) failures.push(`Gallery image is missing intrinsic dimensions: ${image[1]}`);
   if (!/\bsrcset="[^\"]+\.webp \d+w/i.test(image[0])) failures.push(`Gallery image is missing responsive WebP candidates: ${image[1]}`);
   if (/\bloading="lazy"/i.test(image[0]) && !/\bsizes="auto, /i.test(image[0])) failures.push(`Lazy Gallery image must use its rendered width with a fallback size: ${image[1]}`);

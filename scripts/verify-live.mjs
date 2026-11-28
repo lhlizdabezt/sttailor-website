@@ -18,6 +18,24 @@ const expect = (condition, message) => {
   if (!condition) failures.push(message);
 };
 const revalidate = "public, max-age=0, must-revalidate";
+const utf8 = new TextDecoder("utf-8", { fatal: true });
+const assetTypes = new Map([
+  [".avif", "image/avif"], [".css", "text/css"], [".heic", "image/heic"], [".jpeg", "image/jpeg"],
+  [".jpg", "image/jpeg"], [".json", "application/json"], [".mp4", "video/mp4"], [".png", "image/png"],
+  [".svg", "image/svg+xml"], [".txt", "text/plain"], [".webp", "image/webp"], [".woff2", "font/woff2"]
+]);
+
+async function readUtf8(response, route) {
+  try {
+    return utf8.decode(await response.arrayBuffer());
+  } catch (error) {
+    throw new Error(`Could not read a valid UTF-8 response for ${route}`, { cause: error });
+  }
+}
+
+function pageMain(html) {
+  return html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] ?? "";
+}
 
 // Cloudflare may need a short DNS propagation window immediately after a
 // custom-domain Worker deployment. Retry transient network failures only;
@@ -26,7 +44,7 @@ async function fetchWithRetry(resource, options = {}, attempts = 5) {
   let lastError;
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
     try {
-      return await fetch(resource, options);
+      return await fetch(resource, { ...options, signal: AbortSignal.timeout(15_000) });
     } catch (error) {
       lastError = error;
       if (attempt < attempts) await new Promise((resolve) => setTimeout(resolve, attempt * 1000));
@@ -49,7 +67,7 @@ async function fetchTextUntil(resource, options, predicate, attempts = 20) {
   let last;
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
     const response = await fetchWithRetry(resource, options);
-    const text = await response.text();
+    const text = await readUtf8(response, resource);
     last = { response, text };
     if (predicate(response, text)) return last;
     if (attempt < attempts) await new Promise((resolve) => setTimeout(resolve, 3000));
@@ -58,12 +76,15 @@ async function fetchTextUntil(resource, options, predicate, attempts = 20) {
 }
 
 const pages = new Map();
+const pageDates = new Map();
+const titles = new Set();
+const descriptions = new Set();
 for (const route of routes) {
   const verifyingRevision = route === "/" && expectedBuildRevision;
   const { response, text: html } = verifyingRevision
-    ? await fetchTextUntil(`${origin}${route}`, {}, (candidate, text) => candidate.status === 200 && text.includes(`name="sttailor-build-revision" content="${expectedBuildRevision}"`))
-    : { response: await fetchWithRetry(`${origin}${route}`), text: "" };
-  const pageHtml = verifyingRevision ? html : await response.text();
+    ? await fetchTextUntil(`${origin}${route}`, { redirect: "manual" }, (candidate, text) => candidate.status === 200 && text.includes(`name="sttailor-build-revision" content="${expectedBuildRevision}"`))
+    : { response: await fetchWithRetry(`${origin}${route}`, { redirect: "manual" }), text: "" };
+  const pageHtml = verifyingRevision ? html : await readUtf8(response, route);
   pages.set(route, pageHtml);
   const stylesheet = pageHtml.match(/<link rel="stylesheet" href="([^"]+)"/i)?.[1];
   expect(stylesheet && response.headers.get("link")?.includes(`<${stylesheet}>; rel=preload; as=style`), `${route} does not advertise its current stylesheet to Cloudflare Early Hints`);
@@ -87,13 +108,25 @@ for (const route of routes) {
   }
   const robotsTag = response.headers.get("x-robots-tag") ?? "";
   expect(robotsTag.startsWith("index, follow") && !/\b(?:noindex|noimageindex|none)\b/i.test(robotsTag), `${route} has no indexable X-Robots-Tag`);
-  expect(pageHtml.includes(`<link rel="canonical" href="${origin}${route}">`), `${route} has no production canonical`);
+  const canonicals = [...pageHtml.matchAll(/<link rel="canonical" href="([^"]+)">/gi)];
+  expect(canonicals.length === 1 && canonicals[0][1] === `${origin}${route}`, `${route} must publish exactly one self-referencing canonical`);
   expect(!pageHtml.toLowerCase().includes("beta.sttailor.com"), `${route} still contains the beta host`);
-  expect(pageHtml.includes('name="robots" content="index, follow'), `${route} is not indexable`);
+  const robotDirectives = [...pageHtml.matchAll(/<meta name="(robots|googlebot)" content="([^"]+)">/gi)];
+  expect(new Set(robotDirectives.map(([, name]) => name.toLowerCase())).size === 2 && robotDirectives.length === 2 && robotDirectives.every(([, , value]) =>
+    value.startsWith("index, follow") && !/\b(?:noindex|noimageindex|none)\b/i.test(value)), `${route} must publish unambiguous indexable robots and Googlebot metadata`);
+  const title = pageHtml.match(/<title>([^<]+)<\/title>/i)?.[1]?.trim();
+  const description = pageHtml.match(/<meta name="description" content="([^"]+)">/i)?.[1]?.trim();
+  expect(title && !titles.has(title), `${route} has a missing or duplicate title`);
+  expect(description && !descriptions.has(description), `${route} has a missing or duplicate description`);
+  titles.add(title);
+  descriptions.add(description);
   expect(pageHtml.includes('"hasOfferCatalog":{"@type":"OfferCatalog"') && !pageHtml.includes('"makesOffer":{"@type":"OfferCatalog"'), `${route} has an invalid LocalBusiness service catalog relationship`);
   const footer = pageHtml.match(/<footer\b[\s\S]*?<\/footer>/i)?.[0] ?? "";
   const schemaText = pageHtml.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i)?.[1];
   const schemaGraph = schemaText ? JSON.parse(schemaText)["@graph"] : [];
+  const pageSchema = schemaGraph.find((entity) => entity["@id"] === `${origin}${route}#webpage`);
+  expect(pageSchema?.url === `${origin}${route}` && pageSchema.inLanguage?.includes("en") && pageSchema.inLanguage.includes("vi"), `${route} has inconsistent bilingual WebPage schema`);
+  pageDates.set(route, pageSchema?.dateModified);
   for (const failure of businessProfileFailures(footer, schemaGraph)) failures.push(`${failure}: ${route}`);
   const mapFrames = [...pageHtml.replace(/<template\b[\s\S]*?<\/template>/gi, "").matchAll(/<iframe\b[^>]*src="https:\/\/www\.google\.com\/maps\/embed\?[^>]*><\/iframe>/g)];
   const mapInFooter = mapFrames.some(([frame]) => footer.includes(frame));
@@ -112,7 +145,8 @@ for (const route of routes) {
   expect((pageHtml.match(/'GTM-TQSDB6XT'/g) || []).length === 1 && (pageHtml.match(/googletagmanager\.com\/gtm\.js\?id=/g) || []).length === 1 && /<head>[^]*?<!-- Google Tag Manager -->[^]*?<\/head>/.test(pageHtml), `${route} has no single Google Tag Manager head snippet`);
   expect((pageHtml.match(/googletagmanager\.com\/ns\.html\?id=GTM-TQSDB6XT/g) || []).length === 1 && pageHtml.includes('<body><!-- Google Tag Manager (noscript) -->'), `${route} has no single Google Tag Manager body fallback`);
   expect((pageHtml.match(/g\.src="\/n31x\/"/g) || []).length === 1 && pageHtml.includes('gtag("config","G-BQDKE20XR0")') && !pageHtml.includes('googletagmanager.com/gtag/js'), `${route} has no single first-party Google Analytics 4 tag`);
-  const mainContent = pageHtml.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1] ?? "";
+  const mainContent = pageMain(pageHtml);
+  expect(/\blang="vi"/.test(mainContent), `${route} has no Vietnamese language marking in its rendered source`);
   expect(!/in writing|written quotation|bằng văn bản/i.test(mainContent), `${route} still uses rigid written-confirmation wording`);
   expect(!/PayPal|\bWise\b/i.test(pageHtml), `${route} still lists removed international payment wallets in content or metadata`);
   expect((pageHtml.match(/clarity\.ms\/tag\//g) || []).length === 0 && pageHtml.includes(')(window,document,"clarity")'), `${route} has a duplicate direct Microsoft Clarity loader or no event queue`);
@@ -259,12 +293,12 @@ expect(filmSample.status === 206 && /^bytes 0-1\/\d+$/.test(filmSample.headers.g
 const poster = await fetchWithRetry(`${origin}${posterPath}`, { method: "HEAD" });
 expect(poster.status === 200 && poster.headers.get("content-type")?.includes("image/webp"), "Gallery fitting poster is unavailable");
 
-const robots = await fetchWithRetry(`${origin}/robots.txt`);
-const robotsText = await robots.text();
+const robots = await fetchWithRetry(`${origin}/robots.txt`, { redirect: "manual" });
+const robotsText = await readUtf8(robots, "/robots.txt");
 const disclosure = await fetchWithRetry(`${origin}/.well-known/security.txt`);
 const disclosureText = await disclosure.text();
 expect(disclosure.status === 200 && disclosure.headers.get("content-type")?.includes("text/plain") && disclosureText.includes("Contact: mailto:contact.sttailor@gmail.com") && Date.parse(disclosureText.match(/^Expires: (.+)$/m)?.[1] ?? "") > Date.now(), "security.txt must publish a current vulnerability-reporting contact as plain text");
-expect(robots.status === 200 && robotsText.includes(`Sitemap: ${origin}/sitemap.xml`), "robots.txt is invalid");
+expect(robots.status === 200 && robots.headers.get("content-type")?.startsWith("text/plain") && robotsText.includes(`Sitemap: ${origin}/sitemap.xml`), "robots.txt is invalid");
 expect(robots.headers.get("cache-control") === revalidate, "robots.txt does not revalidate before reuse");
 expect(/^User-agent:\s*\*\s*$/mi.test(robotsText) && /^Allow:\s*\/\s*$/mi.test(robotsText) && !/^Disallow:\s*\/\s*$/mi.test(robotsText), "robots.txt must allow public pages to be crawled");
 expect(!/^Disallow:\s*\S+/mi.test(robotsText), "robots.txt must not block a published public resource");
@@ -281,10 +315,17 @@ await Promise.all(Array.from({ length: 6 }, async () => {
     const asset = publicAssets[assetCursor++];
     try {
       const sourcePhoto = asset.startsWith("/media/sources/") && asset.endsWith(".heic");
-      const response = await fetchWithRetry(`${origin}${asset}`, { method: sourcePhoto ? "GET" : "HEAD", signal: AbortSignal.timeout(15000) }, 2);
+      const response = await fetchWithRetry(`${origin}${asset}`, { method: sourcePhoto ? "GET" : "HEAD", redirect: "manual" }, 2);
       expect(response.status === 200, `Public asset ${asset} returned ${response.status}`);
       const robotsTag = response.headers.get("x-robots-tag") ?? "";
-      const contentType = response.headers.get("content-type");
+      const contentType = response.headers.get("content-type")?.split(";", 1)[0].trim().toLowerCase();
+      const extension = path.extname(asset).toLowerCase();
+      const expectedType = assetTypes.get(extension);
+      const isJavascript = extension === ".js" || asset === "/n31x/";
+      const validType = isJavascript
+        ? /^(?:application|text)\/javascript$/.test(contentType ?? "")
+        : contentType && contentType !== "text/html" && (!expectedType || contentType === expectedType);
+      expect(validType, `Public asset ${asset} returned the wrong content type: ${contentType ?? "missing"}`);
       if (sourcePhoto) {
         expect(robotsTag === "noindex" && contentType === "image/heic", `Source photo ${asset} must serve as a HEIC download excluded from indexing`);
         const releasePhoto = readFileSync(path.join(dist, asset.slice(1)));
@@ -292,7 +333,6 @@ await Promise.all(Array.from({ length: 6 }, async () => {
         continue;
       }
       expect(!/\b(?:noindex|none|noimageindex)\b/i.test(robotsTag), `Public asset ${asset} has an indexing restriction`);
-      expect(!contentType?.includes("text/html"), `Public asset ${asset} returned HTML instead of its file`);
       if (/-share-[a-f0-9]{12}\.jpg$/.test(asset)) {
         expect(response.headers.get("content-type")?.includes("image/jpeg") && response.headers.get("cache-control")?.includes("immutable"), `Social preview ${asset} must serve as a cacheable JPEG`);
       }
@@ -314,7 +354,7 @@ await Promise.all(Array.from({ length: 6 }, async () => {
 console.log(`Audited ${publicAssets.length} public assets: originals, responsive images, icons, CSS, JavaScript, public build metadata and the first-party measurement gateway.`);
 
 const imageBot = await fetchWithRetry(`${origin}/media/2026/09/st-tailor-archive-navy-coastal-suit.jpg`,
-  { method: "HEAD", headers: { "User-Agent": "Googlebot-Image" } });
+  { method: "HEAD", redirect: "manual", headers: { "User-Agent": "Googlebot-Image/1.0" } });
 expect(imageBot.status === 200 && imageBot.headers.get("content-type")?.startsWith("image/") && !/\b(?:noindex|noimageindex)\b/i.test(imageBot.headers.get("x-robots-tag") ?? ""), "Googlebot-Image could not reach the canonical archive image");
 const legacyArchive = await fetchWithRetry(`${origin}/media/_responsive/2026/09/st-tailor-archive-atelier-one-360.webp`, { method: "HEAD", redirect: "manual" });
 expect(legacyArchive.status === 301 && legacyArchive.headers.get("location") === `${origin}/media/_responsive/2026/09/st-tailor-archive-navy-coastal-suit-360.webp`, "The retired archive derivative URL does not redirect to its replacement");
@@ -325,13 +365,15 @@ for (const asset of ["2026/06/store-sttailor-1.webp", "2026/09/logo-sttailor.png
 const unknownUpload = await fetchWithRetry(`${origin}/wp-content/uploads/2026/06/nonexistent-original.webp`, { method: "HEAD", redirect: "manual" });
 expect(unknownUpload.status === 404 && !unknownUpload.headers.get("location") && unknownUpload.headers.get("x-robots-tag") === "noindex, follow", "An unknown legacy upload must return a true, non-indexable 404");
 
-const llms = await fetchWithRetry(`${origin}/llms.txt`);
-const llmsText = new TextDecoder("utf-8", { fatal: true }).decode(await llms.arrayBuffer());
+const expectedLlms = readFileSync(path.join(dist, "llms.txt"), "utf8");
+const discoveryRequest = { redirect: "manual", headers: { "Cache-Control": "no-cache" } };
+const { response: llms, text: llmsText } = await fetchTextUntil(`${origin}/llms.txt`, discoveryRequest,
+  (candidate, text) => candidate.ok && text === expectedLlms, expectedBuildRevision ? 20 : 1);
 expect(llms.status === 200 && /^# S\.T Tailor$/m.test(llmsText), "llms.txt is missing its Markdown heading");
 expect(llms.headers.get("cache-control") === revalidate, "llms.txt does not revalidate before reuse");
 expect(llms.headers.get("content-language") === "en, vi", "llms.txt does not declare both audience languages");
 expect(llms.headers.get("content-type")?.toLowerCase() === "text/plain; charset=utf-8" && llmsText === llmsText.normalize("NFC") && llmsText.includes("Địa chỉ: Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định") && !/\uFFFD|á[º»]|Ã[\u0080-\u00BF]/.test(llmsText), "llms.txt does not serve clean, explicitly declared UTF-8 Vietnamese text");
-expect(llmsText === readFileSync(path.join(dist, "llms.txt"), "utf8"), "Production llms.txt differs from the verified release file");
+expect(llmsText === expectedLlms, "Production llms.txt differs from the verified release file");
 
 const indexNowKeyResponse = await fetchWithRetry(`${origin}/${indexNowKeyFile}`);
 expect(indexNowKeyResponse.status === 200 && (await indexNowKeyResponse.text()).trim() === indexNowKey, "IndexNow ownership key file is missing or invalid");
@@ -344,15 +386,17 @@ expect(manifestResponse.ok && (!expectedBuildRevision || liveManifest.revision =
 
 const expectedSitemap = expectedBuildRevision ? readFileSync(path.join(dist, "sitemap.xml"), "utf8") : null;
 // The edge may serve the previous sitemap briefly after the HTML has updated.
-const { response: sitemap, text: sitemapText } = await fetchTextUntil(`${origin}/sitemap.xml`,
-  { headers: { "Cache-Control": "no-cache" } },
+const { response: sitemap, text: sitemapText } = await fetchTextUntil(`${origin}/sitemap.xml`, discoveryRequest,
   (candidate, text) => candidate.ok && (!expectedSitemap || text === expectedSitemap), expectedSitemap ? 20 : 1);
-expect(sitemap.status === 200, `sitemap.xml returned ${sitemap.status}`);
+expect(sitemap.status === 200 && sitemap.headers.get("content-type")?.includes("xml"), `sitemap.xml returned ${sitemap.status} without XML delivery`);
 expect(sitemap.headers.get("cache-control") === revalidate, "sitemap.xml does not revalidate before reuse");
 if (expectedSitemap) expect(sitemapText === expectedSitemap, "Production sitemap differs from the validated release artifact");
-const sitemapLocations = [...sitemapText.matchAll(/<url>\s*<loc>([^<]+)<\/loc>/g)].map(([, location]) => location);
-const sitemapUrls = new Set(sitemapLocations);
-expect(sitemapLocations.length === routes.length && sitemapUrls.size === routes.length && routes.every((route) => sitemapUrls.has(`${origin}${route}`)), "Production sitemap must list every canonical route exactly once");
+const sitemapEntries = [...sitemapText.matchAll(/<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>(\d{4}-\d{2}-\d{2})<\/lastmod>/g)];
+const sitemapDates = new Map(sitemapEntries.map(([, location, date]) => [location, date]));
+expect(sitemapEntries.length === routes.length && sitemapDates.size === routes.length && routes.every((route) => sitemapDates.has(`${origin}${route}`)), "Production sitemap must list every canonical route with a lastmod date exactly once");
+for (const [route, pageDate] of pageDates) {
+  expect(pageDate && pageDate === sitemapDates.get(`${origin}${route}`), `${route} disagrees with its sitemap lastmod date`);
+}
 expect(sitemapText.includes("xmlns:image="), "Image sitemap namespace is missing");
 expect(sitemapText.includes("<image:image>"), "Image sitemap entries are missing");
 const gallerySitemap = sitemapText.match(/<url><loc>https:\/\/sttailor\.com\/gallery\/[\s\S]*?<\/url>/)?.[0] ?? "";
@@ -361,25 +405,29 @@ expect(gallerySitemapImages.length === builtGalleryImages.size && [...builtGalle
 const watchSitemap = sitemapText.match(/<url><loc>https:\/\/sttailor\.com\/phim-thu-do\/[\s\S]*?<\/url>/)?.[0] ?? "";
 expect(sitemapText.includes('xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"') && (sitemapText.match(/<video:video>/g) || []).length === 1 && watchSitemap.includes(`<video:content_loc>${origin}${filmPath}</video:content_loc>`) && watchSitemap.includes(`<video:thumbnail_loc>${origin}${posterPath}</video:thumbnail_loc>`), "Video sitemap omits or duplicates the fitting watch page");
 
-// Simulated user agents detect edge rules that block or alter public responses.
-const crawlerAgents = ["Googlebot", "bingbot", "OAI-SearchBot", "Claude-SearchBot", "PerplexityBot", "Applebot", "ChatGPT-User"];
+// User-agent simulations catch broad edge rules. They do not verify crawler IPs.
+const crawlerAgents = new Map([
+  ["Googlebot Smartphone", "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"],
+  ...["Googlebot", "bingbot", "OAI-SearchBot", "Claude-SearchBot", "PerplexityBot", "Applebot", "ChatGPT-User"].map((agent) => [agent, agent])
+]);
 const crawlerRoutes = ["/", "/gallery/", "/du-an/nina-campos/", "/san-pham/suit-xam-nhat-ve-chu-k/", "/cam-nang-may-do/"];
 const discoveryResources = [["/robots.txt", robotsText], ["/sitemap.xml", sitemapText], ["/llms.txt", llmsText]];
-await Promise.all(crawlerAgents.map(async (agent) => {
-  const options = { redirect: "manual", headers: { "User-Agent": agent, "Cache-Control": "no-cache" } };
+await Promise.all(Array.from(crawlerAgents, async ([agent, userAgent]) => {
+  const options = { redirect: "manual", headers: { "User-Agent": userAgent, "Cache-Control": "no-cache" } };
   for (const route of crawlerRoutes) {
     const response = await fetchWithRetry(`${origin}${route}`, options);
-    const html = await response.text();
+    const html = await readUtf8(response, `${agent} ${route}`);
     const robotsTag = response.headers.get("x-robots-tag") ?? "";
-    expect(response.status === 200 && robotsTag.startsWith("index, follow") && !/\b(?:noindex|noimageindex|none)\b/i.test(robotsTag) && html.includes(`<link rel="canonical" href="${origin}${route}">`) && /<main\b[^>]*\bid="main-content"(?:\s|>)/.test(html) && /\blang="vi"/.test(html), `${agent} cannot read the canonical bilingual HTML for ${route}`);
+    const main = pageMain(html);
+    expect(response.status === 200 && robotsTag.startsWith("index, follow") && !/\b(?:noindex|noimageindex|none)\b/i.test(robotsTag) && html.includes(`<link rel="canonical" href="${origin}${route}">`) && main && main === pageMain(pages.get(route) ?? ""), `${agent} cannot read the same canonical bilingual content for ${route}`);
   }
   for (const [route, expectedContent] of discoveryResources) {
     const response = await fetchWithRetry(`${origin}${route}`, options);
-    const body = await response.text();
+    const body = await readUtf8(response, `${agent} ${route}`);
     expect(response.status === 200 && body === expectedContent, `${agent} cannot read the current public ${route}`);
   }
 }));
-console.log(`Checked ${crawlerAgents.length} crawler user agents across ${crawlerRoutes.length} canonical bilingual pages and ${discoveryResources.length} discovery resources.`);
+console.log(`Checked ${crawlerAgents.size} crawler user agents across ${crawlerRoutes.length} canonical bilingual pages and ${discoveryResources.length} discovery resources.`);
 
 const manifest = await fetchWithRetry(`${origin}/site.webmanifest`);
 expect(manifest.status === 200 && (await manifest.text()).includes('"name": "S.T Tailor"'), "site.webmanifest is invalid");

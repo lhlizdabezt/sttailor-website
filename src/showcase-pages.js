@@ -296,7 +296,7 @@ export const showcaseEntries = [
     labels: ["Niña Campos collaboration", "Hợp tác cùng Niña Campos"],
     heading: "Niña Campos",
     title: "Niña Campos in a Tailored Stage Suit | S.T Tailor",
-    description: "See the light two-piece stage suit S.T Tailor made for singer Niña Campos in six performance and portrait photographs. Explore the cut, layers and fit in motion.",
+    description: "See the pale two-piece suit S.T Tailor made for singer Niña Campos in seven stage and portrait photographs, with details on the jacket, pleated trousers and styling.",
     summary: ninaCampos.summary,
     image: photoSource(ninaCover),
     imageAlt: ninaCoverAlt.join(" | "),
@@ -576,6 +576,17 @@ export const showcaseEntries = [
     summary: ["Client portraits show what comes into view at different distances, from a trouser hem and shoes to the lapel, neckline and tie.", "Ảnh khách hàng cho thấy chi tiết hiện lên ở từng khoảng cách, từ lai quần và giày đến ve áo, đường cổ và cà vạt."],
     image: "/media/2026/09/st-tailor-gallery-navy-formal-front.jpg",
     imageAlt: "Full-length portrait of a client in a navy suit, white shirt and burgundy tie | Chân dung toàn thân khách mặc suit navy, sơ mi trắng và cà vạt đỏ rượu"
+  },
+  {
+    route: "/san-pham/ao-khoac-navy-tui-trong-vien-hoa-van/",
+    section: "suits-and-jackets",
+    source: "ShowcaseNavyPatternedPocketJacket.html",
+    labels: ["Navy jacket with gold-patterned inside pockets", "Áo khoác navy có túi trong viền họa tiết vàng"],
+    title: "Navy Jacket With Gold-Patterned Inside Pockets | S.T Tailor",
+    description: "Look inside a finished S.T Tailor navy jacket. See its dark patterned lining, gold and brown pocket trim and buttoned inside pocket.",
+    summary: ["Dark patterned lining and gold-and-brown pocket trim are visible when the navy jacket is opened over a fine-striped shirt and geometric tie.", "Khi mở vạt áo khoác navy, có thể thấy lớp lót tối màu có hoa văn và viền túi vàng nâu bên cạnh sơ mi sọc mảnh và cà vạt họa tiết hình học."],
+    image: "/media/2026/09/st-tailor-gallery-jacket-lining-mannequin.jpg",
+    imageAlt: "Open navy jacket on an S.T Tailor form, with dark patterned lining and gold-and-brown trim on the inside pockets | Áo khoác navy mở vạt trên ma-nơ-canh S.T Tailor, để lộ lớp lót tối có hoa văn và viền túi trong màu vàng nâu"
   },
   {
     route: "/san-pham/ao-ghi-le-xam-bac/",

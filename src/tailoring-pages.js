@@ -210,6 +210,26 @@ export const tailoringPages = [
     imageAlt: "Navy jacket with notch lapels, a pale blue tie and a yellow pocket square | Áo khoác navy ve chữ K, phối cà vạt xanh nhạt và khăn túi ngực vàng"
   },
   {
+    route: "/cam-nang-may-do/chon-tui-ao-khoac/",
+    source: "GuideJacketPockets.html",
+    labels: ["Choosing jacket pockets", "Chọn kiểu túi áo khoác"],
+    title: "Choosing Pockets for a Tailored Jacket | S.T Tailor",
+    description: "Compare flap, jetted and patch pockets on finished jackets. See how to choose the placement and depth of outside and inside pockets at a fitting.",
+    descriptionVi: "So sánh túi nắp, túi viền và túi đắp trên áo khoác đã hoàn thiện. Xem cách chọn vị trí và độ sâu của túi ngoài và túi trong khi thử áo.",
+    image: "/media/2026/09/sttailorhcm_3971191631789221081.jpg",
+    imageAlt: "Navy jacket on a form with a flap pocket and a jetted pocket at the hips | Áo khoác navy trên ma-nơ-canh với một túi nắp và một túi viền ngang hông"
+  },
+  {
+    route: "/cam-nang-may-do/xay-dung-tu-do-cong-so/",
+    source: "GuideWorkWardrobe.html",
+    labels: ["Building a tailored work wardrobe", "Xây dựng tủ đồ may đo công sở"],
+    title: "Tailored Work Wardrobe in Ho Chi Minh City | S.T Tailor",
+    description: "Plan a work wardrobe around your dress code and daily routine. Compare a navy suit, separates and shirting, with fitting checks for office and travel.",
+    descriptionVi: "Lên tủ đồ may đo theo quy định trang phục và lịch làm việc. So sánh suit navy, đồ mặc rời và sơ mi, cùng các bước thử đồ cho công sở và công tác.",
+    image: "/media/2026/11/st-tailor-navy-blazer-client-standing.webp",
+    imageAlt: "Client in a navy blazer with an open-collar white shirt, grey trousers and brown leather shoes | Khách mặc blazer navy, sơ mi trắng mở cổ, quần xám và giày da nâu"
+  },
+  {
     route: "/cam-nang-may-do/chon-cap-va-ly-quan-tay/",
     source: "GuideTrouserRise.html",
     labels: ["Choosing trouser rise and pleats", "Chọn độ cao cạp và ly quần tây"],

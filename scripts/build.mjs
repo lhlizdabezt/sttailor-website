@@ -49,7 +49,8 @@ const liningHeroSizes = "(max-width: 860px) min(calc(100vw - 48px), 480px), min(
 const editorialGuideHeroes = tailoringPages.filter(({ source }) =>
   ["GuideFirstConsultation.html", "GuideGarmentCollection.html", "GuideWeddingPlanning.html", "GuideAftercare.html", "GuideShirtCollars.html", "GuideReferencePhotos.html",
     "GuideOrderQuotation.html", "GuideArrangeDelivery.html", "GuidePackingSuit.html", "GuideBlackTie.html", "GuideShirtCuffs.html",
-    "GuideShirtFit.html", "GuideTrouserHem.html", "GuideJacketLapels.html", "GuideTrouserRise.html", "ServiceShirts.html", "ServiceTrousers.html", "ServiceJackets.html"].includes(source)
+    "GuideShirtFit.html", "GuideTrouserHem.html", "GuideJacketLapels.html", "GuideJacketPockets.html", "GuideWorkWardrobe.html", "GuideTrouserRise.html",
+    "ServiceShirts.html", "ServiceTrousers.html", "ServiceJackets.html"].includes(source)
 );
 const editorialGuideHeroSizes = "(max-width: 560px) calc(100vw - 28px), (max-width: 860px) calc(100vw - 48px), min(calc(46vw - 36px), 540px)";
 
@@ -372,28 +373,35 @@ function bilingualProse(markup) {
   });
 }
 
+function showcaseDetailsProse(markup) {
+  const adjacentTranslations = /<p(?: lang="en")?>((?:(?!<\/p>)[\s\S])*)<\/p>\s*<p lang="vi">((?:(?!<\/p>)[\s\S])*)<\/p>/g;
+  return bilingualProse(markup.replace(adjacentTranslations, '<p>$1<span lang="vi">$2</span></p>'));
+}
+
 function layoutEditorialCopy(html) {
   const regions = [
     ["div", "st-home-editorial__intro"],
+    ["div", "st-about-hero__details"],
     ["header", "st-lux-provenance__intro"],
     ["header", "st-cloth-heritage__head"],
     ["header", "st-about-discovery__head"],
     ["header", "st-tripadvisor__copy"],
     ["header", "st-service-commission-map__head"],
     ["header", "st-bespoke-process__head"],
+    ["div", "st-gallery-hero__summary"],
     ["header", "st-gallery-numpad__heading"],
     ["header", "st-contact-details-heading"],
     ["div", "st-contact-heading"],
     ["header", "st-client-care__header"],
     ["header", "st-showcase__collection"],
-    ["div", "st-showcase__details"],
+    ["div", "st-showcase__details", showcaseDetailsProse],
     ["p", "st-showcase__story-intro"],
     ["p", "st-payment-methods__note"]
   ];
-  for (const [tag, name] of regions) {
+  for (const [tag, name, format = bilingualProse] of regions) {
     const range = findElementByClass(html, tag, name);
     if (!range) continue;
-    html = html.slice(0, range.start) + bilingualProse(html.slice(range.start, range.end)) + html.slice(range.end);
+    html = html.slice(0, range.start) + format(html.slice(range.start, range.end)) + html.slice(range.end);
   }
   const heroCopy = /(<div class="st-guide-hero__copy">)([\s\S]*?)(<\/div>\s*)(?=<figure class="st-guide-hero__media")/;
   if (!html.includes("st-guide-hero__intro")) {
@@ -490,7 +498,7 @@ function transformFooter(html, route) {
 }
 
 function transformServices(html) {
-  html = html.replace('aria-labelledby="st-service-title"', 'aria-labelledby="st-service-commission-map-title"');
+  html = html.replace(' aria-labelledby="st-service-title"', "");
   for (const [tag, className] of [
     ["header", "st-service-hero"],
     ["section", "st-service-offerings"],
@@ -516,7 +524,11 @@ function transformServices(html) {
         <li class="st-motion st-motion-4"><span class="st-bespoke-process__number">04</span><div><h3>Fittings &amp; refinement<span lang="vi">Thử đồ &amp; tinh chỉnh</span></h3><p>Balance, comfort and movement are reviewed through fitting, then resolved in the finishing details.<span lang="vi">Độ cân đối, thoải mái và chuyển động được kiểm tra qua thử đồ rồi hoàn thiện ở từng chi tiết.</span></p></div></li>
         <li class="st-motion st-motion-5"><span class="st-bespoke-process__number">05</span><div><h3>Handover &amp; care<span lang="vi">Bàn giao &amp; chăm sóc</span></h3><p>The finished garment is inspected and pressed, with practical guidance for wearing and care.<span lang="vi">Trang phục được kiểm tra, là hoàn thiện và hướng dẫn sử dụng, bảo quản phù hợp.</span></p></div></li>
       </ol>
-      <div class="st-bespoke-process__actions"><a href="/lien-he/">ARRANGE A CONSULTATION <span aria-hidden="true">/</span> <span lang="vi">ĐẶT LỊCH TƯ VẤN</span></a><a href="/bang-gia/">VIEW STARTING PRICES <span aria-hidden="true">/</span> <span lang="vi">XEM BẢNG GIÁ</span></a><a href="/cam-nang-may-do/">READ THE TAILORING GUIDE <span aria-hidden="true">/</span> <span lang="vi">XEM CẨM NANG MAY ĐO</span></a></div>
+      <nav class="st-bespoke-process__actions" aria-label="Next steps / Bước tiếp theo">
+        <a href="/lien-he/"><span>Arrange a consultation</span><span lang="vi">Đặt lịch tư vấn</span></a>
+        <a href="/bang-gia/"><span>View starting prices</span><span lang="vi">Xem bảng giá</span></a>
+        <a href="/cam-nang-may-do/"><span>Read the tailoring guide</span><span lang="vi">Xem cẩm nang may đo</span></a>
+      </nav>
     </div>
   </section>`;
   html = html.replace('  <aside class="st-service-booking"', `${bespokeProcess}\n${showcaseHubLinks()}\n  <aside class="st-service-booking"`);
@@ -951,14 +963,14 @@ function transformAbout(html) {
     <article class="st-tripadvisor__card st-tripadvisor__card--reviews" aria-labelledby="st-tripadvisor-listing-title">
       <div class="st-tripadvisor__card-copy">
           <h3 id="st-tripadvisor-listing-title">S.T Tailor on Tripadvisor<span lang="vi">S.T Tailor trên Tripadvisor</span></h3>
-          <p>See what visitors share about their fittings and showroom visits. Tripadvisor also publishes their full reviews and photos.<span lang="vi">Đọc chia sẻ của khách về những buổi thử đồ và trải nghiệm ghé nhà may. Bạn có thể xem toàn văn đánh giá và ảnh của khách trên Tripadvisor.</span></p>
+          <p>Read recent comments about fittings and showroom visits. Tripadvisor has the full reviews and visitor photos.<span lang="vi">Đọc những chia sẻ gần đây về các buổi thử đồ và trải nghiệm ghé nhà may. Bạn có thể xem bài đánh giá đầy đủ và ảnh của khách trên Tripadvisor.</span></p>
       </div>
       <div class="st-tripadvisor__embed">
         <a class="st-tripadvisor__embed-link" href="${tripadvisorListing}" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note">
-          <img src="/icons/tripadvisor-logomark.svg" alt="" width="34" height="24" loading="lazy" decoding="async">
-          <span>View on Tripadvisor<span lang="vi">Xem trên Tripadvisor</span></span>
+          <span class="st-tripadvisor__embed-brand" aria-hidden="true"><img src="/icons/tripadvisor-logomark.svg" alt="" width="36" height="23" decoding="async">Tripadvisor</span>
+          <span class="st-tripadvisor__embed-caption">View on Tripadvisor<span lang="vi">Xem trên Tripadvisor</span></span>
         </a>
-        <iframe class="st-tripadvisor__frame" src="${tripadvisorEmbedPath}" title="Recent Tripadvisor reviews for S.T Tailor / Đánh giá gần đây của S.T Tailor trên Tripadvisor" loading="lazy" width="500" height="200" referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
+        <iframe class="st-tripadvisor__frame" src="${tripadvisorEmbedPath}" title="Recent Tripadvisor reviews for S.T Tailor / Đánh giá gần đây của S.T Tailor trên Tripadvisor" loading="lazy" width="500" height="282" referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
       </div>
       <div class="st-tripadvisor__actions">
         <a class="st-tripadvisor__link" href="${tripadvisorListing}" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note"><span>Read reviews</span><span lang="vi">Đọc đánh giá</span></a>

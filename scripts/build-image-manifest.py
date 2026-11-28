@@ -163,7 +163,9 @@ def main() -> int:
                 for candidate in responsive_widths:
                     if candidate < width:
                         variants.append({"src": build_variant(image, relative, candidate, responsive_root, cache_immutable=is_cover), "width": candidate})
-                entry = {"width": width, "height": height, "responsive": variants}
+                # Compare the rendered pixels after applying the stored orientation.
+                decoded_sha256 = sha256(image.convert("RGBA").tobytes()).hexdigest()
+                entry = {"width": width, "height": height, "decoded_sha256": decoded_sha256, "responsive": variants}
                 if is_cover:
                     variants.append({"src": build_variant(image, relative, width, responsive_root, cache_immutable=True), "width": width})
                 if relative.as_posix() == HOME_HERO:

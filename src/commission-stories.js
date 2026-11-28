@@ -10,7 +10,7 @@ const shirtDetails = "/du-an/chi-tiet-so-mi-may-do/";
 export const ninaCampos = {
   id: "suit-san-khau-nina-campos", route: "/du-an/nina-campos/", album: "appointments",
   labels: ["Niña Campos in a light suit", "Niña Campos trong bộ suit sáng màu"],
-  summary: ["S.T Tailor made this light two-piece suit for singer Niña Campos. In six photographs, see how she wore it on stage and how the jacket and trousers look in a full-length portrait.", "Bộ suit hai mảnh sáng màu này do S.T Tailor may cho ca sĩ Niña Campos. Sáu bức ảnh cho thấy cách cô mặc trên sân khấu, cùng phom áo khoác và quần qua góc chụp toàn thân."],
+  summary: ["S.T Tailor made this pale two-piece suit for singer Niña Campos. Seven photographs follow the open jacket and pleated trousers from the stage to full-length portraits by the staircase.", "S.T Tailor may bộ suit hai mảnh sáng màu này cho ca sĩ Niña Campos. Bảy bức ảnh ghi lại dáng áo khoác mở vạt và quần xếp ly, từ sân khấu đến những bức chân dung toàn thân bên cầu thang."],
   includeReferencedPhotos: true,
   photos: [
     ["nina-campos-light-suit-on-stage", "Niña Campos holds a microphone in a pale open jacket and matching trousers against blue and red stage lighting.", "Niña Campos cầm micro trong áo khoác sáng màu mở vạt và quần đồng bộ, trước nền đèn sân khấu xanh đỏ."],
@@ -18,7 +18,8 @@ export const ninaCampos = {
     ["nina-campos-light-suit-stage-group", "Niña Campos stands between two people on stage, wearing a light suit and dark top.", "Niña Campos đứng giữa hai người trên sân khấu, phối suit sáng màu với áo tối."],
     ["nina-campos-light-lapel-group-portrait", "Close group portrait with Niña Campos in the centre, showing the light jacket lapel over a dark top.", "Chân dung cận cảnh của nhóm với Niña Campos ở giữa, thấy ve áo khoác sáng trên nền áo tối."],
     ["/media/2026/09/st-tailor-gallery-singer-feedback-one.jpg", "Niña Campos in a light suit and dark top, standing beside a man in a white shirt near a staircase.", "Niña Campos mặc suit sáng màu và áo tối, đứng cạnh một người mặc sơ mi trắng gần cầu thang."],
-    ["/media/2026/09/st-tailor-gallery-singer-feedback-two.jpg", "Niña Campos poses by the staircase beside a man in a white shirt. Her pale pleated trousers and light trainers are visible.", "Niña Campos chụp cạnh cầu thang bên một người mặc sơ mi trắng. Ảnh cho thấy quần xếp ly và giày thể thao sáng màu của cô."]
+    ["/media/2026/09/st-tailor-gallery-singer-feedback-two.jpg", "Niña Campos poses by the staircase with one arm bent, showing her pale pleated trousers and light trainers below the open jacket.", "Niña Campos đứng bên cầu thang với một tay gập, để lộ quần xếp ly và giày thể thao sáng màu bên dưới áo khoác mở vạt."],
+    ["/media/2026/09/st-tailor-owner-client-white-suit.jpg", "Full-length staircase portrait of Niña Campos beside an S.T Tailor representative, with her pale jacket open over a dark top and one hand near her trouser pocket.", "Chân dung toàn thân bên cầu thang của Niña Campos cạnh đại diện S.T Tailor, với áo khoác sáng mở vạt ngoài áo tối và một tay đặt cạnh túi quần."]
   ]
 };
 

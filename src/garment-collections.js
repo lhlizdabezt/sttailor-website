@@ -54,7 +54,7 @@ export const garmentCollections = [
     id: "chi-tiet-trong-phong-thu",
     route: "/du-an/chi-tiet-phong-thu-do/",
     album: "fitting",
-    labels: ["Inside the fitting room","Bên trong phòng thử đồ"],
+    labels: ["Fitting portraits and finishing details","Chân dung buổi thử và chi tiết hoàn thiện"],
     summary: ["Portraits and close views from several fittings show a short-sleeve shirt, a conversation in navy and details of styling and embroidery.","Chân dung và ảnh cận từ nhiều buổi thử ghi lại sơ mi tay ngắn, cuộc trao đổi khi thử áo navy và chi tiết phối đồ, đường thêu."],
     photos: [
       ["/media/2026/11/st-tailor-light-blue-short-sleeve-shirt-left-profile.webp", "Left-side view of a client in a light blue short-sleeve shirt at the showroom.", "Góc bên trái của khách mặc sơ mi xanh nhạt tay ngắn trong showroom."],
