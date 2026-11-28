@@ -14764,6 +14764,8 @@ html body .st-about-lux-hero .st-about-atelier-panel { grid-area: process; }
 html body #main-content .st-lux-page.st-lux-about .st-about-hero__details .st-lux-lead {
   max-width: none !important;
   margin: 0 !important;
+  color: #422719 !important;
+  -webkit-text-fill-color: #422719 !important;
   font: 400 clamp(16px, 1.3vw, 19px)/1.7 var(--st-vietnamese) !important;
 }
 html body #main-content .st-lux-page.st-lux-about .st-about-hero__details .st-lux-actions {
@@ -14788,9 +14790,13 @@ html body .st-gallery-hero--index .st-gallery-hero__summary { grid-area: lead; }
 html body .st-gallery-hero--index .st-gallery-hero__story { grid-area: image; }
 html body #main-content .st-gallery-hero__summary > p {
   margin: 0 !important;
-  color: #4f3021 !important;
-  -webkit-text-fill-color: #4f3021 !important;
+  color: #422719 !important;
+  -webkit-text-fill-color: #422719 !important;
   font: 400 clamp(16px, 1.3vw, 19px)/1.7 var(--st-vietnamese) !important;
+}
+html body #main-content :is(.st-lux-page.st-lux-about .st-about-hero__details .st-lux-lead, .st-gallery-hero__summary > p) > [lang="vi"] {
+  color: inherit !important;
+  -webkit-text-fill-color: inherit !important;
 }
 html body #main-content .st-gallery-hero__summary > p > [lang="vi"] { display: block; margin-block-start: 8px; }
 html body #main-content .st-guide-hero__grid:has(> p.st-guide-hero__intro) {
