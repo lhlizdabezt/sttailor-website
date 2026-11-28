@@ -3,8 +3,10 @@ const widget = document.querySelector(".st-tripadvisor__widget");
 const fallback = widget.querySelector(".st-tripadvisor__fallback");
 const listing = fallback.href;
 const listingOrigin = new URL(listing).origin;
+let previousReady;
+let previousHeight;
 
-function shareReviewStatus() {
+function shareReviewStatus(force = false) {
   if (window.parent === window) return;
   const ready = widget.hasAttribute("data-ready");
   let height = null;
@@ -13,11 +15,14 @@ function shareReviewStatus() {
     const snippetHeight = Math.max(reviewSnippets.scrollHeight, reviewSnippets.getBoundingClientRect().height);
     height = Math.ceil(snippetHeight + parseFloat(style.paddingTop) + parseFloat(style.paddingBottom));
   }
+  if (!force && ready === previousReady && height === previousHeight) return;
+  previousReady = ready;
+  previousHeight = height;
   window.parent.postMessage({ type: "st-tailor-tripadvisor-status", ready, height }, location.origin);
 }
 
 window.addEventListener("message", (event) => {
-  if (event.source === window.parent && event.origin === location.origin && event.data === "st-tailor-tripadvisor-status") shareReviewStatus();
+  if (event.source === window.parent && event.origin === location.origin && event.data === "st-tailor-tripadvisor-status") shareReviewStatus(true);
 });
 
 // The vendor can populate its anchor attributes in separate asynchronous steps.
@@ -55,6 +60,6 @@ new MutationObserver(updateWidget).observe(reviewSnippets, {
   attributeFilter: ["href", "target", "rel", "class", "src", "onclick"],
 });
 // New review excerpts or reflow at a narrower width can change the preview size.
-new ResizeObserver(shareReviewStatus).observe(reviewSnippets);
-window.addEventListener("resize", shareReviewStatus);
+new ResizeObserver(() => shareReviewStatus()).observe(reviewSnippets);
+window.addEventListener("resize", () => shareReviewStatus());
 updateWidget();

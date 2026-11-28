@@ -21,6 +21,7 @@
 | `/10-cach-bao-quan-vest-nam-luon-nhu-moi-bi-quyet-giu-phom-chuan-theo-thoi-gian/` | `/bao-quan-giat-la/` | 301 | Retired suit-care article reported by Bing; relevant bilingual replacement |
 | `/refund_returns/` | `/doi-tra-hoan-tien/` | 301 | Current returns and refunds policy |
 | `/bao-hanh-sua-chua/` | `/dich-vu/` | 301 | Closest existing service page |
+| `/wp-content/uploads/YYYY/MM/<image>` | `/media/YYYY/MM/<image>` | 301 | An exact matching, published JPEG, PNG or WebP exists. The redirect preserves query parameters. |
 
 Unknown paths return a real 404 and are not redirected to the homepage. There is one redirect authority for `www`: the dedicated redirect Worker.
 

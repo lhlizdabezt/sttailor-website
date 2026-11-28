@@ -47,7 +47,7 @@ const liningGuide = tailoringPages.find(({ source }) => source === "GuideJacketL
 const suitPiecesGuide = tailoringPages.find(({ source }) => source === "GuideSuitPieces.html");
 const liningHeroSizes = "(max-width: 860px) min(calc(100vw - 48px), 480px), min(calc(45vw - 46px), 480px)";
 const editorialGuideHeroes = tailoringPages.filter(({ source }) =>
-  ["GuideFirstConsultation.html", "GuideGarmentCollection.html", "GuideWeddingPlanning.html", "GuideAftercare.html", "GuideShirtCollars.html",
+  ["GuideFirstConsultation.html", "GuideGarmentCollection.html", "GuideWeddingPlanning.html", "GuideAftercare.html", "GuideShirtCollars.html", "GuideReferencePhotos.html",
     "GuideOrderQuotation.html", "GuideArrangeDelivery.html", "GuidePackingSuit.html", "GuideBlackTie.html", "GuideShirtCuffs.html",
     "GuideShirtFit.html", "GuideTrouserHem.html", "GuideJacketLapels.html", "GuideTrouserRise.html", "ServiceShirts.html", "ServiceTrousers.html", "ServiceJackets.html"].includes(source)
 );
@@ -375,12 +375,14 @@ function bilingualProse(markup) {
 function layoutEditorialCopy(html) {
   const regions = [
     ["div", "st-home-editorial__intro"],
+    ["header", "st-lux-provenance__intro"],
     ["header", "st-cloth-heritage__head"],
+    ["header", "st-about-discovery__head"],
     ["header", "st-tripadvisor__copy"],
     ["header", "st-service-commission-map__head"],
     ["header", "st-bespoke-process__head"],
     ["header", "st-gallery-numpad__heading"],
-    ["header", "st-gallery-series__head"],
+    ["header", "st-contact-details-heading"],
     ["div", "st-contact-heading"],
     ["header", "st-client-care__header"],
     ["header", "st-showcase__collection"],
@@ -565,12 +567,12 @@ function transformContact(html) {
 }
 
 const franceClientPhotos = [
-  ["st-tailor-red-waistcoat-bouquet-back.jpg", "Red patterned waistcoat with a bouquet over the shoulder", "Áo gile đỏ họa tiết cùng bó hoa trên vai"],
-  ["st-tailor-red-waistcoat-side-profile.jpg", "Side profile of the red waistcoat, white shirt and bouquet", "Góc nghiêng áo gile đỏ, sơ mi trắng và bó hoa"],
-  ["st-tailor-red-waistcoat-full-length.jpg", "Back view of the red waistcoat and blue-grey trousers", "Áo gile đỏ và quần xanh xám nhìn từ phía sau"],
-  ["st-tailor-red-waistcoat-marina-evening.jpg", "Red waistcoat and jacket carried beside the marina at night", "Áo gile đỏ cùng áo khoác cầm tay bên bến du thuyền về đêm"],
-  ["st-tailor-red-waistcoat-turning-view.jpg", "Turning view showing the red waistcoat and adjustable back strap", "Góc xoay người thể hiện áo gile đỏ và đai điều chỉnh phía sau"],
-  ["st-tailor-red-waistcoat-bouquet-marina.jpg", "Red waistcoat and flowers against the illuminated marina", "Áo gile đỏ và bó hoa bên bến du thuyền lên đèn"]
+  ["st-tailor-red-waistcoat-bouquet-back.jpg", "Red patterned waistcoat with a bouquet over the shoulder", "Áo ghi-lê đỏ họa tiết cùng bó hoa trên vai"],
+  ["st-tailor-red-waistcoat-side-profile.jpg", "Side profile of the red waistcoat, white shirt and bouquet", "Góc nghiêng áo ghi-lê đỏ, sơ mi trắng và bó hoa"],
+  ["st-tailor-red-waistcoat-full-length.jpg", "Back view of the red waistcoat and blue-grey trousers", "Áo ghi-lê đỏ và quần xanh xám nhìn từ phía sau"],
+  ["st-tailor-red-waistcoat-marina-evening.jpg", "Red waistcoat and jacket carried beside the marina at night", "Áo ghi-lê đỏ cùng áo khoác cầm tay bên bến du thuyền về đêm"],
+  ["st-tailor-red-waistcoat-turning-view.jpg", "Turning view showing the red waistcoat and adjustable back strap", "Góc xoay người thể hiện áo ghi-lê đỏ và đai điều chỉnh phía sau"],
+  ["st-tailor-red-waistcoat-bouquet-marina.jpg", "Red waistcoat and flowers against the illuminated marina", "Áo ghi-lê đỏ và bó hoa bên bến du thuyền lên đèn"]
 ];
 
 const galleryAltText = {
@@ -727,10 +729,8 @@ function appendGalleryCollections(html) {
     if (!grid) throw new Error(`Gallery chapter is missing: ${album}`);
     const content = series.map(({ id, route, labels, summary, photos, includeReferencedPhotos }) => `<section class="st-gallery-series" id="${id}" aria-labelledby="${id}-title" tabindex="-1">
       <header class="st-gallery-series__head">
-        <div>
-          <h3 id="${id}-title">${labels[0]}<span lang="vi">${labels[1]}</span></h3>
-          <p>${summary[0]}<span lang="vi">${summary[1]}</span></p>
-        </div>
+        <h3 id="${id}-title">${labels[0]}<span lang="vi">${labels[1]}</span></h3>
+        ${bilingualProse(`<p>${summary[0]}<span lang="vi">${summary[1]}</span></p>`)}
         ${id === showroomEntrance.id
           ? `<a class="st-gallery-series__link" href="${route}#${id}">Find the showroom<span lang="vi">Xem lối vào nhà may</span></a>`
           : `<a class="st-gallery-series__link" href="${route}">View story<span lang="vi">Xem bài và ảnh</span></a>`}
@@ -805,7 +805,7 @@ function transformGallery(html) {
   const evening = findElementById(html, "section", "album-tuxedo");
   const eveningGrid = evening && findElementByClass(html.slice(evening.start, evening.end), "div", "st-album-grid");
   if (!eveningGrid) throw new Error("Evening gallery grid was not found for the client photographs.");
-  const series = `<section class="st-gallery-client-series" aria-labelledby="st-gallery-client-series-title"><h3 id="st-gallery-client-series-title">Red waistcoat, after dark.<span lang="vi">Áo gile đỏ trong khung cảnh đêm.</span></h3><div class="st-gallery-client-series__grid">${franceClientPhotos.map(([file, en, vi]) => `<figure class="st-gallery-client-series__card"><img src="/media/2026/10/${file}" alt="" loading="lazy" decoding="async"><figcaption>${en}<span lang="vi">${vi}</span></figcaption></figure>`).join("")}</div></section>`;
+  const series = `<section class="st-gallery-client-series" aria-labelledby="st-gallery-client-series-title"><h3 id="st-gallery-client-series-title">Red waistcoat, after dark.<span lang="vi">Áo ghi-lê đỏ trong khung cảnh đêm.</span></h3><div class="st-gallery-client-series__grid">${franceClientPhotos.map(([file, en, vi]) => `<figure class="st-gallery-client-series__card"><img src="/media/2026/10/${file}" alt="" loading="lazy" decoding="async"><figcaption>${en}<span lang="vi">${vi}</span></figcaption></figure>`).join("")}</div></section>`;
   const seriesInsertAt = evening.start + eveningGrid.end;
   html = `${html.slice(0, seriesInsertAt)}${series}${html.slice(seriesInsertAt)}`;
   const galleryIndex = `
@@ -917,7 +917,7 @@ function transformAbout(html) {
     <nav class="st-about-discovery__links" aria-label="S.T Tailor consultation paths | Lối vào tư vấn S.T Tailor">
       <a class="st-motion st-motion-1" href="/dich-vu/"><strong>BESPOKE TAILORING <span lang="vi">MAY ĐO RIÊNG</span></strong><small>Suits, shirts, formalwear and womenswear.<span lang="vi">Suit, sơ mi, lễ phục và trang phục nữ.</span></small><i aria-hidden="true">→</i></a>
       <a class="st-motion st-motion-2" href="/chinh-sua-trang-phuc/"><strong>CLOTHING ALTERATIONS <span lang="vi">CHỈNH SỬA TRANG PHỤC</span></strong><small>Practical refinements for garments you already own.<span lang="vi">Tinh chỉnh thực tế cho trang phục sẵn có.</span></small><i aria-hidden="true">→</i></a>
-      <a class="st-motion st-motion-3" href="/lien-he/"><strong>PRIVATE CONSULTATION <span lang="vi">ĐẶT LỊCH TƯ VẤN</span></strong><small>Telephone, Messenger, Zalo, Instagram or WhatsApp.<span lang="vi">Điện thoại, Messenger, Zalo, Instagram hoặc WhatsApp.</span></small><i aria-hidden="true">→</i></a>
+      <a class="st-motion st-motion-3" href="/lien-he/"><strong>PRIVATE CONSULTATION <span lang="vi">ĐẶT LỊCH TƯ VẤN</span></strong><small>Telephone, email, Messenger, Zalo, Instagram or WhatsApp.<span lang="vi">Điện thoại, email, Messenger, Zalo, Instagram hoặc WhatsApp.</span></small><i aria-hidden="true">→</i></a>
     </nav>
   </div>
 </section>`;

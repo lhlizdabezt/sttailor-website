@@ -120,6 +120,16 @@ export const tailoringPages = [
     imageAlt: "Client and tailor reviewing fabric samples at S.T Tailor | Khách hàng cùng thợ may xem mẫu vải tại S.T Tailor"
   },
   {
+    route: "/cam-nang-may-do/chuan-bi-anh-tham-khao/",
+    source: "GuideReferencePhotos.html",
+    labels: ["Reference photos for a tailoring consultation", "Chuẩn bị ảnh tham khảo khi đặt may"],
+    title: "Using Reference Photos for Bespoke Tailoring | S.T Tailor",
+    description: "Choose useful reference photos for a tailoring appointment. Show the whole outfit, highlight a detail and compare colour and fit in person.",
+    descriptionVi: "Chọn ảnh tham khảo cho buổi tư vấn may đo. Chuẩn bị ảnh toàn thân, chỉ rõ chi tiết yêu thích và kiểm tra lại màu vải, phom dáng khi đến nhà may.",
+    image: "/media/2026/09/st-tailor-navy-lapel-detail.jpeg",
+    imageAlt: "Close view of the lapel and front of a navy tailored jacket | Góc cận ve và thân trước áo khoác may đo màu navy"
+  },
+  {
     route: "/cam-nang-may-do/nhan-trang-phuc-may-do/",
     source: "GuideGarmentCollection.html",
     labels: ["Collecting a tailored garment", "Nhận trang phục may đo"],

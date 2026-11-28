@@ -69,7 +69,10 @@ function securityHeaders(response, pathname = "/") {
   const revalidate = "public, max-age=0, must-revalidate";
   if (isHtml) {
     const isCanonical = routes.has(pathname) && cacheable;
-    if (isCanonical) headers.set("Content-Language", "en, vi");
+    if (isCanonical) {
+      headers.set("Content-Type", "text/html; charset=utf-8");
+      headers.set("Content-Language", "en, vi");
+    }
     // Keep per-page Early Hints outside the limited static asset rule table.
     const stylesheet = isCanonical && buildManifest.routeStyles[pathname];
     if (stylesheet) headers.set("Link", `<${stylesheet.href}>; rel=preload; as=style`);
@@ -150,6 +153,15 @@ export default {
       const { name, widths } = archiveMedia[archiveVariant[1]];
       if (widths.map(String).includes(archiveVariant[2])) {
         return Response.redirect(new URL(`/media/_responsive/2026/09/st-tailor-archive-${name}-${archiveVariant[2]}.webp${url.search}`, url), 301);
+      }
+    }
+    const legacyUpload = /^\/wp-content\/uploads\/(\d{4}\/(?:0[1-9]|1[0-2])\/[a-z0-9][a-z0-9._-]*\.(?:jpe?g|png|webp))$/i.exec(pathname);
+    if (legacyUpload) {
+      const destination = new URL(`/media/${legacyUpload[1]}`, url);
+      const original = await env.ASSETS.fetch(new Request(destination, { method: "HEAD" }));
+      if (original.status === 200 && original.headers.get("Content-Type")?.startsWith("image/")) {
+        destination.search = url.search;
+        return Response.redirect(destination, 301);
       }
     }
     const pathWithSlash = pathname === "/" || pathname.endsWith("/") ? pathname : `${pathname}/`;

@@ -119,26 +119,34 @@ test("nested canonical redirects retain query parameters and unknown child paths
   }
 });
 
-test("llms.txt preserves UTF-8 on GET, HEAD and cache revalidation", async () => {
+test("bilingual HTML and llms.txt declare UTF-8 on GET, HEAD and cache revalidation", async () => {
   const copy = "Địa chỉ: Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định";
-  const etag = '"llms-fixture"';
-  const textEnv = { ASSETS: { fetch: async (request) => {
-    const validated = request.headers.get("If-None-Match") === etag;
-    return new Response(!validated && request.method === "GET" ? copy : null, {
-      status: validated ? 304 : 200,
-      headers: { "Content-Type": "text/plain", ETag: etag }
-    });
-  } } };
-  for (const method of ["GET", "HEAD"]) {
-    const response = await worker.fetch(new Request("https://sttailor.com/llms.txt", { method }), textEnv);
-    assert.equal(response.headers.get("Content-Type"), "text/plain; charset=utf-8");
-    assert.equal(response.headers.get("Cache-Control"), "public, max-age=0, must-revalidate");
-    assert.equal(await response.text(), method === "GET" ? copy : "");
+  const etag = '"bilingual-fixture"';
+  const cases = [["/", "text/html", `<p lang="vi">${copy}</p>`], ["/llms.txt", "text/plain", copy]];
+  for (const [route, contentType, body] of cases) {
+    const url = `https://sttailor.com${route}`;
+    const textEnv = { ASSETS: { fetch: async (request) => {
+      const validated = request.headers.get("If-None-Match") === etag;
+      return new Response(!validated && request.method === "GET" ? body : null, {
+        status: validated ? 304 : 200,
+        headers: { "Content-Type": contentType, ETag: etag }
+      });
+    } } };
+    for (const method of ["GET", "HEAD"]) {
+      const response = await worker.fetch(new Request(url, { method }), textEnv);
+      assert.equal(response.status, 200);
+      assert.equal(response.headers.get("Content-Type"), `${contentType}; charset=utf-8`, `${method} ${route}`);
+      assert.equal(response.headers.get("Content-Language"), "en, vi");
+      assert.equal(response.headers.get("Cache-Control"), "public, max-age=0, must-revalidate");
+      assert.equal(await response.text(), method === "GET" ? body : "");
+    }
+    const cached = await worker.fetch(new Request(url, { headers: { "If-None-Match": etag } }), textEnv);
+    assert.equal(cached.status, 304);
+    assert.equal(cached.headers.get("Content-Type"), `${contentType}; charset=utf-8`, route);
+    assert.equal(cached.headers.get("Content-Language"), "en, vi");
+    assert.equal(cached.headers.get("Cache-Control"), "public, max-age=0, must-revalidate");
+    assert.equal(cached.body, null);
   }
-  const cached = await worker.fetch(new Request("https://sttailor.com/llms.txt", { headers: { "If-None-Match": etag } }), textEnv);
-  assert.equal(cached.status, 304);
-  assert.equal(cached.headers.get("Content-Type"), "text/plain; charset=utf-8");
-  assert.equal(cached.headers.get("Cache-Control"), "public, max-age=0, must-revalidate");
 });
 
 test("only fingerprinted asset paths are immutable and errors cannot enter the browser cache", async () => {
@@ -202,6 +210,46 @@ test("former archive image URLs point to the same published originals and respon
       assert.equal(response.headers.get("Location"), `https://sttailor.com${to}?v=old`);
     }
   }
+});
+
+test("legacy uploads redirect only to an existing original image", async () => {
+  const requestedPaths = [];
+  const uploadsEnv = { ASSETS: { fetch: async (request) => {
+    const { pathname, search } = new URL(request.url);
+    requestedPaths.push([pathname, search, request.method]);
+    if (pathname === "/media/2026/06/store-sttailor-1.webp") {
+      return new Response(null, { headers: { "Content-Type": "image/webp" } });
+    }
+    if (pathname === "/media/2026/06/file-with-html.webp") {
+      return new Response(null, { headers: { "Content-Type": "text/html" } });
+    }
+    return new Response(null, { status: pathname === "/not-found" ? 200 : 404 });
+  } } };
+  const fetchPath = (pathname, method = "GET") =>
+    worker.fetch(new Request(`https://sttailor.com${pathname}`, { method }), uploadsEnv);
+
+  for (const method of ["GET", "HEAD"]) {
+    const redirect = await fetchPath("/wp-content/uploads/2026/06/store-sttailor-1.webp?source=old", method);
+    assert.equal(redirect.status, 301, method);
+    assert.equal(redirect.headers.get("Location"), "https://sttailor.com/media/2026/06/store-sttailor-1.webp?source=old");
+  }
+  for (const pathname of [
+    "/wp-content/uploads/2026/06/missing.jpg",
+    "/wp-content/uploads/2026/06/file-with-html.webp",
+    "/wp-content/uploads/2026/06/private-record.pdf",
+    "/wp-content/uploads/sources/2026/11/source.heic"
+  ]) {
+    const missing = await fetchPath(pathname);
+    assert.equal(missing.status, 404, pathname);
+    assert.equal(missing.headers.get("Location"), null, pathname);
+    assert.equal(missing.headers.get("X-Robots-Tag"), "noindex, follow", pathname);
+  }
+  assert.deepEqual(requestedPaths.filter(([pathname]) => pathname !== "/not-found"), [
+    ["/media/2026/06/store-sttailor-1.webp", "", "HEAD"],
+    ["/media/2026/06/store-sttailor-1.webp", "", "HEAD"],
+    ["/media/2026/06/missing.jpg", "", "HEAD"],
+    ["/media/2026/06/file-with-html.webp", "", "HEAD"]
+  ]);
 });
 
 test("security disclosure is a public text resource while unknown well-known paths remain missing", async () => {

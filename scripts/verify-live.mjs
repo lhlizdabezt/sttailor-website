@@ -68,6 +68,7 @@ for (const route of routes) {
   const stylesheet = pageHtml.match(/<link rel="stylesheet" href="([^"]+)"/i)?.[1];
   expect(stylesheet && response.headers.get("link")?.includes(`<${stylesheet}>; rel=preload; as=style`), `${route} does not advertise its current stylesheet to Cloudflare Early Hints`);
   expect(pageHtml.includes('<link rel="describedby" href="/llms.txt" type="text/plain">'), `${route} does not advertise its bilingual discovery guide`);
+  expect(response.headers.get("content-type")?.toLowerCase() === "text/html; charset=utf-8", `${route} does not declare UTF-8 HTML`);
   expect(response.headers.get("content-language") === "en, vi", `${route} does not declare both audience languages`);
   expect(response.headers.get("cache-control") === revalidate, `${route} does not revalidate its HTML before reuse`);
   expect((pageHtml.match(/<main\b/gi) ?? []).length === 1 && (pageHtml.match(/<\/main>/gi) ?? []).length === 1, `${route} must have exactly one main landmark`);
@@ -84,7 +85,8 @@ for (const route of routes) {
     const hash = createHash("sha256").update(body.replace(/\r\n?/g, "\n")).digest("base64");
     expect(policy.includes(`'sha256-${hash}'`), `${route} has an inline script blocked by CSP: ${hash}`);
   }
-  expect(response.headers.get("x-robots-tag")?.includes("index, follow"), `${route} has no indexable X-Robots-Tag`);
+  const robotsTag = response.headers.get("x-robots-tag") ?? "";
+  expect(robotsTag.startsWith("index, follow") && !/\b(?:noindex|noimageindex|none)\b/i.test(robotsTag), `${route} has no indexable X-Robots-Tag`);
   expect(pageHtml.includes(`<link rel="canonical" href="${origin}${route}">`), `${route} has no production canonical`);
   expect(!pageHtml.toLowerCase().includes("beta.sttailor.com"), `${route} still contains the beta host`);
   expect(pageHtml.includes('name="robots" content="index, follow'), `${route} is not indexable`);
@@ -311,23 +313,17 @@ await Promise.all(Array.from({ length: 6 }, async () => {
 }));
 console.log(`Audited ${publicAssets.length} public assets: originals, responsive images, icons, CSS, JavaScript, public build metadata and the first-party measurement gateway.`);
 
-// A reachable sitemap alone does not prove Cloudflare serves public HTML to
-// crawler requests. This catches broad user-agent blocks and origin differences.
-const crawlerAgents = ["Googlebot", "bingbot", "OAI-SearchBot", "Claude-SearchBot", "PerplexityBot", "Applebot"];
-const crawlerRoutes = ["/", "/gallery/", "/du-an/nina-campos/", "/san-pham/suit-xam-nhat-ve-chu-k/", "/cam-nang-may-do/"];
-await Promise.all(crawlerAgents.map(async (agent) => {
-  for (const route of crawlerRoutes) {
-    const response = await fetchWithRetry(`${origin}${route}`, { redirect: "manual", headers: { "User-Agent": agent } });
-    const html = await response.text();
-    expect(response.status === 200 && response.headers.get("x-robots-tag")?.startsWith("index, follow") && html.includes(`<link rel="canonical" href="${origin}${route}">`) && /<main\b[^>]*\bid="main-content"(?:\s|>)/.test(html) && /\blang="vi"/.test(html), `${agent} cannot read the canonical bilingual HTML for ${route}`);
-  }
-}));
-console.log(`Checked ${crawlerAgents.length} crawler user agents across ${crawlerRoutes.length} canonical bilingual pages.`);
 const imageBot = await fetchWithRetry(`${origin}/media/2026/09/st-tailor-archive-navy-coastal-suit.jpg`,
   { method: "HEAD", headers: { "User-Agent": "Googlebot-Image" } });
 expect(imageBot.status === 200 && imageBot.headers.get("content-type")?.startsWith("image/") && !/\b(?:noindex|noimageindex)\b/i.test(imageBot.headers.get("x-robots-tag") ?? ""), "Googlebot-Image could not reach the canonical archive image");
 const legacyArchive = await fetchWithRetry(`${origin}/media/_responsive/2026/09/st-tailor-archive-atelier-one-360.webp`, { method: "HEAD", redirect: "manual" });
 expect(legacyArchive.status === 301 && legacyArchive.headers.get("location") === `${origin}/media/_responsive/2026/09/st-tailor-archive-navy-coastal-suit-360.webp`, "The retired archive derivative URL does not redirect to its replacement");
+for (const asset of ["2026/06/store-sttailor-1.webp", "2026/09/logo-sttailor.png"]) {
+  const original = await fetchWithRetry(`${origin}/wp-content/uploads/${asset}?source=legacy`, { method: "HEAD", redirect: "manual" });
+  expect(original.status === 301 && original.headers.get("location") === `${origin}/media/${asset}?source=legacy`, `The former upload for ${asset} does not redirect to its published original`);
+}
+const unknownUpload = await fetchWithRetry(`${origin}/wp-content/uploads/2026/06/nonexistent-original.webp`, { method: "HEAD", redirect: "manual" });
+expect(unknownUpload.status === 404 && !unknownUpload.headers.get("location") && unknownUpload.headers.get("x-robots-tag") === "noindex, follow", "An unknown legacy upload must return a true, non-indexable 404");
 
 const llms = await fetchWithRetry(`${origin}/llms.txt`);
 const llmsText = new TextDecoder("utf-8", { fatal: true }).decode(await llms.arrayBuffer());
@@ -364,6 +360,26 @@ const gallerySitemapImages = [...gallerySitemap.matchAll(/<image:loc>([^<]+)<\/i
 expect(gallerySitemapImages.length === builtGalleryImages.size && [...builtGalleryImages].every((src) => gallerySitemapImages.includes(`${origin}${src}`)), "Gallery sitemap must contain every editorial image in the build exactly once");
 const watchSitemap = sitemapText.match(/<url><loc>https:\/\/sttailor\.com\/phim-thu-do\/[\s\S]*?<\/url>/)?.[0] ?? "";
 expect(sitemapText.includes('xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"') && (sitemapText.match(/<video:video>/g) || []).length === 1 && watchSitemap.includes(`<video:content_loc>${origin}${filmPath}</video:content_loc>`) && watchSitemap.includes(`<video:thumbnail_loc>${origin}${posterPath}</video:thumbnail_loc>`), "Video sitemap omits or duplicates the fitting watch page");
+
+// Simulated user agents detect edge rules that block or alter public responses.
+const crawlerAgents = ["Googlebot", "bingbot", "OAI-SearchBot", "Claude-SearchBot", "PerplexityBot", "Applebot", "ChatGPT-User"];
+const crawlerRoutes = ["/", "/gallery/", "/du-an/nina-campos/", "/san-pham/suit-xam-nhat-ve-chu-k/", "/cam-nang-may-do/"];
+const discoveryResources = [["/robots.txt", robotsText], ["/sitemap.xml", sitemapText], ["/llms.txt", llmsText]];
+await Promise.all(crawlerAgents.map(async (agent) => {
+  const options = { redirect: "manual", headers: { "User-Agent": agent, "Cache-Control": "no-cache" } };
+  for (const route of crawlerRoutes) {
+    const response = await fetchWithRetry(`${origin}${route}`, options);
+    const html = await response.text();
+    const robotsTag = response.headers.get("x-robots-tag") ?? "";
+    expect(response.status === 200 && robotsTag.startsWith("index, follow") && !/\b(?:noindex|noimageindex|none)\b/i.test(robotsTag) && html.includes(`<link rel="canonical" href="${origin}${route}">`) && /<main\b[^>]*\bid="main-content"(?:\s|>)/.test(html) && /\blang="vi"/.test(html), `${agent} cannot read the canonical bilingual HTML for ${route}`);
+  }
+  for (const [route, expectedContent] of discoveryResources) {
+    const response = await fetchWithRetry(`${origin}${route}`, options);
+    const body = await response.text();
+    expect(response.status === 200 && body === expectedContent, `${agent} cannot read the current public ${route}`);
+  }
+}));
+console.log(`Checked ${crawlerAgents.length} crawler user agents across ${crawlerRoutes.length} canonical bilingual pages and ${discoveryResources.length} discovery resources.`);
 
 const manifest = await fetchWithRetry(`${origin}/site.webmanifest`);
 expect(manifest.status === 200 && (await manifest.text()).includes('"name": "S.T Tailor"'), "site.webmanifest is invalid");

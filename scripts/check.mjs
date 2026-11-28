@@ -513,7 +513,9 @@ for (const excluded of ["linkedin", "facebook", "pinterest", "youtube", "tiktok"
 }
 if (contact.includes("st-contact-hero") || contact.includes("Tell us what you are dressing for") || contact.includes("Hãy chia sẻ dịp sử dụng")) failures.push("Contact hero band still remains after the requested removal.");
 if ((contact.match(/<h1\b/g) ?? []).length !== 1 || !contact.includes("CONTACT DETAILS")) failures.push("Contact page must retain one semantic H1 after its introduction band is removed.");
-if (!/<p class="st-contact-summary">[^<]+<span lang="vi">[^<]+<\/span><\/p>/.test(contact)) failures.push("Contact consultation guidance must be visible in both languages.");
+if (!/<header class="st-contact-details-heading">\s*<h1\b[^>]*>[\s\S]+?<p class="st-contact-summary st-prose-pair"><span lang="en">[^<]+<\/span><span lang="vi">[^<]+<\/span><\/p>\s*<\/header>\s*<div class="st-contact-info">/.test(contact)) {
+  failures.push("Contact must place its bilingual consultation guidance above the address and map columns.");
+}
 
 const services = readFileSync(path.join(dist, "dich-vu", "index.html"), "utf8");
 for (const removedBlock of ["st-service-hero", "st-service-offerings", "st-service-brief", "st-service-process", "st-service-house-standard", "st-service-notes", "st-service-gallery-redirect", "st-service-commission-map__journey"]) {
@@ -654,6 +656,10 @@ for (const image of galleryContentImages) {
   if (/\bloading="lazy"/i.test(image[0]) && !/\bsizes="auto, /i.test(image[0])) failures.push(`Lazy Gallery image must use its rendered width with a fallback size: ${image[1]}`);
 }
 if (!gallery.includes('"@type":"ItemList"') || !gallery.includes(`"numberOfItems":${galleryContentImages.length}`)) failures.push("Gallery image structured data is missing or incomplete.");
+const galleryStoryHeaders = [...gallery.matchAll(/<header class="st-gallery-series__head">([\s\S]*?)<\/header>/g)];
+if (!galleryStoryHeaders.length || galleryStoryHeaders.some(([, header]) => !/<p class="st-prose-pair"><span lang="en">[\s\S]+?<\/span><span lang="vi">[\s\S]+?<\/span><\/p>/.test(header))) {
+  failures.push("Every Gallery story introduction must place its English and Vietnamese copy in the full-width prose row.");
+}
 const filmPath = "/media/2026/09/st-tailor-womenswear-fitting-film.mp4";
 const posterPath = "/media/2026/09/st-tailor-womenswear-fitting-poster.webp";
 const filmTag = gallery.match(/<video\b[^>]*>[\s\S]*?<\/video>/i)?.[0] ?? "";

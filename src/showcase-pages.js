@@ -577,6 +577,28 @@ export const showcaseEntries = [
     image: "/media/2026/09/st-tailor-gallery-navy-formal-front.jpg",
     imageAlt: "Full-length portrait of a client in a navy suit, white shirt and burgundy tie | Chân dung toàn thân khách mặc suit navy, sơ mi trắng và cà vạt đỏ rượu"
   },
+  {
+    route: "/san-pham/ao-ghi-le-xam-bac/",
+    section: "suits-and-jackets",
+    source: "ShowcaseSilverGreyWaistcoat.html",
+    labels: ["Silver-grey tailored waistcoat", "Áo ghi-lê may đo xám bạc"],
+    title: "Silver-Grey Tailored Waistcoat | S.T Tailor",
+    description: "Examine a finished silver-grey waistcoat from S.T Tailor, with pointed fronts, narrow welt pockets and stitched buttonholes.",
+    summary: ["A silver-grey waistcoat with pointed fronts, narrow welt pockets and a single row of buttons, made as part of a three-piece suit.", "Áo ghi-lê xám bạc với hai vạt nhọn, túi viền hẹp và một hàng khuy, được may đồng bộ trong bộ suit ba mảnh."],
+    image: "/media/2026/11/st-tailor-silver-grey-waistcoat-front-on-form.webp",
+    imageAlt: "Silver-grey waistcoat on a form with pointed fronts, a single row of buttons and welt pockets | Áo ghi-lê xám bạc trên ma-nơ-canh với hai vạt nhọn, một hàng khuy và túi viền"
+  },
+  {
+    route: "/san-pham/ao-ghi-le-do-hoa-tiet/",
+    section: "suits-and-jackets",
+    source: "ShowcasePatternedRedWaistcoat.html",
+    labels: ["Red waistcoat with a patterned back", "Áo ghi-lê đỏ có họa tiết ở lưng"],
+    title: "Red Tailored Waistcoat With a Patterned Back | S.T Tailor",
+    description: "Examine the patterned back, armhole edges and adjustable strap of a finished red waistcoat from S.T Tailor.",
+    summary: ["A finished red waistcoat with a dark motif across the back and a short strap to adjust the waist. Rear and angled views show how the back sits over a white shirt.", "Áo ghi-lê đỏ đã hoàn thiện, với hoa văn sẫm ở lưng và đai ngắn để chỉnh độ ôm ở eo. Ảnh phía sau và góc nghiêng cho thấy dáng lưng áo khi mặc ngoài sơ mi trắng."],
+    image: "/media/2026/10/st-tailor-red-waistcoat-bouquet-back.jpg",
+    imageAlt: "Back of a red patterned waistcoat worn with a white shirt and a bouquet over one shoulder | Mặt sau áo ghi-lê đỏ họa tiết phối sơ mi trắng, khách mang bó hoa trên vai"
+  },
   ...photoStoryPages
 ];
 
