@@ -60,6 +60,26 @@ export const tailoringPages = [
     imageAlt: "Pale olive tailored jacket on a showroom form | Áo khoác may đo xanh ô liu nhạt trên mannequin tại nhà may"
   },
   {
+    route: "/cham-soc-khach-hang/dat-may-tiep/",
+    source: "GuideRepeatOrder.html",
+    labels: ["Placing a repeat tailoring order", "Đặt may cho lần tiếp theo"],
+    title: "Repeat Bespoke Tailoring Orders | S.T Tailor HCMC",
+    description: "Return to S.T Tailor for another shirt, suit or pair of trousers. Know what to share, when to update your measurements and how to plan fittings from overseas.",
+    descriptionVi: "Đặt may thêm sơ mi, suit hoặc quần tây tại S.T Tailor. Xem cần gửi thông tin gì, khi nào nên cập nhật số đo và cách sắp xếp thử đồ nếu ở nước ngoài.",
+    image: "/media/2026/11/st-tailor-showroom-comparing-dark-fabric-swatches.webp",
+    imageAlt: "Comparing dark cloth swatches at S.T Tailor | So sánh các mẫu vải tối màu tại nhà may S.T Tailor"
+  },
+  {
+    route: "/cam-nang-may-do/sap-lich-thu-do-theo-nhom/",
+    source: "GuideGroupFittings.html",
+    labels: ["Planning group fittings", "Sắp lịch thử đồ theo nhóm"],
+    title: "Group Tailoring Fittings in Ho Chi Minh City | S.T Tailor",
+    description: "Plan tailoring fittings for a wedding party, performers or a group travelling together. Coordinate one schedule and fit each person individually at S.T Tailor.",
+    descriptionVi: "Sắp xếp lịch thử đồ cho nhóm dự cưới, nhóm biểu diễn hoặc nhóm đi cùng nhau. Thống nhất lịch chung và kiểm tra độ vừa riêng cho từng người tại S.T Tailor.",
+    image: "/media/2026/09/st-tailor-magenta-floral-wrap-dress-and-navy-suit.jpg",
+    imageAlt: "Navy suit and magenta floral wrap dress displayed together at S.T Tailor | Suit navy và đầm quấn hoa hồng tím trưng bày cạnh nhau tại S.T Tailor"
+  },
+  {
     route: "/cam-nang-may-do/chuan-bi-trang-phuc-cuoi/",
     source: "GuideWeddingPlanning.html",
     labels: ["Planning wedding tailoring", "Chuẩn bị may lễ phục cưới"],

@@ -232,6 +232,7 @@ function editorialPhoto([file, english, vietnamese]) {
 
 function photoCollectionSection({ id, labels, photos }, { heading = labels, heroImage, intro } = {}) {
   const views = photos.filter(([file]) => photoSource(file) !== heroImage);
+  if (!views.length) return "";
   return `<section class="st-showcase__shell st-showcase__story" id="${id}" aria-labelledby="${id}-title">
     <h2 id="${id}-title">${heading[0]}<span lang="vi">${heading[1]}</span></h2>
     ${intro ? `<p class="st-showcase__story-intro">${intro[0]}<span lang="vi">${intro[1]}</span></p>` : ""}
@@ -393,6 +394,8 @@ function layoutEditorialCopy(html) {
     ["header", "st-contact-details-heading"],
     ["div", "st-contact-heading"],
     ["header", "st-client-care__header"],
+    ["div", "stpr-priceboard__head"],
+    ["div", "st-fitting-film__details"],
     ["header", "st-showcase__collection"],
     ["div", "st-showcase__details", showcaseDetailsProse],
     ["p", "st-showcase__story-intro"],
@@ -538,7 +541,6 @@ function transformServices(html) {
 function transformPricing(html) {
   html = removeElementByClass(html, "header", "stpr-hero")
     .replace(/<h2 id="stpr-priceboard-title">([\s\S]*?)<\/h2>/, '<h1 id="stpr-priceboard-title">$1</h1>')
-    .replace(/\s*<p>Each starting price is a guide[\s\S]*?<\/p>/, "")
     .replace("THE ATELIER GALLERY <span lang=\"vi\">THƯ VIỆN ATELIER</span>", "PRIVATE CONSULTATION <span lang=\"vi\">TƯ VẤN VÀ BÁO GIÁ</span>")
     .replace("See the references behind each commission.<span lang=\"vi\">Khám phá cảm hứng phía sau mỗi đơn may.</span>", "Let us prepare your quotation.<span lang=\"vi\">Nhận tư vấn và báo giá.</span>")
     .replace("Explore tailoring, cloth and finished work before a conversation.<span lang=\"vi\">Khám phá may đo, chất liệu và sản phẩm hoàn thiện trước khi trao đổi.</span>", "Discuss cloth, design and timing with S.T Tailor before your order is confirmed.<span lang=\"vi\">Trao đổi chất liệu, thiết kế và thời gian cùng S.T Tailor trước khi xác nhận đơn hàng.</span>")

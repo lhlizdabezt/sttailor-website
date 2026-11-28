@@ -12789,6 +12789,15 @@ html body .st-fitting-film__details { grid-area: details; }
 html body .st-fitting-film__details > p { margin: 18px 0 22px; max-width: 58ch; font: 400 16px/1.6 var(--st-vietnamese); }
 html body .st-fitting-film__details > p span { display: block; margin-top: 8px; color: #624330; }
 html body .st-fitting-film nav { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+@media (min-width: 861px) {
+  html body .st-fitting-film {
+    grid-template-areas: "screen title" "details details";
+    grid-template-rows: auto auto;
+    align-items: center;
+  }
+  html body .st-fitting-film__details { padding-block-start: 24px; border-block-start: 1px solid #b99672; }
+  html body .st-fitting-film nav { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
 html body .st-fitting-film nav a {
   display: grid !important;
   align-content: center;
@@ -14166,6 +14175,9 @@ html body .st-contact-page--v2 :is(h2, h3),
 html body .st-contact-page--v2 :is(h2, h3) [lang="vi"] { font-weight: 500 !important; }
 html body #main-content .st-lux-about h3,
 html body #main-content .st-lux-about h3 [lang="vi"] { font-weight: 500 !important; }
+html body #main-content .st-lux-page.st-lux-about .st-about-discovery__head h2 [lang="vi"],
+html body #main-content #st-pricing-v5.stpr-ledger h2 [lang="vi"] { font-weight: 550 !important; }
+html body #main-content .st-contact-page--v2 .st-contact-card h3 [lang="vi"] { font-weight: inherit !important; }
 html body .st-site-frame :is(a, button, summary):focus-visible { outline: 2px solid currentColor !important; outline-offset: 4px !important; }
 /* A visible perimeter on filled actions, including those rendered by the retained page templates. */
 html body #main-content :is(
@@ -14536,6 +14548,16 @@ html body .st-gallery-series__head p {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(9px, 1.8vw, 18px);
 }
+.st-gallery-series__grid:has(> figure:only-child) {
+  grid-template-columns: minmax(0, 420px);
+  justify-content: center;
+}
+@media (min-width: 361px) {
+  .st-gallery-series__grid:has(> figure:nth-child(2):last-child) {
+    grid-template-columns: repeat(2, minmax(0, 440px));
+    justify-content: center;
+  }
+}
 .st-gallery-series__grid figure {
   display: grid;
   grid-template-rows: auto 1fr;
@@ -14753,6 +14775,19 @@ html body #main-content .st-prose-pair > [lang="vi"] {
   font-size: inherit !important;
   font-weight: inherit !important;
   line-height: inherit !important;
+}
+html body #main-content #st-pricing-v5.stpr-ledger .stpr-priceboard__head {
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: clamp(16px, 2.5vw, 32px) !important;
+}
+html body #main-content #st-pricing-v5.stpr-ledger .stpr-priceboard__head > .st-prose-pair {
+  max-width: none !important;
+  padding-block-start: 15px;
+  border-block-start: 1px solid #b99672;
+  font-size: clamp(16px, 1.25vw, 18px) !important;
+}
+html body #main-content #st-pricing-v5.stpr-ledger .stpr-priceboard__head > .st-prose-pair > [lang="vi"] {
+  font-size: inherit !important;
 }
 html body #main-content .st-lux-page.st-lux-about .st-about-lux-hero .st-lux-hero-grid {
   grid-template-areas: "heading" "lead" "process";

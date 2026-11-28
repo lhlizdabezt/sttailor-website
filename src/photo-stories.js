@@ -16,8 +16,36 @@ const crimson = "/san-pham/ao-khoac-den-lot-do/";
 const greenSuitFitting = "/du-an/thu-suit-xanh-la-dam/";
 const shortSleeveShirt = "/san-pham/so-mi-xanh-nhat-tay-ngan/";
 const lightGreyNotchSuit = "/san-pham/suit-xam-nhat-ve-chu-k/";
+const whiteStandCollarShirt = "/san-pham/so-mi-trang-co-dung/";
+const lilacPatternedBlouse = "/san-pham/ao-tim-nhat-hoa-tiet/";
+const tealSetFitting = "/du-an/thu-trang-phuc-xanh-co-vit/";
 
 export const photoCollections = [
+  {
+    id: "so-mi-trang-co-dung", route: whiteStandCollarShirt, album: "shirts-trousers",
+    labels: ["White stand-collar shirt", "Sơ mi trắng cổ đứng"],
+    summary: ["A white long-sleeved shirt with a low stand collar, tonal buttons and a softly curved hem, shown from the front on a dress form.", "Sơ mi trắng tay dài với cổ đứng thấp, khuy cùng tông và lai cong nhẹ, chụp chính diện trên ma-nơ-canh."],
+    photos: [
+      ["white-stand-collar-shirt-front", "White shirt on a dress form, with a low stand collar, tonal front buttons and a curved hem.", "Sơ mi trắng trên ma-nơ-canh, có cổ đứng thấp, hàng khuy cùng tông và lai cong nhẹ."]
+    ]
+  },
+  {
+    id: "ao-tim-nhat-hoa-tiet", route: lilacPatternedBlouse, album: "womenswear",
+    labels: ["Lilac patterned blouse", "Áo tím nhạt họa tiết"],
+    summary: ["A lilac blouse with looping motifs, a short neckline opening and full sleeves gathered into cuffs.", "Áo tím nhạt với họa tiết uốn lượn, đường xẻ ngắn ở cổ và tay áo rộng thu về măng sét."],
+    photos: [
+      ["lilac-patterned-long-sleeve-blouse", "Lilac blouse on a hanger, with looping motifs, a split neckline and gathered sleeve cuffs.", "Áo tím nhạt trên móc treo, có họa tiết uốn lượn, cổ xẻ và tay áo nhún vào măng sét."]
+    ]
+  },
+  {
+    id: "thu-trang-phuc-xanh-co-vit", route: tealSetFitting, album: "fitting",
+    labels: ["Fitting a dark teal two-piece set", "Thử bộ trang phục xanh cổ vịt"],
+    summary: ["Front and side views of a dark teal button-front shirt and matching trousers during a showroom fitting.", "Góc chính diện và góc nghiêng của áo cài khuy xanh cổ vịt đậm cùng quần đồng bộ trong buổi thử tại showroom."],
+    photos: [
+      ["dark-teal-matching-set-fitting-front", "Front view of a client in a dark teal button-front shirt with pale collar trim and matching trousers.", "Góc chính diện khách mặc áo cài khuy xanh cổ vịt đậm, cổ viền sáng, cùng quần đồng bộ."],
+      ["dark-teal-matching-set-fitting-side", "Side view of the dark teal outfit, showing the sleeve, shirt hem and fall of the trousers.", "Góc nghiêng bộ trang phục xanh cổ vịt đậm, thấy rõ tay áo, lai áo và độ rủ của quần."]
+    ]
+  },
   {
     id: "suit-xam-nhat-ve-chu-k", route: lightGreyNotchSuit, album: "suits",
     labels: ["Light grey notch-lapel suit", "Suit xám nhạt ve chữ K"],
@@ -189,6 +217,36 @@ export const photoCollections = [
 ];
 
 const stories = [
+  {
+    route: whiteStandCollarShirt, section: "shirts-and-trousers",
+    title: "White Stand-Collar Shirt | S.T Tailor",
+    description: "See a finished white stand-collar shirt by S.T Tailor in Ho Chi Minh City, with tonal buttons, long sleeves and a gently curved hem.",
+    details: [
+      ["The collar and button front", "Cổ đứng và hàng khuy trước", "A low collar band follows the base of the neck and closes with a single matching button. The other pale buttons run down a straight placket, while the light cloth shows a fine surface texture in the showroom photograph.", "Dải cổ đứng thấp ôm theo chân cổ và cài bằng một khuy cùng tông. Các khuy sáng còn lại nằm dọc nẹp thẳng, còn ảnh chụp tại showroom cho thấy vân mảnh trên mặt vải."],
+      ["Cuffs, length and ease", "Măng sét, chiều dài và độ rộng cử động", "The long sleeves end in neat cuffs and the hem curves gently at the sides. At a fitting, fasten the collar and turn your head, then reach forward to check ease across the back. Try the shirt with the trousers you expect to wear so you can choose a hem length for tucking it in or wearing it loose.", "Tay dài kết thúc bằng măng sét gọn, lai áo cong nhẹ về hai bên. Khi thử, hãy cài khuy cổ, quay đầu rồi đưa tay ra trước để kiểm tra độ thoải mái ở lưng áo. Thử cùng chiếc quần định phối để chọn chiều dài lai phù hợp khi sơ vin hoặc mặc thả ngoài."]
+    ],
+    related: ["/dich-vu/so-mi-may-do/", "/san-pham/so-mi-trang-co-mo-rong/", shortSleeveShirt, "/du-an/chi-tiet-so-mi-may-do/"]
+  },
+  {
+    route: lilacPatternedBlouse, section: "womenswear",
+    title: "Lilac Patterned Blouse | S.T Tailor",
+    description: "Explore a finished lilac blouse by S.T Tailor, with looping motifs, a split neckline and long sleeves gathered into cuffs.",
+    details: [
+      ["Pattern placement and neckline", "Bố cục hoa văn và đường cổ", "Light, looping motifs run across the front and sleeves. A short opening breaks the neckline at the centre, where a narrow lilac trim follows the edge of the split. When choosing a patterned cloth, hold it at the neckline to see how the scale looks against your shoulders.", "Họa tiết uốn lượn màu sáng trải trên thân trước và tay áo. Cổ áo có đường xẻ ngắn ở giữa, viền tím nhạt chạy dọc mép xẻ. Khi chọn vải có hoa văn, hãy ướm mẫu lên cổ để nhìn rõ tỷ lệ họa tiết so với vai."],
+      ["Sleeve fullness and cuffs", "Độ phồng tay áo và măng sét", "The sleeves keep their fullness through the forearm before gathering at the cuffs. If you commission a similar blouse, try it with the skirt or trousers you intend to wear. Check where the hem sits when standing and whether the cuffs feel comfortable as you bend your arms.", "Tay áo giữ độ phồng dọc cẳng tay rồi nhún gọn vào măng sét. Nếu đặt may áo tương tự, hãy thử cùng chân váy hoặc quần dự định phối. Xem lai áo nằm ở đâu khi đứng và măng sét có thoải mái khi gập tay hay không."]
+    ],
+    related: ["/dich-vu/trang-phuc-nu/", "/san-pham/ao-khong-tay-sang-mau-hoa-tiet-nho/", dress, "/chon-vai-may-do/"]
+  },
+  {
+    route: tealSetFitting, section: "fittings",
+    title: "Dark Teal Two-Piece Fitting | S.T Tailor",
+    description: "Compare front and side views of a dark teal shirt and matching trousers during a fitting at S.T Tailor in Ho Chi Minh City.",
+    details: [
+      ["The shirt and trousers from the front", "Áo và quần qua góc chính diện", "Pale trim traces the open collar above the line of front buttons. The shirt is worn over a crew-neck top, with matching trousers falling straight beneath. The full-length photograph lets you compare the open neckline, the shirt hem and the proportion of the trouser leg.", "Đường viền sáng chạy quanh cổ áo mở, ngay trên hàng khuy trước. Áo mặc ngoài một lớp áo cổ tròn, đi cùng quần đồng màu có ống rủ thẳng. Ảnh toàn thân cho thấy tương quan giữa cổ mở, lai áo và chiều dài ống quần."],
+      ["What the side view shows", "Chi tiết có thể xem từ góc nghiêng", "With the client’s arms relaxed, the side view shows where the sleeve ends, how the shirt hangs over the hip and where the trouser hem meets the foot. At your fitting, bring the shoes you plan to wear and take a few steps to check trouser length and ease in motion.", "Khi khách thả lỏng tay, góc nghiêng cho thấy vị trí cửa tay, độ rủ của áo qua hông và điểm lai quần chạm bàn chân. Khi đến thử, hãy mang theo đôi giày dự định phối và đi vài bước để kiểm tra chiều dài quần cùng độ thoải mái khi di chuyển."]
+    ],
+    related: ["/quy-trinh-thu-do/", "/du-an/thu-so-mi-trang-va-quan-toi-mau/", greenSuitFitting, "/dich-vu/quan-tay-may-do/"]
+  },
   {
     route: lightGreyNotchSuit, section: "suits-and-jackets",
     title: "Light Grey Notch-Lapel Two-Piece Suit | S.T Tailor",
