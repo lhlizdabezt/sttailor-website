@@ -1,5 +1,5 @@
 import { clientCareFailures } from "./client-care-contract.mjs";
-import { businessProfileFailures } from "./business-profile-contract.mjs";
+import { businessProfileFailures, hasContactIntroduction } from "./business-profile-contract.mjs";
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
@@ -513,7 +513,7 @@ for (const excluded of ["linkedin", "facebook", "pinterest", "youtube", "tiktok"
 }
 if (contact.includes("st-contact-hero") || contact.includes("Tell us what you are dressing for") || contact.includes("Hãy chia sẻ dịp sử dụng")) failures.push("Contact hero band still remains after the requested removal.");
 if ((contact.match(/<h1\b/g) ?? []).length !== 1 || !contact.includes("CONTACT DETAILS")) failures.push("Contact page must retain one semantic H1 after its introduction band is removed.");
-if (!/<header class="st-contact-details-heading">\s*<h1\b[^>]*>[\s\S]+?<p class="st-contact-summary st-prose-pair"><span lang="en">[^<]+<\/span><span lang="vi">[^<]+<\/span><\/p>\s*<\/header>\s*<div class="st-contact-info">/.test(contact)) {
+if (!hasContactIntroduction(contact)) {
   failures.push("Contact must place its bilingual consultation guidance above the address and map columns.");
 }
 

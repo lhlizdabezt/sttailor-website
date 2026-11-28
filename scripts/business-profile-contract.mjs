@@ -3,6 +3,10 @@ const vietnameseAddress = "Lầu 1, 258 Lê Thánh Tôn, Phường Tân Định,
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 const followHosts = ["www.facebook.com", "www.instagram.com", "wa.me", "zalo.me", "www.linkedin.com", "www.youtube.com", "www.tiktok.com", "www.pinterest.com", "www.threads.com", "www.tripadvisor.com"];
 
+export function hasContactIntroduction(html) {
+  return /<header class="st-contact-details-heading">\s*<h1\b[^>]*>[\s\S]+?<p class="st-contact-summary st-prose-pair"><span lang="en">[^<]+<\/span><span lang="vi">[^<]+<\/span><\/p>\s*<\/header>\s*<div class="st-contact-info">/.test(html);
+}
+
 export function businessProfileFailures(footer, schemaGraph) {
   const business = schemaGraph.find((entity) => [entity["@type"]].flat().includes("LocalBusiness"));
   if (!business) return ["LocalBusiness structured data is missing"];

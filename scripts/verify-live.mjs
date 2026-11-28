@@ -1,5 +1,5 @@
 import { clientCareFailures } from "./client-care-contract.mjs";
-import { businessProfileFailures } from "./business-profile-contract.mjs";
+import { businessProfileFailures, hasContactIntroduction } from "./business-profile-contract.mjs";
 import { createHash } from "node:crypto";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
@@ -216,7 +216,7 @@ expect(home.includes("1st Floor, 258 Le Thanh Ton, Tan Dinh Ward"), "Shared foot
 expect(!contact.includes("Tell us what you are dressing for"), "Removed contact introduction is still present");
 expect(!contact.includes("Hãy chia sẻ dịp sử dụng"), "Removed Vietnamese contact introduction is still present");
 expect(!contact.includes("CONTACT S.T TAILOR / LIÊN HỆ"), "Removed contact hero label is still present");
-expect(/<p class="st-contact-summary">[^<]+<span lang="vi">[^<]+<\/span><\/p>/.test(contact), "Bilingual contact consultation guidance is missing");
+expect(hasContactIntroduction(contact), "Contact must place its bilingual consultation guidance above the address and map columns");
 
 expect(home.includes('"LocalBusiness"'), "LocalBusiness structured data is missing");
 expect(home.includes('"OfferCatalog"'), "OfferCatalog structured data is missing");
