@@ -11,6 +11,7 @@ import { tailoringPages } from "../src/tailoring-pages.js";
 import { showcaseHubs, showcasePages } from "../src/showcase-pages.js";
 import { ninaCampos } from "../src/commission-stories.js";
 import { clientCareHubRoute } from "../src/client-care-pages.js";
+import { publicPhotoArchives } from "../src/public-photo-archives.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const sourceRoot = path.join(root, "source", "wordpress");
@@ -130,7 +131,7 @@ for (const route of expectedRoutes) {
   const guideBody = mainContent.split(/<div class="[^"\n]*\bst-guide-article__body\b[^"\n]*">/)[1]?.split('<aside class="st-guide-cta"')[0];
   if (guideBody) {
     for (const [, section] of guideBody.matchAll(/<section\b[^>]*>([\s\S]*?)<\/section>/g)) {
-      if (!/<div class="st-guide-bilingual">\s*<p lang="en">[\s\S]+?<\/p>\s*<p lang="vi">[\s\S]+?<\/p>\s*<\/div>/.test(section)) {
+      if (!/<div class="st-guide-bilingual"(?: data-long-prose)?>\s*<p lang="en">[\s\S]+?<\/p>\s*<p lang="vi">[\s\S]+?<\/p>\s*<\/div>/.test(section)) {
         failures.push(`Guide section must have a full-width English and Vietnamese copy block: ${route}`);
       }
     }
@@ -170,6 +171,21 @@ for (const route of expectedRoutes) {
   }
   if (schemaGraph.some((entity) => entity["@type"] === "Article" && entity.alternativeHeadline !== pageSchema?.alternateName)) {
     failures.push(`Article schema is missing its Vietnamese title: ${route}`);
+  }
+  if (route === clientCareHubRoute) {
+    const list = schemaGraph.find((entity) => entity["@id"] === pageSchema?.mainEntity?.["@id"]);
+    const expectedCareRoutes = ["/phuong-thuc-thanh-toan/", "/doi-tra-hoan-tien/", "/chinh-sach-van-chuyen/", "/dieu-khoan-dieu-kien/", "/chinh-sach-bao-mat/",
+      ...tailoringPages.filter((page) => page.route.startsWith(clientCareHubRoute)).map((page) => page.route)];
+    const entries = list?.itemListElement ?? [];
+    if (pageSchema?.["@type"] !== "CollectionPage" || list?.["@type"] !== "ItemList" || !list.alternateName ||
+        entries.length !== expectedCareRoutes.length || list.numberOfItems !== entries.length ||
+        entries.some((item, index) => {
+          const href = expectedCareRoutes[index];
+          return item["@type"] !== "ListItem" || item.position !== index + 1 || !item.name || !item.alternateName ||
+            item.url !== `https://sttailor.com${href}` || !mainContent.includes(`href="${href}"`);
+        })) {
+      failures.push("Client Care structured data must describe the bilingual guides and policies linked from its page.");
+    }
   }
   pageDiscovery.set(route, { lastModified: pageSchema?.dateModified, primaryImage: pageSchema?.primaryImageOfPage?.url });
   const breadcrumb = schemaGraph.find((item) => item["@type"] === "BreadcrumbList");
@@ -690,6 +706,18 @@ if (!notFound.includes("Back to Home") || !notFound.includes("Về trang chủ")
 const sourcePhotoHeaderRule = /^\/media\/sources\/\*\r?\n[ \t]+X-Robots-Tag: noindex$/m;
 if (!sourcePhotoHeaderRule.test(assetHeaders)) failures.push("The full-resolution source photo downloads must not create duplicate image search entries.");
 if (/X-Robots-Tag:\s*noindex/i.test(assetHeaders.replace(sourcePhotoHeaderRule, ""))) failures.push("Production headers still prevent search indexing.");
+const archiveRoot = path.join(dist, "media", "sources");
+const archivePaths = readdirSync(archiveRoot, { recursive: true, withFileTypes: true }).filter((entry) => entry.isFile())
+  .map((entry) => `/media/sources/${path.relative(archiveRoot, path.join(entry.parentPath, entry.name)).split(path.sep).join("/")}`);
+if (archivePaths.length !== publicPhotoArchives.size || archivePaths.some((asset) => !publicPhotoArchives.has(asset))) {
+  failures.push("The build must contain only the approved full-resolution photo archives.");
+}
+for (const [asset, expectedHash] of publicPhotoArchives) {
+  const file = path.join(dist, asset.slice(1));
+  if (!existsSync(file) || createHash("sha256").update(readFileSync(file)).digest("hex") !== expectedHash) {
+    failures.push(`The published archive is missing or differs from the approved bytes: ${asset}`);
+  }
+}
 if (!assetHeaders.includes("Strict-Transport-Security: max-age=15552000")) failures.push("Production HSTS must remain the conservative six-month policy.");
 for (const staticFile of ["robots.txt", "sitemap.xml", "llms.txt", "site.webmanifest", indexNowKeyFile]) {
   if (!existsSync(path.join(dist, staticFile))) failures.push(`Missing production discovery file: ${staticFile}`);
@@ -714,6 +742,7 @@ if (existsSync(path.join(dist, indexNowKeyFile)) && readFileSync(path.join(dist,
   failures.push("IndexNow ownership key file does not contain the expected key.");
 }
 const sitemap = readFileSync(path.join(dist, "sitemap.xml"), "utf8");
+if (sitemap.includes("/media/sources/")) failures.push("The image sitemap must exclude full-resolution photo archives.");
 const indexNowPageSignatures = manifest.indexNowPageSignatures ?? {};
 if (Object.keys(indexNowPageSignatures).length !== expectedRoutes.length ||
     expectedRoutes.some((route) => !/^[a-f0-9]{64}$/.test(indexNowPageSignatures[route] ?? ""))) {

@@ -6,6 +6,7 @@ import { tripadvisorEmbedPath } from "../src/security-policy.js";
 import { tailoringPages } from "../src/tailoring-pages.js";
 import { showcasePages } from "../src/showcase-pages.js";
 import { fittingFilm } from "../src/fitting-film.js";
+import { publicPhotoArchives } from "../src/public-photo-archives.js";
 
 const env = {
   ASSETS: {
@@ -79,6 +80,32 @@ test("the internal error documents and asset headers are not public routes", asy
     }
   }
   assert.deepEqual([...new Set(requestedAssets)], ["/not-found"]);
+});
+
+test("only approved photo archives are served and their indexing is disabled", async () => {
+  const requestedAssets = [];
+  const archiveEnv = { ASSETS: { fetch: async (request) => {
+    const { pathname } = new URL(request.url);
+    requestedAssets.push(pathname);
+    return new Response(null, { headers: { "Content-Type": pathname === "/not-found" ? "text/html" : "image/heic" } });
+  } } };
+  for (const asset of publicPhotoArchives.keys()) {
+    const response = await worker.fetch(new Request(`https://sttailor.com${asset}`, { method: "HEAD" }), archiveEnv);
+    assert.equal(response.status, 200, asset);
+    assert.equal(response.headers.get("X-Robots-Tag"), "noindex", asset);
+  }
+  const blocked = [
+    "/media/sources/2026/11/unpublished.heic",
+    "/media/sources/2026/11/unpublished.pdf",
+    "/media/%73ources/2026/11/unpublished.pdf"
+  ];
+  for (const asset of blocked) {
+    const response = await worker.fetch(new Request(`https://sttailor.com${asset}`, { method: "HEAD" }), archiveEnv);
+    assert.equal(response.status, 404, asset);
+    assert.equal(response.headers.get("X-Robots-Tag"), "noindex, follow", asset);
+    assert.equal(response.headers.get("Cache-Control"), "no-store", asset);
+  }
+  assert.deepEqual(requestedAssets, [...publicPhotoArchives.keys(), ...blocked.map(() => "/not-found")]);
 });
 
 test("conditions for a missing URL cannot strip the 404 page body", async () => {

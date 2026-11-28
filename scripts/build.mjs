@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { transform as minifyCss } from "lightningcss";
 import path from "node:path";
@@ -12,6 +12,7 @@ import { showcaseEntries, showcaseHubs, showcaseItemsFor, showcasePages } from "
 import { photoCollections, photoSource } from "../src/photo-stories.js";
 import { showroomEntrance } from "../src/portfolio-stories.js";
 import { fittingFilm as galleryFilm, fittingFilmRoute } from "../src/fitting-film.js";
+import { publicPhotoArchives } from "../src/public-photo-archives.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 // The approved WordPress layout remains the baseline; current page refinements
@@ -399,7 +400,8 @@ function layoutEditorialCopy(html) {
     ["header", "st-showcase__collection"],
     ["div", "st-showcase__details", showcaseDetailsProse],
     ["p", "st-showcase__story-intro"],
-    ["p", "st-payment-methods__note"]
+    ["p", "st-payment-methods__note"],
+    ["div", "st-payment-grid"]
   ];
   for (const [tag, name, format = bilingualProse] of regions) {
     const range = findElementByClass(html, tag, name);
@@ -416,7 +418,14 @@ function layoutEditorialCopy(html) {
       return opening + copy.replace(intro, "") + closing + prose + "\n      ";
     });
   }
-  return html;
+  // Keep the usual bilingual comparison for short descriptions and give long
+  // guide paragraphs a wider reading measure.
+  const guidePair = /(<div class="st-guide-bilingual")>([\s\S]*?)<\/div>/g;
+  const languageParagraph = /<p lang="(?:en|vi)">([\s\S]*?)<\/p>/g;
+  return html.replace(guidePair, (block, opening, paragraphs) => {
+    const long = [...paragraphs.matchAll(languageParagraph)].some(([, text]) => text.replace(/<[^>]*>/g, "").trim().length >= 360);
+    return long ? `${opening} data-long-prose>${paragraphs}</div>` : block;
+  });
 }
 
 function replaceVisibleAtelier(html) {
@@ -492,7 +501,6 @@ function transformFooter(html, route) {
       '<section class="st-footer-v7__about" aria-labelledby="st-footer-title">',
       '<section class="st-footer-v7__about" aria-labelledby="st-footer-title">\n        <a class="st-footer-v7__crest" href="/" aria-label="S.T Tailor home"><img src="/media/2026/09/logo-sttailor-1000x1024.png" alt="S.T Tailor" width="1000" height="1024" loading="lazy" decoding="async"></a>'
     );
-  html = html.replace(/(<nav class="st-footer-v7__social"[\s\S]*?)(<\/nav>)/, `$1<a href="https://www.tripadvisor.com/Attraction_Review-g293925-d34701232-Reviews-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer"><img src="/icons/tripadvisor-logomark.svg" alt="" aria-hidden="true" width="20" height="20" loading="lazy" decoding="async"><span>Tripadvisor</span></a>$2`);
   if (route === "/lien-he/") {
     // Contact already embeds the same showroom map in its main content.
     html = html.replace(/<iframe\b[^>]*src="https:\/\/www\.google\.com\/maps\/embed\?[^"]+"[^>]*><\/iframe>/, "");
@@ -975,8 +983,8 @@ function transformAbout(html) {
         <iframe class="st-tripadvisor__frame" src="${tripadvisorEmbedPath}" title="Recent Tripadvisor reviews for S.T Tailor / Đánh giá gần đây của S.T Tailor trên Tripadvisor" loading="lazy" width="500" height="282" referrerpolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
       </div>
       <div class="st-tripadvisor__actions">
-        <a class="st-tripadvisor__link" href="${tripadvisorListing}" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note"><span>Read reviews</span><span lang="vi">Đọc đánh giá</span></a>
-        <a class="st-tripadvisor__link st-tripadvisor__link--outline" href="https://www.tripadvisor.com/UserReviewEdit-g293925-d34701232-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note"><span>Write a review</span><span lang="vi">Viết đánh giá</span></a>
+        <a class="st-tripadvisor__link" href="${tripadvisorListing}" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note"><span>Read reviews on Tripadvisor</span><span lang="vi">Đọc đánh giá trên Tripadvisor</span></a>
+        <a class="st-tripadvisor__link st-tripadvisor__link--outline" href="https://www.tripadvisor.com/UserReviewEdit-g293925-d34701232-S_T_Tailor-Ho_Chi_Minh_City.html" target="_blank" rel="noopener noreferrer" aria-describedby="st-tripadvisor-link-note"><span>Write a Tripadvisor review</span><span lang="vi">Viết đánh giá trên Tripadvisor</span></a>
       </div>
     </article>
     <article class="st-tripadvisor__card st-tripadvisor__card--visit" aria-labelledby="st-tripadvisor-visit-title">
@@ -1306,6 +1314,19 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
     graph.push({ "@type": "ItemList", "@id": `${canonical}#guides`, name: "S.T Tailor tailoring guide | Cẩm nang may đo S.T Tailor", numberOfItems: guideRoutes.length, itemListElement: guideRoutes.map(([url, english, vietnamese], index) => ({ "@type": "ListItem", position: index + 1, name: `${english} | ${vietnamese}`, url: `https://sttailor.com${url}` })) });
     webPage.mainEntity = { "@id": `${canonical}#guides` };
   }
+  if (route === clientCareHubRoute) {
+    const careListId = `${canonical}#client-care-resources`;
+    const careRoutes = [...policyRoutes, ...clientCareGuides.map(({ route: href }) => href)];
+    graph.push({
+      "@type": "ItemList", "@id": careListId, name: "S.T Tailor Client Care",
+      alternateName: "Chăm sóc khách hàng S.T Tailor", numberOfItems: careRoutes.length,
+      itemListElement: careRoutes.map((href, index) => {
+        const [name, alternateName] = pageLabels.get(href);
+        return { "@type": "ListItem", position: index + 1, name, alternateName, url: `https://sttailor.com${href}` };
+      })
+    });
+    webPage.mainEntity = { "@id": careListId };
+  }
   if (guideRoutes.some(([guideRoute]) => guideRoute === route) || clientCareGuides.some((page) => page.route === route)) {
     graph.push({ "@type": "Article", "@id": `${canonical}#article`, headline: title.split(" | ")[0], alternativeHeadline: alternateName, description, image: `https://sttailor.com${shareImage}`, author: { "@id": "https://sttailor.com/#business" }, publisher: { "@id": "https://sttailor.com/#business" }, mainEntityOfPage: { "@id": `${canonical}#webpage` }, dateModified: lastModified, inLanguage: ["en", "vi"] });
     webPage.mainEntity = { "@id": `${canonical}#article` };
@@ -1376,6 +1397,9 @@ function documentFor(route, sourceFile, title, description, shareImage, shareIma
 
 function collectAssetPaths() {
   const sourceFiles = new Set([...routes.map(([, file]) => file), "Error.html", "Footer.html"]);
+  const unregistered = readdirSync(sourceRoot, { recursive: true })
+    .filter((name) => /\.html$/i.test(name) && !sourceFiles.has(name));
+  if (unregistered.length) throw new Error(`Versioned page templates without a route:\n${unregistered.join("\n")}`);
   const content = [...Array.from(sourceFiles, (file) => readFileSync(path.join(sourceRoot, file), "utf8")), readFileSync(path.join(sourceRoot, "CustomCSS.css"), "utf8")].join("\n");
   const matcher = /https?:\/\/sttailor\.com\/wp-content\/uploads\/([^\"' )]+)/g;
   const found = new Set(["2026/09/logo-sttailor.png", "2026/09/logo-sttailor-1000x1024.png"]);
@@ -1387,17 +1411,12 @@ function collectAssetPaths() {
   return [...found].filter((asset) => !asset.includes(".."));
 }
 
-function copyAssets() {
-  if (!existsSync(sourceMedia)) throw new Error(`Versioned media source not found: ${sourceMedia}`);
-  const assets = collectAssetPaths();
-  const missing = assets.filter((asset) => !existsSync(path.join(sourceMedia, asset)));
-  if (missing.length) throw new Error(`Versioned media source is incomplete:\n${missing.join("\n")}`);
+function copyAssets(assets) {
   for (const asset of assets) {
     const target = path.join(dist, "media", asset);
     mkdirSync(path.dirname(target), { recursive: true });
     copyFileSync(path.join(sourceMedia, asset), target);
   }
-  return assets;
 }
 
 function copyGalleryFilm() {
@@ -1407,6 +1426,19 @@ function copyGalleryFilm() {
     const target = path.join(dist, publicPath.slice(1));
     mkdirSync(path.dirname(target), { recursive: true });
     copyFileSync(source, target);
+  }
+}
+
+function copyPublicPhotoArchives() {
+  for (const [publicPath, expectedHash] of publicPhotoArchives) {
+    const relativePath = publicPath.slice("/media/sources/".length);
+    const contents = readFileSync(path.join(sourcePhotoArchive, relativePath));
+    if (createHash("sha256").update(contents).digest("hex") !== expectedHash) {
+      throw new Error(`Approved photo archive has changed: ${relativePath}`);
+    }
+    const target = path.join(dist, publicPath.slice(1));
+    mkdirSync(path.dirname(target), { recursive: true });
+    writeFileSync(target, contents);
   }
 }
 
@@ -1443,14 +1475,19 @@ function assertGalleryHasNoDuplicates() {
   if (new Set(refs).size !== refs.length) throw new Error("Gallery source contains duplicate image references. Build stopped to preserve the no-duplicate gallery rule.");
 }
 
+const assets = collectAssetPaths();
+if (!existsSync(sourceMedia)) throw new Error(`Versioned media source not found: ${sourceMedia}`);
+const missingAssets = assets.filter((asset) => !existsSync(path.join(sourceMedia, asset)));
+if (missingAssets.length) throw new Error(`Versioned media source is incomplete:\n${missingAssets.join("\n")}`);
+
 // Windows can hold a transient handle on a freshly generated file. Node only
 // retries EPERM/EBUSY cleanup when recursive removal is given retry settings.
 // This keeps local validation reliable without changing deployed output.
 rmSync(dist, { recursive: true, force: true, maxRetries: 5, retryDelay: 250 });
 mkdirSync(dist, { recursive: true });
 assertGalleryHasNoDuplicates();
-const assets = copyAssets();
-cpSync(sourcePhotoArchive, path.join(dist, "media", "sources"), { recursive: true });
+copyAssets(assets);
+copyPublicPhotoArchives();
 copyGalleryFilm();
 copyIcons();
 mkdirSync(path.join(dist, "fonts"), { recursive: true });

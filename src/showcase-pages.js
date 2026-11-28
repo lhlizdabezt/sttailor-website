@@ -589,6 +589,17 @@ export const showcaseEntries = [
     imageAlt: "Open navy jacket on an S.T Tailor form, with dark patterned lining and gold-and-brown trim on the inside pockets | Áo khoác navy mở vạt trên ma-nơ-canh S.T Tailor, để lộ lớp lót tối có hoa văn và viền túi trong màu vàng nâu"
   },
   {
+    route: "/san-pham/suit-ba-manh-xam-bac/",
+    section: "suits-and-jackets",
+    source: "ShowcaseSilverGreyThreePieceSuit.html",
+    labels: ["Silver-grey three-piece suit", "Suit ba mảnh xám bạc"],
+    title: "Silver-Grey Bespoke Three-Piece Suit | S.T Tailor",
+    description: "Explore a finished silver-grey three-piece suit by S.T Tailor. See how the notch-lapel jacket, buttoned waistcoat and matching trousers sit together.",
+    summary: ["A silver-grey jacket with notch lapels, a button-front waistcoat and matching trousers. The set is shown over a pale blue shirt at the S.T Tailor showroom.", "Áo khoác xám bạc ve chữ K, áo ghi-lê cài khuy và quần đồng màu. Bộ suit được phối cùng sơ mi xanh nhạt tại nhà may S.T Tailor."],
+    image: "/media/2026/11/st-tailor-silver-grey-three-piece-front.webp",
+    imageAlt: "Client wearing a silver-grey three-piece suit, pale blue shirt and straw hat at S.T Tailor | Khách mặc suit ba mảnh xám bạc, sơ mi xanh nhạt và mũ cói tại S.T Tailor"
+  },
+  {
     route: "/san-pham/ao-ghi-le-xam-bac/",
     section: "suits-and-jackets",
     source: "ShowcaseSilverGreyWaistcoat.html",

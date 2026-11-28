@@ -6,6 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { indexNowKey, indexNowKeyFile } from "../src/indexnow.js";
 import { contentSecurityPolicy, tripadvisorEmbedPath } from "../src/security-policy.js";
+import { publicPhotoArchives } from "../src/public-photo-archives.js";
 
 const origin = "https://sttailor.com";
 const expectedBuildRevision = process.env.EXPECTED_BUILD_REVISION;
@@ -314,7 +315,8 @@ await Promise.all(Array.from({ length: 6 }, async () => {
   while (assetCursor < publicAssets.length) {
     const asset = publicAssets[assetCursor++];
     try {
-      const sourcePhoto = asset.startsWith("/media/sources/") && asset.endsWith(".heic");
+      const sourcePhoto = publicPhotoArchives.has(asset);
+      expect(!asset.startsWith("/media/sources/") || sourcePhoto, `Unapproved photo archive in the build: ${asset}`);
       const response = await fetchWithRetry(`${origin}${asset}`, { method: sourcePhoto ? "GET" : "HEAD", redirect: "manual" }, 2);
       expect(response.status === 200, `Public asset ${asset} returned ${response.status}`);
       const robotsTag = response.headers.get("x-robots-tag") ?? "";
@@ -340,6 +342,10 @@ await Promise.all(Array.from({ length: 6 }, async () => {
       if (responsiveFormat) {
         expect(contentType === `image/${responsiveFormat}` && response.headers.get("cache-control")?.includes("immutable"), `Responsive image ${asset} must serve with its ${responsiveFormat} type and immutable caching`);
       }
+      if (extension === ".webp" && !responsiveFormat) {
+        const cache = response.headers.get("cache-control") ?? "";
+        expect(/\bmax-age=604800\b/.test(cache) && !/\bimmutable\b/.test(cache), `Stable WebP ${asset} must expire after seven days`);
+      }
       if (asset.endsWith(".woff2")) {
         expect(response.headers.get("content-type") === "font/woff2" && response.headers.get("cache-control")?.includes("immutable"), `Vietnamese font ${asset} must serve as a cacheable WOFF2`);
       }
@@ -352,6 +358,11 @@ await Promise.all(Array.from({ length: 6 }, async () => {
   }
 }));
 console.log(`Audited ${publicAssets.length} public assets: originals, responsive images, icons, CSS, JavaScript, public build metadata and the first-party measurement gateway.`);
+for (const asset of ["/media/sources/2026/11/unpublished.heic", "/media/%73ources/2026/11/unpublished.pdf"]) {
+  const response = await fetchWithRetry(`${origin}${asset}`, { method: "HEAD", redirect: "manual" });
+  expect(response.status === 404 && response.headers.get("cache-control") === "no-store" && response.headers.get("x-robots-tag") === "noindex, follow",
+    `Unapproved photo archive path did not return a non-indexable 404: ${asset}`);
+}
 
 const imageBot = await fetchWithRetry(`${origin}/media/2026/09/st-tailor-archive-navy-coastal-suit.jpg`,
   { method: "HEAD", redirect: "manual", headers: { "User-Agent": "Googlebot-Image/1.0" } });
@@ -399,6 +410,7 @@ for (const [route, pageDate] of pageDates) {
 }
 expect(sitemapText.includes("xmlns:image="), "Image sitemap namespace is missing");
 expect(sitemapText.includes("<image:image>"), "Image sitemap entries are missing");
+expect(!sitemapText.includes("/media/sources/"), "Image sitemap exposes an original archive download");
 const gallerySitemap = sitemapText.match(/<url><loc>https:\/\/sttailor\.com\/gallery\/[\s\S]*?<\/url>/)?.[0] ?? "";
 const gallerySitemapImages = [...gallerySitemap.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)].map((match) => match[1]);
 expect(gallerySitemapImages.length === builtGalleryImages.size && [...builtGalleryImages].every((src) => gallerySitemapImages.includes(`${origin}${src}`)), "Gallery sitemap must contain every editorial image in the build exactly once");
@@ -408,9 +420,9 @@ expect(sitemapText.includes('xmlns:video="http://www.google.com/schemas/sitemap-
 // User-agent simulations catch broad edge rules. They do not verify crawler IPs.
 const crawlerAgents = new Map([
   ["Googlebot Smartphone", "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"],
-  ...["Googlebot", "bingbot", "OAI-SearchBot", "Claude-SearchBot", "PerplexityBot", "Applebot", "ChatGPT-User"].map((agent) => [agent, agent])
+  ...["Googlebot", "bingbot", "Applebot", "OAI-SearchBot", "GPTBot", "ChatGPT-User", "Claude-SearchBot", "ClaudeBot", "Claude-User", "PerplexityBot", "Perplexity-User"].map((agent) => [agent, agent])
 ]);
-const crawlerRoutes = ["/", "/gallery/", "/du-an/nina-campos/", "/san-pham/suit-xam-nhat-ve-chu-k/", "/cam-nang-may-do/"];
+const crawlerRoutes = ["/", "/gallery/", "/lien-he/", "/du-an/nina-campos/", "/san-pham/suit-xam-nhat-ve-chu-k/", "/cam-nang-may-do/"];
 const discoveryResources = [["/robots.txt", robotsText], ["/sitemap.xml", sitemapText], ["/llms.txt", llmsText]];
 await Promise.all(Array.from(crawlerAgents, async ([agent, userAgent]) => {
   const options = { redirect: "manual", headers: { "User-Agent": userAgent, "Cache-Control": "no-cache" } };

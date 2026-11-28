@@ -70,6 +70,46 @@ export const tailoringPages = [
     imageAlt: "Comparing dark cloth swatches at S.T Tailor | So sánh các mẫu vải tối màu tại nhà may S.T Tailor"
   },
   {
+    route: "/cham-soc-khach-hang/tu-van-may-do-tu-xa/",
+    source: "GuideRemoteConsultation.html",
+    labels: ["Preparing for a remote tailoring consultation", "Chuẩn bị tư vấn may đo từ xa"],
+    title: "Remote Tailoring Consultation Before Visiting HCMC | S.T Tailor",
+    description: "Plan a remote tailoring consultation with S.T Tailor. Share your dates and reference photos, and see what to bring to an in-person fitting.",
+    descriptionVi: "Chuẩn bị tư vấn may đo từ xa với S.T Tailor. Chia sẻ dịp mặc, ảnh tham khảo và lịch đi lại để biết những quyết định nào nên dành cho buổi thử trực tiếp.",
+    image: "/media/2026/11/st-tailor-showroom-consultation-desk.webp",
+    imageAlt: "Consultation desk and clothing display at the S.T Tailor showroom | Bàn tư vấn và khu trưng bày trang phục tại S.T Tailor"
+  },
+  {
+    route: "/cham-soc-khach-hang/thanh-toan-tu-nuoc-ngoai/",
+    source: "GuideInternationalPayment.html",
+    labels: ["Paying for a tailoring order from overseas", "Thanh toán đơn may từ nước ngoài"],
+    title: "Paying for an S.T Tailor Order From Overseas",
+    description: "Know what to check before paying S.T Tailor from overseas, including your quotation, bank or card charges, payment references and refund follow-up.",
+    descriptionVi: "Xem các bước thanh toán cho S.T Tailor từ nước ngoài, từ kiểm tra báo giá, phí ngân hàng hoặc phí thẻ đến lưu mã giao dịch và theo dõi hoàn tiền.",
+    image: "/media/2026/11/st-tailor-showroom-comparing-dark-fabric-swatches.webp",
+    imageAlt: "A dark fabric swatch being reviewed over cloth books during a tailoring consultation | Mẫu vải tối màu được xem trên các sổ vải trong buổi tư vấn may đo"
+  },
+  {
+    route: "/cham-soc-khach-hang/doi-lich-thu-do/",
+    source: "GuideRescheduleFitting.html",
+    labels: ["Changing a fitting or collection date", "Đổi lịch thử hoặc nhận trang phục"],
+    title: "Change a Tailoring Fitting or Collection Date | S.T Tailor",
+    description: "Need to change your fitting or collection date? See what to send S.T Tailor, how to handle a fixed event or departure date and what to check before delivery.",
+    descriptionVi: "Cần đổi lịch thử hoặc nhận trang phục? Xem thông tin cần gửi S.T Tailor, cách sắp xếp khi đã ấn định ngày sự kiện hoặc khởi hành và những điểm cần xem trước khi giao đồ.",
+    image: "/media/2026/11/st-tailor-showroom-consultation-desk.webp",
+    imageAlt: "Consultation desk and clothing display at the S.T Tailor showroom | Bàn tư vấn và khu trưng bày trang phục tại S.T Tailor"
+  },
+  {
+    route: "/cham-soc-khach-hang/phieu-thu-va-hoa-don/",
+    source: "GuideOrderInvoice.html",
+    labels: ["Requesting a receipt or invoice", "Yêu cầu phiếu thu hoặc hóa đơn"],
+    title: "Request a Tailoring Receipt or Invoice | S.T Tailor",
+    description: "Request a receipt or invoice for your S.T Tailor order. Learn what to share at the time of ordering and how to follow up on a missing or incorrect document.",
+    descriptionVi: "Yêu cầu phiếu thu hoặc hóa đơn cho đơn may tại S.T Tailor. Xem thông tin cần gửi khi đặt may và cách liên hệ khi chứng từ bị thiếu hoặc có sai sót.",
+    image: "/media/2026/11/st-tailor-showroom-comparing-dark-fabric-swatches.webp",
+    imageAlt: "Dark cloth swatches laid over sample books during a tailoring consultation | Mẫu vải tối màu đặt trên các sổ vải trong buổi tư vấn may đo"
+  },
+  {
     route: "/cam-nang-may-do/sap-lich-thu-do-theo-nhom/",
     source: "GuideGroupFittings.html",
     labels: ["Planning group fittings", "Sắp lịch thử đồ theo nhóm"],

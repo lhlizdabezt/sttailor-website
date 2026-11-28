@@ -36,6 +36,9 @@ function updateWidget() {
     if (link.getAttribute("aria-describedby") !== "st-tripadvisor-new-tab") {
       link.setAttribute("aria-describedby", "st-tripadvisor-new-tab");
     }
+    if (link.id === "allreviews" && !link.hasAttribute("aria-label")) {
+      link.setAttribute("aria-label", "Read reviews of S.T Tailor on Tripadvisor");
+    }
     if (link.href === `${listingOrigin}/` && !link.textContent.trim() && !link.hasAttribute("aria-label")) {
       link.setAttribute("aria-label", "Tripadvisor homepage / Trang chủ Tripadvisor");
     }

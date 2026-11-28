@@ -2,6 +2,7 @@ import buildManifest from "../dist/build-manifest.json" with { type: "json" };
 import { indexNowKeyFile } from "./indexnow.js";
 import { contentSecurityPolicy, tripadvisorEmbedPath } from "./security-policy.js";
 import { fetchFittingFilm, fittingFilm } from "./fitting-film.js";
+import { publicPhotoArchives } from "./public-photo-archives.js";
 
 const canonicalHost = "sttailor.com";
 // Serve exactly the canonical routes emitted with the sitemap and page assets.
@@ -52,6 +53,15 @@ const immutableAssets = [
   /^\/media\/_responsive\/.+-\d+(?:-q68)?-[a-f0-9]{12}\.(?:avif|webp)$/
 ];
 
+function isPhotoArchivePath(pathname, url) {
+  if (!pathname.startsWith("/media/") || !pathname.includes("%")) return pathname.startsWith("/media/sources/");
+  try {
+    return new URL(decodeURIComponent(pathname), url).pathname.startsWith("/media/sources/");
+  } catch {
+    return false;
+  }
+}
+
 function securityHeaders(response, pathname = "/") {
   const headers = new Headers(response.headers);
   headers.set("X-Content-Type-Options", "nosniff");
@@ -78,6 +88,9 @@ function securityHeaders(response, pathname = "/") {
     if (stylesheet) headers.set("Link", `<${stylesheet.href}>; rel=preload; as=style`);
     headers.set("Content-Security-Policy", contentSecurityPolicy(pathname));
     headers.set("X-Robots-Tag", isCanonical ? "index, follow, max-image-preview:large" : "noindex, follow");
+  }
+  if (cacheable && publicPhotoArchives.has(pathname)) {
+    headers.set("X-Robots-Tag", "noindex");
   }
   if (response.status >= 400) {
     headers.set("Cache-Control", "no-store");
@@ -176,6 +189,9 @@ export default {
     }
     if (pathname === fittingFilm.src) {
       return securityHeaders(await fetchFittingFilm(request, env.ASSETS), pathname);
+    }
+    if (!publicPhotoArchives.has(pathname) && isPhotoArchivePath(pathname, url)) {
+      return notFound(request, env, url);
     }
     if (routes.has(pathname) || pathname === tripadvisorEmbedPath || staticFiles.has(pathname) || staticPrefixes.some((prefix) => pathname.startsWith(prefix))) {
       return securityHeaders(await env.ASSETS.fetch(request), pathname);

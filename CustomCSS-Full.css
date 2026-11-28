@@ -12346,6 +12346,8 @@ main { display: block; width: 100%; overflow: hidden; }
 }
 .st-service-page .st-service-commission-map__gallery-link:hover { background: #fff8ee; text-decoration: underline; }
 .st-service-page .st-service-booking h2 { font-family: var(--st-wordmark) !important; font-weight: 600 !important; }
+.st-service-booking__inner > div { flex: 1 1 auto; }
+html body .st-service-booking p:not(.st-page-kicker) { max-width: none; }
 /* The removed house-standard band must not leave the old commission-map top gutter behind. */
 html body .st-service-page .st-service-commission-map { margin-top: 0 !important; }
 
@@ -13387,18 +13389,19 @@ html body .st-guide-article__body > section > .st-guide-kicker { margin: 0 0 -8p
 html body .st-guide-article__body > section h2 { margin: 0 !important; color: var(--guide-ink) !important; font: 500 clamp(32px, 4vw, 52px)/1.1 var(--st-wordmark) !important; }
 html body .st-guide-article__body > section h2 span[lang="vi"] { display: block !important; margin-top: 11px !important; color: #75452c !important; font-size: max(16px, .48em) !important; line-height: 1.2 !important; }
 html body .st-guide-article__body > section p a:any-link,
-html body .st-payment-methods__note a:any-link {
+html body :is(.st-payment-methods__note, .st-payment-card) a:any-link {
+  display: inline-block;
+  max-inline-size: 100%;
   padding: 1px 4px;
   border: 1px solid #9e7658;
   color: #57301d !important;
   -webkit-text-fill-color: currentColor !important;
   text-decoration: underline;
   text-underline-offset: .15em;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
+  overflow-wrap: anywhere;
 }
 html body .st-guide-article__body > section p a:is(:hover, :focus-visible, :active),
-html body .st-payment-methods__note a:is(:hover, :focus-visible, :active) {
+html body :is(.st-payment-methods__note, .st-payment-card) a:is(:hover, :focus-visible, :active) {
   background: #f0dfca;
   color: #392116 !important;
 }
@@ -14001,7 +14004,6 @@ html body .st-gallery-page--albums .st-gallery-film {
   padding-top: clamp(36px, 5vw, 60px) !important;
   border-top: 1px solid rgba(80, 45, 27, .34) !important;
 }
-html body .st-gallery-page--albums .st-gallery-film__copy { max-width: 580px !important; }
 html body .st-gallery-page--albums .st-gallery-film__kicker {
   margin: 0 0 18px !important;
   color: #75452d !important;
@@ -14030,7 +14032,7 @@ html body .st-gallery-page--albums .st-gallery-film__copy h3 span[lang="vi"] {
   line-height: 1.4 !important;
 }
 html body .st-gallery-page--albums .st-gallery-film__copy > p:not(.st-gallery-film__kicker) {
-  max-width: 53ch !important;
+  max-width: none !important;
   margin: 0 0 27px !important;
   color: #4e3528 !important;
   font-size: 16px !important;
@@ -14120,13 +14122,15 @@ html body .st-payment-page--focused .st-payment-methods { padding-top: clamp(48p
 html body .st-payment-page--focused h1 { margin: 0 0 22px !important; color: #3a2116 !important; font: 500 clamp(36px, 4.4vw, 62px)/1.08 var(--st-wordmark) !important; text-wrap: balance !important; }
 html body .st-payment-page--focused h1 span[lang="vi"] { display: block !important; margin-top: 12px !important; color: #70432b !important; font: 500 .5em/1.3 var(--st-vietnamese) !important; }
 html body .st-payment-page--focused .st-payment-card p span[lang="vi"] { display: block !important; margin-top: 12px !important; }
-html body .st-payment-page--focused .st-payment-card h2 { margin: 0 0 16px !important; color: #352116 !important; font: 500 21px/1.1 var(--st-heritage) !important; letter-spacing: 0 !important; }
-html body .st-payment-page--focused .st-payment-card h2 span[lang="vi"] { display: block !important; margin-top: 8px !important; color: #70432b !important; font: 500 16px/1.3 var(--st-vietnamese) !important; }
-html body .st-payment-page--focused .st-payment-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
-html body .st-payment-page--focused .st-payment-card > p:last-child { font-size: 16px !important; line-height: 1.65 !important; }
-@media (min-width: 921px) { html body .st-payment-page--focused .st-payment-card h2 { min-height: 80px !important; } }
-@media (min-width: 1100px) { html body .st-payment-page--focused .st-payment-card h2 { min-height: 54px !important; } }
-@media (max-width: 920px) { html body .st-payment-page--focused .st-payment-grid { grid-template-columns: 1fr !important; } }
+html body .st-payment-page--focused .st-payment-card h2 { margin: 0 0 16px !important; color: #352116 !important; font: 500 clamp(22px, 2.6vw, 34px)/1.13 var(--st-heritage) !important; letter-spacing: 0 !important; }
+html body .st-payment-page--focused .st-payment-card h2 span[lang="vi"] { display: block !important; margin-top: 8px !important; color: #70432b !important; font: 500 clamp(16px, 1.4vw, 20px)/1.35 var(--st-vietnamese) !important; }
+html body .st-payment-page--focused .st-payment-grid { grid-template-columns: minmax(0, 1fr) !important; }
+html body .st-payment-page--focused .st-payment-card {
+  min-height: 0 !important;
+  padding: clamp(18px, 2.5vw, 36px) !important;
+}
+html body .st-payment-page--focused .st-payment-card:hover { transform: none; }
+html body .st-payment-page--focused .st-payment-card > p:last-child { font-size: clamp(16px, 1.3vw, 18px) !important; line-height: 1.7 !important; }
 html body .st-client-care__header { padding-top: clamp(48px, 6vw, 76px) !important; }
 html body .st-client-care__header h1 { margin: 0 0 20px !important; color: #352117 !important; font: 500 clamp(44px, 5vw, 68px)/1.08 var(--st-wordmark) !important; }
 html body .st-client-care__header h1 span[lang="vi"] { display: block !important; margin-top: 12px !important; color: #70432b !important; font: 500 .5em/1.25 var(--st-vietnamese) !important; }
@@ -14134,13 +14138,17 @@ html body .st-client-care__header > p:last-child { margin: 0 !important; color: 
 html body .st-client-care__header > p:last-child span { display: block !important; margin-top: 8px !important; color: #674c3d !important; }
 html body .st-client-care .st-info-kicker { font-size: 14px !important; }
 html body .st-client-care .st-info-body { padding: 32px 0 64px !important; }
-html body .st-client-care .st-info-section { padding: 28px 0 !important; gap: 24px 48px !important; grid-template-columns: minmax(180px, .55fr) minmax(0, 1fr) !important; }
+html body .st-client-care .st-info-section { padding: 28px 0 !important; gap: 24px !important; grid-template-columns: minmax(0, 1fr) !important; }
 html body .st-client-care .st-info-section h2 { font-size: clamp(27px, 2.6vw, 36px) !important; font-weight: 500 !important; line-height: 1.15 !important; }
 html body .st-client-care .st-info-section h2 span[lang="vi"] { font-size: .62em !important; font-weight: 500 !important; }
-html body .st-client-care .st-info-section__copy p { margin-bottom: 14px !important; line-height: 1.65 !important; }
+html body .st-client-care .st-info-section__copy p { margin-bottom: 14px !important; font-size: clamp(16px, 1.25vw, 18px) !important; line-height: 1.72 !important; }
 html body .st-client-care .st-info-section__copy p:last-child { margin-bottom: 0 !important; }
+html body .st-client-care .st-info-section__copy > p:not([lang="vi"]) + p[lang="vi"] {
+  padding-block-start: 12px;
+  border-block-start: 1px solid #ddc4a9;
+}
 html body .st-client-care .st-info-section__copy a { display: inline !important; padding: 1px 4px !important; border: 1px solid #a88665 !important; background: #f3e3ce !important; color: #57301d !important; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
-@media (max-width: 860px) { html body .st-client-care .st-info-section { grid-template-columns: 1fr !important; gap: 16px !important; } }
+@media (max-width: 860px) { html body .st-client-care .st-info-section { gap: 16px !important; } }
 
 /* Keep editorial labels readable and the contact heading hierarchy consistent. */
 html body #st-home-v6.st-home-v6--mission .st-home-v6__kicker,
@@ -14867,8 +14875,7 @@ html body #main-content .st-service-commission-map__head > .st-prose-pair:last-c
   border: 0 !important;
 }
 @media (min-width: 861px) {
-  html body #main-content .st-prose-pair,
-  html body #main-content .st-client-care .st-info-section__copy {
+  html body #main-content .st-prose-pair {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: clamp(24px, 3.2vw, 48px);
@@ -14878,15 +14885,12 @@ html body #main-content .st-service-commission-map__head > .st-prose-pair:last-c
     text-align: start !important;
     text-wrap: wrap !important;
   }
-  html body #main-content .st-prose-pair > [lang="vi"],
-  html body #main-content .st-client-care .st-info-section__copy > [lang="vi"] {
+  html body #main-content .st-prose-pair > [lang="vi"] {
     margin: 0 !important;
     padding-inline-start: clamp(16px, 2vw, 28px);
     border-inline-start: 1px solid currentColor;
     text-align: start !important;
   }
-  html body #main-content .st-client-care .st-info-section { grid-template-columns: minmax(0, 1fr) !important; }
-  html body #main-content .st-client-care .st-info-section__copy > p { margin-block-end: 0 !important; }
   html body #main-content .st-guide-hero__grid:has(> p.st-guide-hero__intro) { align-items: center !important; }
   html body #main-content .st-guide-hero__grid:has(> p.st-guide-hero__intro) .st-guide-hero__media:not(.st-suit-fit .st-guide-hero__media) {
     min-height: clamp(300px, 33vw, 460px) !important;
@@ -14913,16 +14917,16 @@ html body #main-content .st-service-commission-map__head > .st-prose-pair:last-c
   html body #main-content .st-gallery-series__head > .st-gallery-series__link { grid-area: 1 / 2; }
   html body #main-content .st-showcase__details { grid-template-columns: minmax(0, 1fr); gap: clamp(14px, 2vw, 28px); }
   html body #main-content .st-showcase__section > p { font-size: clamp(16px, 1.25vw, 18px); line-height: 1.75; }
-  html body #main-content .st-showcase__section:has(> p[lang="vi"]) {
+  html body #main-content .st-showcase__section:has(> p:not([lang="vi"])):has(> p[lang="vi"]) {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: clamp(24px, 3.2vw, 48px);
     align-items: start;
   }
-  html body #main-content .st-showcase__section:has(> p[lang="vi"]) > :is(:not(p), .st-prose-pair) {
+  html body #main-content .st-showcase__section:has(> p:not([lang="vi"])):has(> p[lang="vi"]) > :is(:not(p), .st-prose-pair) {
     grid-column: 1 / -1;
   }
-  html body #main-content .st-showcase__section > p[lang="vi"] {
+  html body #main-content .st-showcase__section:has(> p:not([lang="vi"])) > p[lang="vi"] {
     color: var(--showcase-muted);
     padding-inline-start: clamp(16px, 2vw, 28px);
     border-inline-start: 1px solid currentColor;
@@ -14978,6 +14982,43 @@ html body #main-content .st-service-page--folio .st-service-commission-map__cata
   font-size: 16px !important;
   line-height: 1.65 !important;
 }
+html body #main-content .st-lux-page.st-lux-about .st-lux-provenance__cloth h3 {
+  font-size: clamp(19px, 1.8vw, 25px) !important;
+  line-height: 1.25 !important;
+}
+html body #main-content .st-lux-page.st-lux-about :is(.st-lux-provenance__cloth, .st-lux-value) h3 > [lang="vi"],
+html body #main-content #st-pricing-v5.stpr-ledger .stpr-card h2 > [lang="vi"] {
+  font-size: clamp(16px, 1.3vw, 19px) !important;
+  font-weight: 550 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.4 !important;
+}
+html body #main-content .st-lux-page.st-lux-about .st-about-atelier-panel__note { max-width: none !important; }
+
+html body #main-content .st-guide-bilingual:not(:has(> [lang="en"]):has(> [lang="vi"])),
+html body #main-content .st-guide-bilingual[data-long-prose] {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+html body #main-content .st-guide-bilingual[data-long-prose] > p[lang="vi"] {
+  padding: 12px 0 0;
+  border-inline-start: 0;
+  border-block-start: 1px solid #ddc4a9;
+}
+html body #main-content .st-guide-bilingual:not(:has(> [lang="en"])) > p[lang="vi"] {
+  padding-inline-start: 0;
+  border-inline-start: 0;
+}
+@media (min-width: 861px) and (max-width: 1079px) {
+  html body #main-content :is(.st-prose-pair, .st-guide-bilingual) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  html body #main-content :is(.st-prose-pair, .st-guide-bilingual) > [lang="vi"] {
+    padding-inline-start: 0;
+    border-inline-start: 0;
+  }
+}
 @media (min-width: 781px) {
   html body #main-content .st-service-page--folio .st-service-commission-map__catalogue { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
   html body #main-content .st-service-page--folio .st-service-commission-map__catalogue > article:nth-child(n) { grid-column: auto !important; min-height: 0 !important; }
@@ -14989,12 +15030,21 @@ html body #main-content .st-service-page--folio .st-service-commission-map__cata
   html body #main-content .st-service-page--folio .st-service-commission-map__catalogue h2 > span[lang="vi"] { font-size: 16px !important; }
 }
 
-html body #main-content :is(.stpr-card__copy, .st-showcase--client-care .st-showcase-card__copy p) a:any-link {
+html body #main-content :is(.stpr-card__copy, .stpr-priceboard__head, .st-showcase__section p, .st-showcase--client-care .st-showcase-card__copy p) a:any-link {
+  display: inline-block;
+  max-inline-size: 100%;
   padding: 0 .18em;
   border: 1px solid currentColor;
   border-radius: 0;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor !important;
+  text-decoration: underline;
+  text-underline-offset: .15em;
+  overflow-wrap: anywhere;
+}
+html body #main-content :is(.stpr-card__copy, .stpr-priceboard__head, .st-showcase__section p, .st-showcase--client-care .st-showcase-card__copy p) a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }
 html body #main-content .st-guide-sources > a {
   display: inline-flex;
